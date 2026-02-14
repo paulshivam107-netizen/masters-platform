@@ -1,0 +1,45 @@
+# Environment variables
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+.venv/
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React
+/frontend/build
+.DS_Store
+
+# Docker
+*.log
+
+# Database
+*.db
+*.sqlite3
+
+# Backups & archives
+backup-*/
+backups/
+*.zip
+
+# Test artifacts
+frontend/test-results/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

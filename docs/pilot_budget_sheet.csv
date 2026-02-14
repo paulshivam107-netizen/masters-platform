@@ -1,0 +1,21 @@
+Month,Section,Line Item,Planned Qty,Unit Price/Cost USD,Planned Amount USD,Actual Amount USD,Variance (Actual-Plan) USD,Notes
+2026-02,Cost,Frontend Hosting (Vercel Pro),1,20,=D2*E2,,=G2-F2,Set 0 if using free tier
+2026-02,Cost,Backend + DB (Railway),1,40,=D3*E3,,=G3-F3,Pilot estimate midpoint
+2026-02,Cost,Email (Postmark),1,15,=D4*E4,,=G4-F4,10k emails baseline
+2026-02,Cost,Monitoring (UptimeRobot),1,7,=D5*E5,,=G5-F5,Set 0 if free tier
+2026-02,Cost,Domain (monthly equivalent),1,2,=D6*E6,,=G6-F6,Annualized estimate
+2026-02,Cost,Misc / Buffer,1,10,=D7*E7,,=G7-F7,Unexpected usage buffer
+2026-02,Cost,AI Reviews (OpenAI gpt-5 mini),1500,0.00315,=D8*E8,,=G8-F8,Assumes ~3k input + ~1.2k output tokens per review
+2026-02,Cost,Payment Processing Fees (effective),350,0.035,=D9*E9,,=G9-F9,Estimate until live Stripe data
+2026-02,Summary,Total Costs,,,=SUM(F2:F9),=SUM(G2:G9),=G10-F10,Monthly burn before founder time
+2026-02,Revenue,Review Pack Sales (one-time),10,9,=D11*E11,,=G11-F11,Example: 10-pack at $9
+2026-02,Revenue,Pro Subscribers,10,15,=D12*E12,,=G12-F12,Monthly subscription
+2026-02,Revenue,Premium Subscribers,4,29,=D13*E13,,=G13-F13,Monthly subscription
+2026-02,Summary,Total Revenue,,,=SUM(F11:F13),=SUM(G11:G13),=G14-F14,Top-line pilot revenue
+2026-02,Summary,Net (Revenue - Costs),,,=F14-F10,=G14-G10,=G15-F15,Positive means profitable month
+2026-02,Guardrail,Monthly Budget Cap USD,,120,=E16,,=F16-G10,Target cap for pilot control
+2026-02,Guardrail,Budget Utilization %,,,=F10/F16,=G10/F16,=G17-F17,Keep planned and actual <= 1.00
+2026-02,KPI,Break-even Pro Subscribers Needed,,15,=F10/E18,,,If only $15 Pro plan revenue is counted
+2026-02,KPI,Gross Margin %,,,=(F14-F10)/F14,=(G14-G10)/G14,=G19-F19,Target > 0.60
+2026-02,KPI,AI Cost as % of Revenue,,,=F8/F14,=G8/G14,=G20-F20,Target < 0.10 for healthy unit economics
+2026-02,How To,Usage,,,,,,Fill column G monthly actuals; duplicate rows with new month; update quantities in column D as usage changes
