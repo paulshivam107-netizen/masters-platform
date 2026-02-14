@@ -1,5 +1,7 @@
 # Master's Application Platform
 
+![CI](https://github.com/paulshivam107-netizen/masters-platform/actions/workflows/ci.yml/badge.svg)
+
 Planning workspace for Master's applicants with applications tracking, essay drafting, document readiness, deadlines, reminders, and AI essay review (mock or Anthropic-backed).
 
 ## Current Architecture
