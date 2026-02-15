@@ -67,10 +67,10 @@ export default function ProgramsPage() {
   React.useEffect(() => {
     document.body.classList.remove('dark-body');
     document.body.classList.add('public-body');
+    fetchPrograms('');
     return () => {
       document.body.classList.remove('public-body');
     };
-    fetchPrograms('');
   }, [fetchPrograms]);
 
   const handleSubmit = (event) => {
