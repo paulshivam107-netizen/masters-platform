@@ -12,6 +12,7 @@ jobs:
     timeout-minutes: 30
     env:
       PYTHONUNBUFFERED: "1"
+      SECRET_KEY: "ci-secure-secret-key-for-checks-1234567890"
       E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
       E2E_PASSWORD: ${{ secrets.E2E_PASSWORD }}
       E2E_ADMIN_EMAIL: ${{ secrets.E2E_ADMIN_EMAIL }}
@@ -38,7 +39,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install frontend dependencies
-        run: npm --prefix frontend ci
+        run: npm --prefix frontend ci --legacy-peer-deps
 
       - name: Install Playwright browser
         run: npx --prefix frontend playwright install --with-deps chromium

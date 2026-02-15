@@ -19,7 +19,7 @@ function isLikelyPlaceholder(value) {
 }
 
 async function ensureAuthenticated(page, email, password) {
-  await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 12000 });
+  await page.goto('/auth?mode=login&next=%2Fapp', { waitUntil: 'domcontentloaded', timeout: 12000 });
 
   const emailInput = page.getByTestId('auth-login-email');
   if (await emailInput.isVisible({ timeout: 1500 }).catch(() => false)) {
