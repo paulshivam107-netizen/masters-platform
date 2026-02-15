@@ -105,7 +105,10 @@ export default function LandingPage() {
     <div className="public-page">
       <div className="public-shell">
         <header className="public-topbar">
-          <div className="public-brand">Masters App Command Center</div>
+          <div className="public-brand">
+            Masters App
+            <span>Command Center</span>
+          </div>
           <nav className="public-nav" aria-label="Public navigation">
             <Link className="public-link-btn" to="/programs">Explore Programs</Link>
             <Link className="public-link-btn" to="/auth?mode=login&next=%2Fapp">Login</Link>
@@ -117,8 +120,7 @@ export default function LandingPage() {
           <article className="public-card">
             <h1>Plan applications, draft essays, and review faster.</h1>
             <p>
-              Organize schools, deadlines, and essays in one workspace. Get AI review quality quickly,
-              then save and iterate once you create your account.
+              Organize schools, deadlines, and essays in one workspace.
             </p>
             <div className="public-hero-actions">
               <button type="button" className="public-btn primary" onClick={handleContinue}>
@@ -131,21 +133,22 @@ export default function LandingPage() {
           <aside className="public-card public-kpi-grid">
             <div className="public-kpi">
               <strong>One workspace</strong>
-              <span>Applications, essays, requirements, documents.</span>
+              <span>Applications, essays, and docs in one place.</span>
             </div>
             <div className="public-kpi">
               <strong>AI review loop</strong>
-              <span>Fast iteration for clarity, structure, and specificity.</span>
+              <span>Quick feedback on clarity and structure.</span>
             </div>
             <div className="public-kpi">
               <strong>Save when ready</strong>
-              <span>Demo first, then register to persist everything.</span>
+              <span>Try first, then sign up to save progress.</span>
             </div>
           </aside>
         </section>
 
         <section className="public-section">
           <h2 className="public-section-title">How it works</h2>
+          <p className="public-section-subtitle">Simple flow, no lock-in until you decide to save work.</p>
           <div className="public-feature-grid">
             <article className="public-card public-feature">
               <h3>1. Explore</h3>
@@ -164,11 +167,12 @@ export default function LandingPage() {
 
         <section className="public-section">
           <h2 className="public-section-title">Try a sample review</h2>
+          <p className="public-section-subtitle">Paste a draft and instantly see how the review loop feels.</p>
           <div className="public-card">
             <div className="public-demo">
               <div className="public-field">
                 <label htmlFor="public-demo-prompt">Essay prompt</label>
-                <input
+                <textarea
                   id="public-demo-prompt"
                   value={demoPrompt}
                   onChange={(event) => setDemoPrompt(event.target.value)}
@@ -225,7 +229,8 @@ export default function LandingPage() {
         </section>
 
         <footer className="public-page-footer">
-          Pilot access is free while we validate product flow and feedback quality.
+          <span>Pilot access is free while we validate product flow and feedback quality.</span>
+          <Link className="public-link-btn primary" to="/auth?mode=signup&next=%2Fapp">Create free account</Link>
         </footer>
       </div>
     </div>

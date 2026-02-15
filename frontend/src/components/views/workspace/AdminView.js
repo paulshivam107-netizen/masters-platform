@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 function AdminView({
   adminLoading,
@@ -171,13 +171,13 @@ function AdminView({
     });
   };
 
-  const closeRoleChangeModal = () => {
+  const closeRoleChangeModal = useCallback(() => {
     if (roleUpdateLoading) return;
     setPendingRoleChange(null);
     if (lastFocusedRef.current && typeof lastFocusedRef.current.focus === 'function') {
       lastFocusedRef.current.focus();
     }
-  };
+  }, [roleUpdateLoading]);
 
   const confirmRoleChange = async () => {
     if (!pendingRoleChange) return;
@@ -439,7 +439,7 @@ function AdminView({
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [pendingRoleChange, roleUpdateLoading]);
+  }, [closeRoleChangeModal, pendingRoleChange]);
 
   useEffect(() => {
     if (!pendingRoleChange) return undefined;
