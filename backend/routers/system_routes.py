@@ -33,7 +33,7 @@ def health_check():
         "mock_mode": settings.MOCK_MODE,
         "cors_origins": settings.cors_origins_list,
         "app_env": settings.app_env_normalized,
-        "message": "Using mock AI reviews (free)" if settings.MOCK_MODE else "Using real Claude API"
+        "message": "Using mock AI reviews (free)" if settings.MOCK_MODE else "Using configured live AI provider"
     }
 
 

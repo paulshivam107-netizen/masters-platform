@@ -16,7 +16,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     MOCK_MODE: bool = True
-    ANTHROPIC_API_KEY: Optional[str] = None
+    OPENAI_API_KEY: Optional[str] = None
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_MODEL: str = "gemini-1.5-flash"
     GOOGLE_CLIENT_ID: Optional[str] = None
     APP_ENV: str = "development"
     EXPOSE_DEV_AUTH_TOKENS: Optional[bool] = None

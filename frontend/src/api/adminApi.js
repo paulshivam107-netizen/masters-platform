@@ -54,3 +54,13 @@ export async function deleteAdminProgramCatalogItemApi(programId) {
   const { data } = await apiClient.delete(`/admin/programs/${programId}`);
   return data;
 }
+
+export async function getAdminAiRuntimeConfigApi() {
+  const { data } = await apiClient.get('/admin/ai/runtime');
+  return data;
+}
+
+export async function updateAdminAiRuntimeConfigApi(payload) {
+  const { data } = await apiClient.put('/admin/ai/runtime', payload);
+  return data;
+}

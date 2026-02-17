@@ -1,12 +1,10 @@
 from typing import List, Optional
 
-from anthropic import Anthropic
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from auth import get_current_user
-from config import get_settings
 from database import get_db
 from models import ApplicationTracker, Essay, User
 from schemas import (
@@ -18,16 +16,15 @@ from schemas import (
     EssayVersionInfo,
     ReviewResponse,
 )
+from services.ai_runtime import (
+    call_gemini_text,
+    call_openai_text,
+    get_or_create_ai_runtime_config,
+)
 from services.migrations import backfill_essay_application_links
 from services.reviews import extract_score, generate_mock_outline, generate_mock_review
 
 router = APIRouter(prefix="/essays", tags=["essays"])
-settings = get_settings()
-
-MOCK_MODE = settings.MOCK_MODE
-anthropic_client = None
-if not MOCK_MODE and settings.ANTHROPIC_API_KEY:
-    anthropic_client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
 
 
 @router.post("/", response_model=EssayResponse)
@@ -139,28 +136,8 @@ async def get_essay_versions(
     }
 
 
-@router.post("/{essay_id}/review", response_model=ReviewResponse)
-async def review_essay(
-    essay_id: int,
-    review_request: EssayReviewRequest,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    essay = db.query(Essay).filter(and_(Essay.id == essay_id, Essay.user_id == current_user.id)).first()
-    if not essay:
-        raise HTTPException(status_code=404, detail="Essay not found")
-
-    try:
-        if MOCK_MODE:
-            review_content, score = generate_mock_review(essay)
-        else:
-            if not anthropic_client:
-                raise HTTPException(
-                    status_code=503,
-                    detail="Claude API not configured. Set ANTHROPIC_API_KEY or enable MOCK_MODE."
-                )
-
-            prompt = f"""You are an expert admissions consultant reviewing MBA/MS application essays.
+def _build_review_prompt(essay: Essay, review_request: EssayReviewRequest) -> str:
+    return f"""You are an expert admissions consultant reviewing MBA/MS application essays.
 
 School: {essay.school_name}
 Program Type: {essay.program_type}
@@ -180,13 +157,65 @@ Please provide a comprehensive review with:
 Focus Areas: {', '.join(review_request.focus_areas) if review_request.focus_areas else 'All aspects'}
 """
 
-            message = anthropic_client.messages.create(
-                model="claude-sonnet-4-20250514",
-                max_tokens=2000,
-                messages=[{"role": "user", "content": prompt}]
-            )
 
-            review_content = message.content[0].text
+def _build_outline_prompt(payload: EssayAssistRequest) -> str:
+    point_lines = "\n".join([f"- {point}" for point in payload.skeleton_points])
+    return f"""You are an admissions writing coach.
+
+Build a practical essay outline using the user's skeleton points.
+
+School: {payload.school_name}
+Program: {payload.program_type}
+Prompt: {payload.essay_prompt}
+Target length: {payload.target_word_count} words
+
+Skeleton points from user:
+{point_lines}
+
+Return:
+1) A markdown outline with 5 sections and approximate word budget per section.
+2) Exactly 3 concise next-step bullets.
+3) Keep language tactical and specific.
+"""
+
+
+def _run_provider_text(provider: str, prompt: str, *, max_tokens: int, openai_model: str, gemini_model: str) -> str:
+    if provider == "openai":
+        return call_openai_text(prompt, max_tokens=max_tokens, model=openai_model)
+    if provider == "gemini":
+        return call_gemini_text(prompt, max_tokens=max_tokens, model=gemini_model)
+    raise HTTPException(status_code=400, detail="Unsupported AI provider in runtime config.")
+
+
+@router.post("/{essay_id}/review", response_model=ReviewResponse)
+async def review_essay(
+    essay_id: int,
+    review_request: EssayReviewRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    essay = db.query(Essay).filter(and_(Essay.id == essay_id, Essay.user_id == current_user.id)).first()
+    if not essay:
+        raise HTTPException(status_code=404, detail="Essay not found")
+
+    try:
+        runtime = get_or_create_ai_runtime_config(db)
+        provider = (runtime.provider or "mock").strip().lower()
+
+        if not runtime.ai_enabled:
+            raise HTTPException(status_code=503, detail="AI is temporarily disabled by admin.")
+
+        if provider == "mock":
+            review_content, score = generate_mock_review(essay)
+        else:
+            prompt = _build_review_prompt(essay, review_request)
+            review_content = _run_provider_text(
+                provider,
+                prompt,
+                max_tokens=2000,
+                openai_model=runtime.openai_model,
+                gemini_model=runtime.gemini_model,
+            )
             score = extract_score(review_content)
 
         essay.ai_review = review_content
@@ -205,13 +234,20 @@ Focus Areas: {', '.join(review_request.focus_areas) if review_request.focus_area
 async def assist_essay_outline(
     payload: EssayAssistRequest,
     _: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
 ):
     caution = (
         "Use this outline as a drafting scaffold. Keep final wording, stories, and voice authentically your own."
     )
 
     try:
-        if MOCK_MODE:
+        runtime = get_or_create_ai_runtime_config(db)
+        provider = (runtime.provider or "mock").strip().lower()
+
+        if not runtime.ai_enabled:
+            raise HTTPException(status_code=503, detail="AI is temporarily disabled by admin.")
+
+        if provider == "mock":
             outline_markdown, next_steps = generate_mock_outline(
                 school_name=payload.school_name,
                 program_type=payload.program_type,
@@ -226,36 +262,13 @@ async def assist_essay_outline(
                 "caution": caution,
             }
 
-        if not anthropic_client:
-            raise HTTPException(
-                status_code=503,
-                detail="Claude API not configured. Set ANTHROPIC_API_KEY or enable MOCK_MODE."
-            )
-
-        point_lines = "\n".join([f"- {point}" for point in payload.skeleton_points])
-        prompt = f"""You are an admissions writing coach.
-
-Build a practical essay outline using the user's skeleton points.
-
-School: {payload.school_name}
-Program: {payload.program_type}
-Prompt: {payload.essay_prompt}
-Target length: {payload.target_word_count} words
-
-Skeleton points from user:
-{point_lines}
-
-Return:
-1) A markdown outline with 5 sections and approximate word budget per section.
-2) Exactly 3 concise next-step bullets.
-3) Keep language tactical and specific.
-"""
-        message = anthropic_client.messages.create(
-            model="claude-sonnet-4-20250514",
+        outline_markdown = _run_provider_text(
+            provider,
+            _build_outline_prompt(payload),
             max_tokens=1400,
-            messages=[{"role": "user", "content": prompt}]
+            openai_model=runtime.openai_model,
+            gemini_model=runtime.gemini_model,
         )
-        outline_markdown = message.content[0].text
         next_steps = [
             "Draft each section in your own voice before running final review.",
             "Add at least two concrete outcomes with measurable impact.",
@@ -264,7 +277,7 @@ Return:
         return {
             "outline_markdown": outline_markdown,
             "next_steps": next_steps,
-            "mode": "ai",
+            "mode": provider,
             "caution": caution,
         }
     except HTTPException:

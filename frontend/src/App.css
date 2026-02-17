@@ -8805,6 +8805,47 @@ body:not(.dark-body) {
   gap: 6px;
 }
 
+.admin-ai-config-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-ai-config-grid {
+  display: grid;
+  grid-template-columns: 140px minmax(220px, 1fr);
+  gap: 10px 12px;
+  align-items: center;
+}
+
+.admin-ai-config-grid label {
+  font-weight: 600;
+}
+
+.admin-ai-config-grid select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(18, 31, 45, 0.15);
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.admin-ai-config-grid input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(18, 31, 45, 0.15);
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.admin-ai-config-meta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: rgba(24, 24, 32, 0.72);
+}
+
 .App.dark-mode .admin-catalog-grid input,
 .App.dark-mode .admin-catalog-grid select,
 .App.dark-mode .admin-catalog-toolbar input {
@@ -8815,6 +8856,22 @@ body:not(.dark-body) {
 
 .App.dark-mode .admin-field-error {
   color: #ff9fa1;
+}
+
+.App.dark-mode .admin-ai-config-grid select {
+  background: rgba(16, 23, 33, 0.9);
+  border-color: rgba(138, 172, 232, 0.28);
+  color: #e6efff;
+}
+
+.App.dark-mode .admin-ai-config-grid input {
+  background: rgba(16, 23, 33, 0.9);
+  border-color: rgba(138, 172, 232, 0.28);
+  color: #e6efff;
+}
+
+.App.dark-mode .admin-ai-config-meta {
+  color: rgba(216, 224, 238, 0.74);
 }
 
 .share-snapshot-header {
