@@ -10,7 +10,9 @@ import {
   getAdminEventsApi,
   getAdminFeedbackApi,
   getAdminOverviewApi,
+  getAdminAiRuntimeConfigApi,
   getAdminUsersApi,
+  updateAdminAiRuntimeConfigApi,
   updateAdminProgramCatalogItemApi,
   updateAdminUserRoleApi,
   listProgramCatalogApi,
@@ -351,6 +353,7 @@ function AppContent() {
   const [adminFeedback, setAdminFeedback] = React.useState([]);
   const [adminBreakdown, setAdminBreakdown] = React.useState([]);
   const [adminCoverage, setAdminCoverage] = React.useState(null);
+  const [adminAiRuntimeConfig, setAdminAiRuntimeConfig] = React.useState(null);
   const [adminLastUpdatedAt, setAdminLastUpdatedAt] = React.useState(null);
   const [programCatalog, setProgramCatalog] = React.useState([]);
   const [programCatalogLoading, setProgramCatalogLoading] = React.useState(false);
@@ -363,13 +366,14 @@ function AppContent() {
     try {
       setAdminLoading(true);
       setAdminError('');
-      const [overview, users, events, feedback, breakdown, coverage] = await Promise.all([
+      const [overview, users, events, feedback, breakdown, coverage, aiRuntimeConfig] = await Promise.all([
         getAdminOverviewApi(),
         getAdminUsersApi(30),
         getAdminEventsApi(60),
         getAdminFeedbackApi(25),
         getAdminEventBreakdownApi(10),
-        getAdminEventCoverageApi()
+        getAdminEventCoverageApi(),
+        getAdminAiRuntimeConfigApi()
       ]);
       setAdminOverview(overview);
       setAdminUsers(users);
@@ -377,6 +381,7 @@ function AppContent() {
       setAdminFeedback(feedback);
       setAdminBreakdown(breakdown);
       setAdminCoverage(coverage);
+      setAdminAiRuntimeConfig(aiRuntimeConfig);
       setAdminLastUpdatedAt(new Date().toISOString());
     } catch (error) {
       setAdminError(error?.response?.data?.detail || 'Failed to load admin data');
@@ -393,6 +398,23 @@ function AppContent() {
         await loadAdminData();
       } catch (error) {
         const message = error?.response?.data?.detail || 'Failed to update user role';
+        setAdminError(message);
+        throw new Error(message);
+      }
+    },
+    [loadAdminData]
+  );
+
+  const handleAdminUpdateAiRuntimeConfig = React.useCallback(
+    async (payload) => {
+      try {
+        setAdminError('');
+        const updated = await updateAdminAiRuntimeConfigApi(payload);
+        setAdminAiRuntimeConfig(updated);
+        await loadAdminData();
+        return updated;
+      } catch (error) {
+        const message = error?.response?.data?.detail || 'Failed to update AI runtime config';
         setAdminError(message);
         throw new Error(message);
       }
@@ -617,6 +639,7 @@ function AppContent() {
               adminFeedback={adminFeedback}
               adminBreakdown={adminBreakdown}
               adminCoverage={adminCoverage}
+              adminAiRuntimeConfig={adminAiRuntimeConfig}
               adminLastUpdatedAt={adminLastUpdatedAt}
               currentUserId={user?.id}
               onChangeRole={handleAdminRoleChange}
@@ -625,6 +648,7 @@ function AppContent() {
               programCatalogLoading={programCatalogLoading}
               onSaveProgramCatalogItem={handleAdminSaveProgramCatalogItem}
               onDeleteProgramCatalogItem={handleAdminDeleteProgramCatalogItem}
+              onUpdateAiRuntimeConfig={handleAdminUpdateAiRuntimeConfig}
             />
           ) : (
             <WorkspaceArea

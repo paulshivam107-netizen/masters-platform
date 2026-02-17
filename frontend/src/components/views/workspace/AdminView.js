@@ -9,6 +9,7 @@ function AdminView({
   adminFeedback,
   adminBreakdown,
   adminCoverage,
+  adminAiRuntimeConfig,
   adminLastUpdatedAt,
   currentUserId,
   onChangeRole,
@@ -16,7 +17,8 @@ function AdminView({
   programCatalog,
   programCatalogLoading,
   onSaveProgramCatalogItem,
-  onDeleteProgramCatalogItem
+  onDeleteProgramCatalogItem,
+  onUpdateAiRuntimeConfig
 }) {
   const USERS_BATCH = 20;
   const EVENTS_BATCH = 30;
@@ -50,6 +52,13 @@ function AdminView({
   const [visibleUsersCount, setVisibleUsersCount] = useState(USERS_BATCH);
   const [visibleEventsCount, setVisibleEventsCount] = useState(EVENTS_BATCH);
   const [visibleFeedbackCount, setVisibleFeedbackCount] = useState(FEEDBACK_BATCH);
+  const [aiConfigDraft, setAiConfigDraft] = useState({
+    provider: 'mock',
+    ai_enabled: true,
+    openai_model: 'gpt-4o-mini',
+    gemini_model: 'gemini-1.5-flash'
+  });
+  const [aiConfigSaving, setAiConfigSaving] = useState(false);
   const modalRef = useRef(null);
   const lastFocusedRef = useRef(null);
   const toastIdRef = useRef(0);
@@ -64,6 +73,11 @@ function AdminView({
     ui_create_essay_clicked: 'Clicked new essay',
     ui_right_sidebar_essay_selected: 'Selected essay in sidebar',
     ui_error_boundary_triggered: 'UI error boundary triggered'
+  };
+  const AI_PROVIDER_LABELS = {
+    mock: 'Mock (No API cost)',
+    openai: 'OpenAI',
+    gemini: 'Gemini'
   };
 
   const formatEventLabel = (name) => {
@@ -81,6 +95,23 @@ function AdminView({
     window.setTimeout(() => {
       setToasts((prev) => prev.filter((item) => item.id !== id));
     }, 3600);
+  };
+
+  const handleAiConfigSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      setAiConfigSaving(true);
+      await onUpdateAiRuntimeConfig({
+        ...aiConfigDraft,
+        openai_model: (aiConfigDraft.openai_model || '').trim(),
+        gemini_model: (aiConfigDraft.gemini_model || '').trim()
+      });
+      pushToast('success', 'AI runtime config updated.');
+    } catch (error) {
+      pushToast('error', error?.message || 'Failed to update AI runtime config.');
+    } finally {
+      setAiConfigSaving(false);
+    }
   };
 
   const resetCatalogForm = () => {
@@ -456,6 +487,16 @@ function AdminView({
   }, [adminError]);
 
   useEffect(() => {
+    if (!adminAiRuntimeConfig) return;
+    setAiConfigDraft({
+      provider: adminAiRuntimeConfig.provider || 'mock',
+      ai_enabled: Boolean(adminAiRuntimeConfig.ai_enabled),
+      openai_model: adminAiRuntimeConfig.openai_model || 'gpt-4o-mini',
+      gemini_model: adminAiRuntimeConfig.gemini_model || 'gemini-1.5-flash'
+    });
+  }, [adminAiRuntimeConfig]);
+
+  useEffect(() => {
     setVisibleUsersCount(USERS_BATCH);
   }, [adminUsers.length]);
 
@@ -526,6 +567,70 @@ function AdminView({
       {adminLoading && !adminOverview && <p className="admin-loading" data-testid="admin-loading">Loading admin analytics...</p>}
 
       <div className="settings-grid admin-stats-grid">
+        <div className="settings-card settings-card-wide">
+          <h3>AI Runtime Controls</h3>
+          <form className="admin-ai-config-form" onSubmit={handleAiConfigSubmit}>
+            <div className="admin-ai-config-grid">
+              <label htmlFor="admin-ai-provider">Provider</label>
+              <select
+                id="admin-ai-provider"
+                data-testid="admin-ai-provider"
+                value={aiConfigDraft.provider}
+                onChange={(event) => setAiConfigDraft((prev) => ({ ...prev, provider: event.target.value }))}
+                disabled={aiConfigSaving}
+              >
+                {Object.entries(AI_PROVIDER_LABELS).map(([value, label]) => (
+                  <option key={`provider-${value}`} value={value}>{label}</option>
+                ))}
+              </select>
+
+              <label htmlFor="admin-ai-enabled">AI Enabled</label>
+              <select
+                id="admin-ai-enabled"
+                data-testid="admin-ai-enabled"
+                value={aiConfigDraft.ai_enabled ? 'true' : 'false'}
+                onChange={(event) => setAiConfigDraft((prev) => ({ ...prev, ai_enabled: event.target.value === 'true' }))}
+                disabled={aiConfigSaving}
+              >
+                <option value="true">Enabled</option>
+                <option value="false">Disabled (Kill switch)</option>
+              </select>
+
+              <label htmlFor="admin-ai-openai-model">OpenAI model</label>
+              <input
+                id="admin-ai-openai-model"
+                data-testid="admin-ai-openai-model"
+                type="text"
+                value={aiConfigDraft.openai_model}
+                onChange={(event) => setAiConfigDraft((prev) => ({ ...prev, openai_model: event.target.value }))}
+                disabled={aiConfigSaving}
+                placeholder="gpt-4o-mini"
+              />
+
+              <label htmlFor="admin-ai-gemini-model">Gemini model</label>
+              <input
+                id="admin-ai-gemini-model"
+                data-testid="admin-ai-gemini-model"
+                type="text"
+                value={aiConfigDraft.gemini_model}
+                onChange={(event) => setAiConfigDraft((prev) => ({ ...prev, gemini_model: event.target.value }))}
+                disabled={aiConfigSaving}
+                placeholder="gemini-1.5-flash"
+              />
+            </div>
+
+            <p className="admin-ai-config-meta" data-testid="admin-ai-provider-ready">
+              Provider status: {adminAiRuntimeConfig?.provider_ready ? 'Ready' : 'Missing API key'}
+            </p>
+            <p className="admin-ai-config-meta">
+              OpenAI key: {adminAiRuntimeConfig?.provider_readiness?.openai ? 'configured' : 'missing'} | Gemini key: {adminAiRuntimeConfig?.provider_readiness?.gemini ? 'configured' : 'missing'}
+            </p>
+            <button type="submit" disabled={aiConfigSaving}>
+              {aiConfigSaving ? 'Saving...' : 'Save AI config'}
+            </button>
+          </form>
+        </div>
+
         <div className="settings-card"><h3>Total users</h3><p>{adminOverview?.total_users ?? 0}</p></div>
         <div className="settings-card"><h3>Active users</h3><p>{adminOverview?.active_users ?? 0}</p></div>
         <div className="settings-card"><h3>Verified users</h3><p>{adminOverview?.verified_users ?? 0}</p></div>
