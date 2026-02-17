@@ -133,3 +133,15 @@ class AdminEvent(Base):
     event_name = Column(String, nullable=False, index=True)
     payload_json = Column(Text, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+
+
+class AiRuntimeConfig(Base):
+    __tablename__ = "ai_runtime_config"
+
+    id = Column(Integer, primary_key=True, index=True)
+    provider = Column(String, nullable=False, default="mock")
+    ai_enabled = Column(Boolean, nullable=False, default=True)
+    openai_model = Column(String, nullable=False, default="gpt-4o-mini")
+    gemini_model = Column(String, nullable=False, default="gemini-1.5-flash")
+    updated_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)

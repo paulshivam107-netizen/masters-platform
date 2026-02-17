@@ -324,6 +324,29 @@ class AdminRoleUpdateResponse(BaseModel):
     role: str
 
 
+class AdminAiRuntimeConfigResponse(BaseModel):
+    provider: Literal["mock", "openai", "gemini"]
+    ai_enabled: bool
+    openai_model: str
+    gemini_model: str
+    provider_ready: bool
+    provider_readiness: dict[str, bool]
+    updated_at: Optional[datetime]
+    updated_by_user_id: Optional[int]
+
+
+class AdminAiRuntimeConfigUpdateRequest(BaseModel):
+    provider: Literal["mock", "openai", "gemini"]
+    ai_enabled: bool
+    openai_model: str = Field(default="gpt-4o-mini", min_length=2, max_length=120)
+    gemini_model: str = Field(default="gemini-1.5-flash", min_length=2, max_length=120)
+
+    @field_validator("openai_model", "gemini_model")
+    @classmethod
+    def normalize_model_name(cls, value: str) -> str:
+        return value.strip()
+
+
 # Essay schemas
 class EssayCreate(BaseModel):
     school_name: str = Field(min_length=2, max_length=160)

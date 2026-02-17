@@ -9,6 +9,8 @@ from auth import require_admin_user
 from database import get_db
 from models import AdminEvent, ApplicationTracker, Essay, PilotFeedback, User
 from schemas import (
+    AdminAiRuntimeConfigResponse,
+    AdminAiRuntimeConfigUpdateRequest,
     AdminEventCoverageResponse,
     AdminEventBreakdownRow,
     AdminEventRow,
@@ -19,6 +21,12 @@ from schemas import (
     AdminRoleUpdateResponse,
     AdminUserRow,
     ProgramCatalogItem,
+)
+from services.ai_runtime import (
+    ALLOWED_AI_PROVIDERS,
+    get_or_create_ai_runtime_config,
+    provider_readiness,
+    update_ai_runtime_config,
 )
 from services.program_catalog import build_program_id, load_program_catalog, save_program_catalog
 
@@ -381,3 +389,59 @@ async def delete_program_catalog_item(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program catalog item not found")
     save_program_catalog(next_catalog)
     return {"deleted": True, "id": program_id}
+
+
+@router.get("/ai/runtime", response_model=AdminAiRuntimeConfigResponse)
+async def get_ai_runtime_config(
+    _: User = Depends(require_admin_user),
+    db: Session = Depends(get_db)
+):
+    config = get_or_create_ai_runtime_config(db)
+    readiness = provider_readiness()
+    provider = (config.provider or "mock").strip().lower()
+    if provider not in ALLOWED_AI_PROVIDERS:
+        provider = "mock"
+    return {
+        "provider": provider,
+        "ai_enabled": bool(config.ai_enabled),
+        "openai_model": config.openai_model,
+        "gemini_model": config.gemini_model,
+        "provider_ready": readiness.get(provider, False),
+        "provider_readiness": readiness,
+        "updated_at": config.updated_at,
+        "updated_by_user_id": config.updated_by_user_id,
+    }
+
+
+@router.put("/ai/runtime", response_model=AdminAiRuntimeConfigResponse)
+async def put_ai_runtime_config(
+    payload: AdminAiRuntimeConfigUpdateRequest,
+    current_admin: User = Depends(require_admin_user),
+    db: Session = Depends(get_db)
+):
+    provider = (payload.provider or "mock").strip().lower()
+    if provider not in ALLOWED_AI_PROVIDERS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Provider must be one of: {', '.join(sorted(ALLOWED_AI_PROVIDERS))}"
+        )
+
+    config = update_ai_runtime_config(
+        db,
+        provider=provider,
+        ai_enabled=bool(payload.ai_enabled),
+        openai_model=payload.openai_model,
+        gemini_model=payload.gemini_model,
+        updated_by_user_id=current_admin.id,
+    )
+    readiness = provider_readiness()
+    return {
+        "provider": config.provider,
+        "ai_enabled": bool(config.ai_enabled),
+        "openai_model": config.openai_model,
+        "gemini_model": config.gemini_model,
+        "provider_ready": readiness.get(config.provider, False),
+        "provider_readiness": readiness,
+        "updated_at": config.updated_at,
+        "updated_by_user_id": config.updated_by_user_id,
+    }

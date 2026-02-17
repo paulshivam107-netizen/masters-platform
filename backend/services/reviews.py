@@ -31,7 +31,7 @@ Your essay for {essay.school_name}'s {essay.program_type} program shows promise 
 - Show, don't tell - use vivid descriptions
 
 ---
-💡 *This is a simulated review. Enable Claude API for detailed, personalized feedback.*
+💡 *This is a simulated review. Select OpenAI or Gemini in Pilot Admin for detailed, personalized feedback.*
 """
     elif word_count < 300:
         score = 6.5
@@ -55,7 +55,7 @@ Your {essay.program_type} application essay for {essay.school_name} demonstrates
 **Score: 6.5/10** - Competitive foundation, needs refinement.
 
 ---
-💡 *This is a simulated review. Enable Claude API for detailed, personalized feedback.*
+💡 *This is a simulated review. Select OpenAI or Gemini in Pilot Admin for detailed, personalized feedback.*
 """
     else:
         score = 8.0
@@ -82,7 +82,7 @@ Excellent work on your {essay.program_type} essay for {essay.school_name}!
 **Score: 8.0/10** - You're in great shape!
 
 ---
-💡 *This is a simulated review. Enable Claude API for detailed, personalized feedback.*
+💡 *This is a simulated review. Select OpenAI or Gemini in Pilot Admin for detailed, personalized feedback.*
 """
 
     return review, score

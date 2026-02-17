@@ -115,6 +115,26 @@ def run_schema_migrations(engine):
         conn.execute(text("CREATE INDEX IF NOT EXISTS ix_admin_events_event_name ON admin_events(event_name)"))
         conn.execute(text("CREATE INDEX IF NOT EXISTS ix_admin_events_created_at ON admin_events(created_at)"))
 
+        conn.execute(text("""
+            CREATE TABLE IF NOT EXISTS ai_runtime_config (
+                id INTEGER PRIMARY KEY,
+                provider VARCHAR NOT NULL DEFAULT 'mock',
+                ai_enabled BOOLEAN NOT NULL DEFAULT 1,
+                openai_model VARCHAR NOT NULL DEFAULT 'gpt-4o-mini',
+                gemini_model VARCHAR NOT NULL DEFAULT 'gemini-1.5-flash',
+                updated_by_user_id INTEGER,
+                updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY(updated_by_user_id) REFERENCES users(id)
+            )
+        """))
+        conn.execute(text("CREATE INDEX IF NOT EXISTS ix_ai_runtime_config_id ON ai_runtime_config(id)"))
+        ai_columns = conn.execute(text("PRAGMA table_info(ai_runtime_config)")).fetchall()
+        ai_column_names = {row[1] for row in ai_columns}
+        if "openai_model" not in ai_column_names:
+            conn.execute(text("ALTER TABLE ai_runtime_config ADD COLUMN openai_model VARCHAR NOT NULL DEFAULT 'gpt-4o-mini'"))
+        if "gemini_model" not in ai_column_names:
+            conn.execute(text("ALTER TABLE ai_runtime_config ADD COLUMN gemini_model VARCHAR NOT NULL DEFAULT 'gemini-1.5-flash'"))
+
 
 def backfill_essay_application_links(user_id: int, db: Session):
     """Backfill essay.application_id using school + program match for legacy data."""
