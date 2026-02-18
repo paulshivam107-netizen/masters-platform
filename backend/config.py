@@ -31,6 +31,7 @@ class Settings(BaseSettings):
     SMTP_FROM: Optional[str] = None
 
     CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
+    CORS_ORIGIN_REGEX: Optional[str] = None
     ADMIN_EMAILS: str = ""
 
     @property
