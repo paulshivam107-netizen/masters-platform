@@ -9028,8 +9028,8 @@ body:not(.dark-body) {
   --layout-gap: 16px;
   --layout-sidebar-width: clamp(220px, 18vw, 252px);
   --layout-app-max: 1780px;
-  --layout-main-max: clamp(820px, 62vw, 1080px);
-  --layout-rail-width: clamp(300px, 24vw, 380px);
+  --layout-main-max: clamp(780px, 60vw, 1080px);
+  --layout-rail-width: clamp(272px, 22vw, 340px);
 }
 
 html,
@@ -9103,7 +9103,7 @@ body.dark-body {
   min-width: 0 !important;
   min-height: 0 !important;
   display: grid !important;
-  grid-template-columns: minmax(0, 1fr) var(--layout-rail-width) !important;
+  grid-template-columns: minmax(0, 1fr) minmax(248px, var(--layout-rail-width)) !important;
   align-items: start !important;
   gap: var(--layout-gap) !important;
 }
@@ -9130,8 +9130,8 @@ body.dark-body {
 }
 
 .App .main-content {
-  max-width: var(--layout-main-max) !important;
-  justify-self: start !important;
+  max-width: none !important;
+  justify-self: stretch !important;
 }
 
 .App .right-sidebar {
@@ -10264,4 +10264,88 @@ body.dark-body {
 
 .App.dark-mode .sidebar-theme-slot .app-theme-toggle__thumb {
   background: var(--dm-primary) !important;
+}
+
+/* --------------------------------------------------
+   Final override: top ribbon one-line + equal hero CTAs
+-------------------------------------------------- */
+.App .workspace-top-controls {
+  width: 100% !important;
+  min-width: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto auto auto !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.App .header-search-form {
+  grid-column: 1 / 2 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+  margin: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.App .header-search-form input {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+.App .header-search-form button {
+  min-width: 68px !important;
+  padding: 0 12px !important;
+  white-space: nowrap !important;
+}
+
+.App .header-create-menu,
+.App .header-icon-btn,
+.App .header-profile-menu {
+  margin: 0 !important;
+  min-width: 0 !important;
+}
+
+.App .header-create-btn {
+  min-width: 78px !important;
+  padding: 0 14px !important;
+  white-space: nowrap !important;
+}
+
+.App .home-hero-actions {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+.App .home-hero-actions .new-essay-btn,
+.App .home-hero-actions .secondary-action-btn {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 980px) {
+  .App .workspace-top-controls {
+    grid-template-columns: minmax(0, 1fr) auto auto auto !important;
+    row-gap: 0 !important;
+  }
+
+  .App .header-search-form {
+    order: 0 !important;
+    flex: none !important;
+  }
+
+  .App .header-create-menu,
+  .App .header-icon-btn,
+  .App .header-profile-menu {
+    order: 0 !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .App .home-hero-actions {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
 }
