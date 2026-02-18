@@ -85,6 +85,11 @@ class GoogleLoginRequest(BaseModel):
     id_token: str = Field(min_length=20, max_length=4096)
 
 
+class GoogleAuthConfigResponse(BaseModel):
+    enabled: bool
+    client_id: Optional[str] = None
+
+
 class UserProfileUpdate(BaseModel):
     name: Optional[str] = Field(default=None, min_length=2, max_length=80)
     avatar_url: Optional[str] = Field(default=None, max_length=500)
