@@ -49,6 +49,9 @@ try:
 except Exception:  # pragma: no cover - optional dependency fallback
     google_id_token = None
     google_requests = None
+    GOOGLE_AUTH_IMPORT_ERROR = "google-auth runtime import failed (install google-auth and requests)"
+else:
+    GOOGLE_AUTH_IMPORT_ERROR = None
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 settings = get_settings()
@@ -59,7 +62,7 @@ def verify_google_identity_token(token_value: str) -> tuple[str, str]:
     if not settings.GOOGLE_CLIENT_ID:
         raise HTTPException(status_code=503, detail="GOOGLE_CLIENT_ID is not configured")
     if not google_id_token or not google_requests:
-        raise HTTPException(status_code=503, detail="google-auth dependency is not installed")
+        raise HTTPException(status_code=503, detail=GOOGLE_AUTH_IMPORT_ERROR or "google-auth dependency is not installed")
 
     try:
         id_info = google_id_token.verify_oauth2_token(
