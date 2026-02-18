@@ -64,6 +64,7 @@ function HomeView({
   const showCollapsedOnboarding = showOnboardingCard && onboardingHidden;
   const nextStep = onboardingSteps.find((step) => !step.complete);
   const onboardingProgress = Math.round((completedOnboardingSteps / onboardingSteps.length) * 100);
+  const firstName = ((user?.name || '').trim().split(/\s+/)[0] || 'there').trim();
 
   return (
             selectedApplication ? (
@@ -130,7 +131,7 @@ function HomeView({
             ) : (
               <div className="home-dashboard" data-testid="home-dashboard">
                 <div className="home-welcome-card home-hero-card" data-testid="home-dashboard-hero">
-                  <h2>Welcome back, {user.name}</h2>
+                  <h2>Welcome back, {firstName}</h2>
                   <p>Plan your entire Master's application cycle: schools, deadlines, essays, recommendations, and documents.</p>
                   <div className="home-hero-actions">
                     <button
