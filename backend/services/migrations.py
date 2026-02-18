@@ -6,6 +6,11 @@ from models import ApplicationTracker, Essay
 
 def run_schema_migrations(engine):
     """Lightweight SQLite-safe migrations for local development."""
+    # This migration helper uses SQLite-specific PRAGMA/DDL and should not
+    # execute against Postgres in production environments.
+    if engine.dialect.name != "sqlite":
+        return
+
     with engine.begin() as conn:
         user_columns = conn.execute(text("PRAGMA table_info(users)")).fetchall()
         user_column_names = {row[1] for row in user_columns}
