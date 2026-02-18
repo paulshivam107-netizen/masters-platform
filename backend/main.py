@@ -38,9 +38,12 @@ def ensure_startup_safety():
 
 ensure_startup_safety()
 
-# Ensure schema exists for local/pilot usage.
-Base.metadata.create_all(bind=engine)
-run_schema_migrations(engine)
+# Keep API bootable even if DB init fails; health and logs should expose DB issues.
+try:
+    Base.metadata.create_all(bind=engine)
+    run_schema_migrations(engine)
+except Exception as exc:
+    print(f"WARNING: database initialization skipped due to error: {exc}")
 
 app = FastAPI(title="MBA/MS Application Platform")
 app.add_middleware(
