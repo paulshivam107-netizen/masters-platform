@@ -45,7 +45,8 @@ function TopControls({
           aria-expanded={isCreateMenuOpen}
           onClick={() => setIsCreateMenuOpen((prev) => !prev)}
         >
-          + Create
+          <span className="header-create-btn-plus" aria-hidden="true">+</span>
+          <span className="header-create-btn-label">Create</span>
         </button>
         {isCreateMenuOpen && (
           <div className="header-create-dropdown" role="menu">
