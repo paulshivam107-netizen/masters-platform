@@ -20,6 +20,20 @@ def read_root():
 
 @router.get("/health")
 def health_check():
+    # Liveness probe: keep this fast and DB-independent so container health
+    # does not flap when managed Postgres is slow/unavailable.
+    return {
+        "status": "healthy",
+        "db_status": "unknown",
+        "mock_mode": settings.MOCK_MODE,
+        "cors_origins": settings.cors_origins_list,
+        "app_env": settings.app_env_normalized,
+        "message": "Using mock AI reviews (free)" if settings.MOCK_MODE else "Using configured live AI provider"
+    }
+
+
+@router.get("/health/db")
+def db_health_check():
     db_status = "ok"
     try:
         with engine.connect() as conn:
