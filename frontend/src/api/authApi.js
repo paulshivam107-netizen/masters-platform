@@ -15,6 +15,11 @@ export async function loginWithGoogleApi(idToken) {
   return data;
 }
 
+export async function getGoogleAuthConfigApi() {
+  const { data } = await apiClient.get('/auth/google/config');
+  return data;
+}
+
 export async function getCurrentUserApi() {
   const { data } = await apiClient.get('/auth/me');
   return data;

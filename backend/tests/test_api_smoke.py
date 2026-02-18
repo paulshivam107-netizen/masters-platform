@@ -48,6 +48,12 @@ class ApiSmokeTest(unittest.IsolatedAsyncioTestCase):
         self.assertIn("mock_mode", payload)
         self.assertIn("app_env", payload)
 
+        google_config = await self.client.get("/auth/google/config")
+        self.assertEqual(google_config.status_code, 200, google_config.text)
+        google_payload = google_config.json()
+        self.assertIn("enabled", google_payload)
+        self.assertIn("client_id", google_payload)
+
         programs = await self.client.get("/programs")
         self.assertEqual(programs.status_code, 200, programs.text)
         programs_payload = programs.json()

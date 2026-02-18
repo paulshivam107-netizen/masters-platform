@@ -22,6 +22,7 @@ from schemas import (
     EmailActionRequest,
     EmailVerificationConfirmRequest,
     GenericActionResponse,
+    GoogleAuthConfigResponse,
     GoogleLoginRequest,
     LogoutRequest,
     PasswordResetConfirmRequest,
@@ -101,6 +102,14 @@ def issue_auth_tokens(user: User, db: Session) -> dict:
         "token_type": "bearer",
         "user": user
     }
+
+
+@router.get("/google/config", response_model=GoogleAuthConfigResponse)
+def google_auth_config():
+    client_id = (settings.GOOGLE_CLIENT_ID or "").strip()
+    if not client_id:
+        return {"enabled": False, "client_id": None}
+    return {"enabled": True, "client_id": client_id}
 
 
 @router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)

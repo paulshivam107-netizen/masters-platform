@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { requestEmailVerificationApi } from '../api';
+import { requestGoogleIdToken, resolveGoogleClientId } from '../app/googleIdentity';
 import { MoonIcon, SunIcon } from '../app/icons';
 import { trackEvent } from '../app/telemetry';
 import './Auth.css';
@@ -52,36 +53,16 @@ function Signup({ onSwitchToLogin, isDarkMode, onToggleTheme }) {
     setError('');
     setMessage('');
     setDevToken('');
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    if (!clientId) {
-      setError('Google sign-in is not configured yet (missing REACT_APP_GOOGLE_CLIENT_ID).');
-      return;
-    }
-    if (!window.google?.accounts?.id) {
-      setError('Google Identity script not loaded. Refresh and try again.');
-      return;
-    }
     setLoading(true);
     try {
-      await new Promise((resolve, reject) => {
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          callback: async (response) => {
-            try {
-              await loginWithGoogle(response.credential);
-              trackEvent('auth_signup_success', { method: 'google' });
-              resolve();
-            } catch (err) {
-              reject(err);
-            }
-          }
-        });
-        window.google.accounts.id.prompt((notification) => {
-          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-            reject(new Error('Google prompt was dismissed or unavailable.'));
-          }
-        });
-      });
+      const clientId = await resolveGoogleClientId();
+      if (!clientId) {
+        setError('Google sign-in is not configured yet. Please use email signup for now.');
+        return;
+      }
+      const idToken = await requestGoogleIdToken(clientId);
+      await loginWithGoogle(idToken);
+      trackEvent('auth_signup_success', { method: 'google' });
     } catch (err) {
       setError(err.response?.data?.detail || err.message || 'Google signup failed.');
       trackEvent('auth_signup_failure', { method: 'google' });

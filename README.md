@@ -74,6 +74,7 @@ Defined in `.env` (project root), consumed by backend settings:
 Frontend:
 
 - `REACT_APP_API_URL` (defaults to `http://localhost:8000`)
+- `REACT_APP_GOOGLE_CLIENT_ID` (optional; if omitted, frontend reads `GET /auth/google/config` from backend)
 
 ## Pilot Readiness Notes
 
