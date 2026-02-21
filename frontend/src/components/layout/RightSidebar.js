@@ -76,6 +76,8 @@ function RightSidebar({
         )}
       </div>
 
+      <hr className="right-pane-divider" />
+
       <div className="essay-list right-rail-card" data-testid="right-sidebar-essays-section">
         <div className="essay-list-header">
           <h3>Your Essays</h3>

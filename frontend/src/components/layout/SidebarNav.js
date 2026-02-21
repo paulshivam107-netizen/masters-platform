@@ -6,9 +6,7 @@ function SidebarNav({
   activeNav,
   expandedNavGroups,
   onToggleGroup,
-  onNavigate,
-  isDarkMode,
-  onToggleTheme
+  onNavigate
 }) {
   const [isMobileMoreOpen, setIsMobileMoreOpen] = React.useState(false);
   const navItems = React.useMemo(
@@ -41,7 +39,18 @@ function SidebarNav({
   }, [activeNav]);
 
   return (
-    <div className="nav-sidebar soft-sidebar" data-testid="sidebar-nav">
+    <div
+      className="nav-sidebar soft-sidebar"
+      data-testid="sidebar-nav"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: 'calc(100vh - 40px)',
+        overflow: 'hidden',
+        position: 'relative',
+        paddingBottom: '24px' // Extra insurance space at bottom
+      }}
+    >
       <div className="sidebar-brand" aria-hidden="true">
         <span className="sidebar-brand-mark">
           <span className="sidebar-brand-logo">
@@ -50,8 +59,32 @@ function SidebarNav({
           <span className="sidebar-brand-text" data-testid="sidebar-brand-title">Dashboard</span>
         </span>
       </div>
-      <div className="nav-drawer soft-nav-drawer open" aria-hidden={false}>
-        <div className="nav-drawer-list soft-nav-list">
+      <div
+        className="nav-drawer soft-nav-drawer open"
+        aria-hidden={false}
+        style={{
+          flex: '1 1 auto',
+          minHeight: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+      >
+        <div
+          className="nav-drawer-list soft-nav-list"
+          style={{
+            flex: '1 1 auto',
+            minHeight: 0,
+            overflowY: 'auto',
+            overflowX: 'hidden',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '8px',
+            paddingBottom: '80px',
+            overscrollBehavior: 'contain'
+          }}
+        >
           {navGroups.map((group) => (
             <div key={`group-${group.id}`} className="nav-group">
               <button
@@ -86,24 +119,6 @@ function SidebarNav({
             </div>
           ))}
         </div>
-      </div>
-      <div className="sidebar-theme-slot">
-        <button
-          type="button"
-          className={`app-theme-toggle ${isDarkMode ? 'app-theme-toggle--dark' : 'app-theme-toggle--light'}`}
-          data-testid="sidebar-theme-toggle"
-          aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          aria-pressed={isDarkMode}
-          onClick={onToggleTheme}
-        >
-          <span className="app-theme-toggle__thumb" aria-hidden="true" />
-          <span className="app-theme-toggle__icon app-theme-toggle__icon--light" aria-hidden="true">
-            <SunIcon />
-          </span>
-          <span className="app-theme-toggle__icon app-theme-toggle__icon--dark" aria-hidden="true">
-            <MoonIcon />
-          </span>
-        </button>
       </div>
 
       <div className="mobile-bottom-nav" data-testid="mobile-bottom-nav">
@@ -183,13 +198,7 @@ function SidebarNav({
                 </div>
               </div>
             ))}
-            {overflowMobileItems.length > 0 && (
-              <div className="mobile-nav-theme-row">
-                <button type="button" className="mobile-nav-theme-toggle-btn" onClick={onToggleTheme}>
-                  Switch to {isDarkMode ? 'Light' : 'Dark'} mode
-                </button>
-              </div>
-            )}
+            {/* Mobile theme toggle removed */}
           </div>
         </div>
       )}

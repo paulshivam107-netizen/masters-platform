@@ -20,7 +20,6 @@ export default function AuthPage() {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isDarkMode, setIsDarkMode] = React.useState(() => localStorage.getItem('auth_theme') === 'dark');
 
   const mode = parseMode(searchParams.get('mode'));
   const next = normalizeNext(searchParams.get('next'));
@@ -29,13 +28,11 @@ export default function AuthPage() {
     : `After login, you will continue to ${next}.`;
 
   React.useEffect(() => {
-    localStorage.setItem('auth_theme', isDarkMode ? 'dark' : 'light');
-    document.body.classList.toggle('dark-body', isDarkMode);
-    document.body.classList.add('public-body');
+    document.body.classList.add('dark-body', 'public-body');
     return () => {
       document.body.classList.remove('public-body');
     };
-  }, [isDarkMode]);
+  }, []);
 
   React.useEffect(() => {
     if (!loading && user) {
@@ -69,14 +66,10 @@ export default function AuthPage() {
         {mode === 'login' ? (
           <Login
             onSwitchToSignup={() => setMode('signup')}
-            isDarkMode={isDarkMode}
-            onToggleTheme={() => setIsDarkMode((prev) => !prev)}
           />
         ) : (
           <Signup
             onSwitchToLogin={() => setMode('login')}
-            isDarkMode={isDarkMode}
-            onToggleTheme={() => setIsDarkMode((prev) => !prev)}
           />
         )}
       </div>

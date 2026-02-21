@@ -36,7 +36,9 @@ class Settings(BaseSettings):
 
     @property
     def cors_origins_list(self) -> list[str]:
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",") if origin.strip()]
+        origins.extend(["http://localhost:3002", "http://127.0.0.1:3002"])
+        return origins
 
     @field_validator("EXPOSE_DEV_AUTH_TOKENS", mode="before")
     @classmethod
