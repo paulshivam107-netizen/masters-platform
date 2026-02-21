@@ -55,8 +55,6 @@ function AppContent() {
     setShowVersions,
     activeNav,
     setActiveNav,
-    isDarkMode,
-    setIsDarkMode,
     confirmDelete,
     setConfirmDelete,
     showHomeChecklist,
@@ -206,7 +204,6 @@ function AppContent() {
     user,
     fetchEssays: actions.fetchEssays,
     fetchApplications: actions.fetchApplications,
-    isDarkMode,
     confirmDelete,
     showHomeChecklist,
     reducedMotion,
@@ -258,8 +255,6 @@ function AppContent() {
       profileFormData,
       profileSaving,
       applications,
-      isDarkMode,
-      setIsDarkMode,
       reducedMotion,
       setReducedMotion,
       confirmDelete,
@@ -572,127 +567,129 @@ function AppContent() {
     };
   }, [activeNav, showAdminPage, showForm, showApplicationForm, showVersions]);
 
-  return (
-  <div className={`App ${isDarkMode ? 'dark-mode' : ''} ${reducedMotion ? 'reduced-motion' : ''}`}>
-    <div className="app-layout">
-      {/* 1. Left Navigation */}
-      <SidebarNav
-        navGroups={navGroups}
-        activeNav={activeNav}
-        expandedNavGroups={expandedNavGroups}
-        onToggleGroup={actions.handleToggleNavGroup}
-        onNavigate={actions.handleNavChange}
-        isDarkMode={isDarkMode}
-        onToggleTheme={() => setIsDarkMode((prev) => !prev)}
-      />
+  React.useEffect(() => {
+    document.body.classList.add('dark-body');
+  }, []);
 
-      <div className="workspace-shell">
-        <TopControls
-          globalSearch={globalSearch}
-          onGlobalSearchChange={setGlobalSearch}
-          onGlobalSearchSubmit={actions.handleGlobalSearch}
-          onCreateEssay={() => {
-            trackEvent('ui_create_essay_clicked', { source: 'top_controls' });
-            actions.handleOpenNewEssayForm();
-          }}
-          onCreateApplication={() => {
-            trackEvent('ui_create_application_clicked', { source: 'top_controls' });
-            actions.handleOpenApplicationForm();
-          }}
-          notificationCount={notificationCount}
-          onOpenNotifications={() => actions.handleNavChange('notifications')}
-          profileMenuRef={profileMenuRef}
-          isProfileMenuOpen={isProfileMenuOpen}
-          onToggleProfileMenu={() => setIsProfileMenuOpen((prev) => !prev)}
-          onGoProfile={() => actions.handleNavChange('profile')}
-          onGoSettings={() => actions.handleNavChange('settings')}
-          onLogout={logout}
-          user={user}
+  return (
+    <div className={`App dark-mode ${reducedMotion ? 'reduced-motion' : ''}`}>
+      <div className="app-layout">
+        {/* 1. Left Navigation */}
+        <SidebarNav
+          navGroups={navGroups}
+          activeNav={activeNav}
+          expandedNavGroups={expandedNavGroups}
+          onToggleGroup={actions.handleToggleNavGroup}
+          onNavigate={actions.handleNavChange}
         />
 
-        <div className={`workspace-body ${showAdminPage ? 'workspace-body-admin' : ''}`}>
-      {/* 2. Main Center Workspace */}
-      <div className="main-content">
-        <div className="content-header">
-          <div className="content-header-main">
-            <h1>{pageHeading}</h1>
-            <p className="header-subtitle">{pageSubtitle}</p>
+        <div className="workspace-shell">
+          <TopControls
+            globalSearch={globalSearch}
+            onGlobalSearchChange={setGlobalSearch}
+            onGlobalSearchSubmit={actions.handleGlobalSearch}
+            onCreateEssay={() => {
+              trackEvent('ui_create_essay_clicked', { source: 'top_controls' });
+              actions.handleOpenNewEssayForm();
+            }}
+            onCreateApplication={() => {
+              trackEvent('ui_create_application_clicked', { source: 'top_controls' });
+              actions.handleOpenApplicationForm();
+            }}
+            notificationCount={notificationCount}
+            onOpenNotifications={() => actions.handleNavChange('notifications')}
+            profileMenuRef={profileMenuRef}
+            isProfileMenuOpen={isProfileMenuOpen}
+            onToggleProfileMenu={() => setIsProfileMenuOpen((prev) => !prev)}
+            onGoProfile={() => actions.handleNavChange('profile')}
+            onGoSettings={() => actions.handleNavChange('settings')}
+            onLogout={logout}
+            user={user}
+          />
+
+          <div className={`workspace-body ${showAdminPage ? 'workspace-body-admin' : ''}`}>
+            {/* 2. Main Center Workspace */}
+            <div className="main-content">
+              <div className="content-header">
+                <div className="content-header-main">
+                  <h1>{pageHeading}</h1>
+                  <p className="header-subtitle">{pageSubtitle}</p>
+                </div>
+              </div>
+
+              <AppErrorBoundary
+                name="workspace_shell"
+                onReset={() => {
+                  setActiveNav('home');
+                  setSelectedEssay(null);
+                  setShowForm(false);
+                  setShowVersions(false);
+                }}
+              >
+                {showAdminPage ? (
+                  <AdminView
+                    adminLoading={adminLoading}
+                    adminError={adminError}
+                    adminOverview={adminOverview}
+                    adminUsers={adminUsers}
+                    adminEvents={adminEvents}
+                    adminFeedback={adminFeedback}
+                    adminBreakdown={adminBreakdown}
+                    adminCoverage={adminCoverage}
+                    adminAiRuntimeConfig={adminAiRuntimeConfig}
+                    adminLastUpdatedAt={adminLastUpdatedAt}
+                    currentUserId={user?.id}
+                    onChangeRole={handleAdminRoleChange}
+                    onRefresh={loadAdminData}
+                    programCatalog={programCatalog}
+                    programCatalogLoading={programCatalogLoading}
+                    onSaveProgramCatalogItem={handleAdminSaveProgramCatalogItem}
+                    onDeleteProgramCatalogItem={handleAdminDeleteProgramCatalogItem}
+                    onUpdateAiRuntimeConfig={handleAdminUpdateAiRuntimeConfig}
+                  />
+                ) : (
+                  <WorkspaceArea
+                    {...workspaceAreaProps}
+                    programCatalog={programCatalog}
+                    programCatalogLoading={programCatalogLoading}
+                    onApplyProgramCatalogItem={handleApplyProgramCatalogItem}
+                    onAssistOutline={handleAssistOutline}
+                  />
+                )}
+              </AppErrorBoundary>
+            </div>
+
+            {/* 3. Right Sidebar */}
+            {!showAdminPage && (
+              <RightSidebar
+                onViewAllApplications={handleViewAllApplications}
+                onViewAllEssays={() => actions.handleNavChange('essays')}
+                onSelectApplication={handleSelectSidebarApplication}
+                onSelectEssay={(essay) => {
+                  trackEvent('ui_right_sidebar_essay_selected', { essayId: essay?.id || null });
+                  setSelectedEssay(essay);
+                  setReview(null);
+                  setShowVersions(false);
+                  setShowForm(false);
+                  setActiveNav('essays');
+                }}
+                visibleSidebarApplications={visibleSidebarApplications}
+                selectedApplicationId={selectedApplicationId}
+                essays={essays}
+                selectedEssayId={selectedEssay?.id}
+                getEssayCountForApplication={getEssayCountForApplication}
+                parseDate={parseDate}
+                hasMoreSidebarApplications={hasMoreSidebarApplications}
+                sidebarApplications={sidebarApplications}
+                applications={applications}
+                applicationSearch={applicationSearch}
+              />
+            )}
           </div>
         </div>
-        
-        <AppErrorBoundary
-          name="workspace_shell"
-          onReset={() => {
-            setActiveNav('home');
-            setSelectedEssay(null);
-            setShowForm(false);
-            setShowVersions(false);
-          }}
-        >
-          {showAdminPage ? (
-            <AdminView
-              adminLoading={adminLoading}
-              adminError={adminError}
-              adminOverview={adminOverview}
-              adminUsers={adminUsers}
-              adminEvents={adminEvents}
-              adminFeedback={adminFeedback}
-              adminBreakdown={adminBreakdown}
-              adminCoverage={adminCoverage}
-              adminAiRuntimeConfig={adminAiRuntimeConfig}
-              adminLastUpdatedAt={adminLastUpdatedAt}
-              currentUserId={user?.id}
-              onChangeRole={handleAdminRoleChange}
-              onRefresh={loadAdminData}
-              programCatalog={programCatalog}
-              programCatalogLoading={programCatalogLoading}
-              onSaveProgramCatalogItem={handleAdminSaveProgramCatalogItem}
-              onDeleteProgramCatalogItem={handleAdminDeleteProgramCatalogItem}
-              onUpdateAiRuntimeConfig={handleAdminUpdateAiRuntimeConfig}
-            />
-          ) : (
-            <WorkspaceArea
-              {...workspaceAreaProps}
-              programCatalog={programCatalog}
-              programCatalogLoading={programCatalogLoading}
-              onApplyProgramCatalogItem={handleApplyProgramCatalogItem}
-              onAssistOutline={handleAssistOutline}
-            />
-          )}
-        </AppErrorBoundary>
-      </div>
-
-      {/* 3. Right Sidebar */}
-      {!showAdminPage && (
-        <RightSidebar
-          onViewAllApplications={handleViewAllApplications}
-          onViewAllEssays={() => actions.handleNavChange('essays')}
-          onSelectApplication={handleSelectSidebarApplication}
-          onSelectEssay={(essay) => {
-            trackEvent('ui_right_sidebar_essay_selected', { essayId: essay?.id || null });
-            setSelectedEssay(essay);
-            setReview(null);
-            setShowVersions(false);
-            setShowForm(false);
-            setActiveNav('essays');
-          }}
-          visibleSidebarApplications={visibleSidebarApplications}
-          selectedApplicationId={selectedApplicationId}
-          essays={essays}
-          selectedEssayId={selectedEssay?.id}
-          getEssayCountForApplication={getEssayCountForApplication}
-          parseDate={parseDate}
-          hasMoreSidebarApplications={hasMoreSidebarApplications}
-          sidebarApplications={sidebarApplications}
-          applications={applications}
-          applicationSearch={applicationSearch}
-        />
-      )}
-      </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
 
 function ProtectedAppRoute() {

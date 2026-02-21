@@ -23,7 +23,6 @@ export function useAppState() {
   const [versions, setVersions] = useState([]);
   const [showVersions, setShowVersions] = useState(false);
   const [activeNav, setActiveNav] = useState('home');
-  const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('ui_theme') !== 'light');
   const [confirmDelete, setConfirmDelete] = useState(() => localStorage.getItem('ui_confirm_delete') !== 'false');
   const [showHomeChecklist, setShowHomeChecklist] = useState(() => localStorage.getItem('ui_show_checklist') !== 'false');
   const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('ui_reduced_motion') === 'true');
@@ -144,8 +143,6 @@ export function useAppState() {
     setShowVersions,
     activeNav,
     setActiveNav,
-    isDarkMode,
-    setIsDarkMode,
     confirmDelete,
     setConfirmDelete,
     showHomeChecklist,
