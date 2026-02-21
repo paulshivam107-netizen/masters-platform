@@ -6,7 +6,7 @@ import { MoonIcon, SunIcon } from '../app/icons';
 import { trackEvent } from '../app/telemetry';
 import './Auth.css';
 
-function Signup({ onSwitchToLogin, isDarkMode, onToggleTheme }) {
+function Signup({ onSwitchToLogin }) {
   const { signup, loginWithGoogle } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -73,32 +73,14 @@ function Signup({ onSwitchToLogin, isDarkMode, onToggleTheme }) {
 
   return (
     <div className="auth-container">
-      <div className="auth-theme-slot">
-        <button
-          type="button"
-          className={`app-theme-toggle auth-app-theme-toggle ${isDarkMode ? 'app-theme-toggle--dark' : 'app-theme-toggle--light'}`}
-          data-testid="auth-theme-toggle"
-          aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-          aria-pressed={isDarkMode}
-          onClick={onToggleTheme}
-        >
-          <span className="app-theme-toggle__thumb" aria-hidden="true" />
-          <span className="app-theme-toggle__icon app-theme-toggle__icon--light" aria-hidden="true">
-            <SunIcon />
-          </span>
-          <span className="app-theme-toggle__icon app-theme-toggle__icon--dark" aria-hidden="true">
-            <MoonIcon />
-          </span>
-        </button>
-      </div>
       <div className="auth-box">
         <h2 data-testid="auth-signup-heading">Create Account</h2>
         <p className="auth-subtitle">Start getting AI-powered essay reviews</p>
-        
+
         {error && <div className="error-message">{error}</div>}
         {message && <div className="success-message">{message}</div>}
         {devToken && <div className="success-message">Dev token: {devToken}</div>}
-        
+
         <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Full Name</label>
