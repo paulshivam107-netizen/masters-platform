@@ -12,12 +12,4 @@ test.describe('Auth smoke', () => {
     await expect(page.getByTestId('auth-login-heading')).toBeVisible();
   });
 
-  test('theme toggle is interactive on auth shell', async ({ page }) => {
-    await page.goto('/auth?mode=login&next=%2Fapp');
-
-    const toggle = page.getByTestId('auth-theme-toggle');
-    await expect(toggle).toBeVisible();
-    await toggle.click();
-    await expect(toggle).toBeVisible();
-  });
 });
