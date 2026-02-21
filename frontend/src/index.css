@@ -17,8 +17,6 @@
 
   body {
     margin: 0;
-    background-color: #f7f3ee;
-    color: #1f2735;
     font-family: "Inter", "Geist", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -26,8 +24,8 @@
 
   body.dark-body {
     color-scheme: dark;
-    background-color: #0f1a2a;
-    color: #dbe6f5;
+    background-color: var(--window-bg, #0A0A0A);
+    color: var(--ink, #FFFFFF);
   }
 }
 
