@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /auth
+
+Sitemap: https://masters-platform.pages.dev/sitemap.xml

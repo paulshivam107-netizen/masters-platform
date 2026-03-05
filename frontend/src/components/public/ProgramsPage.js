@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { listProgramCatalogApi } from '../../api';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSeo } from '../../app/seo';
 import './PublicPages.css';
 
 const FALLBACK_PROGRAMS = [
@@ -45,6 +46,12 @@ export default function ProgramsPage() {
   const [loading, setLoading] = React.useState(false);
   const [items, setItems] = React.useState([]);
   const [error, setError] = React.useState('');
+
+  useSeo({
+    title: 'Program explorer',
+    description: 'Browse MBA and masters program data including country, city, and application fee details.',
+    path: '/programs'
+  });
 
   const fetchPrograms = React.useCallback(async (nextQuery = '') => {
     try {

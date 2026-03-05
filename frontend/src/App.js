@@ -34,6 +34,7 @@ import { useAppEffects } from './app/hooks/useAppEffects';
 import { useAppActions } from './app/hooks/useAppActions';
 import { useWorkspaceComputed } from './app/hooks/useWorkspaceComputed';
 import { trackEvent } from './app/telemetry';
+import { useSeo } from './app/seo';
 
 function AppContent() {
   const { user, logout, updateProfile } = useAuth();
@@ -338,6 +339,13 @@ function AppContent() {
       getDefaultResearchCard,
       getVersionIdentity
     }
+  });
+
+  useSeo({
+    title: pageHeading || 'Workspace',
+    description: 'Authenticated application workspace for essays, programs, deadlines, and documents.',
+    path: '/app',
+    robots: 'noindex,nofollow'
   });
 
   const [adminLoading, setAdminLoading] = React.useState(false);

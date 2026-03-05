@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
+import { useSeo } from '../../app/seo';
 import Login from '../Login';
 import Signup from '../Signup';
 import './PublicPages.css';
@@ -23,9 +24,14 @@ export default function AuthPage() {
 
   const mode = parseMode(searchParams.get('mode'));
   const next = normalizeNext(searchParams.get('next'));
-  const nextHint = next === '/app'
-    ? 'After login, you will go to your workspace.'
-    : `After login, you will continue to ${next}.`;
+  const nextHint = next === '/app' ? '' : `After login, you will continue to ${next}.`;
+
+  useSeo({
+    title: mode === 'signup' ? 'Create account' : 'Login',
+    description: 'Create your account or login to continue in Masters Platform.',
+    path: '/auth',
+    robots: 'noindex,nofollow'
+  });
 
   React.useEffect(() => {
     document.body.classList.add('dark-body', 'public-body');
@@ -60,7 +66,7 @@ export default function AuthPage() {
     <div className="public-auth-layout">
       <div className="public-auth-topbar">
         <Link className="public-link-btn" to="/">Back to Home</Link>
-        <span className="public-auth-next">{nextHint}</span>
+        {nextHint ? <span className="public-auth-next">{nextHint}</span> : null}
       </div>
       <div className="public-auth-shell">
         {mode === 'login' ? (
