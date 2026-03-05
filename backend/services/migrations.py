@@ -3,11 +3,24 @@ from sqlalchemy.orm import Session
 
 from models import ApplicationTracker, Essay
 
+POSTGRES_RLS_TABLES = (
+    "users",
+    "essays",
+    "applications",
+    "refresh_tokens",
+    "auth_tokens",
+    "pilot_feedback",
+    "admin_events",
+    "ai_runtime_config",
+)
+
 
 def run_schema_migrations(engine):
-    """Lightweight SQLite-safe migrations for local development."""
-    # This migration helper uses SQLite-specific PRAGMA/DDL and should not
-    # execute against Postgres in production environments.
+    """Lightweight schema + security migrations for supported dialects."""
+    if engine.dialect.name == "postgresql":
+        run_postgres_security_migrations(engine)
+        return
+
     if engine.dialect.name != "sqlite":
         return
 
@@ -139,6 +152,50 @@ def run_schema_migrations(engine):
             conn.execute(text("ALTER TABLE ai_runtime_config ADD COLUMN openai_model VARCHAR NOT NULL DEFAULT 'gpt-4o-mini'"))
         if "gemini_model" not in ai_column_names:
             conn.execute(text("ALTER TABLE ai_runtime_config ADD COLUMN gemini_model VARCHAR NOT NULL DEFAULT 'gemini-1.5-flash'"))
+
+
+def run_postgres_security_migrations(engine):
+    """
+    Idempotent Postgres/Supabase security hardening:
+    - ensure RLS is enabled on app tables
+    - install a restricted service policy so backend/service-role traffic works
+      while anonymous/authenticated Supabase roles are denied by default
+    """
+    with engine.begin() as conn:
+        for table_name in POSTGRES_RLS_TABLES:
+            table_ref = f"public.{table_name}"
+            exists = conn.execute(
+                text("SELECT to_regclass(:table_ref) IS NOT NULL"),
+                {"table_ref": table_ref},
+            ).scalar()
+            if not exists:
+                continue
+
+            conn.execute(text(f'ALTER TABLE {table_ref} ENABLE ROW LEVEL SECURITY'))
+            policy_name = f"app_service_full_access_{table_name}"
+            conn.execute(
+                text(
+                    f"""
+                    DO $$
+                    BEGIN
+                        IF NOT EXISTS (
+                            SELECT 1
+                            FROM pg_policies
+                            WHERE schemaname = 'public'
+                              AND tablename = '{table_name}'
+                              AND policyname = '{policy_name}'
+                        ) THEN
+                            CREATE POLICY {policy_name}
+                            ON {table_ref}
+                            FOR ALL
+                            TO PUBLIC
+                            USING (current_user = 'service_role' OR current_user LIKE 'postgres%')
+                            WITH CHECK (current_user = 'service_role' OR current_user LIKE 'postgres%');
+                        END IF;
+                    END $$;
+                    """
+                )
+            )
 
 
 def backfill_essay_application_links(user_id: int, db: Session):
