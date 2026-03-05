@@ -31,8 +31,13 @@ def main():
     if is_default_secret(settings.SECRET_KEY) or len(settings.SECRET_KEY.strip()) < 32:
         errors.append("SECRET_KEY must be set to a non-default value with at least 32 characters.")
 
-    if not settings.MOCK_MODE and not settings.ANTHROPIC_API_KEY:
-        errors.append("MOCK_MODE=false requires ANTHROPIC_API_KEY.")
+    has_live_ai_key = bool((settings.OPENAI_API_KEY or "").strip() or (settings.GEMINI_API_KEY or "").strip())
+    if not settings.MOCK_MODE and not has_live_ai_key:
+        message = "MOCK_MODE=false requires OPENAI_API_KEY or GEMINI_API_KEY."
+        if settings.is_production_like_env:
+            errors.append(message)
+        else:
+            warnings.append(message)
 
     has_smtp_any = any([settings.SMTP_HOST, settings.SMTP_USER, settings.SMTP_PASSWORD, settings.SMTP_FROM])
     has_smtp_min = bool(settings.SMTP_HOST and settings.SMTP_USER and settings.SMTP_PASSWORD)

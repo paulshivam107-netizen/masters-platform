@@ -277,7 +277,7 @@ async def assist_essay_outline(
         return {
             "outline_markdown": outline_markdown,
             "next_steps": next_steps,
-            "mode": provider,
+            "mode": "ai",
             "caution": caution,
         }
     except HTTPException:
