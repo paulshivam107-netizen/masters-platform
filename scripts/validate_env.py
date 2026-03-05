@@ -58,6 +58,10 @@ def main():
 
     if not settings.cors_origins_list:
         errors.append("CORS_ORIGINS is empty.")
+    if settings.is_production_like_env and settings.cors_has_localhost_origin:
+        errors.append("CORS_ORIGINS cannot include localhost/127.0.0.1 in production-like environments.")
+    if settings.is_production_like_env and settings.has_database_url_placeholder:
+        errors.append("DATABASE_URL contains placeholder credentials. Replace with a real password/token.")
 
     db_url = settings.DATABASE_URL
     if db_url.startswith("sqlite:///"):
@@ -65,6 +69,8 @@ def main():
         sqlite_file = (ROOT_DIR / sqlite_path).resolve() if not os.path.isabs(sqlite_path) else Path(sqlite_path)
         if not sqlite_file.parent.exists():
             errors.append(f"SQLite directory does not exist: {sqlite_file.parent}")
+        if settings.is_production_like_env:
+            warnings.append("SQLite is configured in a production-like environment. Prefer managed Postgres for pilot/production.")
     else:
         warnings.append("Non-SQLite DATABASE_URL detected. Ensure credentials/network are available in your environment.")
 

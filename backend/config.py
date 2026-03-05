@@ -87,6 +87,27 @@ class Settings(BaseSettings):
         normalized = (self.SECRET_KEY or "").strip().lower()
         return len((self.SECRET_KEY or "").strip()) >= 32 and normalized not in DEFAULT_SECRET_VALUES
 
+    @property
+    def database_url_normalized(self) -> str:
+        return (self.DATABASE_URL or "").strip()
+
+    @property
+    def is_postgres_database(self) -> bool:
+        normalized = self.database_url_normalized.lower()
+        return normalized.startswith("postgresql://") or normalized.startswith("postgres://")
+
+    @property
+    def has_database_url_placeholder(self) -> bool:
+        normalized = self.database_url_normalized.lower()
+        # Common placeholder tokens copied from templates/UIs.
+        return "[your-password]" in normalized or "your-password" in normalized
+
+    @property
+    def cors_has_localhost_origin(self) -> bool:
+        if not self.cors_origins_list:
+            return False
+        return any("localhost" in origin or "127.0.0.1" in origin for origin in self.cors_origins_list)
+
 
 @lru_cache
 def get_settings() -> Settings:

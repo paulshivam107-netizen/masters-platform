@@ -35,6 +35,17 @@ def ensure_startup_safety():
             "EXPOSE_DEV_AUTH_TOKENS cannot be enabled in pilot/staging/production environments."
         )
 
+    if settings.is_production_like_env and settings.has_database_url_placeholder:
+        raise RuntimeError(
+            "DATABASE_URL contains a placeholder password/token. "
+            "Set a real managed database connection string before startup."
+        )
+
+    if settings.is_production_like_env and settings.cors_has_localhost_origin:
+        raise RuntimeError(
+            "CORS_ORIGINS cannot contain localhost/127.0.0.1 in pilot/staging/production environments."
+        )
+
 
 ensure_startup_safety()
 
@@ -43,6 +54,8 @@ try:
     Base.metadata.create_all(bind=engine)
     run_schema_migrations(engine)
 except Exception as exc:
+    if settings.is_production_like_env:
+        raise RuntimeError(f"Database initialization failed: {exc}") from exc
     print(f"WARNING: database initialization skipped due to error: {exc}")
 
 app = FastAPI(title="MBA/MS Application Platform")
