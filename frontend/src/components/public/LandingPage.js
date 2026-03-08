@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { trackEvent } from '../../app/telemetry';
+import { useSeo } from '../../app/seo';
 import './PublicPages.css';
 
 const WORKFLOW_STEPS = [
@@ -23,6 +24,29 @@ const HERO_SIGNALS = [
   'No card required',
   'Free during pilot',
   'Honest product, no fake stats'
+];
+
+const LANDING_STRUCTURED_DATA = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'Masters Platform',
+    url: 'https://masters-platform.pages.dev/',
+    description: 'Application command center for essays, programs, and deadline planning.'
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'Masters Platform',
+    applicationCategory: 'EducationApplication',
+    operatingSystem: 'Web',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+      availability: 'https://schema.org/InStock'
+    }
+  }
 ];
 
 function buildDemoReview(prompt, draft) {
@@ -95,6 +119,13 @@ export default function LandingPage() {
   const [typedText, setTypedText] = React.useState('');
 
   const fullPreviewText = '"Describe a time you led through uncertainty. What changed in your approach?"';
+
+  useSeo({
+    title: 'Application command center for essays and deadlines',
+    description: 'Track schools, draft essays, and run AI review loops in one workflow for MBA and masters applications.',
+    path: '/',
+    structuredData: LANDING_STRUCTURED_DATA
+  });
 
   React.useEffect(() => {
     document.body.classList.remove('dark-body');

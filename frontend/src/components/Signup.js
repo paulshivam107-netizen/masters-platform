@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { requestEmailVerificationApi } from '../api';
 import { requestGoogleIdToken, resolveGoogleClientId } from '../app/googleIdentity';
-import { MoonIcon, SunIcon } from '../app/icons';
 import { trackEvent } from '../app/telemetry';
 import './Auth.css';
 

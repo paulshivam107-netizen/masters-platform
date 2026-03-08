@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrandLogoIcon, MoonIcon, SunIcon } from '../../app/icons';
+import { BrandLogoIcon } from '../../app/icons';
 
 function SidebarNav({
   navGroups,
@@ -21,7 +21,6 @@ function SidebarNav({
   );
   const primaryMobileIds = React.useMemo(() => new Set(['home', 'essays', 'tracker', 'deadlines']), []);
   const primaryMobileItems = navItems.filter((item) => primaryMobileIds.has(item.id));
-  const overflowMobileItems = navItems.filter((item) => !primaryMobileIds.has(item.id));
 
   const overflowByGroup = React.useMemo(
     () =>

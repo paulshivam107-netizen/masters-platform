@@ -1,0 +1,9 @@
+{
+  "name": "Masters Platform",
+  "short_name": "Masters",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f111a",
+  "theme_color": "#0f111a",
+  "icons": []
+}
