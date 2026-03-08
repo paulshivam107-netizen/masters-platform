@@ -5,7 +5,6 @@ import {
   resetPasswordApi
 } from '../api';
 import { requestGoogleIdToken, resolveGoogleClientId } from '../app/googleIdentity';
-import { MoonIcon, SunIcon } from '../app/icons';
 import { trackEvent } from '../app/telemetry';
 import './Auth.css';
 
