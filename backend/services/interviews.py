@@ -136,6 +136,7 @@ def complete(db, session, op, token, updates=None, result=None, usage=None):
         db.rollback()
         raise HTTPException(409, "The session changed while this step was running. Reload to continue.")
     op.status = "succeeded"
+    op.failure_code = None
     op.result_json = json.dumps(result) if result is not None else None
     op.usage_json = json.dumps(usage or {})
     db.commit()
@@ -143,13 +144,13 @@ def complete(db, session, op, token, updates=None, result=None, usage=None):
     return serialize(session)
 
 
-def fail(db, session_id, operation_id, token):
+def fail(db, session_id, operation_id, token, reason="save_failed"):
     db.rollback()
     changed = db.query(InterviewSession).filter_by(id=session_id, pending_token=token).update(
         {"pending_token": None, "pending_until": None}, synchronize_session=False,
     )
     if changed:
-        db.query(InterviewOperation).filter_by(id=operation_id).update({"status": "failed"}, synchronize_session=False)
+        db.query(InterviewOperation).filter_by(id=operation_id).update({"status": "failed", "failure_code": reason, "failed_at": datetime.utcnow()}, synchronize_session=False)
     db.commit()
 
 
@@ -157,7 +158,7 @@ def run_step(db, session, op, token, action):
     try:
         return action()
     except provider.ProviderFailure as exc:
-        fail(db, session.id, op.id, token)
+        fail(db, session.id, op.id, token, getattr(exc, "code", "provider_error"))
         raise HTTPException(exc.status, str(exc)) from None
     except HTTPException:
         raise

@@ -1,4 +1,4 @@
-from sqlalchemy import and_, text
+from sqlalchemy import and_, text, inspect
 from sqlalchemy.orm import Session
 
 from models import ApplicationTracker, Essay
@@ -16,11 +16,13 @@ POSTGRES_RLS_TABLES = (
     "interview_operations",
     "interview_quotas",
     "resume_question_sets",
+    "admin_economics_scenarios",
 )
 
 
 def run_schema_migrations(engine):
     """Lightweight schema + security migrations for supported dialects."""
+    run_admin_operations_migrations(engine)
     if engine.dialect.name == "postgresql":
         run_postgres_security_migrations(engine)
         return
@@ -238,3 +240,30 @@ def backfill_essay_application_links(user_id: int, db: Session):
 
     if changed:
         db.commit()
+
+
+def run_admin_operations_migrations(engine):
+    """Additive, repeatable upgrade for existing SQLite and PostgreSQL pilots."""
+    if engine.dialect.name not in ("sqlite", "postgresql"):
+        return
+    additions = {
+        "pilot_feedback": {
+            "status": "VARCHAR(24) NOT NULL DEFAULT 'open'",
+            "resolution_note": "TEXT NOT NULL DEFAULT ''",
+            "revision": "INTEGER NOT NULL DEFAULT 0",
+            "handled_by": "INTEGER",
+            "handled_at": "TIMESTAMP",
+        },
+        "interview_operations": {
+            "failure_code": "VARCHAR(40)", "failed_at": "TIMESTAMP",
+        },
+    }
+    with engine.begin() as conn:
+        inspector = inspect(conn)
+        for table, columns in additions.items():
+            if not inspector.has_table(table):
+                continue
+            existing = {c["name"] for c in inspector.get_columns(table)}
+            for name, definition in columns.items():
+                if name not in existing:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {definition}"))

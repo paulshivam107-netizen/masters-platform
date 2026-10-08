@@ -72,7 +72,8 @@ echo "[3/7] Backend API and interview regression tests"
   "${PYTHON_BIN}" -m unittest \
     tests.test_interviews \
     tests.test_resume_questions \
-    tests.test_interview_plan -v
+    tests.test_interview_plan \
+    tests.test_admin_operations -v
 )
 
 echo "[4/7] Frontend unit tests"

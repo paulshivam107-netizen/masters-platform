@@ -1,0 +1,329 @@
+.admin-panel [hidden] {
+  display: none !important;
+}
+.admin-panel .pilot-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 6px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 14px;
+}
+.admin-panel .pilot-tabs button {
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  padding: 11px 15px;
+  margin: 0;
+}
+.admin-panel .pilot-tabs button[aria-current="page"] {
+  background: var(--tint);
+  color: var(--primary);
+  font-weight: 700;
+}
+.pilot-section {
+  min-width: 0;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+}
+.pilot-section > p,
+.pilot-section-heading p {
+  margin: 8px 0 18px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.pilot-section h3 {
+  font-size: 19px;
+  margin-bottom: 8px;
+}
+.pilot-section h4 {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.pilot-stack {
+  display: grid;
+  gap: var(--section-gap);
+  min-width: 0;
+}
+.pilot-section-heading,
+.pilot-ticket-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.pilot-section-heading > div {
+  max-width: 650px;
+}
+.pilot-section label,
+.pilot-user-search {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.pilot-section input,
+.pilot-section select,
+.pilot-section textarea,
+.pilot-user-search input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  margin-top: 6px;
+  padding: 10px 12px;
+  background: var(--surface-soft);
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  color: var(--ink);
+  font: inherit;
+}
+.pilot-section textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+.pilot-section input:focus-visible,
+.pilot-section select:focus-visible,
+.pilot-section textarea:focus-visible,
+.pilot-tabs button:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+.pilot-muted {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+.pilot-attention-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin: 22px 0;
+}
+.admin-panel .pilot-attention-grid button {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  text-align: left;
+  padding: 22px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.pilot-attention-grid strong {
+  font: 650 24px var(--font-heading);
+}
+.pilot-attention-grid span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.pilot-metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.pilot-metric {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.pilot-metric span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+.pilot-metric strong {
+  display: block;
+  font: 650 26px var(--font-heading);
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+.pilot-ticket {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 12px;
+  padding: 18px;
+  margin: 14px 0;
+  min-width: 0;
+}
+.pilot-ticket p {
+  line-height: 1.65;
+  font-size: 13px;
+  margin: 10px 0;
+  overflow-wrap: anywhere;
+}
+.pilot-message {
+  white-space: pre-wrap;
+}
+.pilot-id {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.pilot-badge {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 11px;
+  border-radius: 6px;
+  padding: 5px 8px;
+  color: var(--primary);
+  background: var(--tint);
+}
+.pilot-badge.attention {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+.pilot-notice {
+  padding: 14px 16px;
+  margin: 18px 0;
+  background: var(--surface-soft);
+  border-left: 3px solid var(--primary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.pilot-error {
+  color: var(--danger);
+}
+.pilot-empty {
+  padding: 28px 20px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 12px;
+  margin: 20px 0;
+  text-align: center;
+}
+.pilot-empty p {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+.pilot-section details {
+  border-top: 1px solid var(--line);
+  margin-top: 18px;
+  padding-top: 14px;
+}
+.pilot-section summary {
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 0;
+  margin-bottom: 14px;
+}
+.pilot-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 18px 0;
+}
+.pilot-full {
+  grid-column: 1 / -1;
+}
+.pilot-actions,
+.pilot-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0 0;
+}
+.pilot-pagination {
+  justify-content: flex-end;
+  font-size: 12px;
+  color: var(--muted);
+}
+.pilot-pagination span {
+  margin-right: auto;
+}
+.pilot-filters {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin: 18px 0;
+}
+.pilot-filters form {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+.pilot-filters form label {
+  flex: 1;
+  min-width: 160px;
+}
+.pilot-economics-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 28px;
+}
+.pilot-breakdown {
+  margin: 12px 0;
+  font-size: 13px;
+}
+.pilot-breakdown > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.pilot-breakdown dd {
+  white-space: nowrap;
+  margin: 0;
+}
+.pilot-user-search {
+  max-width: 480px;
+  margin: 16px 0;
+}
+@media (max-width: 950px) {
+  .pilot-economics-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pilot-attention-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .pilot-section-heading {
+    flex-direction: column;
+  }
+  .pilot-section-heading > label {
+    width: 100%;
+  }
+  .pilot-form-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .pilot-ticket-top {
+    flex-wrap: wrap;
+  }
+  .pilot-metric strong {
+    font-size: 22px;
+  }
+  .admin-panel .pilot-tabs {
+    gap: 2px;
+  }
+  .admin-panel .pilot-tabs button {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
+
+.pilot-subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.admin-panel .pilot-subnav button[aria-pressed="true"] {
+  background: var(--tint);
+  color: var(--primary);
+  border-color: var(--primary);
+}

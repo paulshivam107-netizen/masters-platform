@@ -294,3 +294,22 @@ PY
 - [Search and AI visibility implementation](docs/SEO_IMPLEMENTATION.md): public HTML rendering, crawler policy, deployment routing and launch checks.
 
 `npm run build` now also renders the public pages and generates crawler files. Run `npm run preview` from `frontend` to check the resulting static site. Public indexing is off by default; set the documented public origin and indexing flag only for a reviewed production launch.
+
+
+## Admin pilot operations
+
+Open `/app/admin` with an active admin account. Sections can be linked directly, for example `/app/admin?section=spending`.
+
+- **Overview:** interview steps requiring attention and unresolved feedback.
+- **Interviews:** failed/stalled operations, safe diagnostic categories, attempts and session IDs. Applicant retries resolve the queue automatically. No transcripts, resumes or recordings are exposed. Older failures show an unknown reason; requests rejected before an operation exists are not included.
+- **Spending:** recorded live interview/resume usage, optional text-cost estimates using rates entered by the admin, and the integrated economics calculator. Usage is not an invoice: deleted records, failed-call charges and audio costs are not fully captured. Calculator scenarios persist per admin account with edit-conflict protection. Temporary token rates are not saved.
+- **Feedback:** search and paginate reports; mark open, in progress or resolved, with internal notes. Resolution requires a note. Changes are audited and concurrent edits return a conflict instead of overwriting. No customer messages are sent.
+- **Users / Programmes / System:** existing controls grouped into focused screens. The AI pause switch covers live interviews; model selection in the existing settings form applies to essay reviews.
+
+### Upgrade and validation
+
+Restart the backend after updating code. Standard startup creates the `admin_economics_scenarios` table and applies additive feedback/operation columns; `python scripts/db_migrate.py` performs the same migration explicitly. Back up any valuable database before upgrades. Never run seed/reset scripts against existing applicant data.
+
+New regression coverage: `backend/tests/test_admin_operations.py`, `frontend/src/components/views/workspace/AdminPilot.test.js`, and `adminEconomics.test.js`. The standard CI runner includes the admin backend suite. Validation used an isolated SQLite database and synthetic admin/member accounts, with no provider calls. A real PostgreSQL upgrade and real-provider billing reconciliation remain deployment checks.
+
+Validated on 8 October 2026: 32 backend tests, 59 frontend tests across 17 suites, and the real application's production compilation passed. The 12 new frontend checks were rerun after final UI changes. Browser checks used the actual admin components and API in a synthetic fixture: feedback resolution persisted across reload; calculator assumptions saved and reloaded; diagnostics displayed; light/dark themes and a 390px phone viewport were reviewed with no horizontal overflow. This was not a production sign-in or live-provider test. [Saved browser evidence](docs/validation/admin-pilot/) contains synthetic data only.

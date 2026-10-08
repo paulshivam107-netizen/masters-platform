@@ -122,6 +122,11 @@ class PilotFeedback(Base):
     category = Column(String, nullable=False, default="general")
     message = Column(Text, nullable=False)
     page_context = Column(String, nullable=True)
+    status = Column(String(24), nullable=False, default="open", server_default="open")
+    resolution_note = Column(Text, nullable=False, default="", server_default="")
+    revision = Column(Integer, nullable=False, default=0, server_default="0")
+    handled_by = Column(Integer, nullable=True)
+    handled_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
 
 
@@ -183,6 +188,8 @@ class InterviewOperation(Base):
     status = Column(String(16), nullable=False, default="pending")
     result_json = Column(Text, nullable=True)
     usage_json = Column(Text, nullable=True)
+    failure_code = Column(String(40), nullable=True)
+    failed_at = Column(DateTime, nullable=True)
     attempts = Column(Integer, nullable=False, default=1)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
@@ -210,3 +217,11 @@ class ResumeQuestionSet(Base):
     pending_until = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
     # The original file and reviewed resume text are deliberately not persisted.
+
+
+class AdminEconomicsScenario(Base):
+    __tablename__ = "admin_economics_scenarios"
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    assumptions_json = Column(Text, nullable=False)
+    revision = Column(Integer, nullable=False, default=1)
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
