@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from auth import require_admin_user
 from database import get_db
+from routers.admin_operations import router as operations_router
 from models import AdminEvent, ApplicationTracker, Essay, PilotFeedback, User
 from schemas import (
     AdminAiRuntimeConfigResponse,
@@ -445,3 +446,6 @@ async def put_ai_runtime_config(
         "updated_at": config.updated_at,
         "updated_by_user_id": config.updated_by_user_id,
     }
+
+
+router.include_router(operations_router)

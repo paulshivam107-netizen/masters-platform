@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import AdminPilot from './AdminPilot';
 
 function AdminView({
   adminLoading,
@@ -6,7 +8,6 @@ function AdminView({
   adminOverview,
   adminUsers,
   adminEvents,
-  adminFeedback,
   adminBreakdown,
   adminCoverage,
   adminAiRuntimeConfig,
@@ -22,7 +23,12 @@ function AdminView({
 }) {
   const USERS_BATCH = 20;
   const EVENTS_BATCH = 30;
-  const FEEDBACK_BATCH = 20;
+  const sections = [['overview', 'Overview'], ['interviews', 'Interviews'], ['spending', 'Spending'], ['feedback', 'Feedback'], ['users', 'Users'], ['catalog', 'Programmes'], ['system', 'System']];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const section = sections.some(([id]) => id === searchParams.get('section')) ? searchParams.get('section') : 'overview';
+  const selectSection = id => setSearchParams({ section: id });
+  const [pilotRefresh, setPilotRefresh] = useState(0);
+  const [userSearch, setUserSearch] = useState('');
 
   const [pendingRoleChange, setPendingRoleChange] = useState(null);
   const [roleUpdateLoading, setRoleUpdateLoading] = useState(false);
@@ -51,7 +57,6 @@ function AdminView({
   const [liveMessage, setLiveMessage] = useState('');
   const [visibleUsersCount, setVisibleUsersCount] = useState(USERS_BATCH);
   const [visibleEventsCount, setVisibleEventsCount] = useState(EVENTS_BATCH);
-  const [visibleFeedbackCount, setVisibleFeedbackCount] = useState(FEEDBACK_BATCH);
   const [aiConfigDraft, setAiConfigDraft] = useState({
     provider: 'mock',
     ai_enabled: true,
@@ -225,9 +230,10 @@ function AdminView({
   };
 
   const handleRefreshClick = async () => {
+    setPilotRefresh(n => n + 1);
     try {
       await onRefresh();
-      pushToast('success', 'Admin data refreshed.');
+      setLiveMessage('Refresh requested. Each section shows its own loading or error state.');
     } catch (_error) {
       pushToast('error', 'Could not refresh admin data.');
     }
@@ -504,13 +510,9 @@ function AdminView({
     setVisibleEventsCount(EVENTS_BATCH);
   }, [adminEvents.length]);
 
-  useEffect(() => {
-    setVisibleFeedbackCount(FEEDBACK_BATCH);
-  }, [adminFeedback.length]);
-
-  const visibleUsers = adminUsers.slice(0, visibleUsersCount);
+  const filteredUsers = adminUsers.filter(row => `${row.email} ${row.name || ''}`.toLowerCase().includes(userSearch.toLowerCase()));
+  const visibleUsers = filteredUsers.slice(0, visibleUsersCount);
   const visibleEvents = adminEvents.slice(0, visibleEventsCount);
-  const visibleFeedback = adminFeedback.slice(0, visibleFeedbackCount);
   const normalizedCatalogSearch = catalogSearch.trim().toLowerCase();
   const filteredCatalog = programCatalog.filter((item) => {
     if (!normalizedCatalogSearch) return true;
@@ -521,9 +523,8 @@ function AdminView({
       || (item.country || '').toLowerCase().includes(normalizedCatalogSearch)
     );
   });
-  const hasMoreUsers = visibleUsersCount < adminUsers.length;
+  const hasMoreUsers = visibleUsersCount < filteredUsers.length;
   const hasMoreEvents = visibleEventsCount < adminEvents.length;
-  const hasMoreFeedback = visibleFeedbackCount < adminFeedback.length;
 
   return (
     <div className="settings-panel admin-panel">
@@ -547,6 +548,7 @@ function AdminView({
       <div className="admin-toolbar" data-testid="admin-toolbar">
         <div className="admin-toolbar-title-wrap">
           <h2>Pilot Admin</h2>
+          <p className="pilot-muted">Support applicants, review usage and keep the pilot running.</p>
           {adminLastUpdatedAt && (
             <p className="admin-last-updated">Last updated {new Date(adminLastUpdatedAt).toLocaleTimeString()}</p>
           )}
@@ -563,12 +565,16 @@ function AdminView({
         </button>
       </div>
 
+      <nav className="pilot-tabs" aria-label="Admin sections">{sections.map(([id, label]) => <button type="button" key={id} aria-current={section === id ? 'page' : undefined} onClick={() => selectSection(id)}>{label}</button>)}</nav>
+      <AdminPilot key={currentUserId} section={section} refresh={pilotRefresh} overview={adminOverview} onSelect={selectSection}/>
+
       {adminError && <p className="admin-error" data-testid="admin-error" aria-live="assertive">{adminError}</p>}
       {adminLoading && !adminOverview && <p className="admin-loading" data-testid="admin-loading">Loading admin analytics...</p>}
 
-      <div className="settings-grid admin-stats-grid">
+      <div className="settings-grid admin-stats-grid" hidden={section !== 'system'}>
         <div className="settings-card settings-card-wide">
-          <h3>AI Runtime Controls</h3>
+          <h3>AI controls</h3>
+          <p className="pilot-muted">The AI pause switch also pauses live interviews and résumé generation. Provider/model selection below controls essay reviews; interview models are configured on the server.</p>
           <form className="admin-ai-config-form" onSubmit={handleAiConfigSubmit}>
             <div className="admin-ai-config-grid">
               <label htmlFor="admin-ai-provider">Provider</label>
@@ -632,7 +638,7 @@ function AdminView({
         </div>
 
         <div className="settings-card"><h3>Total users</h3><p>{adminOverview?.total_users ?? 0}</p></div>
-        <div className="settings-card"><h3>Active users</h3><p>{adminOverview?.active_users ?? 0}</p></div>
+        <div className="settings-card"><h3>Enabled accounts</h3><p>{adminOverview?.active_users ?? 0}</p></div>
         <div className="settings-card"><h3>Verified users</h3><p>{adminOverview?.verified_users ?? 0}</p></div>
         <div className="settings-card"><h3>Total events</h3><p>{adminOverview?.total_events ?? 0}</p></div>
         <div className="settings-card"><h3>Events in last 7 days</h3><p>{adminOverview?.recent_events_7d ?? 0}</p></div>
@@ -641,14 +647,14 @@ function AdminView({
         <div className="settings-card"><h3>Weekly active users (WAU)</h3><p>{adminOverview?.wau_users_7d ?? 0}</p></div>
         <div className="settings-card"><h3>New users (last 7 days)</h3><p>{adminOverview?.new_users_7d ?? 0}</p></div>
         <div className="settings-card"><h3>Activated users (last 7 days)</h3><p>{adminOverview?.activated_users_7d ?? 0}</p></div>
-        <div className="settings-card"><h3>Activation rate</h3><p>{adminOverview?.activation_rate_7d ?? 0}%</p></div>
+        <div className="settings-card"><h3>Application + essay activation</h3><p>{adminOverview?.activation_rate_7d ?? 0}%</p></div>
         <div className="settings-card"><h3>Error events (last 7 days)</h3><p>{adminOverview?.api_error_events_7d ?? 0}</p></div>
         <div className="settings-card"><h3>New applications (last 7 days)</h3><p>{adminOverview?.applications_created_7d ?? 0}</p></div>
         <div className="settings-card"><h3>New essays (last 7 days)</h3><p>{adminOverview?.essays_created_7d ?? 0}</p></div>
       </div>
 
       <div className="settings-grid">
-        <div className="settings-card settings-card-wide">
+        <div className="settings-card settings-card-wide" hidden={section !== 'system'}>
           <h3>Top Events</h3>
           <div className="admin-list">
             {adminBreakdown.length === 0 ? (
@@ -663,7 +669,7 @@ function AdminView({
           </div>
         </div>
 
-        <div className="settings-card settings-card-wide">
+        <div className="settings-card settings-card-wide" hidden={section !== 'system'}>
           <h3>Telemetry Coverage (7d)</h3>
           {!adminCoverage ? (
             <p>Coverage not available yet.</p>
@@ -686,13 +692,13 @@ function AdminView({
           )}
         </div>
 
-        <div className="settings-card settings-card-wide">
+        <div className="settings-card settings-card-wide" hidden={section !== 'catalog'}>
           <h3>Program Catalog Editor</h3>
           <form className="admin-catalog-form" onSubmit={handleCatalogSubmit}>
             <div className="admin-catalog-grid">
               <input
                 type="text"
-                placeholder="Catalog ID (optional for create)"
+                aria-label="Catalog ID" placeholder="Catalog ID (optional for create)"
                 value={catalogForm.id}
                 disabled={Boolean(catalogEditingId)}
                 onChange={(event) => handleCatalogFormChange('id', event.target.value)}
@@ -703,7 +709,7 @@ function AdminView({
               )}
               <input
                 type="text"
-                placeholder="School name"
+                aria-label="School name" placeholder="School name"
                 value={catalogForm.school_name}
                 onChange={(event) => handleCatalogFormChange('school_name', event.target.value)}
                 onBlur={() => handleCatalogBlur('school_name')}
@@ -714,7 +720,7 @@ function AdminView({
               )}
               <input
                 type="text"
-                placeholder="Program name"
+                aria-label="Program name" placeholder="Program name"
                 value={catalogForm.program_name}
                 onChange={(event) => handleCatalogFormChange('program_name', event.target.value)}
                 onBlur={() => handleCatalogBlur('program_name')}
@@ -725,7 +731,7 @@ function AdminView({
               )}
               <input
                 type="text"
-                placeholder="Degree"
+                aria-label="Degree" placeholder="Degree"
                 value={catalogForm.degree}
                 onChange={(event) => handleCatalogFormChange('degree', event.target.value)}
                 onBlur={() => handleCatalogBlur('degree')}
@@ -736,7 +742,7 @@ function AdminView({
               )}
               <input
                 type="text"
-                placeholder="Country"
+                aria-label="Country" placeholder="Country"
                 value={catalogForm.country}
                 onChange={(event) => handleCatalogFormChange('country', event.target.value)}
                 onBlur={() => handleCatalogBlur('country')}
@@ -747,7 +753,7 @@ function AdminView({
               )}
               <input
                 type="text"
-                placeholder="City"
+                aria-label="City" placeholder="City"
                 value={catalogForm.city}
                 onChange={(event) => handleCatalogFormChange('city', event.target.value)}
                 onBlur={() => handleCatalogBlur('city')}
@@ -904,32 +910,10 @@ function AdminView({
           </div>
         </div>
 
-        <div className="settings-card settings-card-wide">
-          <h3>Recent Feedback</h3>
-          <div className="admin-list">
-            {adminFeedback.length === 0 ? (
-              <p>No feedback submitted yet.</p>
-            ) : (
-              visibleFeedback.map((row) => (
-                <p key={`feedback-${row.id}`} data-testid="admin-feedback-item">
-                  <strong>[{row.category}]</strong> {row.message} ({row.user_email})
-                </p>
-              ))
-            )}
-            {hasMoreFeedback && (
-              <button
-                type="button"
-                className="admin-load-more"
-                onClick={() => setVisibleFeedbackCount((prev) => prev + FEEDBACK_BATCH)}
-              >
-                Load More Feedback
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="settings-card settings-card-wide">
-          <h3>Recent Users</h3>
+        <div className="settings-card settings-card-wide" hidden={section !== 'users'}>
+          <h3>Recent users</h3>
+          <label className="pilot-user-search">Find in loaded users<input type="search" value={userSearch} onChange={e => { setUserSearch(e.target.value); setVisibleUsersCount(USERS_BATCH); }} placeholder="Email or name"/></label>
+          <p className="pilot-muted">Showing the latest {adminUsers.length} accounts loaded by the admin API.</p>
           <div className="admin-table-wrap">
             <table className="admin-table">
               <caption className="sr-only">Recent users with role and activity metrics</caption>
@@ -944,7 +928,7 @@ function AdminView({
                 </tr>
               </thead>
               <tbody>
-                {adminUsers.length === 0 ? (
+                {visibleUsers.length === 0 ? (
                   <tr>
                     <td colSpan={6}>No users found.</td>
                   </tr>
@@ -985,7 +969,7 @@ function AdminView({
           </div>
         </div>
 
-        <div className="settings-card settings-card-wide">
+        <div className="settings-card settings-card-wide" hidden={section !== 'system'}>
           <h3>Recent Telemetry Events</h3>
           <div className="admin-list">
             {adminEvents.length === 0 ? (

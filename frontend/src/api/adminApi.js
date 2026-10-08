@@ -64,3 +64,16 @@ export async function updateAdminAiRuntimeConfigApi(payload) {
   const { data } = await apiClient.put('/admin/ai/runtime', payload);
   return data;
 }
+
+export async function getPilotAdminApi(path) {
+  const { data } = await apiClient.get(`/admin/pilot/${path}`);
+  return data;
+}
+export async function updatePilotFeedbackApi(id, payload) {
+  const { data } = await apiClient.patch(`/admin/pilot/feedback/${id}`, payload);
+  return data;
+}
+export async function saveEconomicsApi(payload) {
+  const { data } = await apiClient.put('/admin/pilot/economics', payload);
+  return data;
+}

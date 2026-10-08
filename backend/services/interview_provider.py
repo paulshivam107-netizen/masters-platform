@@ -16,9 +16,10 @@ MAX_RECORDING_SECONDS = 120
 
 
 class ProviderFailure(Exception):
-    def __init__(self, message="The AI service could not complete this step. Your saved interview is safe; please retry.", status=503):
+    def __init__(self, message="The AI service could not complete this step. Your saved interview is safe; please retry.", status=503, code="provider_error"):
         super().__init__(message)
         self.status = status
+        self.code = code
 
 
 def enabled():
@@ -45,14 +46,14 @@ def _post(path, **kwargs):
                 **kwargs,
             )
         if response.status_code == 429:
-            raise ProviderFailure("The AI provider is busy or has reached its usage limit. Please try later.", 503)
+            raise ProviderFailure("The AI provider is busy or has reached its usage limit. Please try later.", 503, code="provider_limit")
         if response.status_code in (401, 403):
-            raise ProviderFailure("The AI connection needs the site owner's attention. Your saved interview is safe.")
+            raise ProviderFailure("The AI connection needs the site owner's attention. Your saved interview is safe.", code="provider_auth")
         if not 200 <= response.status_code < 300:
             raise ProviderFailure()
         return response
     except httpx.TimeoutException:
-        raise ProviderFailure("The AI response timed out. Your answer has not been advanced; please retry.") from None
+        raise ProviderFailure("The AI response timed out. Your answer has not been advanced; please retry.", code="provider_timeout") from None
     except httpx.HTTPError:
         raise ProviderFailure() from None
 
