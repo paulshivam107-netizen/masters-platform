@@ -1,127 +1,108 @@
-import { useRef, useState } from 'react';
-import {
-  createDefaultProfileForm
-} from '../formDefaults';
-import { DOC_GLOBAL_SCOPE, isLegacyDocMap } from '../helpers';
+import { useTheme } from "../../contexts/ThemeContext";
+import { useWorkspaceNavigation } from "../workspaceNavigation";
+import { useRef, useState } from "react";
+import { createDefaultProfileForm } from "../formDefaults";
+import { readStoredValue, readUserValue } from "../workspaceStorage";
 import {
   loadApplicationDraft,
   loadEssayDraft,
   ONBOARDING_DISMISSED_KEY,
-  ONBOARDING_HIDDEN_KEY
-} from '../drafts';
+  ONBOARDING_HIDDEN_KEY,
+} from "../drafts";
 
-export function useAppState() {
-  const initialEssayDraft = loadEssayDraft();
-  const initialApplicationDraft = loadApplicationDraft();
+export function useAppState(userId) {
+  const initialEssayDraft = loadEssayDraft(userId);
+  const initialApplicationDraft = loadApplicationDraft(userId);
   const profileMenuRef = useRef(null);
   const [essays, setEssays] = useState([]);
   const [selectedEssay, setSelectedEssay] = useState(null);
   const [review, setReview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [showAuth, setShowAuth] = useState('login');
+  const [showAuth, setShowAuth] = useState("login");
   const [versions, setVersions] = useState([]);
   const [showVersions, setShowVersions] = useState(false);
-  const [activeNav, setActiveNav] = useState('home');
-  const [confirmDelete, setConfirmDelete] = useState(() => localStorage.getItem('ui_confirm_delete') !== 'false');
-  const [showHomeChecklist, setShowHomeChecklist] = useState(() => localStorage.getItem('ui_show_checklist') !== 'false');
-  const [reducedMotion, setReducedMotion] = useState(() => localStorage.getItem('ui_reduced_motion') === 'true');
+  const [activeNav, setActiveNav] = useWorkspaceNavigation();
+  const [confirmDelete, setConfirmDelete] = useState(
+    () => readStoredValue("ui_confirm_delete", true) !== false,
+  );
+  const [showHomeChecklist, setShowHomeChecklist] = useState(
+    () => readStoredValue("ui_show_checklist", true) !== false,
+  );
+  const { reducedMotion, setReducedMotion } = useTheme();
   const [applications, setApplications] = useState([]);
   const [selectedApplicationId, setSelectedApplicationId] = useState(null);
-  const [applicationSearch, setApplicationSearch] = useState('');
+  const [applicationSearch, setApplicationSearch] = useState("");
   const [showApplicationForm, setShowApplicationForm] = useState(false);
   const [editingApplicationId, setEditingApplicationId] = useState(null);
   const [applicationLoading, setApplicationLoading] = useState(false);
-  const [essayDegreeChoice, setEssayDegreeChoice] = useState('MBA');
-  const [essayCustomDegree, setEssayCustomDegree] = useState('');
-  const [applicationDegreeChoice, setApplicationDegreeChoice] = useState('MBA');
-  const [applicationCustomDegree, setApplicationCustomDegree] = useState('');
-  const [docStatusByApplication, setDocStatusByApplication] = useState(() => {
-    try {
-      const savedByApp = localStorage.getItem('ui_doc_status_by_application');
-      if (savedByApp) return JSON.parse(savedByApp);
-
-      const legacy = localStorage.getItem('ui_doc_status_map');
-      if (!legacy) return {};
-      const parsed = JSON.parse(legacy);
-      if (isLegacyDocMap(parsed)) {
-        return { [DOC_GLOBAL_SCOPE]: parsed };
-      }
-      return parsed;
-    } catch {
-      return {};
-    }
-  });
+  const [essayDegreeChoice, setEssayDegreeChoice] = useState("MBA");
+  const [essayCustomDegree, setEssayCustomDegree] = useState("");
+  const [applicationDegreeChoice, setApplicationDegreeChoice] = useState("MBA");
+  const [applicationCustomDegree, setApplicationCustomDegree] = useState("");
+  const [docStatusByApplication, setDocStatusByApplication] = useState(() =>
+    readUserValue(userId, "ui_doc_status_by_application", {}),
+  );
   const [docsApplicationId, setDocsApplicationId] = useState(null);
-  const [docsCopySourceId, setDocsCopySourceId] = useState('');
+  const [docsCopySourceId, setDocsCopySourceId] = useState("");
   const [profileSaving, setProfileSaving] = useState(false);
-  const [profileMessage, setProfileMessage] = useState('');
+  const [profileMessage, setProfileMessage] = useState("");
   const [reminderPreview, setReminderPreview] = useState(null);
   const [reminderLoading, setReminderLoading] = useState(false);
   const [reminderSending, setReminderSending] = useState(false);
   const [timelineMonthOffset, setTimelineMonthOffset] = useState(0);
-  const [globalSearch, setGlobalSearch] = useState('');
+  const [globalSearch, setGlobalSearch] = useState("");
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [expandedNavGroups, setExpandedNavGroups] = useState({
     core: true,
     planning: true,
-    resources: true
+    resources: false,
   });
-  const [dismissedNotifications, setDismissedNotifications] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ui_dismissed_notifications');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-  const [interviewPrepByApplication, setInterviewPrepByApplication] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ui_interview_prep_by_application');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-  const [researchByApplication, setResearchByApplication] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ui_research_by_application');
-      return saved ? JSON.parse(saved) : {};
-    } catch {
-      return {};
-    }
-  });
-  const [decisionMatrixWeights, setDecisionMatrixWeights] = useState(() => {
-    try {
-      const saved = localStorage.getItem('ui_decision_matrix_weights');
-      if (saved) return JSON.parse(saved);
-    } catch {
-      // no-op
-    }
-    return {
+  const [dismissedNotifications, setDismissedNotifications] = useState(() =>
+    readUserValue(userId, "ui_dismissed_notifications", {}),
+  );
+  const [interviewPrepByApplication, setInterviewPrepByApplication] = useState(
+    () => readUserValue(userId, "ui_interview_prep_by_application", {}),
+  );
+  const [researchByApplication, setResearchByApplication] = useState(() =>
+    readUserValue(userId, "ui_research_by_application", {}),
+  );
+  const [decisionMatrixWeights, setDecisionMatrixWeights] = useState(() =>
+    readUserValue(userId, "ui_decision_matrix_weights", {
       readiness: 35,
       deadline: 25,
       affordability: 20,
       decision: 10,
-      documents: 10
-    };
+      documents: 10,
+    }),
+  );
+  const [versionDiffSelection, setVersionDiffSelection] = useState({
+    base: "",
+    compare: "",
   });
-  const [versionDiffSelection, setVersionDiffSelection] = useState({ base: '', compare: '' });
-  const [profileFormData, setProfileFormData] = useState(createDefaultProfileForm);
+  const [profileFormData, setProfileFormData] = useState(
+    createDefaultProfileForm,
+  );
   const [formData, setFormData] = useState(initialEssayDraft.value);
-  const [applicationFormData, setApplicationFormData] = useState(initialApplicationDraft.value);
-  const [essayDraftRecovered, setEssayDraftRecovered] = useState(initialEssayDraft.recovered);
-  const [applicationDraftRecovered, setApplicationDraftRecovered] = useState(initialApplicationDraft.recovered);
+  const [applicationFormData, setApplicationFormData] = useState(
+    initialApplicationDraft.value,
+  );
+  const [essayDraftRecovered, setEssayDraftRecovered] = useState(
+    initialEssayDraft.recovered,
+  );
+  const [applicationDraftRecovered, setApplicationDraftRecovered] = useState(
+    initialApplicationDraft.recovered,
+  );
   const [onboardingDismissed, setOnboardingDismissed] = useState(
-    () => localStorage.getItem(ONBOARDING_DISMISSED_KEY) === 'true'
+    () => readUserValue(userId, ONBOARDING_DISMISSED_KEY, false) === true,
   );
   const [onboardingHidden, setOnboardingHidden] = useState(
-    () => localStorage.getItem(ONBOARDING_HIDDEN_KEY) === 'true'
+    () => readUserValue(userId, ONBOARDING_HIDDEN_KEY, false) === true,
   );
-  const [feedbackCategory, setFeedbackCategory] = useState('general');
-  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [feedbackCategory, setFeedbackCategory] = useState("general");
+  const [feedbackMessage, setFeedbackMessage] = useState("");
   const [feedbackSending, setFeedbackSending] = useState(false);
-  const [feedbackStatus, setFeedbackStatus] = useState('');
+  const [feedbackStatus, setFeedbackStatus] = useState("");
 
   return {
     profileMenuRef,
@@ -224,6 +205,6 @@ export function useAppState() {
     feedbackSending,
     setFeedbackSending,
     feedbackStatus,
-    setFeedbackStatus
+    setFeedbackStatus,
   };
 }

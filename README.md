@@ -1,8 +1,14 @@
 # Master's Application Platform
 
+**Continue from the October 2026 checkpoint:** [session handoff](docs/SESSION_HANDOFF.md) links the implemented features, complete future roadmap, AI learning plan and archived validation evidence.
+
 ![CI](https://github.com/paulshivam107-netizen/masters-platform/actions/workflows/ci.yml/badge.svg)
 
 Planning workspace for Master's applicants with applications tracking, essay drafting, document readiness, deadlines, reminders, and AI essay review (mock or Anthropic-backed).
+
+## Future product and business roadmap
+
+Start with [the detailed roadmap](docs/future-roadmap/README.md) for the current interview-led strategy, pilot gates, hosting/database migration, pricing calculator, SEO/acquisition plan, operations and 38 scoped implementation tickets. It supersedes the older planning priorities below where they conflict; planned work is not a claim of production readiness.
 
 ## Current Architecture
 
@@ -278,3 +284,13 @@ from routers.system_routes import health_check
 print(health_check())
 PY
 ```
+
+## Onboarding and public launch
+
+- [Interview Studio setup](docs/INTERVIEW_SETUP.md): backend key, chat/voice flow, résumé profiles, adaptive follow-ups, local recording/playback, limits, privacy and validation.
+- [UI consistency review](docs/UI_CONSISTENCY_REVIEW.md): fixes, browser coverage, test results and remaining validation.
+- [Interview question graph](docs/INTERVIEW_QUESTION_BANK.md): 95 question-only prompts, linked follow-ups, source coverage and maintenance.
+- [Indian MBA launch and growth plan](docs/LAUNCH_AND_GROWTH_PLAN.md): audiences, pilot steps, outreach drafts, adoption metrics, quality backlog and interview revenue path.
+- [Search and AI visibility implementation](docs/SEO_IMPLEMENTATION.md): public HTML rendering, crawler policy, deployment routing and launch checks.
+
+`npm run build` now also renders the public pages and generates crawler files. Run `npm run preview` from `frontend` to check the resulting static site. Public indexing is off by default; set the documented public origin and indexing flag only for a reviewed production launch.

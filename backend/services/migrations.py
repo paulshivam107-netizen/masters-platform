@@ -12,6 +12,10 @@ POSTGRES_RLS_TABLES = (
     "pilot_feedback",
     "admin_events",
     "ai_runtime_config",
+    "interview_sessions",
+    "interview_operations",
+    "interview_quotas",
+    "resume_question_sets",
 )
 
 

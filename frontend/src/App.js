@@ -1,7 +1,13 @@
-import React from 'react';
-import './App.css';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
-import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import React from "react";
+import "./App.css";
+import { AuthProvider, useAuth } from "./contexts/AuthContext";
+import {
+  BrowserRouter,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import {
   createAdminProgramCatalogItemApi,
   deleteAdminProgramCatalogItemApi,
@@ -16,27 +22,59 @@ import {
   updateAdminProgramCatalogItemApi,
   updateAdminUserRoleApi,
   listProgramCatalogApi,
-  assistEssayOutlineApi
-} from './api';
-import AppErrorBoundary from './components/common/AppErrorBoundary';
-import RightSidebar from './components/layout/RightSidebar';
-import SidebarNav from './components/layout/SidebarNav';
-import TopControls from './components/layout/TopControls';
-import AdminView from './components/views/workspace/AdminView';
-import WorkspaceArea from './components/views/WorkspaceArea';
-import LandingPage from './components/public/LandingPage';
-import ProgramsPage from './components/public/ProgramsPage';
-import AuthPage from './components/public/AuthPage';
-import { UNIVERSITY_OPTIONS, DEGREE_OPTIONS, DOC_TEMPLATES } from './app/constants';
-import { getDefaultInterviewPrep, getDefaultResearchCard, getDocScopeKey, getVersionIdentity } from './app/helpers';
-import { useAppState } from './app/hooks/useAppState';
-import { useAppEffects } from './app/hooks/useAppEffects';
-import { useAppActions } from './app/hooks/useAppActions';
-import { useWorkspaceComputed } from './app/hooks/useWorkspaceComputed';
-import { trackEvent } from './app/telemetry';
+  assistEssayOutlineApi,
+} from "./api";
+import AppErrorBoundary from "./components/common/AppErrorBoundary";
+import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
+import SidebarNav from "./components/layout/SidebarNav";
+import TopControls from "./components/layout/TopControls";
+import AdminView from "./components/views/workspace/AdminView";
+import WorkspaceArea from "./components/views/WorkspaceArea";
+import LandingPage from "./components/public/LandingPage";
+import ProgramsPage from "./components/public/ProgramsPage";
+import AuthPage from "./components/public/AuthPage";
+import {
+  GuidesPage,
+  GuidePage,
+  HelpPage,
+  NotFoundPage,
+} from "./components/public/ResourcePages";
+import Seo from "./seo/Seo";
+import {
+  UNIVERSITY_OPTIONS,
+  DEGREE_OPTIONS,
+  DOC_TEMPLATES,
+} from "./app/constants";
+import {
+  getDefaultInterviewPrep,
+  getDefaultResearchCard,
+  getDocScopeKey,
+  getVersionIdentity,
+} from "./app/helpers";
+import { useAppState } from "./app/hooks/useAppState";
+import { useAppEffects } from "./app/hooks/useAppEffects";
+import { useAppActions } from "./app/hooks/useAppActions";
+import { useWorkspaceComputed } from "./app/hooks/useWorkspaceComputed";
+import { trackEvent } from "./app/telemetry";
 
 function AppContent() {
   const { user, logout, updateProfile } = useAuth();
+  const { isDarkMode, setIsDarkMode } = useTheme();
+  const [dataLoadState, setDataLoadState] = React.useState({
+    essays: "loading",
+    applications: "loading",
+  });
+  const [notice, setNotice] = React.useState(null);
+  const notify = React.useCallback(
+    (message) => setNotice({ message, id: Date.now() }),
+    [],
+  );
+  React.useEffect(() => {
+    if (!notice) return undefined;
+    if (/error|failed|could not|please/i.test(notice.message)) return undefined;
+    const timer = window.setTimeout(() => setNotice(null), 8000);
+    return () => window.clearTimeout(timer);
+  }, [notice]);
   const {
     profileMenuRef,
     essays,
@@ -136,10 +174,12 @@ function AppContent() {
     feedbackSending,
     setFeedbackSending,
     feedbackStatus,
-    setFeedbackStatus
-  } = useAppState();
+    setFeedbackStatus,
+  } = useAppState(user?.id);
 
   const actions = useAppActions({
+    setDataLoadState,
+    notify,
     DEGREE_OPTIONS,
     getVersionIdentity,
     applications,
@@ -197,11 +237,12 @@ function AppContent() {
     setFeedbackCategory,
     setFeedbackMessage,
     setFeedbackSending,
-    setFeedbackStatus
+    setFeedbackStatus,
   });
 
   useAppEffects({
     user,
+    notify,
     fetchEssays: actions.fetchEssays,
     fetchApplications: actions.fetchApplications,
     confirmDelete,
@@ -230,7 +271,7 @@ function AppContent() {
     formData,
     applicationFormData,
     onboardingDismissed,
-    onboardingHidden
+    onboardingHidden,
   });
 
   const {
@@ -239,17 +280,12 @@ function AppContent() {
     pageHeading,
     pageSubtitle,
     workspaceAreaProps,
-    visibleSidebarApplications,
-    hasMoreSidebarApplications,
-    sidebarApplications,
-    getEssayCountForApplication,
-    parseDate,
-    handleViewAllApplications,
-    handleSelectSidebarApplication
   } = useWorkspaceComputed({
     user,
     logout,
     state: {
+      isDarkMode,
+      setIsDarkMode,
       activeNav,
       essays,
       profileFormData,
@@ -324,24 +360,24 @@ function AppContent() {
       feedbackMessage,
       setFeedbackMessage,
       feedbackSending,
-      feedbackStatus
+      feedbackStatus,
     },
     actions,
     constants: {
       DEGREE_OPTIONS,
       UNIVERSITY_OPTIONS,
-      DOC_TEMPLATES
+      DOC_TEMPLATES,
     },
     helpers: {
       getDocScopeKey,
       getDefaultInterviewPrep,
       getDefaultResearchCard,
-      getVersionIdentity
-    }
+      getVersionIdentity,
+    },
   });
 
   const [adminLoading, setAdminLoading] = React.useState(false);
-  const [adminError, setAdminError] = React.useState('');
+  const [adminError, setAdminError] = React.useState("");
   const [adminOverview, setAdminOverview] = React.useState(null);
   const [adminUsers, setAdminUsers] = React.useState([]);
   const [adminEvents, setAdminEvents] = React.useState([]);
@@ -351,24 +387,33 @@ function AppContent() {
   const [adminAiRuntimeConfig, setAdminAiRuntimeConfig] = React.useState(null);
   const [adminLastUpdatedAt, setAdminLastUpdatedAt] = React.useState(null);
   const [programCatalog, setProgramCatalog] = React.useState([]);
-  const [programCatalogLoading, setProgramCatalogLoading] = React.useState(false);
+  const [programCatalogLoading, setProgramCatalogLoading] =
+    React.useState(false);
 
-  const isAdminUser = (user?.role || '').toLowerCase() === 'admin';
-  const showAdminPage = isAdminUser && activeNav === 'admin';
+  const isAdminUser = (user?.role || "").toLowerCase() === "admin";
+  const showAdminPage = isAdminUser && activeNav === "admin";
 
   const loadAdminData = React.useCallback(async () => {
     if (!isAdminUser) return;
     try {
       setAdminLoading(true);
-      setAdminError('');
-      const [overview, users, events, feedback, breakdown, coverage, aiRuntimeConfig] = await Promise.all([
+      setAdminError("");
+      const [
+        overview,
+        users,
+        events,
+        feedback,
+        breakdown,
+        coverage,
+        aiRuntimeConfig,
+      ] = await Promise.all([
         getAdminOverviewApi(),
         getAdminUsersApi(30),
         getAdminEventsApi(60),
         getAdminFeedbackApi(25),
         getAdminEventBreakdownApi(10),
         getAdminEventCoverageApi(),
-        getAdminAiRuntimeConfigApi()
+        getAdminAiRuntimeConfigApi(),
       ]);
       setAdminOverview(overview);
       setAdminUsers(users);
@@ -379,7 +424,9 @@ function AppContent() {
       setAdminAiRuntimeConfig(aiRuntimeConfig);
       setAdminLastUpdatedAt(new Date().toISOString());
     } catch (error) {
-      setAdminError(error?.response?.data?.detail || 'Failed to load admin data');
+      setAdminError(
+        error?.response?.data?.detail || "Failed to load admin data",
+      );
     } finally {
       setAdminLoading(false);
     }
@@ -388,33 +435,35 @@ function AppContent() {
   const handleAdminRoleChange = React.useCallback(
     async (targetUserId, nextRole) => {
       try {
-        setAdminError('');
+        setAdminError("");
         await updateAdminUserRoleApi(targetUserId, nextRole);
         await loadAdminData();
       } catch (error) {
-        const message = error?.response?.data?.detail || 'Failed to update user role';
+        const message =
+          error?.response?.data?.detail || "Failed to update user role";
         setAdminError(message);
         throw new Error(message);
       }
     },
-    [loadAdminData]
+    [loadAdminData],
   );
 
   const handleAdminUpdateAiRuntimeConfig = React.useCallback(
     async (payload) => {
       try {
-        setAdminError('');
+        setAdminError("");
         const updated = await updateAdminAiRuntimeConfigApi(payload);
         setAdminAiRuntimeConfig(updated);
         await loadAdminData();
         return updated;
       } catch (error) {
-        const message = error?.response?.data?.detail || 'Failed to update AI runtime config';
+        const message =
+          error?.response?.data?.detail || "Failed to update AI runtime config";
         setAdminError(message);
         throw new Error(message);
       }
     },
-    [loadAdminData]
+    [loadAdminData],
   );
 
   React.useEffect(() => {
@@ -424,8 +473,8 @@ function AppContent() {
   }, [showAdminPage, loadAdminData]);
 
   React.useEffect(() => {
-    if (!isAdminUser && activeNav === 'admin') {
-      setActiveNav('home');
+    if (!isAdminUser && activeNav === "admin") {
+      setActiveNav("home");
     }
   }, [isAdminUser, activeNav, setActiveNav]);
 
@@ -439,10 +488,10 @@ function AppContent() {
     if (!user) return;
     try {
       setProgramCatalogLoading(true);
-      const response = await listProgramCatalogApi('', 200);
+      const response = await listProgramCatalogApi("", 200);
       setProgramCatalog(response?.items || []);
     } catch (error) {
-      console.error('Failed to load program catalog:', error);
+      console.error("Failed to load program catalog:", error);
       setProgramCatalog([]);
     } finally {
       setProgramCatalogLoading(false);
@@ -460,29 +509,32 @@ function AppContent() {
         ...prev,
         school_name: item.school_name || prev.school_name,
         program_name: item.program_name || prev.program_name,
-        fee_currency: item.fee_currency || prev.fee_currency || 'USD',
+        fee_currency: item.fee_currency || prev.fee_currency || "USD",
         application_fee:
           item.application_fee === null || item.application_fee === undefined
             ? prev.application_fee
             : String(item.application_fee),
         deadline: item.deadline_round_1 || prev.deadline,
-        requirements_notes: prev.requirements_notes || ''
+        requirements_notes: prev.requirements_notes || "",
       }));
 
-      const normalizedDegree = (item.degree || item.program_name || '').trim();
-      if (DEGREE_OPTIONS.includes(normalizedDegree) && normalizedDegree !== 'Other') {
+      const normalizedDegree = (item.degree || item.program_name || "").trim();
+      if (
+        DEGREE_OPTIONS.includes(normalizedDegree) &&
+        normalizedDegree !== "Other"
+      ) {
         setApplicationDegreeChoice(normalizedDegree);
-        setApplicationCustomDegree('');
+        setApplicationCustomDegree("");
       } else if (normalizedDegree) {
-        setApplicationDegreeChoice('Other');
+        setApplicationDegreeChoice("Other");
         setApplicationCustomDegree(normalizedDegree);
       }
     },
     [
       setApplicationFormData,
       setApplicationDegreeChoice,
-      setApplicationCustomDegree
-    ]
+      setApplicationCustomDegree,
+    ],
   );
 
   const handleAssistOutline = React.useCallback(async (payload) => {
@@ -493,7 +545,7 @@ function AppContent() {
   const handleAdminSaveProgramCatalogItem = React.useCallback(
     async (programId, payload) => {
       try {
-        setAdminError('');
+        setAdminError("");
         if (programId) {
           await updateAdminProgramCatalogItemApi(programId, payload);
         } else {
@@ -501,78 +553,64 @@ function AppContent() {
         }
         await Promise.all([loadAdminData(), loadProgramCatalog()]);
       } catch (error) {
-        const message = error?.response?.data?.detail || 'Failed to save program catalog item';
+        const message =
+          error?.response?.data?.detail ||
+          "Failed to save program catalog item";
         setAdminError(message);
         throw new Error(message);
       }
     },
-    [loadAdminData, loadProgramCatalog]
+    [loadAdminData, loadProgramCatalog],
   );
 
   const handleAdminDeleteProgramCatalogItem = React.useCallback(
     async (programId) => {
       try {
-        setAdminError('');
+        setAdminError("");
         await deleteAdminProgramCatalogItemApi(programId);
         await Promise.all([loadAdminData(), loadProgramCatalog()]);
       } catch (error) {
-        const message = error?.response?.data?.detail || 'Failed to delete program catalog item';
+        const message =
+          error?.response?.data?.detail ||
+          "Failed to delete program catalog item";
         setAdminError(message);
         throw new Error(message);
       }
     },
-    [loadAdminData, loadProgramCatalog]
+    [loadAdminData, loadProgramCatalog],
   );
 
   React.useEffect(() => {
-    const scrollContainers = Array.from(
-      document.querySelectorAll('.main-content, .right-sidebar, .soft-nav-list')
-    );
-    if (!scrollContainers.length) return undefined;
-
-    const scrollTimers = new Map();
-    const markScrolling = (target) => {
-      target.classList.add('is-scrolling');
-      if (scrollTimers.has(target)) {
-        window.clearTimeout(scrollTimers.get(target));
-      }
-      const timeoutId = window.setTimeout(() => {
-        target.classList.remove('is-scrolling');
-        scrollTimers.delete(target);
-      }, 420);
-      scrollTimers.set(target, timeoutId);
-    };
-    const handleScrollActivity = (event) => markScrolling(event.currentTarget);
-    const handleWheelActivity = (event) => markScrolling(event.currentTarget);
-    const handleTouchActivity = (event) => markScrolling(event.currentTarget);
-
-    scrollContainers.forEach((container) => {
-      container.addEventListener('scroll', handleScrollActivity, { passive: true });
-      container.addEventListener('wheel', handleWheelActivity, { passive: true });
-      container.addEventListener('touchmove', handleTouchActivity, { passive: true });
-    });
-
-    return () => {
-      scrollContainers.forEach((container) => {
-        container.removeEventListener('scroll', handleScrollActivity);
-        container.removeEventListener('wheel', handleWheelActivity);
-        container.removeEventListener('touchmove', handleTouchActivity);
-        container.classList.remove('is-scrolling');
-        const timeoutId = scrollTimers.get(container);
-        if (timeoutId) {
-          window.clearTimeout(timeoutId);
-        }
-      });
-      scrollTimers.clear();
-    };
-  }, [activeNav, showAdminPage, showForm, showApplicationForm, showVersions]);
+    document.querySelector(".main-content")?.scrollTo?.({ top: 0 });
+    window.scrollTo(0, 0);
+  }, [activeNav]);
 
   React.useEffect(() => {
-    document.body.classList.add('dark-body');
-  }, []);
+    if (activeNav === "compose") setShowForm(true);
+  }, [activeNav, setShowForm]);
 
   return (
-    <div className={`App dark-mode ${reducedMotion ? 'reduced-motion' : ''}`}>
+    <div
+      className={`App ${isDarkMode ? "dark-mode" : "light-mode"} ${reducedMotion ? "reduced-motion" : ""}`}
+    >
+      {notice && (
+        <div
+          className={`workspace-toast ${/error|failed|could not|please/i.test(notice.message) ? "toast-warning" : ""}`}
+          role={
+            /error|failed|could not|please/i.test(notice.message)
+              ? "alert"
+              : "status"
+          }
+        >
+          <span>{notice.message}</span>
+          <button aria-label="Dismiss message" onClick={() => setNotice(null)}>
+            ×
+          </button>
+        </div>
+      )}
+      <a className="skip-link" href="#main-workspace">
+        Skip to content
+      </a>
       <div className="app-layout">
         {/* 1. Left Navigation */}
         <SidebarNav
@@ -585,48 +623,87 @@ function AppContent() {
 
         <div className="workspace-shell">
           <TopControls
+            onGoHome={() => actions.handleNavChange("home")}
             globalSearch={globalSearch}
             onGlobalSearchChange={setGlobalSearch}
             onGlobalSearchSubmit={actions.handleGlobalSearch}
             onCreateEssay={() => {
-              trackEvent('ui_create_essay_clicked', { source: 'top_controls' });
+              trackEvent("ui_create_essay_clicked", { source: "top_controls" });
               actions.handleOpenNewEssayForm();
             }}
             onCreateApplication={() => {
-              trackEvent('ui_create_application_clicked', { source: 'top_controls' });
+              trackEvent("ui_create_application_clicked", {
+                source: "top_controls",
+              });
               actions.handleOpenApplicationForm();
             }}
             notificationCount={notificationCount}
-            onOpenNotifications={() => actions.handleNavChange('notifications')}
+            onOpenNotifications={() => actions.handleNavChange("notifications")}
             profileMenuRef={profileMenuRef}
             isProfileMenuOpen={isProfileMenuOpen}
             onToggleProfileMenu={() => setIsProfileMenuOpen((prev) => !prev)}
-            onGoProfile={() => actions.handleNavChange('profile')}
-            onGoSettings={() => actions.handleNavChange('settings')}
+            onGoProfile={() => actions.handleNavChange("profile")}
+            onGoSettings={() => actions.handleNavChange("settings")}
             onLogout={logout}
             user={user}
           />
 
-          <div className={`workspace-body ${showAdminPage ? 'workspace-body-admin' : ''}`}>
+          <div
+            className={`workspace-body ${showAdminPage ? "workspace-body-admin" : ""}`}
+          >
             {/* 2. Main Center Workspace */}
-            <div className="main-content">
+            <main className="main-content" id="main-workspace" tabIndex="-1">
               <div className="content-header">
                 <div className="content-header-main">
+                  <p className="eyebrow">YOUR ADMISSIONS WORKSPACE</p>
                   <h1>{pageHeading}</h1>
                   <p className="header-subtitle">{pageSubtitle}</p>
                 </div>
               </div>
 
+              {!["settings", "profile", "admin"].includes(activeNav) &&
+                Object.values(dataLoadState).includes("error") && (
+                  <div className="data-status" role="alert">
+                    <div>
+                      <strong>We couldn’t load all your work.</strong>
+                      <p>Check your connection and try again.</p>
+                    </div>
+                    <button
+                      className="secondary-action-btn"
+                      onClick={() => {
+                        actions.fetchApplications();
+                        actions.fetchEssays();
+                      }}
+                    >
+                      Try again
+                    </button>
+                  </div>
+                )}
               <AppErrorBoundary
                 name="workspace_shell"
                 onReset={() => {
-                  setActiveNav('home');
+                  setActiveNav("home");
                   setSelectedEssay(null);
                   setShowForm(false);
                   setShowVersions(false);
                 }}
               >
-                {showAdminPage ? (
+                {!["settings", "profile", "admin"].includes(activeNav) &&
+                Object.values(dataLoadState).includes("loading") ? (
+                  <div className="workspace-loading" role="status">
+                    <span className="sr-only">Loading your workspace…</span>
+                    <div className="skeleton-hero" />
+                    <div className="skeleton-grid">
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  </div>
+                ) : !["settings", "profile", "admin"].includes(activeNav) &&
+                  Object.values(dataLoadState).includes(
+                    "error",
+                  ) ? null : showAdminPage ? (
                   <AdminView
                     adminLoading={adminLoading}
                     adminError={adminError}
@@ -644,11 +721,14 @@ function AppContent() {
                     programCatalog={programCatalog}
                     programCatalogLoading={programCatalogLoading}
                     onSaveProgramCatalogItem={handleAdminSaveProgramCatalogItem}
-                    onDeleteProgramCatalogItem={handleAdminDeleteProgramCatalogItem}
+                    onDeleteProgramCatalogItem={
+                      handleAdminDeleteProgramCatalogItem
+                    }
                     onUpdateAiRuntimeConfig={handleAdminUpdateAiRuntimeConfig}
                   />
                 ) : (
                   <WorkspaceArea
+                    key={activeNav}
                     {...workspaceAreaProps}
                     programCatalog={programCatalog}
                     programCatalogLoading={programCatalogLoading}
@@ -657,34 +737,7 @@ function AppContent() {
                   />
                 )}
               </AppErrorBoundary>
-            </div>
-
-            {/* 3. Right Sidebar */}
-            {!showAdminPage && (
-              <RightSidebar
-                onViewAllApplications={handleViewAllApplications}
-                onViewAllEssays={() => actions.handleNavChange('essays')}
-                onSelectApplication={handleSelectSidebarApplication}
-                onSelectEssay={(essay) => {
-                  trackEvent('ui_right_sidebar_essay_selected', { essayId: essay?.id || null });
-                  setSelectedEssay(essay);
-                  setReview(null);
-                  setShowVersions(false);
-                  setShowForm(false);
-                  setActiveNav('essays');
-                }}
-                visibleSidebarApplications={visibleSidebarApplications}
-                selectedApplicationId={selectedApplicationId}
-                essays={essays}
-                selectedEssayId={selectedEssay?.id}
-                getEssayCountForApplication={getEssayCountForApplication}
-                parseDate={parseDate}
-                hasMoreSidebarApplications={hasMoreSidebarApplications}
-                sidebarApplications={sidebarApplications}
-                applications={applications}
-                applicationSearch={applicationSearch}
-              />
-            )}
+            </main>
           </div>
         </div>
       </div>
@@ -705,29 +758,44 @@ function ProtectedAppRoute() {
     return <Navigate to={`/auth?mode=login&next=${next}`} replace />;
   }
 
-  return <AppContent />;
+  return <AppContent key={user.id} />;
 }
 
 function AppRoutes() {
+  const { pathname, hash } = useLocation();
+  React.useEffect(() => {
+    if (!pathname.startsWith("/app") && !hash) window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return (
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/programs" element={<ProgramsPage />} />
-      <Route path="/auth" element={<AuthPage />} />
-      <Route path="/app/*" element={<ProtectedAppRoute />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <Seo />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/programs" element={<ProgramsPage />} />
+        <Route path="/guides" element={<GuidesPage />} />
+        <Route path="/guides/:slug" element={<GuidePage />} />
+        <Route path="/help" element={<HelpPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/app/*" element={<ProtectedAppRoute />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </>
   );
 }
 
 function App() {
   return (
-    <AppErrorBoundary name="root_shell" onReset={() => window.location.reload()}>
-      <AuthProvider>
-        <BrowserRouter>
-          <AppRoutes />
-        </BrowserRouter>
-      </AuthProvider>
+    <AppErrorBoundary
+      name="root_shell"
+      onReset={() => window.location.reload()}
+    >
+      <ThemeProvider>
+        <AuthProvider>
+          <BrowserRouter>
+            <AppRoutes />
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
     </AppErrorBoundary>
   );
 }

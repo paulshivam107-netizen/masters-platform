@@ -1,5 +1,7 @@
 # Pilot Runbook (10-30 Users)
 
+Historical local-pilot runbook. For an external pilot, use the [current roadmap](future-roadmap/README.md), [pilot gates](future-roadmap/01_PRODUCT_AND_PILOT.md) and [managed database/recovery plan](future-roadmap/02_ARCHITECTURE_AND_DEPLOYMENT.md). The SQLite scope and earlier entry criteria below are not sufficient for the planned paid service.
+
 ## Scope
 
 - Environment: local/pilot stack (`frontend` + `backend` + SQLite).

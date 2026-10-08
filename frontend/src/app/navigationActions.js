@@ -14,7 +14,7 @@ export function createNavigationActions({
   setSelectedApplicationId,
   applications,
   setApplicationSearch,
-  globalSearch
+  globalSearch,
 }) {
   const resetEditorPanels = () => {
     setShowForm(false);
@@ -29,12 +29,12 @@ export function createNavigationActions({
     setIsProfileMenuOpen(false);
     setActiveNav(section);
 
-    if (section === 'compose') {
+    if (section === "compose") {
       handleOpenNewEssayForm();
       return;
     }
 
-    if (section === 'tracker') {
+    if (section === "tracker") {
       setShowForm(false);
       setSelectedEssay(null);
       setReview(null);
@@ -42,7 +42,7 @@ export function createNavigationActions({
       return;
     }
 
-    if (section === 'essays') {
+    if (section === "essays") {
       setShowForm(false);
       setShowApplicationForm(false);
       setEditingApplicationId(null);
@@ -53,31 +53,33 @@ export function createNavigationActions({
     }
 
     if (
-      section === 'deadlines' ||
-      section === 'requirements' ||
-      section === 'docs' ||
-      section === 'notifications' ||
-      section === 'matrix' ||
-      section === 'interviews' ||
-      section === 'research' ||
-      section === 'share'
-      || section === 'admin'
+      section === "deadlines" ||
+      section === "requirements" ||
+      section === "docs" ||
+      section === "notifications" ||
+      section === "matrix" ||
+      section === "interviews" ||
+      section === "research" ||
+      section === "share" ||
+      section === "admin"
     ) {
-      if (section === 'docs' && selectedApplicationId) {
+      if (section === "docs" && selectedApplicationId) {
         setDocsApplicationId(selectedApplicationId);
       }
       resetEditorPanels();
       return;
     }
 
-    if (section === 'home') {
+    if (section === "home") {
+      setSelectedApplicationId(null);
+      setSelectedEssay(null);
       setShowApplicationForm(false);
       setEditingApplicationId(null);
       setShowForm(false);
       return;
     }
 
-    if (section === 'settings' || section === 'profile') {
+    if (section === "settings" || section === "profile") {
       resetEditorPanels();
     }
   };
@@ -85,7 +87,7 @@ export function createNavigationActions({
   const handleToggleNavGroup = (groupId) => {
     setExpandedNavGroups((prev) => ({
       ...prev,
-      [groupId]: !prev[groupId]
+      [groupId]: !prev[groupId],
     }));
   };
 
@@ -95,7 +97,7 @@ export function createNavigationActions({
     setSelectedEssay(null);
     setShowForm(false);
     setShowApplicationForm(false);
-    setActiveNav('tracker');
+    setActiveNav("tracker");
   };
 
   const handleSelectSidebarApplication = (applicationId) => {
@@ -107,7 +109,7 @@ export function createNavigationActions({
     setShowForm(false);
     setShowApplicationForm(false);
     setEditingApplicationId(null);
-    setActiveNav('home');
+    setActiveNav("home");
   };
 
   const handleGlobalSearch = (e) => {
@@ -117,14 +119,14 @@ export function createNavigationActions({
     resetEditorPanels();
 
     if (!query) {
-      setActiveNav('tracker');
+      setActiveNav("tracker");
       return;
     }
 
     const matchedApplication = applications.find(
       (application) =>
-        (application.school_name || '').toLowerCase().includes(query) ||
-        (application.program_name || '').toLowerCase().includes(query)
+        (application.school_name || "").toLowerCase().includes(query) ||
+        (application.program_name || "").toLowerCase().includes(query),
     );
     if (matchedApplication) {
       setSelectedApplicationId(matchedApplication.id);
@@ -132,7 +134,7 @@ export function createNavigationActions({
     } else {
       setSelectedApplicationId(null);
     }
-    setActiveNav('tracker');
+    setActiveNav("tracker");
   };
 
   return {
@@ -140,6 +142,6 @@ export function createNavigationActions({
     handleToggleNavGroup,
     handleViewAllApplications,
     handleSelectSidebarApplication,
-    handleGlobalSearch
+    handleGlobalSearch,
   };
 }

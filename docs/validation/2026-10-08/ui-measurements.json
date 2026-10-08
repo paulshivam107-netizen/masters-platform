@@ -1,0 +1,985 @@
+[
+  {
+    "cards": [
+      {
+        "class": "home-next-step",
+        "padding": "25px 30px",
+        "radius": "18px",
+        "width": 1062
+      },
+      {
+        "class": "practice-banner practice-banner-compact",
+        "padding": "20px 24px",
+        "radius": "16px",
+        "width": 1062
+      }
+    ],
+    "overflow": false,
+    "page": "Today",
+    "unlabelled": [],
+    "width": 1366
+  },
+  {
+    "cards": [],
+    "overflow": false,
+    "page": "Your applications",
+    "unlabelled": [],
+    "width": 1366
+  },
+  {
+    "cards": [],
+    "overflow": false,
+    "page": "Your essay library",
+    "unlabelled": [],
+    "width": 1366
+  },
+  {
+    "cards": [
+      {
+        "class": "interview-studio",
+        "padding": "36px",
+        "radius": "24px",
+        "width": 1062
+      },
+      {
+        "class": "dashboard-card interview-prep-card",
+        "padding": "25px",
+        "radius": "18px",
+        "width": 1062
+      }
+    ],
+    "overflow": false,
+    "page": "Interview preparation",
+    "unlabelled": [],
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-calendar",
+    "cards": [
+      {
+        "name": "detail-list-card timeline-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "detail-list-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-requirements",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-compare",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "detail-list-card matrix-weights-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-settings",
+    "cards": [
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 521,
+        "x": 266
+      },
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 521,
+        "x": 807
+      },
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-documents",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-research",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-export-and-share",
+    "cards": [
+      {
+        "name": "dashboard-card export-option",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 342,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card export-option",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 342,
+        "x": 626
+      },
+      {
+        "name": "dashboard-card export-option",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 342,
+        "x": 986
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-profile",
+    "cards": [
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 521,
+        "x": 266
+      },
+      {
+        "name": "settings-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 521,
+        "x": 807
+      },
+      {
+        "name": "settings-card settings-card-wide",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-notifications",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-application-form",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-application-detail",
+    "cards": [
+      {
+        "name": "application-focus-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-essay-form",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-essay-detail",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-dark-essay-detail",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "mobile-dark-essay-detail",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-today",
+    "cards": [
+      {
+        "name": "dashboard-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-applications",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-interviews",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-calendar",
+    "cards": [
+      {
+        "name": "detail-list-card timeline-card",
+        "padding": "16px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-requirements",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-compare",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "detail-list-card matrix-weights-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-documents",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-research",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-export-and-share",
+    "cards": [
+      {
+        "name": "dashboard-card export-option",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card export-option",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card export-option",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-settings",
+    "cards": [
+      {
+        "name": "settings-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "settings-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "settings-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "settings-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-resume-upload",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-public-home",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-public-programmes",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-public-guides",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-guides-confirmed",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-guide-article",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-help",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-sign-in",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "mobile-dark-sign-up",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "desktop-light-sign-in",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-first-visit",
+    "cards": [
+      {
+        "name": "first-visit-next",
+        "padding": "0px",
+        "radius": "0px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-empty-applications",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-empty-essays",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-empty-requirements",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-empty-compare",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-empty-interviews",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "desktop-light-first-application-saved",
+    "cards": [
+      {
+        "name": "first-visit-next",
+        "padding": "0px",
+        "radius": "0px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "final-desktop-light-essay-form",
+    "cards": [],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "final-desktop-dark-interviews",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "final-mobile-light-calendar",
+    "cards": [
+      {
+        "name": "detail-list-card timeline-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "final-mobile-light-requirements",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "final-mobile-light-research",
+    "cards": [
+      {
+        "name": "detail-list-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "final-mobile-light-resume-docx-360",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 334,
+        "x": 13
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 334,
+        "x": 13
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 360
+  },
+  {
+    "name": "final-preview-interviews",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 608,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 608,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 642
+  },
+  {
+    "name": "resume-journey-desktop-dark",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "reviewed-profile-selected-desktop-dark",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "focused-recording-desktop-dark",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "24px",
+        "radius": "18px",
+        "width": 1062,
+        "x": 266
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 1366
+  },
+  {
+    "name": "focused-recording-mobile-light",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "focused-recording-mobile-light",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  },
+  {
+    "name": "resume-led-final-mobile-dark",
+    "cards": [
+      {
+        "name": "dashboard-card interview-studio",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      },
+      {
+        "name": "dashboard-card interview-prep-card",
+        "padding": "20px",
+        "radius": "14px",
+        "width": 356,
+        "x": 17
+      }
+    ],
+    "duplicateIds": [],
+    "missingLabels": [],
+    "overflow": false,
+    "width": 390
+  }
+]

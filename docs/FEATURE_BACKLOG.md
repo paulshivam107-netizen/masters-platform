@@ -1,5 +1,7 @@
 # Feature Backlog (Pilot to Post-Pilot)
 
+Historical backlog. For forward priorities and implementation criteria, use the [8 October 2026 roadmap](future-roadmap/README.md) and [scoped backlog](future-roadmap/06_IMPLEMENTATION_BACKLOG.md). The interview product and production requirements have evolved since the list below.
+
 ## Build Now (Feasible This Week)
 
 1. Essay assist from student skeleton points

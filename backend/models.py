@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Boolean, Date
+from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Boolean, Date, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -145,3 +145,68 @@ class AiRuntimeConfig(Base):
     gemini_model = Column(String, nullable=False, default="gemini-1.5-flash")
     updated_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class InterviewSession(Base):
+    __tablename__ = "interview_sessions"
+    __table_args__ = (UniqueConstraint("user_id", "create_request_id"),)
+
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    create_request_id = Column(String(36), nullable=False)
+    create_fingerprint = Column(String(64), nullable=False)
+    # Snapshot context survives deletion/renaming of the source application.
+    context_json = Column(Text, nullable=False)
+    provider = Column(String(16), nullable=False)
+    mode = Column(String(16), nullable=False)
+    question_limit = Column(Integer, nullable=False)
+    status = Column(String(24), nullable=False, default="active")
+    transcript_json = Column(Text, nullable=False, default="[]")
+    feedback_json = Column(Text, nullable=True)
+    prompt_version = Column(String(24), nullable=False, default="mba-interview-v1")
+    version = Column(Integer, nullable=False, default=0)
+    pending_token = Column(String(36), nullable=True)
+    pending_until = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class InterviewOperation(Base):
+    __tablename__ = "interview_operations"
+    __table_args__ = (UniqueConstraint("session_id", "request_id"),)
+
+    id = Column(String(36), primary_key=True)
+    session_id = Column(String(36), ForeignKey("interview_sessions.id"), nullable=False, index=True)
+    request_id = Column(String(36), nullable=False)
+    kind = Column(String(24), nullable=False)
+    fingerprint = Column(String(64), nullable=False)
+    status = Column(String(16), nullable=False, default="pending")
+    result_json = Column(Text, nullable=True)
+    usage_json = Column(Text, nullable=True)
+    attempts = Column(Integer, nullable=False, default=1)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class InterviewQuota(Base):
+    __tablename__ = "interview_quotas"
+
+    # UTC day + actor. Updated atomically; quotas survive restarts and multiple workers.
+    id = Column(String(80), primary_key=True)
+    calls = Column(Integer, nullable=False, default=0)
+
+
+class ResumeQuestionSet(Base):
+    __tablename__ = "resume_question_sets"
+    __table_args__ = (UniqueConstraint("user_id", "request_id"),)
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    request_id = Column(String(36), nullable=False)
+    fingerprint = Column(String(64), nullable=False)
+    context_json = Column(Text, nullable=False)
+    questions_json = Column(Text, nullable=True)
+    usage_json = Column(Text, nullable=True)
+    status = Column(String(16), nullable=False, default="pending")
+    pending_token = Column(String(36), nullable=True)
+    pending_until = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False, index=True)
+    # The original file and reviewed resume text are deliberately not persisted.

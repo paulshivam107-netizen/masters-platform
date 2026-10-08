@@ -1,7 +1,7 @@
-import { resolveNavGroups, resolvePageHeader } from '../layoutModel';
-import { buildWorkspaceAreaProps } from '../workspaceProps';
-import { createDocumentActions } from '../documentActions';
-import { createExportActions } from '../exportActions';
+import { resolveNavGroups, resolvePageHeader } from "../layoutModel";
+import { buildWorkspaceAreaProps } from "../workspaceProps";
+import { createDocumentActions } from "../documentActions";
+import { createExportActions } from "../exportActions";
 import {
   buildApplicationDecisionMatrixRows,
   buildApplicationReadinessRows,
@@ -21,8 +21,8 @@ import {
   getApplicationReadiness as getApplicationReadinessCalc,
   getDaysUntilDeadline,
   getEssayCountForApplication as getEssayCountForApplicationCalc,
-  parseDate
-} from '../derived';
+  parseDate,
+} from "../derived";
 
 export function useWorkspaceComputed({
   user,
@@ -30,7 +30,7 @@ export function useWorkspaceComputed({
   state,
   actions,
   constants,
-  helpers
+  helpers,
 }) {
   const {
     activeNav,
@@ -109,20 +109,16 @@ export function useWorkspaceComputed({
     feedbackMessage,
     setFeedbackMessage,
     feedbackSending,
-    feedbackStatus
+    feedbackStatus,
   } = state;
 
-  const {
-    DEGREE_OPTIONS,
-    UNIVERSITY_OPTIONS,
-    DOC_TEMPLATES
-  } = constants;
+  const { DEGREE_OPTIONS, UNIVERSITY_OPTIONS, DOC_TEMPLATES } = constants;
 
   const {
     getDocScopeKey,
     getDefaultInterviewPrep,
     getDefaultResearchCard,
-    getVersionIdentity
+    getVersionIdentity,
   } = helpers;
 
   const {
@@ -150,7 +146,7 @@ export function useWorkspaceComputed({
     resolveEssayApplicationId,
     handleDiscardEssayDraft,
     handleDiscardApplicationDraft,
-    submitPilotFeedback
+    submitPilotFeedback,
   } = actions;
 
   const getEssayCountForApplication = (application) =>
@@ -162,22 +158,22 @@ export function useWorkspaceComputed({
       essays,
       docStatusByApplication,
       DOC_TEMPLATES,
-      getDocScopeKey
+      getDocScopeKey,
     });
 
   const applicationSummary = buildApplicationSummary({
     applications,
-    getDaysUntilDeadlineFn: getDaysUntilDeadline
+    getDaysUntilDeadlineFn: getDaysUntilDeadline,
   });
 
-  const reminderDayMarkers = (profileFormData.reminder_days || '30,14,7,1')
-    .split(',')
+  const reminderDayMarkers = (profileFormData.reminder_days || "30,14,7,1")
+    .split(",")
     .map((day) => Number(day.trim()))
     .filter((day) => Number.isFinite(day) && day >= 0);
 
   const applicationReadinessRows = buildApplicationReadinessRows({
     applications,
-    getApplicationReadinessFn: getApplicationReadiness
+    getApplicationReadinessFn: getApplicationReadiness,
   });
   const averageReadiness = buildAverageReadiness(applicationReadinessRows);
 
@@ -187,11 +183,11 @@ export function useWorkspaceComputed({
     docStatusByApplication,
     DOC_TEMPLATES,
     getDocScopeKey,
-    reminderDayMarkers
+    reminderDayMarkers,
   });
 
   const activeNotifications = generatedNotifications.filter(
-    (notification) => !dismissedNotifications[notification.id]
+    (notification) => !dismissedNotifications[notification.id],
   );
   const notificationCount = activeNotifications.length;
 
@@ -200,47 +196,56 @@ export function useWorkspaceComputed({
     applicationReadinessRows,
     getDaysUntilDeadlineFn: getDaysUntilDeadline,
     decisionMatrixWeights,
-    DOC_TEMPLATES
+    DOC_TEMPLATES,
   });
 
   const versionOptionRows = versions.map((version, idx) => ({
     ...version,
-    __identity: getVersionIdentity(version, idx)
+    __identity: getVersionIdentity(version, idx),
   }));
-  const fallbackCompare = versionOptionRows[0]?.__identity || '';
+  const fallbackCompare = versionOptionRows[0]?.__identity || "";
   const fallbackBase = versionOptionRows[1]?.__identity || fallbackCompare;
   const selectedDiffBaseId = versionDiffSelection.base || fallbackBase;
   const selectedDiffCompareId = versionDiffSelection.compare || fallbackCompare;
   const diffBaseVersion =
-    versionOptionRows.find((version) => version.__identity === selectedDiffBaseId) || null;
+    versionOptionRows.find(
+      (version) => version.__identity === selectedDiffBaseId,
+    ) || null;
   const diffCompareVersion =
-    versionOptionRows.find((version) => version.__identity === selectedDiffCompareId) || null;
+    versionOptionRows.find(
+      (version) => version.__identity === selectedDiffCompareId,
+    ) || null;
   const versionDiffRows =
     diffBaseVersion && diffCompareVersion
-      ? buildVersionDiffRows(diffBaseVersion.essay_content, diffCompareVersion.essay_content)
+      ? buildVersionDiffRows(
+          diffBaseVersion.essay_content,
+          diffCompareVersion.essay_content,
+        )
       : [];
   const versionDiffSummary = versionDiffRows.reduce(
     (acc, row) => {
-      if (row.type === 'added') acc.added += 1;
-      if (row.type === 'removed') acc.removed += 1;
-      if (row.type === 'changed') acc.changed += 1;
+      if (row.type === "added") acc.added += 1;
+      if (row.type === "removed") acc.removed += 1;
+      if (row.type === "changed") acc.changed += 1;
       return acc;
     },
-    { added: 0, removed: 0, changed: 0 }
+    { added: 0, removed: 0, changed: 0 },
   );
 
   const selectedApplication =
-    applications.find((application) => application.id === selectedApplicationId) || null;
+    applications.find(
+      (application) => application.id === selectedApplicationId,
+    ) || null;
 
   const essaysForSelectedApplication = selectedApplication
     ? essays.filter((essay) => {
         if (essay.application_id === selectedApplication.id) return true;
         const schoolMatches =
-          (essay.school_name || '').trim().toLowerCase() ===
-          (selectedApplication.school_name || '').trim().toLowerCase();
+          (essay.school_name || "").trim().toLowerCase() ===
+          (selectedApplication.school_name || "").trim().toLowerCase();
         const degreeMatches =
-          (essay.program_type || '').trim().toLowerCase() ===
-          (selectedApplication.program_name || '').trim().toLowerCase();
+          (essay.program_type || "").trim().toLowerCase() ===
+          (selectedApplication.program_name || "").trim().toLowerCase();
         return schoolMatches && degreeMatches;
       })
     : essays;
@@ -249,10 +254,10 @@ export function useWorkspaceComputed({
     if (essay.application_id) return essay.application_id;
     const matched = applications.find(
       (application) =>
-        (application.school_name || '').trim().toLowerCase() ===
-          (essay.school_name || '').trim().toLowerCase() &&
-        (application.program_name || '').trim().toLowerCase() ===
-          (essay.program_type || '').trim().toLowerCase()
+        (application.school_name || "").trim().toLowerCase() ===
+          (essay.school_name || "").trim().toLowerCase() &&
+        (application.program_name || "").trim().toLowerCase() ===
+          (essay.program_type || "").trim().toLowerCase(),
     );
     return matched?.id || null;
   };
@@ -260,28 +265,38 @@ export function useWorkspaceComputed({
   const filteredApplications = filterApplications({
     applications,
     applicationSearch,
-    parseDateFn: parseDate
+    parseDateFn: parseDate,
   });
-  const sidebarApplications = applicationSearch.trim() ? filteredApplications : applications;
+  const sidebarApplications = applicationSearch.trim()
+    ? filteredApplications
+    : applications;
   const sidebarPreviewLimit = 4;
-  const visibleSidebarApplications = sidebarApplications.slice(0, sidebarPreviewLimit);
-  const hasMoreSidebarApplications = sidebarApplications.length > sidebarPreviewLimit;
+  const visibleSidebarApplications = sidebarApplications.slice(
+    0,
+    sidebarPreviewLimit,
+  );
+  const hasMoreSidebarApplications =
+    sidebarApplications.length > sidebarPreviewLimit;
 
-  const { timelineMonthLabel, timelineCells, applicationsByDeadline } = buildTimelineData({
-    applications,
-    timelineMonthOffset,
-    parseDateFn: parseDate
-  });
+  const { timelineMonthLabel, timelineCells, applicationsByDeadline } =
+    buildTimelineData({
+      applications,
+      timelineMonthOffset,
+      parseDateFn: parseDate,
+    });
 
   const deadlineBuckets = buildDeadlineBuckets({
     applicationsByDeadline,
-    getDaysUntilDeadlineFn: getDaysUntilDeadline
+    getDaysUntilDeadlineFn: getDaysUntilDeadline,
   });
 
   const requirementsSummary = buildRequirementsSummary(applications);
-  const activeDocsApplicationId = docsApplicationId || selectedApplicationId || applications[0]?.id || null;
+  const activeDocsApplicationId =
+    docsApplicationId || selectedApplicationId || applications[0]?.id || null;
   const activeDocsApplication =
-    applications.find((application) => application.id === activeDocsApplicationId) || null;
+    applications.find(
+      (application) => application.id === activeDocsApplicationId,
+    ) || null;
   const activeDocsScopeKey = getDocScopeKey(activeDocsApplicationId);
   const activeDocsMap = docStatusByApplication[activeDocsScopeKey] || {};
 
@@ -290,40 +305,44 @@ export function useWorkspaceComputed({
     applications,
     docStatusByApplication,
     getDocScopeKey,
-    DOC_TEMPLATES
+    DOC_TEMPLATES,
   });
 
   const interviewApplications = buildInterviewApplications({
     applications,
-    interviewPrepByApplication
+    interviewPrepByApplication,
   });
   const researchApplications = buildResearchApplications({
     applications,
-    researchByApplication
+    researchByApplication,
   });
 
   const { pageHeading, pageSubtitle } = resolvePageHeader({
     activeNav,
     selectedApplication,
     selectedEssay,
-    activeDocsApplication
+    activeDocsApplication,
   });
 
   const navGroups = resolveNavGroups(user);
 
-  const { updateDocStatus, copyDocsFromApplication, updateInterviewPrepField, updateResearchField } =
-    createDocumentActions({
-      getDocScopeKey,
-      docsApplicationId,
-      setDocStatusByApplication,
-      docsCopySourceId,
-      activeDocsApplicationId,
-      docStatusByApplication,
-      setInterviewPrepByApplication,
-      getDefaultInterviewPrep,
-      setResearchByApplication,
-      getDefaultResearchCard
-    });
+  const {
+    updateDocStatus,
+    copyDocsFromApplication,
+    updateInterviewPrepField,
+    updateResearchField,
+  } = createDocumentActions({
+    getDocScopeKey,
+    docsApplicationId,
+    setDocStatusByApplication,
+    docsCopySourceId,
+    activeDocsApplicationId,
+    docStatusByApplication,
+    setInterviewPrepByApplication,
+    getDefaultInterviewPrep,
+    setResearchByApplication,
+    getDefaultResearchCard,
+  });
 
   const exportActions = createExportActions({
     applications,
@@ -331,7 +350,7 @@ export function useWorkspaceComputed({
     interviewPrepByApplication,
     researchByApplication,
     getApplicationReadiness,
-    parseDate
+    parseDate,
   });
 
   const workspaceAreaProps = buildWorkspaceAreaProps({
@@ -379,6 +398,7 @@ export function useWorkspaceComputed({
     handleExportApplicationsCsv: exportActions.handleExportApplicationsCsv,
     handleExportDeadlinesICS: exportActions.handleExportDeadlinesICS,
     handleCopyShareSummary: exportActions.handleCopyShareSummary,
+    shareSummary: exportActions.buildShareSummary(),
     averageReadiness,
     deadlineBuckets,
     timelineMonthOffset,
@@ -432,7 +452,8 @@ export function useWorkspaceComputed({
     handleOpenApplicationForm,
     handleDiscardEssayDraft,
     handleDiscardApplicationDraft,
-    resolveEssayApplicationId: resolveEssayApplicationId || resolveEssayApplicationIdLocal,
+    resolveEssayApplicationId:
+      resolveEssayApplicationId || resolveEssayApplicationIdLocal,
     docProgressOverall,
     onboardingDismissed,
     setOnboardingDismissed,
@@ -471,7 +492,7 @@ export function useWorkspaceComputed({
     setFeedbackMessage,
     feedbackSending,
     feedbackStatus,
-    submitPilotFeedback
+    submitPilotFeedback,
   });
 
   return {
@@ -486,6 +507,6 @@ export function useWorkspaceComputed({
     getEssayCountForApplication,
     parseDate,
     handleViewAllApplications,
-    handleSelectSidebarApplication
+    handleSelectSidebarApplication,
   };
 }

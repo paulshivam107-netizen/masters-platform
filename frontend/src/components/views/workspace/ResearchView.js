@@ -1,122 +1,120 @@
-import React from 'react';
-
-function ResearchView({
+import React, { useState } from "react";
+export default function ResearchView({
   applications,
+  selectedApplicationId,
   researchByApplication,
   getDefaultResearchCard,
   updateResearchField,
-  handleNavChange,
-  handleOpenApplicationForm
+  handleOpenApplicationForm,
 }) {
+  const [selectedId, setSelectedId] = useState(
+    selectedApplicationId || applications[0]?.id,
+  );
+  const application =
+    applications.find((app) => app.id === Number(selectedId)) ||
+    applications[0];
+  if (!application)
+    return (
+      <div className="empty-state-main">
+        <h2>Start with one programme</h2>
+        <p>Add an application, then collect the details that matter to you.</p>
+        <button
+          className="history-btn"
+          onClick={() => handleOpenApplicationForm()}
+        >
+          Add application
+        </button>
+      </div>
+    );
+  const research = {
+    ...getDefaultResearchCard(),
+    ...(researchByApplication[application.id] || {}),
+  };
+  const field = (key, label, placeholder, type = "textarea") => (
+    <div className="form-group" key={key}>
+      <label htmlFor={`research-${key}`}>{label}</label>
+      {type === "textarea" ? (
+        <textarea
+          id={`research-${key}`}
+          value={research[key]}
+          onChange={(e) =>
+            updateResearchField(application.id, key, e.target.value)
+          }
+          placeholder={placeholder}
+        />
+      ) : (
+        <input
+          id={`research-${key}`}
+          type={type}
+          value={research[key]}
+          onChange={(e) =>
+            updateResearchField(application.id, key, e.target.value)
+          }
+          placeholder={placeholder}
+        />
+      )}
+    </div>
+  );
   return (
-            <div className="research-panel">
-              <div className="detail-list-card">
-                <h3 data-testid="research-heading">School Research Cards</h3>
-                <p>Capture the best-fit evidence before you commit to submissions.</p>
-                {applications.length === 0 ? (
-                  <div className="empty-state-main">
-                    <h2>No applications yet</h2>
-                    <p>Add a school to start building research notes and fit signals.</p>
-                    <div className="empty-state-actions">
-                      <button type="button" className="history-btn" onClick={() => handleOpenApplicationForm()}>
-                        Add Application
-                      </button>
-                      <button type="button" className="secondary-action-btn" onClick={() => handleNavChange('tracker')}>
-                        Go to Applications
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="detail-list research-list">
-                    {applications.map((application) => {
-                      const research = {
-                        ...getDefaultResearchCard(),
-                        ...(researchByApplication[application.id] || {})
-                      };
-                      return (
-                        <article key={`research-${application.id}`} data-testid="research-card" className="research-card">
-                          <div className="research-card-header">
-                            <strong>{application.school_name}</strong>
-                            <span>{application.program_name}</span>
-                          </div>
-                          <div className="tracker-form-grid">
-                            <div className="form-group">
-                              <label>Official Program Link</label>
-                              <input
-                                data-testid="research-website-input"
-                                type="url"
-                                value={research.website}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'website', e.target.value)
-                                }
-                                placeholder="https://program-website.edu"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Location</label>
-                              <input
-                                data-testid="research-location-input"
-                                type="text"
-                                value={research.location}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'location', e.target.value)
-                                }
-                                placeholder="City, Country"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Ranking / Reputation Notes</label>
-                              <textarea
-                                data-testid="research-ranking-input"
-                                value={research.ranking_notes}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'ranking_notes', e.target.value)
-                                }
-                                placeholder="Rankings, prestige notes, faculty strengths."
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Program Highlights</label>
-                              <textarea
-                                data-testid="research-highlights-input"
-                                value={research.program_highlights}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'program_highlights', e.target.value)
-                                }
-                                placeholder="Curriculum, labs, clubs, specialization fit."
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Career Outcomes</label>
-                              <textarea
-                                data-testid="research-outcomes-input"
-                                value={research.career_outcomes}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'career_outcomes', e.target.value)
-                                }
-                                placeholder="Employment stats, hiring partners, salary trends."
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Scholarship / Funding Notes</label>
-                              <textarea
-                                data-testid="research-scholarship-input"
-                                value={research.scholarship_notes}
-                                onChange={(e) =>
-                                  updateResearchField(application.id, 'scholarship_notes', e.target.value)
-                                }
-                                placeholder="Scholarship options, assistantships, funding deadlines."
-                              />
-                            </div>
-                          </div>
-                        </article>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            </div>
+    <div className="research-panel">
+      <div className="school-picker">
+        <label htmlFor="research-application">Research for</label>
+        <select
+          id="research-application"
+          value={application.id}
+          onChange={(e) => setSelectedId(Number(e.target.value))}
+        >
+          {applications.map((app) => (
+            <option key={app.id} value={app.id}>
+              {app.school_name} · {app.program_name}
+            </option>
+          ))}
+        </select>
+      </div>
+      <section className="detail-list-card" data-testid="research-card">
+        <div className="section-heading">
+          <div>
+            <h2 data-testid="research-heading">{application.school_name}</h2>
+            <p className="muted">{application.program_name}</p>
+          </div>
+          <span className="storage-note">
+            Saved in this browser as you type
+          </span>
+        </div>
+        <div className="tracker-form-grid">
+          {field("website", "Official programme link", "https://…", "url")}
+          {field("location", "Location", "City, country", "text")}
+          {field(
+            "program_highlights",
+            "Why this programme?",
+            "Curriculum, clubs or experiences that fit your goals.",
+          )}
+          {field(
+            "career_outcomes",
+            "Career outcomes",
+            "Roles, employers and outcomes to investigate.",
+          )}
+        </div>
+        <details className="progressive-section">
+          <summary>Funding & other research</summary>
+          <div className="tracker-form-grid">
+            {field(
+              "scholarship_notes",
+              "Funding notes",
+              "Scholarships, costs and funding deadlines.",
+            )}
+            {field(
+              "ranking_notes",
+              "Reputation & other notes",
+              "Evidence, sources and questions to follow up.",
+            )}
+          </div>
+        </details>
+      </section>
+      <p className="field-help">
+        Keep links to your sources so you can check details before applying.
+        Notes are stored on this device.
+      </p>
+    </div>
   );
 }
-
-export default ResearchView;

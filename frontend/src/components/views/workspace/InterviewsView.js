@@ -1,119 +1,170 @@
-import React from 'react';
+import React, { useState } from "react";
+import InterviewStudio from "./InterviewStudio";
+import { CheckIcon, PlusIcon, InterviewIcon } from "../../../app/icons";
 
-function InterviewsView({
+export default function InterviewsView({
   applications,
   interviewPrepByApplication,
-  interviewApplications,
+  selectedApplicationId,
   getDefaultInterviewPrep,
   updateInterviewPrepField,
-  handleNavChange,
-  handleOpenApplicationForm
+  handleOpenApplicationForm,
 }) {
-  return (
-            <div className="interview-panel">
-              <h2 className="sr-only" data-testid="interviews-heading">Interviews</h2>
-              <div className="insights-grid">
-                <div className="insight-card">
-                  <h3>Interview Required</h3>
-                  <p>{applications.filter((application) => application.interview_required).length}</p>
-                </div>
-                <div className="insight-card">
-                  <h3>Interview Completed</h3>
-                  <p>{applications.filter((application) => application.interview_completed).length}</p>
-                </div>
-                <div className="insight-card">
-                  <h3>Prep Notes Saved</h3>
-                  <p>{Object.keys(interviewPrepByApplication).length}</p>
-                </div>
-              </div>
+  const [selectedId, setSelectedId] = useState(
+    String(selectedApplicationId || ""),
+  );
+  const application =
+    applications.find((item) => String(item.id) === selectedId) ||
+    applications[0];
+  const prep = {
+    ...getDefaultInterviewPrep(),
+    ...(interviewPrepByApplication[application?.id] || {}),
+  };
 
-              <div className="detail-list-card">
-                <h3>Interview Prep by School</h3>
-                {interviewApplications.length === 0 ? (
-                  <div className="empty-state-main">
-                    <h2>No interview prep yet</h2>
-                    <p>Mark interview-required schools in Applications to start prep notes.</p>
-                    <div className="empty-state-actions">
-                      <button type="button" className="history-btn" onClick={() => handleOpenApplicationForm()}>
-                        Add Application
-                      </button>
-                      <button type="button" className="secondary-action-btn" onClick={() => handleNavChange('tracker')}>
-                        Go to Applications
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="detail-list interview-list">
-                    {interviewApplications.map((application) => {
-                      const prep = {
-                        ...getDefaultInterviewPrep(),
-                        ...(interviewPrepByApplication[application.id] || {})
-                      };
-                      return (
-                        <article key={`interview-${application.id}`} data-testid="interview-card" className="interview-card">
-                          <div className="interview-card-header">
-                            <div>
-                              <strong>{application.school_name}</strong>
-                              <span>{application.program_name}</span>
-                            </div>
-                            <span className={`urgency-chip ${application.interview_completed ? 'done' : 'critical'}`}>
-                              {application.interview_completed ? 'Completed' : 'Pending'}
-                            </span>
-                          </div>
-                          <div className="tracker-form-grid">
-                            <div className="form-group">
-                              <label>Interview Date & Time</label>
-                              <input
-                                data-testid="interview-scheduled-input"
-                                type="datetime-local"
-                                value={prep.scheduled_at}
-                                onChange={(e) =>
-                                  updateInterviewPrepField(application.id, 'scheduled_at', e.target.value)
-                                }
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Story Bank</label>
-                              <textarea
-                                data-testid="interview-stories-input"
-                                value={prep.stories_bank}
-                                onChange={(e) =>
-                                  updateInterviewPrepField(application.id, 'stories_bank', e.target.value)
-                                }
-                                placeholder="Leadership, teamwork, failure, impact examples..."
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Strategy Notes</label>
-                              <textarea
-                                data-testid="interview-strategy-input"
-                                value={prep.strategy_notes}
-                                onChange={(e) =>
-                                  updateInterviewPrepField(application.id, 'strategy_notes', e.target.value)
-                                }
-                                placeholder="Program-specific talking points and questions to ask."
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label>Mock Feedback</label>
-                              <textarea
-                                data-testid="interview-feedback-input"
-                                value={prep.mock_feedback}
-                                onChange={(e) =>
-                                  updateInterviewPrepField(application.id, 'mock_feedback', e.target.value)
-                                }
-                                placeholder="Practice feedback, weak points, follow-up action."
-                              />
-                            </div>
-                          </div>
-                        </article>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
+  return (
+    <div className="interview-panel">
+      <h2 className="sr-only" data-testid="interviews-heading">
+        Interviews
+      </h2>
+      <InterviewStudio
+        applications={applications}
+        selectedApplicationId={selectedApplicationId}
+      />
+      <div className="interview-summary">
+        <span>
+          <strong>
+            {
+              applications.filter(
+                (item) => item.interview_required && !item.interview_completed,
+              ).length
+            }
+          </strong>{" "}
+          interviews to prepare for
+        </span>
+        <span>
+          <strong>
+            {applications.filter((item) => item.interview_completed).length}
+          </strong>{" "}
+          completed
+        </span>
+      </div>
+      <section className="dashboard-card interview-prep-card">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">MAKE IT PERSONAL</span>
+            <h3>Your preparation notebook</h3>
+            <p>Stories, questions and reflections for each programme.</p>
+          </div>
+          {application && (
+            <div className="school-picker">
+              <label htmlFor="interview-school">Programme</label>
+              <select
+                id="interview-school"
+                value={application.id}
+                onChange={(event) => setSelectedId(event.target.value)}
+              >
+                {applications.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.school_name} · {item.program_name}
+                  </option>
+                ))}
+              </select>
             </div>
+          )}
+        </div>
+        {!application ? (
+          <div className="quiet-empty">
+            <InterviewIcon />
+            <h4>Give your preparation a home.</h4>
+            <p>
+              Add an application to start a preparation notebook for that
+              programme.
+            </p>
+            <button
+              className="secondary-action-btn"
+              onClick={() => handleOpenApplicationForm()}
+            >
+              <PlusIcon /> Add application
+            </button>
+          </div>
+        ) : (
+          <article className="interview-card" data-testid="interview-card">
+            <div className="interview-card-header">
+              <div>
+                <strong>{application.school_name}</strong>
+                <span>{application.program_name}</span>
+              </div>
+              <span
+                className={`urgency-chip ${application.interview_completed ? "done" : "upcoming"}`}
+              >
+                {application.interview_completed ? "Completed" : "Preparing"}
+              </span>
+            </div>
+            <div className="tracker-form-grid">
+              <div className="form-group">
+                <label htmlFor="interview-date">Interview date & time</label>
+                <input
+                  id="interview-date"
+                  data-testid="interview-scheduled-input"
+                  type="datetime-local"
+                  value={prep.scheduled_at}
+                  onChange={(event) =>
+                    updateInterviewPrepField(
+                      application.id,
+                      "scheduled_at",
+                      event.target.value,
+                    )
+                  }
+                />
+              </div>
+              <div className="notebook-note">
+                <CheckIcon />
+                <span>Notes are saved in this browser as you type.</span>
+              </div>
+              {[
+                [
+                  "stories_bank",
+                  "Your story bank",
+                  "Leadership, a difficult decision, a setback, a moment of impact…",
+                  "stories",
+                ],
+                [
+                  "strategy_notes",
+                  "Why this programme?",
+                  "What draws you here? What would you ask the panel?",
+                  "strategy",
+                ],
+                [
+                  "mock_feedback",
+                  "Practice reflections",
+                  "What felt strong? What would you make clearer next time?",
+                  "feedback",
+                ],
+              ].map(([key, label, placeholder, test]) => (
+                <div
+                  className={`form-group ${key === "stories_bank" ? "full-width" : ""}`}
+                  key={key}
+                >
+                  <label htmlFor={`interview-${key}`}>{label}</label>
+                  <textarea
+                    id={`interview-${key}`}
+                    data-testid={`interview-${test}-input`}
+                    value={prep[key]}
+                    placeholder={placeholder}
+                    onChange={(event) =>
+                      updateInterviewPrepField(
+                        application.id,
+                        key,
+                        event.target.value,
+                      )
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          </article>
+        )}
+      </section>
+    </div>
   );
 }
-
-export default InterviewsView;
