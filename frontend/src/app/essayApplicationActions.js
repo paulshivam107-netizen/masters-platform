@@ -1,5 +1,15 @@
-import { createDefaultApplicationForm, createDefaultEssayForm } from './formDefaults';
-import { APPLICATION_DRAFT_KEY, ESSAY_DRAFT_KEY } from './drafts';
+import { writeUserValue } from "./workspaceStorage";
+import { trackEvent } from "./telemetry";
+import {
+  createDefaultApplicationForm,
+  createDefaultEssayForm,
+} from "./formDefaults";
+import {
+  APPLICATION_DRAFT_KEY,
+  ESSAY_DRAFT_KEY,
+  loadApplicationDraft,
+  loadEssayDraft,
+} from "./drafts";
 import {
   createApplicationApi,
   createEssayApi,
@@ -9,10 +19,13 @@ import {
   listEssaysApi,
   listEssayVersionsApi,
   reviewEssayApi,
-  updateApplicationApi
-} from '../api';
+  updateApplicationApi,
+} from "../api";
 
 export function createEssayApplicationActions({
+  userId,
+  setDataLoadState = () => {},
+  notify = window.alert,
   degreeOptions,
   getVersionIdentity,
   applications,
@@ -47,38 +60,42 @@ export function createEssayApplicationActions({
   setApplicationLoading,
   setSelectedApplicationId,
   setEssayDraftRecovered,
-  setApplicationDraftRecovered
+  setApplicationDraftRecovered,
 }) {
   const resolveDegreeValue = (choice, customValue) => {
-    if (choice === 'Other') return customValue.trim();
+    if (choice === "Other") return customValue.trim();
     return choice;
   };
 
   const hydrateDegreeFields = (value, setChoice, setCustom) => {
-    if (degreeOptions.includes(value) && value !== 'Other') {
+    if (degreeOptions.includes(value) && value !== "Other") {
       setChoice(value);
-      setCustom('');
+      setCustom("");
       return;
     }
-    setChoice('Other');
-    setCustom(value || '');
+    setChoice("Other");
+    setCustom(value || "");
   };
 
   const fetchEssays = async () => {
+    setDataLoadState((state) => ({ ...state, essays: "loading" }));
     try {
       const data = await listEssaysApi();
       setEssays(data);
+      setDataLoadState((state) => ({ ...state, essays: "ready" }));
     } catch (error) {
-      console.error('Error fetching essays:', error);
+      setDataLoadState((state) => ({ ...state, essays: "error" }));
     }
   };
 
   const fetchApplications = async () => {
+    setDataLoadState((state) => ({ ...state, applications: "loading" }));
     try {
       const data = await listApplicationsApi();
       setApplications(data);
+      setDataLoadState((state) => ({ ...state, applications: "ready" }));
     } catch (error) {
-      console.error('Error fetching applications:', error);
+      setDataLoadState((state) => ({ ...state, applications: "error" }));
     }
   };
 
@@ -91,29 +108,32 @@ export function createEssayApplicationActions({
       if (versionList.length >= 2) {
         setVersionDiffSelection({
           base: getVersionIdentity(versionList[1], 1),
-          compare: getVersionIdentity(versionList[0], 0)
+          compare: getVersionIdentity(versionList[0], 0),
         });
       } else if (versionList.length === 1) {
         setVersionDiffSelection({
           base: getVersionIdentity(versionList[0], 0),
-          compare: getVersionIdentity(versionList[0], 0)
+          compare: getVersionIdentity(versionList[0], 0),
         });
       } else {
-        setVersionDiffSelection({ base: '', compare: '' });
+        setVersionDiffSelection({ base: "", compare: "" });
       }
       setShowVersions(true);
     } catch (error) {
-      console.error('Error fetching versions:', error);
-      alert('Error fetching versions');
+      console.error("Error fetching versions:", error);
+      notify("Error fetching versions");
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const resolvedDegree = resolveDegreeValue(essayDegreeChoice, essayCustomDegree);
+    const resolvedDegree = resolveDegreeValue(
+      essayDegreeChoice,
+      essayCustomDegree,
+    );
     if (!resolvedDegree) {
-      alert('Please enter a custom degree when selecting Other.');
+      notify("Please enter a programme name.");
       setLoading(false);
       return;
     }
@@ -121,23 +141,23 @@ export function createEssayApplicationActions({
     const payload = {
       ...formData,
       program_type: resolvedDegree,
-      application_id: formData.application_id || selectedApplicationId || null
+      application_id: formData.application_id || selectedApplicationId || null,
     };
     const validationErrors = [];
     if (!payload.school_name || payload.school_name.trim().length < 2) {
-      validationErrors.push('School name must be at least 2 characters.');
+      validationErrors.push("School name must be at least 2 characters.");
     }
     if (!payload.program_type || payload.program_type.trim().length < 2) {
-      validationErrors.push('Program type must be at least 2 characters.');
+      validationErrors.push("Program type must be at least 2 characters.");
     }
     if (!payload.essay_prompt || payload.essay_prompt.trim().length < 5) {
-      validationErrors.push('Essay prompt must be at least 5 characters.');
+      validationErrors.push("Essay prompt must be at least 5 characters.");
     }
     if (!payload.essay_content || payload.essay_content.trim().length < 20) {
-      validationErrors.push('Essay content must be at least 20 characters.');
+      validationErrors.push("Essay content must be at least 20 characters.");
     }
     if (validationErrors.length) {
-      alert(validationErrors.join('\n'));
+      notify(validationErrors.join("\n"));
       setLoading(false);
       return;
     }
@@ -145,7 +165,8 @@ export function createEssayApplicationActions({
     if (!payload.application_id) {
       const matchedApplication = applications.find(
         (application) =>
-          application.school_name.toLowerCase() === payload.school_name.trim().toLowerCase()
+          application.school_name.toLowerCase() ===
+          payload.school_name.trim().toLowerCase(),
       );
       if (matchedApplication) {
         payload.application_id = matchedApplication.id;
@@ -154,26 +175,30 @@ export function createEssayApplicationActions({
 
     try {
       await createEssayApi(payload);
+      trackEvent("essay_saved", { is_revision: Boolean(selectedEssay) });
       setFormData(createDefaultEssayForm(selectedApplicationId || null));
-      setEssayDegreeChoice('MBA');
-      setEssayCustomDegree('');
+      setEssayDegreeChoice("MBA");
+      setEssayCustomDegree("");
       setEssayDraftRecovered(false);
-      localStorage.removeItem(ESSAY_DRAFT_KEY);
+      writeUserValue(userId, ESSAY_DRAFT_KEY, null);
       setShowForm(false);
-      setActiveNav('essays');
+      setActiveNav("essays");
       fetchEssays();
-      alert('Essay submitted successfully!');
+      notify("Draft saved.");
     } catch (error) {
       const detail = error?.response?.data?.detail;
       const detailText = Array.isArray(detail)
-        ? detail.map((item) => item?.msg || item?.message).filter(Boolean).join('\n')
+        ? detail
+            .map((item) => item?.msg || item?.message)
+            .filter(Boolean)
+            .join("\n")
         : detail;
       if (detailText) {
-        alert(`Error submitting essay:\n${detailText}`);
+        notify(`Error submitting essay:\n${detailText}`);
       } else {
-        alert('Error submitting essay');
+        notify("Error submitting essay");
       }
-      console.error('Error submitting essay:', error);
+      console.error("Error submitting essay:", error);
     }
     setLoading(false);
   };
@@ -183,64 +208,75 @@ export function createEssayApplicationActions({
     setReview(null);
     try {
       const response = await reviewEssayApi(essayId, {
-        focus_areas: ['structure', 'content', 'grammar']
+        focus_areas: ["structure", "content", "grammar"],
       });
       setReview(response);
     } catch (error) {
-      console.error('Error getting review:', error);
-      alert('Error getting AI review');
+      console.error("Error getting review:", error);
+      notify("Error getting AI review");
     }
     setLoading(false);
   };
 
   const handleDelete = async (essayId) => {
-    if (!confirmDelete || window.confirm('Are you sure you want to delete this essay?')) {
+    if (
+      !confirmDelete ||
+      window.confirm("Are you sure you want to delete this essay?")
+    ) {
       try {
         await deleteEssayApi(essayId);
         fetchEssays();
         setSelectedEssay(null);
         setReview(null);
       } catch (error) {
-        console.error('Error deleting essay:', error);
+        console.error("Error deleting essay:", error);
       }
     }
   };
 
   const resetApplicationForm = () => {
     setApplicationFormData(createDefaultApplicationForm());
-    setApplicationDegreeChoice('MBA');
-    setApplicationCustomDegree('');
+    setApplicationDegreeChoice("MBA");
+    setApplicationCustomDegree("");
     setEditingApplicationId(null);
   };
 
   const handleOpenApplicationForm = (application = null) => {
     if (application) {
       setApplicationFormData({
-        school_name: application.school_name || '',
-        program_name: application.program_name || 'MBA',
-        application_round: application.application_round || 'Round 1',
-        deadline: application.deadline || '',
-        application_fee: application.application_fee ?? '',
-        program_total_fee: application.program_total_fee ?? '',
-        fee_currency: application.fee_currency || 'USD',
+        school_name: application.school_name || "",
+        program_name: application.program_name || "MBA",
+        application_round: application.application_round || "Round 1",
+        deadline: application.deadline || "",
+        application_fee: application.application_fee ?? "",
+        program_total_fee: application.program_total_fee ?? "",
+        fee_currency: application.fee_currency || "USD",
         essays_required: application.essays_required ?? 0,
         lors_required: application.lors_required ?? 0,
         lors_submitted: application.lors_submitted ?? 0,
         interview_required: Boolean(application.interview_required),
         interview_completed: Boolean(application.interview_completed),
-        decision_status: application.decision_status || 'Pending',
-        requirements_notes: application.requirements_notes || '',
-        status: application.status || 'Planning'
+        decision_status: application.decision_status || "Pending",
+        requirements_notes: application.requirements_notes || "",
+        status: application.status || "Planning",
       });
       hydrateDegreeFields(
-        application.program_name || 'MBA',
+        application.program_name || "MBA",
         setApplicationDegreeChoice,
-        setApplicationCustomDegree
+        setApplicationCustomDegree,
       );
       setEditingApplicationId(application.id);
       setApplicationDraftRecovered(false);
     } else {
-      resetApplicationForm();
+      const recovered = loadApplicationDraft(userId);
+      setApplicationFormData(recovered.value);
+      hydrateDegreeFields(
+        recovered.value.program_name || "MBA",
+        setApplicationDegreeChoice,
+        setApplicationCustomDegree,
+      );
+      setApplicationDraftRecovered(recovered.recovered);
+      setEditingApplicationId(null);
     }
 
     setShowApplicationForm(true);
@@ -248,15 +284,18 @@ export function createEssayApplicationActions({
     setSelectedEssay(null);
     setReview(null);
     setShowVersions(false);
-    setActiveNav('tracker');
+    setActiveNav("tracker");
   };
 
   const handleApplicationSubmit = async (e) => {
     e.preventDefault();
     setApplicationLoading(true);
-    const resolvedDegree = resolveDegreeValue(applicationDegreeChoice, applicationCustomDegree);
+    const resolvedDegree = resolveDegreeValue(
+      applicationDegreeChoice,
+      applicationCustomDegree,
+    );
     if (!resolvedDegree) {
-      alert('Please enter a custom degree when selecting Other.');
+      notify("Please enter a programme name.");
       setApplicationLoading(false);
       return;
     }
@@ -265,21 +304,26 @@ export function createEssayApplicationActions({
       ...applicationFormData,
       program_name: resolvedDegree,
       application_fee:
-        applicationFormData.application_fee === '' ? null : Number(applicationFormData.application_fee),
+        applicationFormData.application_fee === ""
+          ? null
+          : Number(applicationFormData.application_fee),
       program_total_fee:
-        applicationFormData.program_total_fee === '' ? null : Number(applicationFormData.program_total_fee),
+        applicationFormData.program_total_fee === ""
+          ? null
+          : Number(applicationFormData.program_total_fee),
       essays_required: Number(applicationFormData.essays_required || 0),
       lors_required: Number(applicationFormData.lors_required || 0),
       lors_submitted: Math.min(
         Number(applicationFormData.lors_submitted || 0),
-        Number(applicationFormData.lors_required || 0)
+        Number(applicationFormData.lors_required || 0),
       ),
       interview_required: Boolean(applicationFormData.interview_required),
       interview_completed: Boolean(
-        applicationFormData.interview_required && applicationFormData.interview_completed
+        applicationFormData.interview_required &&
+          applicationFormData.interview_completed,
       ),
-      decision_status: applicationFormData.decision_status || 'Pending',
-      fee_currency: (applicationFormData.fee_currency || 'USD').toUpperCase()
+      decision_status: applicationFormData.decision_status || "Pending",
+      fee_currency: (applicationFormData.fee_currency || "USD").toUpperCase(),
     };
 
     try {
@@ -287,15 +331,32 @@ export function createEssayApplicationActions({
         await updateApplicationApi(editingApplicationId, payload);
       } else {
         await createApplicationApi(payload);
+        trackEvent("application_created", {
+          first_application: applications.length === 0,
+        });
       }
       await fetchApplications();
       setShowApplicationForm(false);
       resetApplicationForm();
       setApplicationDraftRecovered(false);
-      localStorage.removeItem(APPLICATION_DRAFT_KEY);
+      writeUserValue(userId, APPLICATION_DRAFT_KEY, null);
+      notify(
+        editingApplicationId
+          ? "Application updated."
+          : "Application added. You can add more details whenever you’re ready.",
+      );
     } catch (error) {
-      console.error('Error saving application tracker entry:', error);
-      alert('Could not save application tracker details');
+      console.error("Error saving application tracker entry:", error);
+      const detail = error?.response?.data?.detail;
+      const explanation = Array.isArray(detail)
+        ? detail
+            .map((item) => item.msg?.replace(/^Value error, /, ""))
+            .filter(Boolean)
+            .join(". ")
+        : typeof detail === "string"
+          ? detail
+          : "Check your connection and try again.";
+      notify(`Could not save application. ${explanation}`);
     }
 
     setApplicationLoading(false);
@@ -303,7 +364,10 @@ export function createEssayApplicationActions({
 
   const handleDeleteApplication = async (applicationId) => {
     const confirmed =
-      !confirmDelete || window.confirm('Are you sure you want to delete this tracked application?');
+      !confirmDelete ||
+      window.confirm(
+        "Are you sure you want to delete this tracked application?",
+      );
     if (!confirmed) return;
 
     try {
@@ -314,7 +378,7 @@ export function createEssayApplicationActions({
         resetApplicationForm();
       }
     } catch (error) {
-      console.error('Error deleting tracked application:', error);
+      console.error("Error deleting tracked application:", error);
     }
   };
 
@@ -327,14 +391,18 @@ export function createEssayApplicationActions({
       essay_prompt: baseEssay.essay_prompt,
       essay_content: baseEssay.essay_content,
       parent_essay_id: baseEssay.parent_essay_id || baseEssay.id,
-      application_id: baseEssay.application_id || selectedApplicationId || null
+      application_id: baseEssay.application_id || selectedApplicationId || null,
     });
-    hydrateDegreeFields(baseEssay.program_type, setEssayDegreeChoice, setEssayCustomDegree);
+    hydrateDegreeFields(
+      baseEssay.program_type,
+      setEssayDegreeChoice,
+      setEssayCustomDegree,
+    );
     setShowForm(true);
     setShowApplicationForm(false);
     setEditingApplicationId(null);
     setShowVersions(false);
-    setActiveNav('compose');
+    setActiveNav("compose");
     setEssayDraftRecovered(false);
   };
 
@@ -345,10 +413,10 @@ export function createEssayApplicationActions({
     } else {
       const matched = applications.find(
         (application) =>
-          (application.school_name || '').trim().toLowerCase() ===
-            (version.school_name || '').trim().toLowerCase() &&
-          (application.program_name || '').trim().toLowerCase() ===
-            (version.program_type || '').trim().toLowerCase()
+          (application.school_name || "").trim().toLowerCase() ===
+            (version.school_name || "").trim().toLowerCase() &&
+          (application.program_name || "").trim().toLowerCase() ===
+            (version.program_type || "").trim().toLowerCase(),
       );
       setSelectedApplicationId(matched?.id || null);
     }
@@ -357,39 +425,55 @@ export function createEssayApplicationActions({
   };
 
   const handleOpenNewEssayForm = (applicationId = selectedApplicationId) => {
-    const selectedApplication = applications.find((application) => application.id === applicationId);
-    const defaultProgram = selectedApplication?.program_name || 'MBA';
-    setFormData({
-      school_name: selectedApplication?.school_name || '',
-      program_type: defaultProgram,
-      essay_prompt: '',
-      essay_content: '',
-      parent_essay_id: null,
-      application_id: applicationId || null
-    });
-    hydrateDegreeFields(defaultProgram, setEssayDegreeChoice, setEssayCustomDegree);
+    const selectedApplication = applications.find(
+      (application) => application.id === applicationId,
+    );
+    const defaultProgram = selectedApplication?.program_name || "MBA";
+    const recovered = loadEssayDraft(userId);
+    if (recovered.recovered) {
+      setFormData(recovered.value);
+      hydrateDegreeFields(
+        recovered.value.program_type || "MBA",
+        setEssayDegreeChoice,
+        setEssayCustomDegree,
+      );
+    } else {
+      setFormData({
+        school_name: selectedApplication?.school_name || "",
+        program_type: defaultProgram,
+        essay_prompt: "",
+        essay_content: "",
+        parent_essay_id: null,
+        application_id: applicationId || null,
+      });
+      hydrateDegreeFields(
+        defaultProgram,
+        setEssayDegreeChoice,
+        setEssayCustomDegree,
+      );
+    }
     setSelectedEssay(null);
     setReview(null);
     setShowVersions(false);
     setShowForm(true);
     setShowApplicationForm(false);
     setEditingApplicationId(null);
-    setActiveNav('compose');
-    setEssayDraftRecovered(false);
+    setActiveNav("compose");
+    setEssayDraftRecovered(recovered.recovered);
   };
 
   const handleDiscardEssayDraft = () => {
     setFormData(createDefaultEssayForm(selectedApplicationId || null));
-    setEssayDegreeChoice('MBA');
-    setEssayCustomDegree('');
+    setEssayDegreeChoice("MBA");
+    setEssayCustomDegree("");
     setEssayDraftRecovered(false);
-    localStorage.removeItem(ESSAY_DRAFT_KEY);
+    writeUserValue(userId, ESSAY_DRAFT_KEY, null);
   };
 
   const handleDiscardApplicationDraft = () => {
     resetApplicationForm();
     setApplicationDraftRecovered(false);
-    localStorage.removeItem(APPLICATION_DRAFT_KEY);
+    writeUserValue(userId, APPLICATION_DRAFT_KEY, null);
   };
 
   return {
@@ -407,6 +491,6 @@ export function createEssayApplicationActions({
     handleSelectVersion,
     handleOpenNewEssayForm,
     handleDiscardEssayDraft,
-    handleDiscardApplicationDraft
+    handleDiscardApplicationDraft,
   };
 }

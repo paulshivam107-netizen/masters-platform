@@ -1,19 +1,19 @@
-import React from 'react';
-import ProfileView from './workspace/ProfileView';
-import SettingsView from './workspace/SettingsView';
-import NotificationsView from './workspace/NotificationsView';
-import MatrixView from './workspace/MatrixView';
-import InterviewsView from './workspace/InterviewsView';
-import ResearchView from './workspace/ResearchView';
-import ShareView from './workspace/ShareView';
-import DeadlinesView from './workspace/DeadlinesView';
-import RequirementsView from './workspace/RequirementsView';
-import DocsView from './workspace/DocsView';
-import TrackerView from './workspace/TrackerView';
-import HomeView from './workspace/HomeView';
-import EssayFormView from './workspace/EssayFormView';
-import EssayDetailView from './workspace/EssayDetailView';
-import EssaysView from './workspace/EssaysView';
+import React from "react";
+import ProfileView from "./workspace/ProfileView";
+import SettingsView from "./workspace/SettingsView";
+import NotificationsView from "./workspace/NotificationsView";
+import MatrixView from "./workspace/MatrixView";
+import InterviewsView from "./workspace/InterviewsView";
+import ResearchView from "./workspace/ResearchView";
+import ShareView from "./workspace/ShareView";
+import DeadlinesView from "./workspace/DeadlinesView";
+import RequirementsView from "./workspace/RequirementsView";
+import DocsView from "./workspace/DocsView";
+import TrackerView from "./workspace/TrackerView";
+import HomeView from "./workspace/HomeView";
+import EssayFormView from "./workspace/EssayFormView";
+import EssayDetailView from "./workspace/EssayDetailView";
+import EssaysView from "./workspace/EssaysView";
 
 function WorkspaceArea({
   activeNav,
@@ -60,6 +60,7 @@ function WorkspaceArea({
   handleExportApplicationsCsv,
   handleExportDeadlinesICS,
   handleCopyShareSummary,
+  shareSummary,
   averageReadiness,
   deadlineBuckets,
   timelineMonthOffset,
@@ -156,12 +157,12 @@ function WorkspaceArea({
   programCatalog,
   programCatalogLoading,
   onApplyProgramCatalogItem,
-  onAssistOutline
+  onAssistOutline,
 }) {
-  const isAdmin = (user?.role || '').toLowerCase() === 'admin';
+  const isAdmin = (user?.role || "").toLowerCase() === "admin";
   return (
     <div className="workspace-area">
-      {activeNav === 'profile' ? (
+      {activeNav === "profile" ? (
         <ProfileView
           user={user}
           essays={essays}
@@ -171,8 +172,10 @@ function WorkspaceArea({
           handleProfileFieldChange={handleProfileFieldChange}
           profileSaving={profileSaving}
         />
-      ) : activeNav === 'settings' ? (
+      ) : activeNav === "settings" ? (
         <SettingsView
+          handleProfileSave={handleProfileSave}
+          profileSaving={profileSaving}
           applications={applications}
           essays={essays}
           profileFormData={profileFormData}
@@ -203,19 +206,22 @@ function WorkspaceArea({
           feedbackStatus={feedbackStatus}
           submitPilotFeedback={submitPilotFeedback}
         />
-      ) : activeNav === 'notifications' ? (
+      ) : activeNav === "notifications" ? (
         <NotificationsView
           activeNotifications={activeNotifications}
           markAllNotificationsRead={markAllNotificationsRead}
           dismissedNotifications={dismissedNotifications}
-          remindersEnabled={Boolean(profileFormData?.email_reminders_enabled || user?.email_reminders_enabled)}
+          remindersEnabled={Boolean(
+            profileFormData?.email_reminders_enabled ||
+              user?.email_reminders_enabled,
+          )}
           clearNotificationHistory={clearNotificationHistory}
           setSelectedApplicationId={setSelectedApplicationId}
           setDocsApplicationId={setDocsApplicationId}
           handleNavChange={handleNavChange}
           markNotificationRead={markNotificationRead}
         />
-      ) : activeNav === 'matrix' ? (
+      ) : activeNav === "matrix" ? (
         <MatrixView
           decisionMatrixWeights={decisionMatrixWeights}
           setDecisionMatrixWeights={setDecisionMatrixWeights}
@@ -223,8 +229,9 @@ function WorkspaceArea({
           handleNavChange={handleNavChange}
           handleOpenApplicationForm={handleOpenApplicationForm}
         />
-      ) : activeNav === 'interviews' ? (
+      ) : activeNav === "interviews" ? (
         <InterviewsView
+          selectedApplicationId={selectedApplication?.id}
           applications={applications}
           interviewPrepByApplication={interviewPrepByApplication}
           interviewApplications={interviewApplications}
@@ -233,8 +240,9 @@ function WorkspaceArea({
           handleNavChange={handleNavChange}
           handleOpenApplicationForm={handleOpenApplicationForm}
         />
-      ) : activeNav === 'research' ? (
+      ) : activeNav === "research" ? (
         <ResearchView
+          selectedApplicationId={selectedApplication?.id}
           applications={applications}
           researchByApplication={researchByApplication}
           getDefaultResearchCard={getDefaultResearchCard}
@@ -242,8 +250,11 @@ function WorkspaceArea({
           handleNavChange={handleNavChange}
           handleOpenApplicationForm={handleOpenApplicationForm}
         />
-      ) : activeNav === 'share' ? (
+      ) : activeNav === "share" ? (
         <ShareView
+          shareSummary={shareSummary}
+          applications={applications}
+          handleOpenApplicationForm={handleOpenApplicationForm}
           handleExportApplicationsCsv={handleExportApplicationsCsv}
           handleExportDeadlinesICS={handleExportDeadlinesICS}
           handleCopyShareSummary={handleCopyShareSummary}
@@ -251,8 +262,9 @@ function WorkspaceArea({
           interviewPrepByApplication={interviewPrepByApplication}
           averageReadiness={averageReadiness}
         />
-      ) : activeNav === 'deadlines' ? (
+      ) : activeNav === "deadlines" ? (
         <DeadlinesView
+          handleOpenApplicationForm={handleOpenApplicationForm}
           deadlineBuckets={deadlineBuckets}
           handleExportDeadlinesICS={handleExportDeadlinesICS}
           setTimelineMonthOffset={setTimelineMonthOffset}
@@ -265,7 +277,7 @@ function WorkspaceArea({
           getDaysUntilDeadline={getDaysUntilDeadline}
           parseDate={parseDate}
         />
-      ) : activeNav === 'requirements' ? (
+      ) : activeNav === "requirements" ? (
         <RequirementsView
           requirementsSummary={requirementsSummary}
           essays={essays}
@@ -279,7 +291,7 @@ function WorkspaceArea({
           DOC_TEMPLATES={DOC_TEMPLATES}
           handleOpenApplicationForm={handleOpenApplicationForm}
         />
-      ) : activeNav === 'docs' ? (
+      ) : activeNav === "docs" ? (
         <DocsView
           applications={applications}
           activeDocsApplicationId={activeDocsApplicationId}
@@ -297,8 +309,13 @@ function WorkspaceArea({
           handleOpenApplicationForm={handleOpenApplicationForm}
           handleNavChange={handleNavChange}
         />
-      ) : activeNav === 'tracker' ? (
+      ) : activeNav === "tracker" ? (
         <TrackerView
+          onOpenApplication={(id) => {
+            handleNavChange("home");
+            setSelectedApplicationId(id);
+            setDocsApplicationId(id);
+          }}
           handleOpenApplicationForm={handleOpenApplicationForm}
           applicationSearch={applicationSearch}
           setApplicationSearch={setApplicationSearch}
@@ -329,8 +346,9 @@ function WorkspaceArea({
           programCatalogLoading={programCatalogLoading}
           onApplyProgramCatalogItem={onApplyProgramCatalogItem}
         />
-      ) : activeNav === 'home' && !showForm && !selectedEssay ? (
+      ) : activeNav === "home" ? (
         <HomeView
+          interviewPrepByApplication={interviewPrepByApplication}
           selectedApplication={selectedApplication}
           essaysForSelectedApplication={essaysForSelectedApplication}
           selectedEssay={selectedEssay}
@@ -357,7 +375,7 @@ function WorkspaceArea({
           onboardingHidden={onboardingHidden}
           setOnboardingHidden={setOnboardingHidden}
         />
-      ) : activeNav === 'essays' && !showForm && !selectedEssay ? (
+      ) : activeNav === "essays" && !selectedEssay ? (
         <EssaysView
           essays={essays}
           handleOpenNewEssayForm={handleOpenNewEssayForm}
@@ -368,7 +386,7 @@ function WorkspaceArea({
           setShowForm={setShowForm}
           resolveEssayApplicationId={resolveEssayApplicationId}
         />
-      ) : showForm ? (
+      ) : activeNav === "compose" ? (
         <EssayFormView
           isAdmin={isAdmin}
           formData={formData}
@@ -410,7 +428,7 @@ function WorkspaceArea({
       ) : (
         <div className="empty-state-main">
           <h2>Select an essay to begin</h2>
-          <p>Choose a saved essay from the right panel to view details and generate review feedback.</p>
+          <p>Open your essay library to continue working on a saved draft.</p>
         </div>
       )}
     </div>

@@ -8,6 +8,8 @@ from routers.application_routes import router as application_router
 from routers.admin_routes import router as admin_router
 from routers.auth_routes import router as auth_router
 from routers.essay_routes import router as essay_router
+from routers.interview_routes import router as interview_router
+from routers.resume_routes import router as resume_router
 from routers.feedback_routes import router as feedback_router
 from routers.reminder_routes import router as reminder_router
 from routers.system_routes import router as system_router
@@ -75,6 +77,8 @@ app.include_router(auth_router)
 app.include_router(application_router)
 app.include_router(reminder_router)
 app.include_router(essay_router)
+app.include_router(interview_router)
+app.include_router(resume_router)
 app.include_router(feedback_router)
 app.include_router(telemetry_router)
 app.include_router(admin_router)

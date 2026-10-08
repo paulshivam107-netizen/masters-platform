@@ -1,9 +1,11 @@
-import { createNotificationActions } from '../notificationActions';
-import { createNavigationActions } from '../navigationActions';
-import { createProfileActions } from '../profileActions';
-import { createEssayApplicationActions } from '../essayApplicationActions';
+import { createNotificationActions } from "../notificationActions";
+import { createNavigationActions } from "../navigationActions";
+import { createProfileActions } from "../profileActions";
+import { createEssayApplicationActions } from "../essayApplicationActions";
 
 export function useAppActions({
+  setDataLoadState,
+  notify,
   DEGREE_OPTIONS,
   getVersionIdentity,
   applications,
@@ -61,9 +63,12 @@ export function useAppActions({
   setFeedbackCategory,
   setFeedbackMessage,
   setFeedbackSending,
-  setFeedbackStatus
+  setFeedbackStatus,
 }) {
   const essayApplicationActions = createEssayApplicationActions({
+    userId: user?.id,
+    setDataLoadState,
+    notify,
     degreeOptions: DEGREE_OPTIONS,
     getVersionIdentity,
     applications,
@@ -98,11 +103,11 @@ export function useAppActions({
     setApplicationLoading,
     setSelectedApplicationId,
     setEssayDraftRecovered,
-    setApplicationDraftRecovered
+    setApplicationDraftRecovered,
   });
 
   const notificationActions = createNotificationActions({
-    setDismissedNotifications
+    setDismissedNotifications,
   });
 
   const navigationActions = createNavigationActions({
@@ -121,7 +126,7 @@ export function useAppActions({
     setSelectedApplicationId,
     applications,
     setApplicationSearch,
-    globalSearch
+    globalSearch,
   });
 
   const profileActions = createProfileActions({
@@ -141,13 +146,13 @@ export function useAppActions({
     setFeedbackCategory,
     setFeedbackMessage,
     setFeedbackSending,
-    setFeedbackStatus
+    setFeedbackStatus,
   });
 
   return {
     ...essayApplicationActions,
     ...notificationActions,
     ...navigationActions,
-    ...profileActions
+    ...profileActions,
   };
 }

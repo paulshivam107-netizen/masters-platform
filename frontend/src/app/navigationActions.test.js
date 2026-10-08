@@ -1,4 +1,4 @@
-import { createNavigationActions } from './navigationActions';
+import { createNavigationActions } from "./navigationActions";
 
 function makeSetters() {
   return {
@@ -14,23 +14,23 @@ function makeSetters() {
     setDocsApplicationId: jest.fn(),
     setExpandedNavGroups: jest.fn(),
     setSelectedApplicationId: jest.fn(),
-    setApplicationSearch: jest.fn()
+    setApplicationSearch: jest.fn(),
   };
 }
 
-describe('navigationActions', () => {
-  test('essays route resets editor panels without opening composer', () => {
+describe("navigationActions", () => {
+  test("essays route resets editor panels without opening composer", () => {
     const setters = makeSetters();
     const actions = createNavigationActions({
       ...setters,
-      selectedApplicationId: 'app-1',
+      selectedApplicationId: "app-1",
       applications: [],
-      globalSearch: ''
+      globalSearch: "",
     });
 
-    actions.handleNavChange('essays');
+    actions.handleNavChange("essays");
 
-    expect(setters.setActiveNav).toHaveBeenCalledWith('essays');
+    expect(setters.setActiveNav).toHaveBeenCalledWith("essays");
     expect(setters.handleOpenNewEssayForm).not.toHaveBeenCalled();
     expect(setters.setShowForm).toHaveBeenCalledWith(false);
     expect(setters.setShowApplicationForm).toHaveBeenCalledWith(false);
@@ -40,18 +40,32 @@ describe('navigationActions', () => {
     expect(setters.setShowVersions).toHaveBeenCalledWith(false);
   });
 
-  test('compose route opens new essay form', () => {
+  test("compose route opens new essay form", () => {
     const setters = makeSetters();
     const actions = createNavigationActions({
       ...setters,
       selectedApplicationId: null,
       applications: [],
-      globalSearch: ''
+      globalSearch: "",
     });
 
-    actions.handleNavChange('compose');
+    actions.handleNavChange("compose");
 
-    expect(setters.setActiveNav).toHaveBeenCalledWith('compose');
+    expect(setters.setActiveNav).toHaveBeenCalledWith("compose");
     expect(setters.handleOpenNewEssayForm).toHaveBeenCalledTimes(1);
   });
+});
+
+test("Today returns to the overview after visiting an application", () => {
+  const setters = makeSetters();
+  const actions = createNavigationActions({
+    ...setters,
+    selectedApplicationId: 42,
+    applications: [],
+    globalSearch: "",
+  });
+  actions.handleNavChange("home");
+  expect(setters.setSelectedApplicationId).toHaveBeenCalledWith(null);
+  expect(setters.setSelectedEssay).toHaveBeenCalledWith(null);
+  expect(setters.setActiveNav).toHaveBeenCalledWith("home");
 });

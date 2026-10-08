@@ -1,9 +1,35 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import SetupGuide from "./SetupGuide";
+import JourneyArtwork from "../../common/JourneyArtwork";
+import {
+  ApplicationsIcon,
+  ArrowIcon,
+  CheckIcon,
+  DeadlinesIcon,
+  DocsIcon,
+  EssaysIcon,
+  InterviewIcon,
+  PlusIcon,
+} from "../../../app/icons";
 
-function HomeView({
+function Stat({ icon, value, label, note }) {
+  return (
+    <div className="home-metric-card">
+      <div className="metric-top">
+        <span className="metric-icon">{icon}</span>
+        <span>{label}</span>
+      </div>
+      <p className="metric-value">{value}</p>
+      {note && <small>{note}</small>}
+    </div>
+  );
+}
+
+export default function HomeView({
+  interviewPrepByApplication,
   selectedApplication,
   essaysForSelectedApplication,
-  selectedEssay,
   setSelectedEssay,
   setReview,
   setShowVersions,
@@ -16,280 +42,384 @@ function HomeView({
   user,
   applications,
   applicationSummary,
-  docProgressOverall,
-  DOC_TEMPLATES,
   essays,
   resolveEssayApplicationId,
   setSelectedApplicationId,
   showHomeChecklist,
   onboardingDismissed,
   setOnboardingDismissed,
-  onboardingHidden,
-  setOnboardingHidden
 }) {
-  const onboardingSteps = [
-    {
-      id: 'applications',
-      label: 'Add your first application',
-      complete: applications.length > 0,
-      actionLabel: 'Add application',
-      onAction: () => handleOpenApplicationForm()
-    },
-    {
-      id: 'essay',
-      label: 'Draft your first essay',
-      complete: essays.length > 0,
-      actionLabel: 'Open essay composer',
-      onAction: () => handleOpenNewEssayForm()
-    },
-    {
-      id: 'profile',
-      label: 'Set target intake and countries',
-      complete: Boolean((user?.target_intake || '').trim() && (user?.target_countries || '').trim()),
-      actionLabel: 'Open profile',
-      onAction: () => handleNavChange('profile')
-    },
-    {
-      id: 'reminders',
-      label: 'Enable reminder emails',
-      complete: Boolean(user?.email_reminders_enabled),
-      actionLabel: 'Configure reminders',
-      onAction: () => handleNavChange('settings')
-    }
-  ];
-  const completedOnboardingSteps = onboardingSteps.filter((step) => step.complete).length;
-  const isOnboardingIncomplete = completedOnboardingSteps < onboardingSteps.length;
-  const showOnboardingCard = !onboardingDismissed && isOnboardingIncomplete;
-  const showExpandedOnboarding = showOnboardingCard && !onboardingHidden;
-  const showCollapsedOnboarding = showOnboardingCard && onboardingHidden;
-  const nextStep = onboardingSteps.find((step) => !step.complete);
-  const onboardingProgress = Math.round((completedOnboardingSteps / onboardingSteps.length) * 100);
-  const firstName = ((user?.name || '').trim().split(/\s+/)[0] || 'there').trim();
+  const firstName = (user?.name || "there").trim().split(/\s+/)[0];
+  const openEssay = (essay) => {
+    handleNavChange("essays");
+    setSelectedEssay(essay);
+    setSelectedApplicationId(resolveEssayApplicationId(essay));
+    setReview(null);
+    setShowVersions(false);
+    setShowForm(false);
+  };
+  const recent = [...essays]
+    .sort(
+      (a, b) =>
+        new Date(b.updated_at || b.created_at) -
+        new Date(a.updated_at || a.created_at),
+    )
+    .slice(0, 3);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const upcoming = applications
+    .filter((app) => parseDate(app.deadline) >= today)
+    .sort((a, b) => parseDate(a.deadline) - parseDate(b.deadline))
+    .slice(0, 3);
+  const essayList = (items) => (
+    <div className="recent-essay-list">
+      {items.map((essay) => (
+        <button
+          key={essay.id}
+          type="button"
+          className="recent-work-row"
+          data-testid="home-recent-essay-item"
+          onClick={() => openEssay(essay)}
+        >
+          <span className="list-icon">
+            <EssaysIcon />
+          </span>
+          <span className="list-copy">
+            <strong>{essay.school_name}</strong>
+            <span>{essay.essay_prompt || "Untitled essay"}</span>
+            <small>
+              {new Date(
+                essay.updated_at || essay.created_at,
+              ).toLocaleDateString(undefined, {
+                month: "short",
+                day: "numeric",
+              })}{" "}
+              · Version {essay.version || 1}
+            </small>
+          </span>
+          <ArrowIcon />
+        </button>
+      ))}
+    </div>
+  );
+
+  if (selectedApplication)
+    return (
+      <div
+        className="application-home-panel"
+        data-testid="home-application-panel"
+      >
+        <button
+          className="text-button"
+          onClick={() => setSelectedApplicationId(null)}
+        >
+          ← Back to your overview
+        </button>
+        <section
+          className="application-focus-card"
+          data-testid="home-application-hero"
+        >
+          <span className="eyebrow">YOUR APPLICATION</span>
+          <h2 data-testid="home-application-title">
+            {selectedApplication.school_name}
+          </h2>
+          <p>
+            {selectedApplication.program_name} ·{" "}
+            {selectedApplication.application_round || "Round not set"}
+          </p>
+          <div className="home-hero-actions">
+            <button
+              className="new-essay-btn"
+              data-testid="home-application-new-essay"
+              onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
+            >
+              <PlusIcon /> Write an essay
+            </button>
+            <button
+              className="secondary-action-btn"
+              onClick={() => handleOpenApplicationForm(selectedApplication)}
+            >
+              Edit application
+            </button>
+          </div>
+        </section>
+        <div className="home-metrics-grid">
+          <Stat
+            icon={<EssaysIcon />}
+            value={essaysForSelectedApplication.length}
+            label="Essay drafts"
+          />
+          <Stat
+            icon={<DeadlinesIcon />}
+            value={
+              parseDate(selectedApplication.deadline)?.toLocaleDateString(
+                undefined,
+                { month: "short", day: "numeric" },
+              ) || "Not set"
+            }
+            label="Deadline"
+          />
+          <Stat
+            icon={<CheckIcon />}
+            value={`${getApplicationReadiness(selectedApplication).readiness}%`}
+            label="Checklist completion"
+          />
+        </div>
+        <div className="application-quick-links">
+          {[
+            ["requirements", "Requirements", <CheckIcon />],
+            ["docs", "Documents", <DocsIcon />],
+            ["interviews", "Interview preparation", <InterviewIcon />],
+            ["research", "School research", <ApplicationsIcon />],
+          ].map(([id, label, icon]) => (
+            <button
+              className="secondary-action-btn"
+              key={id}
+              onClick={() => handleNavChange(id)}
+            >
+              {icon}
+              {label}
+              <ArrowIcon />
+            </button>
+          ))}
+        </div>
+        <section className="dashboard-card">
+          <div className="section-heading">
+            <h3>Your essays for this application</h3>
+          </div>
+          {essaysForSelectedApplication.length ? (
+            essayList(essaysForSelectedApplication)
+          ) : (
+            <div className="quiet-empty">
+              <EssaysIcon />
+              <p>A strong application starts with your story.</p>
+              <button
+                className="text-button"
+                onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
+              >
+                Start your first draft <ArrowIcon />
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+    );
+
+  const isFirstVisit = !applications.length && !essays.length;
+  if (isFirstVisit)
+    return (
+      <section className="first-visit" data-testid="home-first-visit">
+        <div className="home-hero-card">
+          <div className="hero-copy">
+            <span className="hero-kicker">LET’S GET STARTED</span>
+            <h2>
+              Welcome, <span>{firstName}.</span>
+            </h2>
+            <p>
+              Start with one programme you’re considering. Add its deadline,
+              then build your plan at your own pace.
+            </p>
+            <div className="home-hero-actions">
+              <button
+                className="hero-primary"
+                data-testid="home-dashboard-start-application"
+                onClick={() => handleOpenApplicationForm()}
+              >
+                Add your first application <ArrowIcon />
+              </button>
+            </div>
+            <p className="first-visit-hint">
+              CAT, GMAT or another route: start with the programme and its
+              official deadline.
+            </p>
+          </div>
+          <JourneyArtwork />
+        </div>
+        <Link className="text-button" to="/help">
+          New here? See the two-minute setup guide <ArrowIcon />
+        </Link>
+        <div className="first-visit-next">
+          <h3>One step at a time</h3>
+          <ol>
+            <li>
+              <strong>Choose your programme</strong>
+              <span>Keep its deadline and requirements together.</span>
+            </li>
+            <li>
+              <strong>Build your application</strong>
+              <span>
+                Save preparation notes, drafts and document checklists.
+              </span>
+            </li>
+            <li>
+              <strong>Practise your story</strong>
+              <span>Prepare a few clear answers for your interview.</span>
+            </li>
+          </ol>
+          <button
+            className="text-button"
+            onClick={() => handleNavChange("interviews")}
+          >
+            Just here to practise? Try a question <ArrowIcon />
+          </button>
+        </div>
+      </section>
+    );
 
   return (
-            selectedApplication ? (
-              <div className="application-home-panel" data-testid="home-application-panel">
-                <div className="home-welcome-card home-hero-card" data-testid="home-application-hero">
-                  <h2 data-testid="home-application-title">{selectedApplication.school_name}</h2>
-                  <p>
-                    {selectedApplication.program_name} | {selectedApplication.application_round || 'Round not set'}
-                  </p>
+    <div className="home-dashboard" data-testid="home-dashboard">
+      {!onboardingDismissed && (
+        <SetupGuide
+          applications={applications}
+          essays={essays}
+          interviewPrepByApplication={interviewPrepByApplication}
+          onApplication={() => handleOpenApplicationForm()}
+          onEssay={() => handleOpenNewEssayForm(applications[0]?.id)}
+          onInterview={() => handleNavChange("interviews")}
+          onDismiss={() => setOnboardingDismissed(true)}
+        />
+      )}
+      <section className="home-next-step" data-testid="home-dashboard-hero">
+        <div>
+          <span className="eyebrow">
+            {upcoming.length ? "YOUR NEXT DEADLINE" : "YOUR NEXT STEP"}
+          </span>
+          <h2>
+            {upcoming.length
+              ? upcoming[0].school_name
+              : `Welcome back, ${firstName}.`}
+          </h2>
+          <p>
+            {upcoming.length
+              ? `${upcoming[0].program_name} · ${parseDate(upcoming[0].deadline).toLocaleDateString(undefined, { month: "long", day: "numeric" })}`
+              : "Pick up a draft or add another programme to your plan."}
+          </p>
+        </div>
+        <button
+          className="hero-primary"
+          data-testid="home-dashboard-start-application"
+          onClick={() =>
+            upcoming.length
+              ? setSelectedApplicationId(upcoming[0].id)
+              : handleNavChange("tracker")
+          }
+        >
+          {upcoming.length ? "Open application" : "View applications"}{" "}
+          <ArrowIcon />
+        </button>
+      </section>
+      <div className="home-summary-line" data-testid="home-dashboard-metrics">
+        <span>
+          <ApplicationsIcon />
+          <strong>{applications.length}</strong> applications
+        </span>
+        <span>
+          <EssaysIcon />
+          <strong>{essays.length}</strong> essay drafts
+        </span>
+        <span>
+          <DeadlinesIcon />
+          <strong>{applicationSummary.dueSoon}</strong> due within 21 days
+        </span>
+      </div>
+      <div className="dashboard-columns">
+        <section className="dashboard-card">
+          <div className="section-heading">
+            <h3>Continue writing</h3>
+            <button
+              className="text-button"
+              onClick={() => handleNavChange("essays")}
+            >
+              All essays <ArrowIcon />
+            </button>
+          </div>
+          {recent.length ? (
+            essayList(recent)
+          ) : (
+            <div className="quiet-empty">
+              <EssaysIcon />
+              <h4>Start with a rough draft.</h4>
+              <p>Your first version doesn’t need to be perfect.</p>
+              <button
+                className="secondary-action-btn"
+                data-testid="home-dashboard-start-essay"
+                onClick={() => handleOpenNewEssayForm()}
+              >
+                <PlusIcon /> Start an essay
+              </button>
+            </div>
+          )}
+        </section>
+        <section className="dashboard-card">
+          <div className="section-heading">
+            <h3>Upcoming deadlines</h3>
+            <button
+              className="text-button"
+              onClick={() => handleNavChange("deadlines")}
+            >
+              Calendar <ArrowIcon />
+            </button>
+          </div>
+          {upcoming.length ? (
+            <div className="upcoming-list">
+              {upcoming.map((app) => {
+                const date = parseDate(app.deadline);
+                return (
                   <button
-                    type="button"
-                    className="new-essay-btn home-cta-btn"
-                    data-testid="home-application-new-essay"
-                    onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
+                    className="deadline-row"
+                    key={app.id}
+                    onClick={() => setSelectedApplicationId(app.id)}
                   >
-                    + New Essay for This Application
+                    <span className="date-tile">
+                      <small>
+                        {date.toLocaleDateString(undefined, { month: "short" })}
+                      </small>
+                      <strong>{date.getDate()}</strong>
+                    </span>
+                    <span className="list-copy">
+                      <strong>{app.school_name}</strong>
+                      <span>
+                        {app.program_name} ·{" "}
+                        {app.application_round || "Application"}
+                      </span>
+                    </span>
+                    <ArrowIcon />
                   </button>
-                </div>
-                <div className="home-metrics-grid home-stats-card home-stats-wide" data-testid="home-application-metrics">
-                  <div className="home-metric-card" data-testid="home-application-metric-essays">
-                    <h3>Essays</h3>
-                    <p className="metric-value">{essaysForSelectedApplication.length}</p>
-                  </div>
-                  <div className="home-metric-card" data-testid="home-application-metric-reviewed">
-                    <h3>Reviewed</h3>
-                    <p className="metric-value">{essaysForSelectedApplication.filter((essay) => essay.review_score).length}</p>
-                  </div>
-                  <div className="home-metric-card home-metric-card--deadline" data-testid="home-application-metric-deadline">
-                    <h3>Deadline</h3>
-                    <p className="metric-value metric-value-date">{parseDate(selectedApplication.deadline)?.toLocaleDateString() || 'Not set'}</p>
-                  </div>
-                  <div className="home-metric-card" data-testid="home-application-metric-readiness">
-                    <h3>Readiness</h3>
-                    <p className="metric-value">{getApplicationReadiness(selectedApplication).readiness}%</p>
-                  </div>
-                </div>
-                <div className="application-essay-list-card home-recent-card home-recent-full" data-testid="home-application-essays-card">
-                  <h3>Essays for this school</h3>
-                  {essaysForSelectedApplication.length === 0 ? (
-                    <p data-testid="home-application-essays-empty">No essays yet. Start your first draft for this application.</p>
-                  ) : (
-                    <div className="application-essay-list school-essay-list">
-                      {essaysForSelectedApplication.map((essay) => (
-                        <button
-                          type="button"
-                          key={essay.id}
-                          className={`application-essay-item school-essay-item ${selectedEssay?.id === essay.id ? 'active' : ''}`}
-                          data-testid="home-application-essay-item"
-                          onClick={() => {
-                            setSelectedEssay(essay);
-                            setReview(null);
-                            setShowVersions(false);
-                            setShowForm(false);
-                          }}
-                        >
-                          <span>{essay.essay_prompt || 'Untitled Prompt'}</span>
-                          <small>Updated {new Date(essay.created_at).toLocaleDateString()}</small>
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="home-dashboard" data-testid="home-dashboard">
-                <div className="home-welcome-card home-hero-card" data-testid="home-dashboard-hero">
-                  <h2>Welcome back, {firstName}</h2>
-                  <p>Plan your entire Master's application cycle: schools, deadlines, essays, recommendations, and documents.</p>
-                  <div className="home-hero-actions">
-                    <button
-                      type="button"
-                      className="new-essay-btn home-cta-btn"
-                      data-testid="home-dashboard-start-essay"
-                      onClick={() => handleOpenNewEssayForm()}
-                    >
-                      Start a New Essay
-                    </button>
-                    <button
-                      type="button"
-                      className="secondary-action-btn"
-                      data-testid="home-dashboard-start-application"
-                      onClick={() => handleOpenApplicationForm()}
-                    >
-                      Start a New Application
-                    </button>
-                  </div>
-                </div>
-
-                <div className="home-metrics-grid home-stats-card" data-testid="home-dashboard-metrics">
-                  <div className="home-metric-card" data-testid="home-dashboard-metric-applications">
-                    <h3>Applications</h3>
-                    <p>{applications.length}</p>
-                  </div>
-                  <div className="home-metric-card" data-testid="home-dashboard-metric-upcoming-deadlines">
-                    <h3>Upcoming Deadlines</h3>
-                    <p>{applicationSummary.upcoming}</p>
-                  </div>
-                  <div className="home-metric-card" data-testid="home-dashboard-metric-docs-ready">
-                    <h3>Documents Ready</h3>
-                    <p>
-                      {docProgressOverall.ready}/
-                      {Math.max(applications.length, 1) * DOC_TEMPLATES.length}
-                    </p>
-                  </div>
-                </div>
-
-                {showExpandedOnboarding && (
-                  <div className="home-tips-card home-onboarding-card" data-testid="home-onboarding-card">
-                    <div className="onboarding-header">
-                      <div className="onboarding-header-top">
-                        <h3>Pilot Setup Guide</h3>
-                        <div className="onboarding-header-actions">
-                          <button
-                            type="button"
-                            className="dismiss-onboarding-btn onboarding-hide-inline"
-                            data-testid="home-onboarding-hide"
-                            onClick={() => setOnboardingHidden(true)}
-                          >
-                            Hide steps
-                          </button>
-                          <button
-                            type="button"
-                            className="dismiss-onboarding-btn onboarding-dismiss-inline"
-                            data-testid="home-onboarding-dismiss"
-                            onClick={() => {
-                              setOnboardingDismissed(true);
-                              setOnboardingHidden(false);
-                            }}
-                          >
-                            Dismiss guide
-                          </button>
-                        </div>
-                      </div>
-                      <p>Complete {completedOnboardingSteps}/{onboardingSteps.length} to unlock the full workflow.</p>
-                      <div className="onboarding-progress">
-                        <div className="onboarding-progress-bar">
-                          <div className="onboarding-progress-fill" style={{ width: `${onboardingProgress}%` }} />
-                        </div>
-                        <span>{onboardingProgress}%</span>
-                      </div>
-                    </div>
-                    {nextStep && (
-                      <div className="onboarding-next-step">
-                        <div>
-                          <strong>Next step:</strong> {nextStep.label}
-                        </div>
-                        <button type="button" className="history-btn" onClick={nextStep.onAction}>
-                          {nextStep.actionLabel}
-                        </button>
-                      </div>
-                    )}
-                    <div className="onboarding-steps">
-                      {onboardingSteps.map((step) => (
-                        <div
-                          key={step.id}
-                          className={`onboarding-step ${step.complete ? 'complete' : ''}`}
-                          data-testid={`home-onboarding-step-${step.id}`}
-                        >
-                          <span className="onboarding-step-label">
-                            {step.complete ? 'Done' : 'Pending'}: {step.label}
-                          </span>
-                          {!step.complete && (
-                            <button type="button" data-testid={`home-onboarding-action-${step.id}`} onClick={step.onAction}>
-                              {step.actionLabel}
-                            </button>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {showCollapsedOnboarding && (
-                  <div className="home-tips-card home-onboarding-card" data-testid="home-onboarding-restore">
-                    <div className="onboarding-header">
-                      <h3>Setup Guide Hidden</h3>
-                      <p>Bring back the setup guide if you want the checklist again.</p>
-                    </div>
-                    <button
-                      type="button"
-                      className="history-btn"
-                      onClick={() => setOnboardingHidden(false)}
-                    >
-                      Show setup guide
-                    </button>
-                  </div>
-                )}
-
-                {essays.length > 0 && (
-                  <div className="application-essay-list-card home-recent-card" data-testid="home-recent-essays-card">
-                    <h3>Recent Essays</h3>
-                    <div className="application-essay-list recent-essay-list">
-                      {essays.slice(0, 5).map((essay) => (
-                        <button
-                          type="button"
-                          key={essay.id}
-                          className="application-essay-item recent-essay-item"
-                          data-testid="home-recent-essay-item"
-                          onClick={() => {
-                            setSelectedEssay(essay);
-                            setSelectedApplicationId(resolveEssayApplicationId(essay));
-                            setReview(null);
-                            setShowVersions(false);
-                            setShowForm(false);
-                          }}
-                        >
-                          <span>{essay.school_name} | {essay.program_type}</span>
-                          <small>Updated {new Date(essay.created_at).toLocaleDateString()}</small>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {showHomeChecklist && (
-                  <div className="home-tips-card home-checklist-card" data-testid="home-checklist-card">
-                    <h3>Home Checklist</h3>
-                    <p>1. Add schools in Applications and set realistic deadlines.</p>
-                    <p>2. Track essays/LOR targets in Requirements and keep drafts moving.</p>
-                    <p>3. Keep core files updated in Docs before submission windows.</p>
-                  </div>
-                )}
-              </div>
-            )
+                );
+              })}
+            </div>
+          ) : (
+            <div className="quiet-empty">
+              <DeadlinesIcon />
+              <h4>No upcoming deadlines.</h4>
+              <p>Check your applications to keep your dates current.</p>
+              <button
+                className="text-button"
+                onClick={() => handleNavChange("tracker")}
+              >
+                View applications <ArrowIcon />
+              </button>
+            </div>
+          )}
+        </section>
+      </div>
+      {showHomeChecklist && (
+        <section className="practice-banner practice-banner-compact">
+          <span className="practice-banner-icon">
+            <InterviewIcon />
+          </span>
+          <div>
+            <h3>Have 90 seconds?</h3>
+            <p>Practise one interview answer, out loud.</p>
+          </div>
+          <button
+            className="secondary-action-btn"
+            onClick={() => handleNavChange("interviews")}
+          >
+            Start practising <ArrowIcon />
+          </button>
+        </section>
+      )}
+    </div>
   );
 }
-
-export default HomeView;

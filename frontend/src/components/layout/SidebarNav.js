@@ -1,209 +1,189 @@
-import React from 'react';
-import { BrandLogoIcon, MoonIcon, SunIcon } from '../../app/icons';
+import React, { useEffect, useRef, useState } from "react";
+import Brand from "../common/Brand";
+import ThemeToggle from "../common/ThemeToggle";
+import { BellIcon, CloseIcon, SettingsIcon } from "../../app/icons";
 
-function SidebarNav({
+export default function SidebarNav({
   navGroups,
   activeNav,
   expandedNavGroups,
   onToggleGroup,
-  onNavigate
+  onNavigate,
 }) {
-  const [isMobileMoreOpen, setIsMobileMoreOpen] = React.useState(false);
-  const navItems = React.useMemo(
-    () =>
-      navGroups.flatMap((group) =>
-        group.items.map((item) => ({
-          ...item,
-          groupLabel: group.label
-        }))
+  const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
+  const dialogRef = useRef(null);
+  const primary = navGroups
+    .flatMap((group) => group.items)
+    .filter((item) =>
+      ["home", "tracker", "essays", "interviews"].includes(item.id),
+    );
+  const overflow = navGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(
+        (item) => !primary.some((nav) => nav.id === item.id),
       ),
-    [navGroups]
-  );
-  const primaryMobileIds = React.useMemo(() => new Set(['home', 'essays', 'tracker', 'deadlines']), []);
-  const primaryMobileItems = navItems.filter((item) => primaryMobileIds.has(item.id));
-  const overflowMobileItems = navItems.filter((item) => !primaryMobileIds.has(item.id));
-
-  const overflowByGroup = React.useMemo(
-    () =>
-      navGroups
-        .map((group) => ({
-          ...group,
-          items: group.items.filter((item) => !primaryMobileIds.has(item.id))
-        }))
-        .filter((group) => group.items.length > 0),
-    [navGroups, primaryMobileIds]
-  );
-
-  React.useEffect(() => {
-    setIsMobileMoreOpen(false);
-  }, [activeNav]);
-
-  return (
-    <div
-      className="nav-sidebar soft-sidebar"
-      data-testid="sidebar-nav"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: 'calc(100vh - 40px)',
-        overflow: 'hidden',
-        position: 'relative',
-        paddingBottom: '24px' // Extra insurance space at bottom
+    }))
+    .filter((group) => group.items.length);
+  useEffect(() => setIsMobileMoreOpen(false), [activeNav]);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (isMobileMoreOpen && !dialog.open) dialog.showModal();
+    else if (!isMobileMoreOpen && dialog.open) dialog.close();
+  }, [isMobileMoreOpen]);
+  const navButton = (item, mobile = false) => (
+    <button
+      key={item.id}
+      type="button"
+      className={`${mobile ? "mobile-nav-more-item" : "nav-drawer-item"} ${activeNav === item.id ? "active" : ""}`}
+      data-testid={`${mobile ? "mobile-nav-overflow" : "nav-item"}-${item.id}`}
+      aria-current={activeNav === item.id ? "page" : undefined}
+      onClick={() => {
+        setIsMobileMoreOpen(false);
+        onNavigate(item.id);
       }}
     >
-      <div className="sidebar-brand" aria-hidden="true">
-        <span className="sidebar-brand-mark">
-          <span className="sidebar-brand-logo">
-            <BrandLogoIcon />
-          </span>
-          <span className="sidebar-brand-text" data-testid="sidebar-brand-title">Dashboard</span>
-        </span>
-      </div>
-      <div
-        className="nav-drawer soft-nav-drawer open"
-        aria-hidden={false}
-        style={{
-          flex: '1 1 auto',
-          minHeight: 0,
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'relative',
-          overflow: 'hidden'
-        }}
-      >
-        <div
-          className="nav-drawer-list soft-nav-list"
-          style={{
-            flex: '1 1 auto',
-            minHeight: 0,
-            overflowY: 'auto',
-            overflowX: 'hidden',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '8px',
-            paddingBottom: '80px',
-            overscrollBehavior: 'contain'
-          }}
-        >
+      <span className="nav-icon-glyph" aria-hidden="true">
+        {item.icon}
+      </span>
+      <span>{item.label}</span>
+    </button>
+  );
+  return (
+    <>
+      <aside className="nav-sidebar" data-testid="sidebar-nav">
+        <Brand to="/app/today" onClick={() => onNavigate("home")} />
+        <nav className="soft-nav-list" aria-label="Workspace navigation">
           {navGroups.map((group) => (
-            <div key={`group-${group.id}`} className="nav-group">
-              <button
-                type="button"
-                className={`nav-group-toggle ${expandedNavGroups[group.id] ? 'open' : ''}`}
-                data-testid={`nav-group-${group.id}`}
-                onClick={() => onToggleGroup(group.id)}
-              >
-                <span>{group.label}</span>
-                <span className="nav-group-chevron" aria-hidden="true">
-                  {expandedNavGroups[group.id] ? '▾' : '▸'}
-                </span>
-              </button>
-              {expandedNavGroups[group.id] && (
-                <div className="nav-group-items">
-                  {group.items.map((item) => (
-                    <button
-                      key={`drawer-${item.id}`}
-                      type="button"
-                      className={`nav-drawer-item soft-nav-item ${activeNav === item.id ? 'active' : ''}`}
-                      data-testid={`nav-item-${item.id}`}
-                      onClick={() => onNavigate(item.id)}
-                    >
-                      <span className="nav-icon-glyph" aria-hidden="true">
-                        {item.icon}
-                      </span>
-                      <span>{item.label}</span>
-                    </button>
-                  ))}
+            <div className="nav-group" key={group.id}>
+              {group.id === "core" ? (
+                <p className="nav-group-label">Your workspace</p>
+              ) : (
+                <button
+                  className="nav-group-toggle"
+                  type="button"
+                  aria-expanded={Boolean(expandedNavGroups[group.id])}
+                  aria-controls={`nav-${group.id}`}
+                  onClick={() => onToggleGroup(group.id)}
+                  data-testid={`nav-group-${group.id}`}
+                >
+                  <span>{group.label}</span>
+                  <span aria-hidden="true">
+                    {expandedNavGroups[group.id] ? "−" : "+"}
+                  </span>
+                </button>
+              )}
+              {(group.id === "core" || expandedNavGroups[group.id]) && (
+                <div className="nav-group-items" id={`nav-${group.id}`}>
+                  {group.items.map((item) => navButton(item))}
                 </div>
               )}
             </div>
           ))}
-        </div>
-      </div>
-
-      <div className="mobile-bottom-nav" data-testid="mobile-bottom-nav">
-        {primaryMobileItems.map((item) => (
+        </nav>
+        <div className="sidebar-footer">
           <button
-            key={`mobile-primary-${item.id}`}
             type="button"
-            className={`mobile-bottom-nav-item ${activeNav === item.id ? 'active' : ''}`}
-            data-testid={`mobile-nav-item-${item.id}`}
-            onClick={() => {
-              setIsMobileMoreOpen(false);
-              onNavigate(item.id);
-            }}
-            aria-label={item.label}
+            className={`nav-drawer-item ${activeNav === "settings" ? "active" : ""}`}
+            onClick={() => onNavigate("settings")}
           >
-            <span className="nav-icon-glyph" aria-hidden="true">
-              {item.icon}
+            <SettingsIcon />
+            <span>Settings</span>
+          </button>
+          <ThemeToggle showLabel />
+        </div>
+      </aside>
+      <nav
+        className="mobile-bottom-nav"
+        aria-label="Mobile navigation"
+        data-testid="mobile-bottom-nav"
+      >
+        {primary.map((item) => (
+          <button
+            key={item.id}
+            className={`mobile-bottom-nav-item ${activeNav === item.id ? "active" : ""}`}
+            data-testid={`mobile-nav-item-${item.id}`}
+            aria-current={activeNav === item.id ? "page" : undefined}
+            onClick={() => onNavigate(item.id)}
+          >
+            <span aria-hidden="true">{item.icon}</span>
+            <span>
+              {item.id === "tracker"
+                ? "Applications"
+                : item.id === "interviews"
+                  ? "Interviews"
+                  : item.label}
             </span>
-            <span className="mobile-bottom-nav-label">{item.label}</span>
           </button>
         ))}
         <button
           type="button"
-          className={`mobile-bottom-nav-item mobile-bottom-nav-item--more ${isMobileMoreOpen ? 'active' : ''}`}
+          className={`mobile-bottom-nav-item ${!primary.some((item) => item.id === activeNav) ? "active" : ""}`}
           data-testid="mobile-nav-item-more"
           aria-haspopup="dialog"
           aria-expanded={isMobileMoreOpen}
-          onClick={() => setIsMobileMoreOpen((prev) => !prev)}
-          aria-label="More navigation options"
+          onClick={() => setIsMobileMoreOpen(true)}
         >
-          <span className="mobile-more-glyph" aria-hidden="true">⋯</span>
-          <span className="mobile-bottom-nav-label">More</span>
+          <span className="more-icon" aria-hidden="true">
+            ···
+          </span>
+          <span>More</span>
         </button>
-      </div>
-
-      {isMobileMoreOpen && (
-        <div className="mobile-nav-more-overlay" role="dialog" aria-modal="true" data-testid="mobile-nav-more-overlay">
-          <button
-            type="button"
-            className="mobile-nav-more-backdrop"
-            aria-label="Close navigation menu"
-            onClick={() => setIsMobileMoreOpen(false)}
-          />
-          <div className="mobile-nav-more-sheet">
-            <header className="mobile-nav-more-header">
-              <strong>More</strong>
-              <button
-                type="button"
-                className="mobile-nav-more-close"
-                onClick={() => setIsMobileMoreOpen(false)}
-                aria-label="Close navigation menu"
-              >
-                Close
-              </button>
-            </header>
-            {overflowByGroup.map((group) => (
-              <div key={`mobile-overflow-group-${group.id}`} className="mobile-nav-more-group">
-                <p className="mobile-nav-more-group-label">{group.label}</p>
-                <div className="mobile-nav-more-items">
-                  {group.items.map((item) => (
-                    <button
-                      key={`mobile-overflow-item-${item.id}`}
-                      type="button"
-                      className={`mobile-nav-more-item ${activeNav === item.id ? 'active' : ''}`}
-                      onClick={() => {
-                        setIsMobileMoreOpen(false);
-                        onNavigate(item.id);
-                      }}
-                      data-testid={`mobile-nav-overflow-${item.id}`}
-                    >
-                      <span className="nav-icon-glyph" aria-hidden="true">
-                        {item.icon}
-                      </span>
-                      <span>{item.label}</span>
-                    </button>
-                  ))}
-                </div>
+      </nav>
+      <dialog
+        ref={dialogRef}
+        className="mobile-nav-more-dialog"
+        aria-labelledby="more-nav-title"
+        onClose={() => setIsMobileMoreOpen(false)}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) setIsMobileMoreOpen(false);
+        }}
+      >
+        <div
+          className="mobile-nav-more-sheet"
+          data-testid="mobile-nav-more-overlay"
+        >
+          <header>
+            <h2 id="more-nav-title">Your workspace</h2>
+            <button
+              className="icon-button"
+              aria-label="Close navigation menu"
+              onClick={() => setIsMobileMoreOpen(false)}
+            >
+              <CloseIcon />
+            </button>
+          </header>
+          {overflow.map((group) => (
+            <div key={group.id}>
+              <p className="nav-group-label">{group.label}</p>
+              <div className="mobile-nav-more-items">
+                {group.items.map((item) => navButton(item, true))}
               </div>
-            ))}
-            {/* Mobile theme toggle removed */}
+            </div>
+          ))}
+          <div className="mobile-sheet-footer">
+            <button
+              className="secondary-action-btn"
+              onClick={() => {
+                setIsMobileMoreOpen(false);
+                onNavigate("notifications");
+              }}
+            >
+              <BellIcon /> Updates
+            </button>
+            <button
+              className="secondary-action-btn"
+              onClick={() => {
+                setIsMobileMoreOpen(false);
+                onNavigate("settings");
+              }}
+            >
+              <SettingsIcon /> Settings
+            </button>
+            <ThemeToggle showLabel />
           </div>
         </div>
-      )}
-    </div>
+      </dialog>
+    </>
   );
 }
-
-export default SidebarNav;

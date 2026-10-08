@@ -1,0 +1,1778 @@
+{
+  "version": "2026-10-08.2",
+  "sources": [
+    {
+      "id": "iima",
+      "label": "IIMA interview handbook",
+      "sections": [
+        "Opening questions",
+        "Why MBA / why now",
+        "Career goals",
+        "Projects",
+        "Leadership and behaviour",
+        "Industry",
+        "Closing questions"
+      ]
+    },
+    {
+      "id": "iimk",
+      "label": "IIMK interview handbook",
+      "sections": [
+        "Motivation",
+        "Career goals",
+        "Projects and leadership",
+        "Personal questions",
+        "Closing questions"
+      ]
+    },
+    {
+      "id": "faq",
+      "label": "Mock interview FAQs",
+      "sections": [
+        "Pillars 1–3",
+        "Cross-questions",
+        "Follow-ups on claims",
+        "Product and industry questions"
+      ]
+    },
+    {
+      "id": "projects",
+      "label": "Side-project question notes",
+      "sections": [
+        "Review-analysis project",
+        "Application tracker",
+        "Cross-cutting questions"
+      ]
+    },
+    {
+      "id": "practice-editorial",
+      "label": "Original practice questions",
+      "sections": [
+        "Academics",
+        "Internships",
+        "Workplace decisions"
+      ]
+    }
+  ],
+  "roots": [
+    "story",
+    "mba-now",
+    "school",
+    "goals",
+    "project",
+    "influence",
+    "failure",
+    "strengths",
+    "industry",
+    "intent-ai",
+    "ai-role",
+    "side-project",
+    "reapplicant",
+    "outside-work",
+    "admire",
+    "contribute",
+    "admit",
+    "academic-subject",
+    "academic-project",
+    "internship",
+    "work-decision",
+    "work-disagreement"
+  ],
+  "nodes": [
+    {
+      "id": "story",
+      "text": "Tell me about yourself.",
+      "topic": "Your story",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "actual-work",
+      "text": "What do you actually do in your current or most recent role?",
+      "topic": "Your story",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "explain-simply",
+      "text": "How would you explain your work to a five-year-old?",
+      "topic": "Your story",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "progression",
+      "text": "How has your role changed as your career has progressed?",
+      "topic": "Your story",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "journey",
+      "text": "Walk me through your journey and where an MBA fits into it.",
+      "topic": "Your story",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "mba-now",
+      "text": "Why do you want an MBA, and why now?",
+      "topic": "MBA motivation",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "mba-necessary",
+      "text": "Is an MBA necessary for the transition you want to make?",
+      "topic": "MBA motivation",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "mba-later",
+      "text": "Why not pursue an MBA later?",
+      "topic": "MBA motivation",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "skill-gaps",
+      "text": "Which specific skills do you want to develop through an MBA?",
+      "topic": "MBA motivation",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "pm-first",
+      "text": "Why not try moving into product management first and decide about an MBA afterwards?",
+      "topic": "MBA motivation",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "mba-ai-value",
+      "text": "Is an MBA still value for money in the age of AI?",
+      "topic": "MBA motivation",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "school",
+      "text": "Why this particular programme?",
+      "topic": "Programme fit",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "other-schools",
+      "text": "Which other programmes have you applied to, and why?",
+      "topic": "Programme fit",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "alumni-research",
+      "text": "Which alumni have you spoken to while researching this programme?",
+      "topic": "Programme fit",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "id": "programme-challenges",
+      "text": "What challenges do you anticipate during the programme?",
+      "topic": "Programme fit",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "younger-cohort",
+      "text": "How would you work with classmates who are younger or have less work experience?",
+      "topic": "Programme fit",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk"
+      ]
+    },
+    {
+      "id": "goals",
+      "text": "Where do you see yourself in five and ten years?",
+      "topic": "Career goals",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "enterprise-consumer",
+      "text": "Why enterprise products rather than consumer products?",
+      "topic": "Career goals",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "target-companies",
+      "text": "Which companies would you like to work for after the MBA?",
+      "topic": "Career goals",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "no-campus-hiring",
+      "text": "What will you do if your target companies do not recruit on campus?",
+      "topic": "Career goals",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "id": "consulting-option",
+      "text": "Would you consider consulting if your intended product role is difficult to find?",
+      "topic": "Career goals",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iimk",
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "internal-move",
+      "text": "Why not pursue your desired transition within your current organisation?",
+      "topic": "Career goals",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "pm-day",
+      "text": "What does a product manager actually do day to day?",
+      "topic": "Career goals",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "engineering-product",
+      "text": "Why are you ready to move from engineering into product management?",
+      "topic": "Career goals",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "project",
+      "text": "Walk me through a significant project you worked on. What was your contribution?",
+      "topic": "Projects and ownership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "own-decision",
+      "text": "What is one decision in that project that was genuinely yours?",
+      "topic": "Projects and ownership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "business-logic",
+      "text": "How did the underlying business rules in your project work?",
+      "topic": "Projects and ownership",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "inherited-system",
+      "text": "Tell me about a critical system or project you inherited without a clear handover.",
+      "topic": "Projects and ownership",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iimk"
+      ]
+    },
+    {
+      "id": "influence",
+      "text": "Tell me about a time you influenced people without formal authority.",
+      "topic": "Leadership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk"
+      ]
+    },
+    {
+      "id": "leader-style",
+      "text": "What kind of leader are you now, and what kind would you like to become?",
+      "topic": "Leadership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "born-made",
+      "text": "Are leaders born or made?",
+      "topic": "Leadership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "are-you-leader",
+      "text": "Do you consider yourself a leader?",
+      "topic": "Leadership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "college-leadership",
+      "text": "Describe a time you led in school or college without holding an official title.",
+      "topic": "Leadership",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iimk"
+      ]
+    },
+    {
+      "id": "failure",
+      "text": "Tell me about a time your own decision went wrong.",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "career-differently",
+      "text": "What would you have done differently in your career?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "project-stopped",
+      "text": "Why did your side project stop, and what did you learn?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "projects"
+      ]
+    },
+    {
+      "id": "rebuild",
+      "text": "Would you rebuild that project today?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "validate-cheaply",
+      "text": "How would you validate the idea cheaply today?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "traffic",
+      "text": "How did you measure your audience or traffic?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "discovery",
+      "text": "How did people find your project?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "platform-dependency",
+      "text": "How do you reconcile a platform helping you reach users while restricting the data your project needs?",
+      "topic": "Setbacks and learning",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "strengths",
+      "text": "What are your biggest strengths?",
+      "topic": "Self-awareness",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "weakness",
+      "text": "What is a weakness you are working on?",
+      "topic": "Self-awareness",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "strength-goals",
+      "text": "How do your strengths and weaknesses relate to your post-MBA goals?",
+      "topic": "Self-awareness",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "irritation",
+      "text": "What irritates you the most?",
+      "topic": "Self-awareness",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "id": "industry",
+      "text": "What is your outlook for an industry you follow?",
+      "topic": "Business and industry",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk"
+      ]
+    },
+    {
+      "id": "business-reading",
+      "text": "What business story have you been reading about recently?",
+      "topic": "Business and industry",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "id": "software-value",
+      "text": "Does AI make software less valuable?",
+      "topic": "Business and industry",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "investment-jobs",
+      "text": "How would you assess a company expanding infrastructure investment while cutting staff?",
+      "topic": "Business and industry",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "board-risk",
+      "text": "As a board adviser, what would concern you about concentrated future orders and negative cash flow?",
+      "topic": "Business and industry",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "intent-ai",
+      "text": "How would an AI product that understands user intent actually work?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "ai-risk",
+      "text": "What could go wrong with that product?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq",
+        "projects"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "ai-accountability",
+      "text": "If AI plans an action and software executes it, where could the plan go wrong and who is accountable?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "competitors",
+      "text": "Who is already building something similar?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "company-gap",
+      "text": "Why has your own company not already built this?",
+      "topic": "AI product judgement",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "willingness-pay",
+      "text": "Would a customer pay for it?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "measure-success",
+      "text": "How would you measure its success?",
+      "topic": "AI product judgement",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "ai-role",
+      "text": "How is AI changing your role?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "ai-tools",
+      "text": "Which AI tools have you used, specifically?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "data-security",
+      "text": "How do you handle data security when using AI with enterprise data?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "ai-resistance",
+      "text": "Did colleagues push back on adopting AI, and what did you do?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "wrong-output",
+      "text": "What would you do if the AI tool produced an incorrect result?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "query-validation",
+      "text": "How did you know an AI-generated query was correct?",
+      "topic": "AI at work",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ],
+      "specialist": true
+    },
+    {
+      "id": "side-project",
+      "text": "What was your side project, and who was it for?",
+      "topic": "Side projects",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "review-numbers",
+      "text": "How did your tool turn written reviews into numbers?",
+      "topic": "Side projects",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "data-model",
+      "text": "Does the quality of the data matter more than the choice of model in your project?",
+      "topic": "Side projects",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "debug-without-ai",
+      "text": "Could you debug or rebuild the project without AI?",
+      "topic": "Side projects",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "ai-cost",
+      "text": "How did you control the cost of AI in your project?",
+      "topic": "Side projects",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "id": "reapplicant",
+      "text": "What has changed since your previous application, and why are you more ready now?",
+      "topic": "Reapplicants",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "outside-work",
+      "text": "What do you do outside work or studies?",
+      "topic": "Interests",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk"
+      ]
+    },
+    {
+      "id": "passion",
+      "text": "What are you passionate about?",
+      "topic": "Interests",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "beginner",
+      "text": "Why did you take up a new activity as a beginner?",
+      "topic": "Interests",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iimk"
+      ]
+    },
+    {
+      "id": "admire",
+      "text": "Name leaders you admire and explain why.",
+      "topic": "People and values",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "id": "self-reliance",
+      "text": "Why do you admire a do-it-yourself approach?",
+      "topic": "People and values",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "real-change",
+      "text": "How do you know the change a leader achieved was real rather than simply enforced?",
+      "topic": "People and values",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "id": "contribute",
+      "text": "How will you contribute to the class?",
+      "topic": "Contribution",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "id": "india-change",
+      "text": "What would you change in India?",
+      "topic": "Contribution",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iimk"
+      ]
+    },
+    {
+      "id": "admit",
+      "text": "Why should we admit you?",
+      "topic": "Closing questions",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "no-admit",
+      "text": "What would you do if you did not receive an offer from any programme?",
+      "topic": "Closing questions",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "panel",
+      "text": "Do you have any questions for the panel?",
+      "topic": "Closing questions",
+      "routes": [
+        "cat",
+        "experienced"
+      ],
+      "sources": [
+        "iima",
+        "iimk",
+        "faq"
+      ]
+    },
+    {
+      "id": "academic-subject",
+      "text": "Which subject from your degree would you like to discuss, and why?",
+      "topic": "Academic understanding",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "academic-subject-2",
+      "text": "Can you explain one idea from that subject using a practical example?",
+      "topic": "Academic understanding",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "academic-subject-3",
+      "text": "What assumptions does that explanation depend on, and when might it fail?",
+      "topic": "Academic understanding",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "academic-project",
+      "text": "Walk me through a project or assignment from your studies. What was your part?",
+      "topic": "Academic projects",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "academic-project-2",
+      "text": "Why did you choose that method or approach?",
+      "topic": "Academic projects",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "academic-project-3",
+      "text": "What evidence would make you reconsider your conclusion?",
+      "topic": "Academic projects",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "internship",
+      "text": "Tell me about an internship, volunteering role or responsibility outside class.",
+      "topic": "Early experience",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "internship-2",
+      "text": "What did you find harder than you expected, and how did you respond?",
+      "topic": "Early experience",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "internship-3",
+      "text": "What would you change if you took on that responsibility again?",
+      "topic": "Early experience",
+      "routes": [
+        "cat"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-decision",
+      "text": "Tell me about a decision at work for which you were personally responsible.",
+      "topic": "Workplace judgment",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-decision-2",
+      "text": "What alternative did you reject and what was the trade-off?",
+      "topic": "Workplace judgment",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-decision-3",
+      "text": "What would someone who disagreed with you say you overlooked?",
+      "topic": "Workplace judgment",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-disagreement",
+      "text": "Describe a disagreement with a colleague or manager. What was at stake?",
+      "topic": "Working with others",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-disagreement-2",
+      "text": "How did you try to understand their position?",
+      "topic": "Working with others",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "id": "work-disagreement-3",
+      "text": "What did you change in your own approach as a result?",
+      "topic": "Working with others",
+      "routes": [
+        "experienced"
+      ],
+      "sources": [
+        "practice-editorial"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "parent": "story",
+      "child": "actual-work",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "actual-work",
+      "child": "explain-simply",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "actual-work",
+      "child": "progression",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "story",
+      "child": "journey",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "mba-now",
+      "child": "mba-necessary",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "parent": "mba-now",
+      "child": "mba-later",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "parent": "mba-now",
+      "child": "skill-gaps",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima",
+        "faq"
+      ]
+    },
+    {
+      "parent": "mba-necessary",
+      "child": "pm-first",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "mba-necessary",
+      "child": "mba-ai-value",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "school",
+      "child": "other-schools",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "school",
+      "child": "alumni-research",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "school",
+      "child": "programme-challenges",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "programme-challenges",
+      "child": "younger-cohort",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "goals",
+      "child": "enterprise-consumer",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "goals",
+      "child": "target-companies",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "target-companies",
+      "child": "no-campus-hiring",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "target-companies",
+      "child": "consulting-option",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "goals",
+      "child": "internal-move",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "goals",
+      "child": "pm-day",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "pm-day",
+      "child": "engineering-product",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "project",
+      "child": "own-decision",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "project",
+      "child": "business-logic",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "project",
+      "child": "inherited-system",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "influence",
+      "child": "leader-style",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "leader-style",
+      "child": "born-made",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "leader-style",
+      "child": "are-you-leader",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "influence",
+      "child": "college-leadership",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "failure",
+      "child": "career-differently",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "failure",
+      "child": "project-stopped",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "project-stopped",
+      "child": "rebuild",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "rebuild",
+      "child": "validate-cheaply",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "project-stopped",
+      "child": "traffic",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "project-stopped",
+      "child": "discovery",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "project-stopped",
+      "child": "platform-dependency",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "strengths",
+      "child": "weakness",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "strengths",
+      "child": "strength-goals",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "weakness",
+      "child": "irritation",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "industry",
+      "child": "business-reading",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "business-reading",
+      "child": "software-value",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "industry",
+      "child": "investment-jobs",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "investment-jobs",
+      "child": "board-risk",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "intent-ai",
+      "child": "ai-risk",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "ai-risk",
+      "child": "ai-accountability",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "intent-ai",
+      "child": "competitors",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "competitors",
+      "child": "company-gap",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "intent-ai",
+      "child": "willingness-pay",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "willingness-pay",
+      "child": "measure-success",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "ai-role",
+      "child": "ai-tools",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "ai-tools",
+      "child": "data-security",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "ai-role",
+      "child": "ai-resistance",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "ai-role",
+      "child": "wrong-output",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "wrong-output",
+      "child": "query-validation",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "side-project",
+      "child": "review-numbers",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "review-numbers",
+      "child": "data-model",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "side-project",
+      "child": "debug-without-ai",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "side-project",
+      "child": "ai-cost",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "outside-work",
+      "child": "passion",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "passion",
+      "child": "beginner",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "admire",
+      "child": "self-reliance",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "admire",
+      "child": "real-change",
+      "basis": "source_follow_up",
+      "sources": [
+        "iima"
+      ]
+    },
+    {
+      "parent": "contribute",
+      "child": "india-change",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "admit",
+      "child": "no-admit",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "admit",
+      "child": "panel",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "mba-now",
+      "child": "no-admit",
+      "basis": "source_follow_up",
+      "sources": [
+        "faq"
+      ]
+    },
+    {
+      "parent": "side-project",
+      "child": "own-decision",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "side-project",
+      "child": "project-stopped",
+      "basis": "editorial_connection",
+      "sources": []
+    },
+    {
+      "parent": "ai-risk",
+      "child": "review-numbers",
+      "basis": "source_follow_up",
+      "sources": [
+        "projects"
+      ]
+    },
+    {
+      "parent": "academic-subject",
+      "child": "academic-subject-2",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "academic-subject-2",
+      "child": "academic-subject-3",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "academic-project",
+      "child": "academic-project-2",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "academic-project-2",
+      "child": "academic-project-3",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "internship",
+      "child": "internship-2",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "internship-2",
+      "child": "internship-3",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "work-decision",
+      "child": "work-decision-2",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "work-decision-2",
+      "child": "work-decision-3",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "work-disagreement",
+      "child": "work-disagreement-2",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    },
+    {
+      "parent": "work-disagreement-2",
+      "child": "work-disagreement-3",
+      "basis": "editorial_connection",
+      "sources": [
+        "practice-editorial"
+      ]
+    }
+  ]
+}

@@ -1,18 +1,21 @@
-import React from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
-import Login from '../Login';
-import Signup from '../Signup';
-import './PublicPages.css';
+import React from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import Login from "../Login";
+import Signup from "../Signup";
+import "./PublicPages.css";
+import Brand from "../common/Brand";
+import ThemeToggle from "../common/ThemeToggle";
+import JourneyArtwork from "../common/JourneyArtwork";
 
 function parseMode(value) {
-  return value === 'signup' ? 'signup' : 'login';
+  return value === "signup" ? "signup" : "login";
 }
 
 function normalizeNext(value) {
-  if (!value || typeof value !== 'string') return '/app';
-  if (!value.startsWith('/')) return '/app';
-  if (value.startsWith('//')) return '/app';
+  if (!value || typeof value !== "string") return "/app";
+  if (!value.startsWith("/")) return "/app";
+  if (value.startsWith("//")) return "/app";
   return value;
 }
 
@@ -21,18 +24,9 @@ export default function AuthPage() {
   const { user, loading } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const mode = parseMode(searchParams.get('mode'));
-  const next = normalizeNext(searchParams.get('next'));
-  const nextHint = next === '/app'
-    ? 'After login, you will go to your workspace.'
-    : `After login, you will continue to ${next}.`;
-
-  React.useEffect(() => {
-    document.body.classList.add('dark-body', 'public-body');
-    return () => {
-      document.body.classList.remove('public-body');
-    };
-  }, []);
+  const mode = parseMode(searchParams.get("mode"));
+  const next = normalizeNext(searchParams.get("next"));
+  const nextHint = "Continue to your workspace after signing in.";
 
   React.useEffect(() => {
     if (!loading && user) {
@@ -43,13 +37,13 @@ export default function AuthPage() {
   const setMode = React.useCallback(
     (nextMode) => {
       const nextParams = new URLSearchParams(searchParams);
-      nextParams.set('mode', nextMode);
-      if (!nextParams.get('next')) {
-        nextParams.set('next', '/app');
+      nextParams.set("mode", nextMode);
+      if (!nextParams.get("next")) {
+        nextParams.set("next", "/app");
       }
       setSearchParams(nextParams, { replace: true });
     },
-    [searchParams, setSearchParams]
+    [searchParams, setSearchParams],
   );
 
   if (loading) {
@@ -58,20 +52,40 @@ export default function AuthPage() {
 
   return (
     <div className="public-auth-layout">
-      <div className="public-auth-topbar">
-        <Link className="public-link-btn" to="/">Back to Home</Link>
-        <span className="public-auth-next">{nextHint}</span>
-      </div>
-      <div className="public-auth-shell">
-        {mode === 'login' ? (
-          <Login
-            onSwitchToSignup={() => setMode('signup')}
-          />
-        ) : (
-          <Signup
-            onSwitchToLogin={() => setMode('login')}
-          />
-        )}
+      <header className="public-auth-topbar">
+        <Brand />
+        <div className="public-nav">
+          <Link className="public-nav-link" to="/">
+            Back to home
+          </Link>
+          <ThemeToggle />
+        </div>
+      </header>
+      <div className="auth-split-layout">
+        <aside className="auth-story">
+          <span className="eyebrow">MAKE SPACE FOR YOUR AMBITION</span>
+          <h1>
+            Your next chapter.
+            <br />
+            All in one place.
+          </h1>
+          <p>
+            A calmer way to organise your applications, shape your story and
+            prepare for what comes next.
+          </p>
+          <JourneyArtwork />
+          <span className="auth-story-foot">
+            Small steps. Meaningful progress.
+          </span>
+        </aside>
+        <div className="public-auth-shell">
+          {mode === "login" ? (
+            <Login onSwitchToSignup={() => setMode("signup")} />
+          ) : (
+            <Signup onSwitchToLogin={() => setMode("login")} />
+          )}
+          <p className="auth-next-hint">{nextHint}</p>
+        </div>
       </div>
     </div>
   );

@@ -65,8 +65,15 @@ else
   echo "[2/7] DB backup/restore drill skipped (set RUN_DB_DRILL=1 to enable)"
 fi
 
-echo "[3/7] Backend API smoke tests"
+echo "[3/7] Backend API and interview regression tests"
 "${PYTHON_BIN}" -m unittest "${BACKEND_DIR}/tests/test_api_smoke.py"
+(
+  cd "${BACKEND_DIR}"
+  "${PYTHON_BIN}" -m unittest \
+    tests.test_interviews \
+    tests.test_resume_questions \
+    tests.test_interview_plan -v
+)
 
 echo "[4/7] Frontend unit tests"
 CI=true npm --prefix "${FRONTEND_DIR}" run test -- --watchAll=false

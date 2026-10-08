@@ -1,7 +1,18 @@
-import React, { useState } from 'react';
-import { BellIcon, UserIcon } from '../../app/icons';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  BellIcon,
+  PlusIcon,
+  SearchIcon,
+  EssaysIcon,
+  ApplicationsIcon,
+  UserIcon,
+  SettingsIcon,
+} from "../../app/icons";
+import ThemeToggle from "../common/ThemeToggle";
+import Brand from "../common/Brand";
 
-function TopControls({
+export default function TopControls({
+  onGoHome,
   globalSearch,
   onGlobalSearchChange,
   onGlobalSearchSubmit,
@@ -15,111 +26,159 @@ function TopControls({
   onGoProfile,
   onGoSettings,
   onLogout,
-  user
+  user,
 }) {
   const [isCreateMenuOpen, setIsCreateMenuOpen] = useState(false);
-
+  const createRef = useRef(null);
+  useEffect(() => {
+    const close = (event) => {
+      if (event.type === "keydown" && event.key !== "Escape") return;
+      if (
+        event.type === "keydown" ||
+        !createRef.current?.contains(event.target)
+      )
+        setIsCreateMenuOpen(false);
+      if (event.type === "keydown" && isProfileMenuOpen) {
+        onToggleProfileMenu();
+        profileMenuRef.current?.querySelector("button")?.focus();
+      }
+    };
+    document.addEventListener("pointerdown", close);
+    document.addEventListener("keydown", close);
+    return () => {
+      document.removeEventListener("pointerdown", close);
+      document.removeEventListener("keydown", close);
+    };
+  }, [isProfileMenuOpen, onToggleProfileMenu, profileMenuRef]);
+  const initials = (user?.name || "You")
+    .split(/\s+/)
+    .map((name) => name[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
   return (
-    <div className="workspace-top-controls">
-      <form className="header-search-form" onSubmit={onGlobalSearchSubmit}>
+    <header className="workspace-top-controls">
+      <div className="mobile-brand">
+        <Brand compact to="/app/today" onClick={onGoHome} />
+      </div>
+      <form
+        className="header-search-form"
+        onSubmit={onGlobalSearchSubmit}
+        role="search"
+      >
+        <SearchIcon />
         <input
           data-testid="global-search-input"
-          type="text"
+          type="search"
           value={globalSearch}
-          onChange={(e) => onGlobalSearchChange(e.target.value)}
-          placeholder="Search schools or programs..."
-          aria-label="Search schools or programs"
+          onChange={(event) => onGlobalSearchChange(event.target.value)}
+          placeholder="Search applications…"
+          aria-label="Search schools or programmes"
         />
-        <button type="submit" data-testid="global-search-submit">Search</button>
+        <button
+          type="submit"
+          data-testid="global-search-submit"
+          aria-label="Search applications"
+        >
+          ↵
+        </button>
       </form>
-      <div
-        className="header-create-menu"
-        onMouseEnter={() => setIsCreateMenuOpen(true)}
-        onMouseLeave={() => setIsCreateMenuOpen(false)}
-      >
+      <div className="topbar-actions">
+        <ThemeToggle />
         <button
           type="button"
-          className="header-create-btn"
-          data-testid="header-create-button"
-          aria-haspopup="menu"
-          aria-expanded={isCreateMenuOpen}
-          onClick={() => setIsCreateMenuOpen((prev) => !prev)}
+          className="header-icon-btn"
+          data-testid="open-notifications-button"
+          aria-label={`Open notifications${notificationCount ? ` (${notificationCount})` : ""}`}
+          onClick={onOpenNotifications}
         >
-          <span className="header-create-btn-plus" aria-hidden="true">+</span>
-          <span className="header-create-btn-label">Create</span>
+          <BellIcon />
+          {notificationCount > 0 && <span className="notification-dot" />}
         </button>
-        {isCreateMenuOpen && (
-          <div className="header-create-dropdown" role="menu">
-            <button
-              type="button"
-              className="header-create-option"
-              data-testid="create-essay-option"
-              role="menuitem"
-              onClick={() => {
-                setIsCreateMenuOpen(false);
-                onCreateEssay();
-              }}
-            >
-              New Essay
-            </button>
-            <button
-              type="button"
-              className="header-create-option"
-              data-testid="create-application-option"
-              role="menuitem"
-              onClick={() => {
-                setIsCreateMenuOpen(false);
-                onCreateApplication();
-              }}
-            >
-              New Application
-            </button>
-          </div>
-        )}
-      </div>
-      <button
-        type="button"
-        className="header-icon-btn"
-        data-testid="open-notifications-button"
-        aria-label={`Open notifications${notificationCount ? ` (${notificationCount})` : ''}`}
-        onClick={onOpenNotifications}
-      >
-        <BellIcon />
-        {notificationCount > 0 && <span className="header-icon-badge">{notificationCount}</span>}
-      </button>
-      <div className="header-profile-menu" ref={profileMenuRef}>
-        <button
-          type="button"
-          className="header-profile-trigger"
-          data-testid="profile-menu-trigger"
-          aria-label="Open account menu"
-          aria-expanded={isProfileMenuOpen}
-          onClick={onToggleProfileMenu}
-        >
-          {user.avatar_url ? (
-            <img src={user.avatar_url} alt={user.name} className="header-profile-avatar-image" />
-          ) : (
-            <span className="header-profile-avatar-fallback" aria-hidden="true">
-              <UserIcon />
-            </span>
+        <div className="header-create-menu" ref={createRef}>
+          <button
+            type="button"
+            className="header-create-btn"
+            data-testid="header-create-button"
+            aria-label="Create new essay or application"
+            aria-expanded={isCreateMenuOpen}
+            onClick={() => setIsCreateMenuOpen((open) => !open)}
+          >
+            <PlusIcon />
+            <span>New</span>
+          </button>
+          {isCreateMenuOpen && (
+            <div className="header-create-dropdown">
+              <p className="dropdown-label">Make a little progress</p>
+              <button
+                data-testid="create-application-option"
+                onClick={() => {
+                  setIsCreateMenuOpen(false);
+                  onCreateApplication();
+                }}
+              >
+                <ApplicationsIcon /> Add application
+              </button>
+              <button
+                data-testid="create-essay-option"
+                onClick={() => {
+                  setIsCreateMenuOpen(false);
+                  onCreateEssay();
+                }}
+              >
+                <EssaysIcon /> Write an essay
+              </button>
+            </div>
           )}
-        </button>
-        {isProfileMenuOpen && (
-          <div className="header-profile-dropdown" role="menu">
-            <button type="button" data-testid="profile-menu-go-profile" className="header-profile-action" role="menuitem" onClick={onGoProfile}>
-              Profile
-            </button>
-            <button type="button" data-testid="profile-menu-go-settings" className="header-profile-action" role="menuitem" onClick={onGoSettings}>
-              Settings
-            </button>
-            <button type="button" data-testid="profile-menu-logout" className="header-profile-action danger" role="menuitem" onClick={onLogout}>
-              Logout
-            </button>
-          </div>
-        )}
+        </div>
+        <div className="header-profile-menu" ref={profileMenuRef}>
+          <button
+            type="button"
+            className="header-profile-trigger"
+            data-testid="profile-menu-trigger"
+            aria-label="Open account menu"
+            aria-expanded={isProfileMenuOpen}
+            onClick={onToggleProfileMenu}
+          >
+            {user?.avatar_url ? (
+              <img
+                src={user.avatar_url}
+                alt=""
+                className="header-profile-avatar-image"
+              />
+            ) : (
+              <span className="avatar-initials">{initials}</span>
+            )}
+          </button>
+          {isProfileMenuOpen && (
+            <div className="header-profile-dropdown">
+              <div className="account-summary">
+                <strong>{user?.name}</strong>
+                <span>{user?.email}</span>
+              </div>
+              <button
+                data-testid="profile-menu-go-profile"
+                onClick={onGoProfile}
+              >
+                <UserIcon /> Your profile
+              </button>
+              <button
+                data-testid="profile-menu-go-settings"
+                onClick={onGoSettings}
+              >
+                <SettingsIcon /> Settings
+              </button>
+              <button
+                data-testid="profile-menu-logout"
+                className="danger"
+                onClick={onLogout}
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 }
-
-export default TopControls;

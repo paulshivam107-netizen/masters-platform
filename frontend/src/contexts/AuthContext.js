@@ -1,4 +1,11 @@
-import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
 import {
   getCurrentUserApi,
   loginApi,
@@ -7,73 +14,98 @@ import {
   refreshTokenApi,
   setAuthToken,
   signupApi,
-  updateProfileApi
-} from '../api';
+  updateProfileApi,
+  installSessionRecovery,
+} from "../api";
 
 const AuthContext = createContext(null);
+const readSessionValue = (key) => {
+  try {
+    return localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+const writeSessionValue = (key, value) => {
+  try {
+    if (value) localStorage.setItem(key, value);
+    else localStorage.removeItem(key);
+  } catch {
+    // Restricted browser storage still permits a session in this open tab.
+  }
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within AuthProvider');
+    throw new Error("useAuth must be used within AuthProvider");
   }
   return context;
 };
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
-  const [refreshToken, setRefreshToken] = useState(localStorage.getItem('refresh_token'));
+  const [token, setToken] = useState(() => readSessionValue("token"));
+  const [refreshToken, setRefreshToken] = useState(() =>
+    readSessionValue("refresh_token"),
+  );
   const [loading, setLoading] = useState(true);
+  const refreshRef = useRef(refreshToken);
+  const sessionVersion = useRef(0);
 
   const clearSession = useCallback(() => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('refresh_token');
+    sessionVersion.current += 1;
+    refreshRef.current = null;
+    writeSessionValue("token", null);
+    writeSessionValue("refresh_token", null);
     setToken(null);
     setRefreshToken(null);
     setUser(null);
-    setAuthToken(null);
+    setAuthToken(null, { newSession: true });
   }, []);
 
   const refreshSession = useCallback(async () => {
-    if (!refreshToken) return false;
+    if (!refreshRef.current) {
+      clearSession();
+      return false;
+    }
+    const version = sessionVersion.current;
     try {
-      const { access_token, refresh_token, user: userData } = await refreshTokenApi(refreshToken);
-      localStorage.setItem('token', access_token);
-      localStorage.setItem('refresh_token', refresh_token);
+      const {
+        access_token,
+        refresh_token,
+        user: userData,
+      } = await refreshTokenApi(refreshRef.current);
+      if (version !== sessionVersion.current) return false;
+      refreshRef.current = refresh_token;
+      writeSessionValue("token", access_token);
+      writeSessionValue("refresh_token", refresh_token);
       setToken(access_token);
       setRefreshToken(refresh_token);
       setAuthToken(access_token);
       if (userData) setUser(userData);
       return true;
     } catch (error) {
-      console.error('Failed to refresh session:', error);
-      clearSession();
+      if (version === sessionVersion.current && error?.response?.status === 401)
+        clearSession();
       return false;
     }
-  }, [refreshToken, clearSession]);
+  }, [clearSession]);
+
+  useEffect(() => installSessionRecovery(refreshSession), [refreshSession]);
 
   const fetchUserProfile = useCallback(async () => {
+    const version = sessionVersion.current;
     try {
       const data = await getCurrentUserApi();
-      setUser(data);
+      if (version === sessionVersion.current) setUser(data);
     } catch (error) {
-      if (error?.response?.status === 401) {
-        const refreshed = await refreshSession();
-        if (refreshed) {
-          const data = await getCurrentUserApi();
-          setUser(data);
-        } else {
-          clearSession();
-        }
-      } else {
-        console.error('Failed to fetch user profile:', error);
-        clearSession();
-      }
+      if (version === sessionVersion.current) clearSession();
     } finally {
-      setLoading(false);
+      if (version === sessionVersion.current || !refreshRef.current)
+        setLoading(false);
     }
-  }, [refreshSession, clearSession]);
+  }, [clearSession]);
 
   useEffect(() => {
     if (token) {
@@ -85,35 +117,53 @@ export const AuthProvider = ({ children }) => {
   }, [token, fetchUserProfile]);
 
   const login = async (email, password) => {
-    const { access_token, refresh_token, user: userData } = await loginApi(email, password);
-    localStorage.setItem('token', access_token);
-    localStorage.setItem('refresh_token', refresh_token);
+    const {
+      access_token,
+      refresh_token,
+      user: userData,
+    } = await loginApi(email, password);
+    sessionVersion.current += 1;
+    refreshRef.current = refresh_token;
+    writeSessionValue("token", access_token);
+    writeSessionValue("refresh_token", refresh_token);
     setToken(access_token);
     setRefreshToken(refresh_token);
     setUser(userData);
-    setAuthToken(access_token);
+    setAuthToken(access_token, { newSession: true });
     return userData;
   };
 
   const loginWithGoogle = async (idToken) => {
-    const { access_token, refresh_token, user: userData } = await loginWithGoogleApi(idToken);
-    localStorage.setItem('token', access_token);
-    localStorage.setItem('refresh_token', refresh_token);
+    const {
+      access_token,
+      refresh_token,
+      user: userData,
+    } = await loginWithGoogleApi(idToken);
+    sessionVersion.current += 1;
+    refreshRef.current = refresh_token;
+    writeSessionValue("token", access_token);
+    writeSessionValue("refresh_token", refresh_token);
     setToken(access_token);
     setRefreshToken(refresh_token);
     setUser(userData);
-    setAuthToken(access_token);
+    setAuthToken(access_token, { newSession: true });
     return userData;
   };
 
   const signup = async (email, name, password) => {
-    const { access_token, refresh_token, user: userData } = await signupApi(email, name, password);
-    localStorage.setItem('token', access_token);
-    localStorage.setItem('refresh_token', refresh_token);
+    const {
+      access_token,
+      refresh_token,
+      user: userData,
+    } = await signupApi(email, name, password);
+    sessionVersion.current += 1;
+    refreshRef.current = refresh_token;
+    writeSessionValue("token", access_token);
+    writeSessionValue("refresh_token", refresh_token);
     setToken(access_token);
     setRefreshToken(refresh_token);
     setUser(userData);
-    setAuthToken(access_token);
+    setAuthToken(access_token, { newSession: true });
     return userData;
   };
 
@@ -124,7 +174,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       // Ignore logout API failures, always clear local session.
-      console.warn('Logout API call failed:', error);
+      console.warn(
+        "Sign-out could not reach the server; the local session was cleared.",
+      );
     } finally {
       clearSession();
     }
@@ -137,16 +189,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      login,
-      signup,
-      loginWithGoogle,
-      updateProfile,
-      logout,
-      loading,
-      isAuthenticated: !!user
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        signup,
+        loginWithGoogle,
+        updateProfile,
+        logout,
+        loading,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
