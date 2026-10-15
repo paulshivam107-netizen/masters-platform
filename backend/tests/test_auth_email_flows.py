@@ -19,7 +19,6 @@ from database import Base, get_db
 from models import AuthToken, User
 from routers import auth_routes
 from services import auth_flows, reminders
-from services.rate_limit import rate_limiter
 
 
 def make_settings(**overrides) -> Settings:
@@ -74,7 +73,6 @@ class SmtpResultTest(unittest.TestCase):
 
 class AuthEmailFlowTest(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        rate_limiter._events.clear()
         self.tmp = tempfile.TemporaryDirectory()
         self.engine = create_engine("sqlite:///" + self.tmp.name + "/auth.sqlite",
                                     connect_args={"check_same_thread": False})

@@ -24,12 +24,13 @@ from services.rate_limit import enforce_rate_limit
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
-def interview_user(request: Request, response: Response, user: User = Depends(get_current_user)):
+def interview_user(request: Request, response: Response, user: User = Depends(get_current_user),
+                   db: Session = Depends(get_db)):
     response.headers["Cache-Control"] = "no-store"
     response.headers["X-Robots-Tag"] = "noindex, nofollow"
     if not user.is_active:
         raise HTTPException(403, "This account is inactive")
-    enforce_rate_limit(request, action="interviews", limit=90, window_seconds=60, user_id=user.id)
+    enforce_rate_limit(request, action="interviews", limit=90, window_seconds=60, user_id=user.id, db=db)
     return user
 
 

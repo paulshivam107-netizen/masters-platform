@@ -11,8 +11,10 @@ from sqlalchemy.orm import Session
 
 from auth import require_admin_user
 from database import get_db
-from models import (AdminEconomicsScenario, AdminEvent, InterviewOperation,
-                    InterviewQuota, InterviewSession, PilotFeedback, ResumeQuestionSet, User)
+from models import (AdminEconomicsScenario, AdminEvent, AiCostEntry, AiPriceVersion, AiRuntimeConfig,
+                    AiSpendCounter, InterviewOperation, InterviewQuota, InterviewSession, PilotFeedback,
+                    ResumeQuestionSet, User)
+from services import ai_costs
 from services.interviews import limit
 
 
@@ -190,3 +192,114 @@ def save_economics(payload: EconomicsUpdate, actor: User = Depends(require_admin
             raise HTTPException(409, 'Your saved scenario changed. Reload it before saving.')
     db.commit()
     return economics(actor, db)
+
+
+# --- R05: AI cost ledger, caps and price versions ------------------------------------------
+
+def ledger_row(entry, email):
+    return {'id': entry.id, 'user_id': entry.user_id, 'user_email': email, 'day': entry.day.isoformat(),
+            'operation': entry.operation, 'reference_id': entry.reference_id, 'model': entry.model,
+            'price_source': entry.price_source, 'price_version_id': entry.price_version_id,
+            'status': entry.status, 'reserved_paise': entry.reserved_paise, 'actual_paise': entry.actual_paise,
+            'input_units': entry.input_units, 'output_units': entry.output_units,
+            'usage_reported': entry.usage_reported, 'failure_code': entry.failure_code, 'note': entry.note,
+            'created_at': entry.created_at, 'resolved_at': entry.resolved_at}
+
+
+@router.get('/ai-ledger')
+def ai_ledger(state: Literal['attention', 'reserved', 'settled', 'released', 'unknown', 'all'] = 'attention',
+              offset: int = Query(default=0, ge=0), db: Session = Depends(get_db)):
+    if ai_costs.expire_stale(db):
+        db.commit()
+    today = datetime.utcnow().date()
+    limits = ai_costs.caps()
+    query = db.query(AiCostEntry, User.email).outerjoin(User, User.id == AiCostEntry.user_id)
+    if state == 'attention':
+        query = query.filter(AiCostEntry.status.in_(['unknown', 'reserved']))
+    elif state != 'all':
+        query = query.filter(AiCostEntry.status == state)
+    total = query.count()
+    rows = query.order_by(AiCostEntry.created_at.desc(), AiCostEntry.id).offset(offset).limit(50).all()
+    counter = db.get(AiSpendCounter, 'global:' + today.isoformat())
+    committed = counter.committed_paise if counter else 0
+    runtime = db.query(AiRuntimeConfig).first()
+    return {
+        'items': [ledger_row(entry, email) for entry, email in rows], 'total': total,
+        'today': {
+            'day': today.isoformat(), 'committed_paise': committed,
+            'in_flight': counter.in_flight if counter else 0,
+            'global_daily_cap_paise': limits['global_daily_cap_paise'],
+            'user_daily_cap_paise': limits['user_daily_cap_paise'],
+            'remaining_paise': max(0, limits['global_daily_cap_paise'] - committed),
+            # Alerts are informational. Only the caps above block new AI operations.
+            'alert_paise': limits['alert_paise'], 'alert_triggered': committed >= limits['alert_paise'],
+            'cap_reached': committed >= limits['global_daily_cap_paise'],
+        },
+        'unknown_total': db.query(func.count(AiCostEntry.id)).filter(AiCostEntry.status == 'unknown').scalar(),
+        'ai_enabled': runtime.ai_enabled if runtime else True,
+        'reconciliation': ai_costs.reconcile(db, today),
+    }
+
+
+class LedgerResolution(BaseModel):
+    outcome: Literal['charged', 'not_charged']
+    actual_paise: int | None = Field(default=None, ge=0, le=10**8)
+    note: str = Field(default='', max_length=200)
+
+
+@router.post('/ai-ledger/{entry_id}/resolve')
+def resolve_ledger_entry(entry_id: str, payload: LedgerResolution,
+                         actor: User = Depends(require_admin_user), db: Session = Depends(get_db)):
+    entry = ai_costs.resolve_unknown(db, entry_id[:36], charged=payload.outcome == 'charged',
+                                     actual_paise=payload.actual_paise, admin_id=actor.id, note=payload.note)
+    db.add(AdminEvent(user_id=actor.id, event_name='admin_ai_ledger_resolved', payload_json=json.dumps({
+        'entry_id': entry.id, 'outcome': payload.outcome, 'actual_paise': entry.actual_paise})))
+    db.commit()
+    return ledger_row(entry, None)
+
+
+class PriceVersionCreate(BaseModel):
+    model: str = Field(min_length=1, max_length=80, pattern=r'^[A-Za-z0-9._:-]+$')
+    input_unit: Literal['tokens', 'text_tokens', 'audio_tokens', 'audio_seconds', 'characters'] = 'tokens'
+    output_unit: Literal['tokens', 'text_tokens', 'audio_tokens', 'audio_seconds', 'characters'] = 'tokens'
+    input_paise_per_million: int = Field(ge=0, le=10**9)
+    output_paise_per_million: int = Field(ge=0, le=10**9)
+    request_paise: int = Field(default=0, ge=0, le=10**6)
+    effective_from: datetime | None = None
+    note: str = Field(default='', max_length=200)
+
+
+def price_row(row):
+    return {'id': row.id, 'model': row.model, 'version': row.version, 'input_unit': row.input_unit,
+            'output_unit': row.output_unit, 'input_paise_per_million': row.input_paise_per_million,
+            'output_paise_per_million': row.output_paise_per_million, 'request_paise': row.request_paise,
+            'effective_from': row.effective_from, 'note': row.note, 'created_at': row.created_at}
+
+
+@router.get('/ai-prices')
+def ai_prices(db: Session = Depends(get_db)):
+    rows = db.query(AiPriceVersion).order_by(AiPriceVersion.model, AiPriceVersion.version.desc()).all()
+    builtin = [{'model': model, 'input_unit': p[0], 'output_unit': p[1], 'input_paise_per_million': p[2],
+                'output_paise_per_million': p[3], 'request_paise': p[4]} for model, p in sorted(ai_costs.BUILTIN_PRICES.items())]
+    return {'versions': [price_row(row) for row in rows], 'builtin': builtin, 'builtin_basis': ai_costs.PRICE_BASIS}
+
+
+@router.post('/ai-prices', status_code=201)
+def add_ai_price(payload: PriceVersionCreate, actor: User = Depends(require_admin_user), db: Session = Depends(get_db)):
+    latest = db.query(func.max(AiPriceVersion.version)).filter(AiPriceVersion.model == payload.model).scalar() or 0
+    row = AiPriceVersion(model=payload.model, version=latest + 1, input_unit=payload.input_unit,
+                         output_unit=payload.output_unit, input_paise_per_million=payload.input_paise_per_million,
+                         output_paise_per_million=payload.output_paise_per_million, request_paise=payload.request_paise,
+                         effective_from=payload.effective_from or datetime.utcnow(), note=payload.note or None,
+                         created_by_user_id=actor.id)
+    db.add(row)
+    try:
+        db.flush()
+    except IntegrityError:
+        db.rollback()
+        raise HTTPException(409, 'Another price version was added. Reload and retry.') from None
+    db.add(AdminEvent(user_id=actor.id, event_name='admin_ai_price_added', payload_json=json.dumps({
+        'model': row.model, 'version': row.version})))
+    db.commit()
+    db.refresh(row)
+    return price_row(row)

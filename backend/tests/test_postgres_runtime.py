@@ -76,9 +76,9 @@ class PostgresRuntimeTest(unittest.IsolatedAsyncioTestCase):
         from routers.auth_routes import router as auth_router
         from routers.essay_routes import router as essay_router
         from routers.interview_routes import router as interview_router
-        from services.rate_limit import rate_limiter
+        from services.rate_limit import reset_rate_limits
 
-        rate_limiter._events.clear()
+        reset_rate_limits(self.runtime_engine)
 
         def runtime_db():
             with self.Session() as db:

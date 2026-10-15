@@ -3,6 +3,7 @@ import {
   getPilotAdminApi,
   updatePilotFeedbackApi,
   saveEconomicsApi,
+  resolveAiLedgerEntryApi,
 } from "../../../api/adminApi";
 import {
   ECONOMICS_FIELDS,
@@ -784,6 +785,140 @@ function Usage({ active, refresh }) {
     </section>
   );
 }
+const paise = (value) =>
+  new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: "INR",
+    minimumFractionDigits: 2,
+  }).format((value || 0) / 100);
+export function AiLedger({ active, refresh }) {
+  const [state, setState] = useState("attention"),
+    [busy, setBusy] = useState(""),
+    [message, setMessage] = useState("");
+  const resource = useResource(`ai-ledger?state=${state}`, active, refresh);
+  const today = resource.data?.today;
+  async function resolve(entry, outcome) {
+    setBusy(entry.id);
+    setMessage("");
+    try {
+      await resolveAiLedgerEntryApi(entry.id, { outcome });
+      resource.reload();
+    } catch (e) {
+      setMessage(errorText(e));
+    } finally {
+      setBusy("");
+    }
+  }
+  return (
+    <section className="pilot-section" aria-labelledby="pilot-ledger-title">
+      <div className="pilot-section-heading">
+        <div>
+          <h3 id="pilot-ledger-title">AI cost ledger and caps</h3>
+          <p>Reservations, settled charges and unknown provider outcomes.</p>
+        </div>
+        <label>
+          Show
+          <select value={state} onChange={(e) => setState(e.target.value)}>
+            <option value="attention">Needs attention</option>
+            <option value="unknown">Unknown outcome</option>
+            <option value="settled">Settled</option>
+            <option value="released">Released</option>
+            <option value="all">All</option>
+          </select>
+        </label>
+      </div>
+      <ResourceState resource={resource} />
+      {message && (
+        <p className="pilot-notice" role="alert">
+          {message}
+        </p>
+      )}
+      {today && !resource.error && (
+        <>
+          <div className="pilot-metrics">
+            <Metric
+              label="Committed today · UTC (hard cap)"
+              value={`${paise(today.committed_paise)} / ${paise(today.global_daily_cap_paise)}`}
+            />
+            <Metric
+              label="Per-user daily cap"
+              value={paise(today.user_daily_cap_paise)}
+            />
+            <Metric
+              label="Unknown outcomes"
+              value={resource.data.unknown_total}
+            />
+            <Metric label="In flight" value={today.in_flight} />
+          </div>
+          {!resource.data.ai_enabled && (
+            <p className="pilot-notice">
+              AI is switched off: new billable steps are refused.
+            </p>
+          )}
+          {today.cap_reached ? (
+            <p className="pilot-notice" role="status">
+              Hard cap reached: new AI steps are refused until midnight UTC.
+            </p>
+          ) : (
+            today.alert_triggered && (
+              <p className="pilot-notice" role="status">
+                Alert only: spending passed {paise(today.alert_paise)}. This
+                does not block anything; the hard cap still applies.
+              </p>
+            )
+          )}
+          {!resource.data.reconciliation.balanced && (
+            <p className="pilot-notice" role="alert">
+              Ledger and cap counters disagree for today. Investigate before
+              raising caps.
+            </p>
+          )}
+          {resource.data.items.length === 0 ? (
+            <div className="pilot-empty">
+              <strong>No ledger entries in this view.</strong>
+            </div>
+          ) : (
+            resource.data.items.map((entry) => (
+              <article className="pilot-ticket" key={entry.id}>
+                <h4>
+                  {entry.operation} · {entry.model} · {entry.status}
+                </h4>
+                <p>
+                  Reserved {paise(entry.reserved_paise)}
+                  {entry.actual_paise !== null &&
+                    ` · actual ${paise(entry.actual_paise)}`}
+                  {entry.failure_code && ` · ${entry.failure_code}`} ·{" "}
+                  {entry.user_email || "no user"} · {date(entry.created_at)}
+                </p>
+                {entry.status === "unknown" && (
+                  <div className="pilot-actions">
+                    <span className="pilot-muted">
+                      Check the provider dashboard, then record the outcome:
+                    </span>
+                    <button
+                      type="button"
+                      disabled={busy === entry.id}
+                      onClick={() => resolve(entry, "charged")}
+                    >
+                      Charged
+                    </button>
+                    <button
+                      type="button"
+                      disabled={busy === entry.id}
+                      onClick={() => resolve(entry, "not_charged")}
+                    >
+                      Not charged
+                    </button>
+                  </div>
+                )}
+              </article>
+            ))
+          )}
+        </>
+      )}
+    </section>
+  );
+}
 export default function AdminPilot({ section, refresh, overview, onSelect }) {
   const [spendingView, setSpendingView] = useState("usage");
   const attention = useResource("interviews", section === "overview", refresh);
@@ -848,6 +983,13 @@ export default function AdminPilot({ section, refresh, overview, onSelect }) {
           </button>
           <button
             type="button"
+            aria-pressed={spendingView === "ledger"}
+            onClick={() => setSpendingView("ledger")}
+          >
+            Cost ledger & caps
+          </button>
+          <button
+            type="button"
             aria-pressed={spendingView === "calculator"}
             onClick={() => setSpendingView("calculator")}
           >
@@ -857,6 +999,12 @@ export default function AdminPilot({ section, refresh, overview, onSelect }) {
         <div hidden={spendingView !== "usage"}>
           <Usage
             active={section === "spending" && spendingView === "usage"}
+            refresh={refresh}
+          />
+        </div>
+        <div hidden={spendingView !== "ledger"}>
+          <AiLedger
+            active={section === "spending" && spendingView === "ledger"}
             refresh={refresh}
           />
         </div>

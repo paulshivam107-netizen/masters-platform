@@ -10,7 +10,12 @@ from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 
 from models import AiRuntimeConfig, InterviewOperation, InterviewQuota, InterviewSession
+from services import ai_costs
 from services import interview_provider as provider
+
+# Instructions, schema and framing sent with every text call, beyond context + transcript.
+TEXT_OVERHEAD_CHARS = 8000
+MAX_OUTPUT_TOKENS = {"answer": 800, "feedback": 2200}
 
 
 def fingerprint(value):
@@ -65,6 +70,25 @@ def reserve_quota(db, user_id, family="ai"):
             raise HTTPException(429, "Today's interview usage limit has been reached. Limits reset at midnight UTC.")
 
 
+def estimate(session, kind, payload):
+    """(operation, model, input_units, output_units): a conservative maximum for one provider call."""
+    if kind == "transcribe":
+        return "interview_transcribe", provider.transcribe_model(), provider.MAX_RECORDING_SECONDS, 1000
+    if kind == "speech":
+        turn = next((t for t in json.loads(session.transcript_json) if t.get("id") == payload.get("turn_id")), {})
+        chars = len(turn.get("text", "")) or 3000
+        # Placeholder audio-token bound until R07 measures real speech usage.
+        return "interview_speech", provider.speech_model(), ai_costs.text_tokens_upper_bound(chars + 200), max(1000, chars * 10)
+    chars = len(session.context_json) + len(session.transcript_json) + len(payload.get("text", "")) + TEXT_OVERHEAD_CHARS
+    return ("interview_" + kind, provider.text_model(), ai_costs.text_tokens_upper_bound(chars),
+            MAX_OUTPUT_TOKENS.get(kind, 2200))
+
+
+def reserve_cost(db, user_id, operation, model, input_units, output_units, reference_id):
+    return ai_costs.reserve(db, user_id=user_id, operation=operation, model=model,
+                            input_units=input_units, output_units=output_units, reference_id=reference_id)
+
+
 def serialize(session, detail=True):
     transcript = json.loads(session.transcript_json)
     result = {
@@ -111,14 +135,21 @@ def claim(db, session, request_id, version, kind, payload, billable=True):
     if changed != 1:
         db.rollback()
         raise HTTPException(409, "An interview step is already running. Wait a moment, then reload the session.")
-    if billable and session.provider == "openai":
+    paid = billable and session.provider == "openai"
+    if paid and previous and previous.attempts >= ai_costs.caps()["max_attempts"]:
+        db.rollback()
+        raise HTTPException(429, "This step has been retried too many times. Your input is kept here; "
+                                 "reload the interview and try again later.")
+    op_id = previous.id if previous else str(uuid4())
+    if paid:
         reserve_quota(db, session.user_id)
+        reserve_cost(db, session.user_id, *estimate(session, kind, payload), op_id)
     if previous:
         previous.status = "pending"
         previous.attempts += 1
         op = previous
     else:
-        op = InterviewOperation(id=str(uuid4()), session_id=session.id, request_id=request_id,
+        op = InterviewOperation(id=op_id, session_id=session.id, request_id=request_id,
                                 kind=kind, fingerprint=digest)
         db.add(op)
     db.commit()
@@ -139,13 +170,16 @@ def complete(db, session, op, token, updates=None, result=None, usage=None):
     op.failure_code = None
     op.result_json = json.dumps(result) if result is not None else None
     op.usage_json = json.dumps(usage or {})
+    ai_costs.finish(db, ai_costs.reserved_entry_for(db, op.id), "charged", usage)
     db.commit()
     db.refresh(session)
     return serialize(session)
 
 
-def fail(db, session_id, operation_id, token, reason="save_failed"):
+def fail(db, session_id, operation_id, token, reason="save_failed", billing="unknown", usage=None):
+    """Release the lease and close the step's cost reservation according to the billing outcome."""
     db.rollback()
+    ai_costs.finish(db, ai_costs.reserved_entry_for(db, operation_id), billing, usage, reason)
     changed = db.query(InterviewSession).filter_by(id=session_id, pending_token=token).update(
         {"pending_token": None, "pending_until": None}, synchronize_session=False,
     )
@@ -158,9 +192,14 @@ def run_step(db, session, op, token, action):
     try:
         return action()
     except provider.ProviderFailure as exc:
-        fail(db, session.id, op.id, token, getattr(exc, "code", "provider_error"))
+        fail(db, session.id, op.id, token, getattr(exc, "code", "provider_error"),
+             getattr(exc, "billing", "none"), getattr(exc, "usage", None))
         raise HTTPException(exc.status, str(exc)) from None
     except HTTPException:
+        # Raised after the provider call (e.g. a save conflict): the call may have been billed.
+        db.rollback()
+        ai_costs.finish(db, ai_costs.reserved_entry_for(db, op.id), "unknown", None, "save_conflict")
+        db.commit()
         raise
     except Exception:
         fail(db, session.id, op.id, token)

@@ -17,7 +17,6 @@ from database import Base, get_db
 from models import ApplicationTracker, InterviewOperation, InterviewQuota, InterviewSession, User
 from routers.interview_routes import router
 from services import interview_provider as provider
-from services.rate_limit import rate_limiter
 from services.interview_questions import question_bank
 
 
@@ -45,7 +44,6 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
         # A missed mock must fail rather than send a paid request.
         self.network = patch("services.interview_provider.httpx.Client.post", side_effect=AssertionError("Unexpected external request"))
         self.network.start()
-        rate_limiter._events.clear()
 
     async def asyncTearDown(self):
         self.network.stop()

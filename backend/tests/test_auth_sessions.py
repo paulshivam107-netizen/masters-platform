@@ -19,7 +19,6 @@ from database import Base, get_db
 from models import RefreshToken, User
 from routers import auth_routes
 from services import auth_flows
-from services.rate_limit import rate_limiter
 
 COOKIE = "masters_refresh"
 APP_ORIGIN = "https://app.example.com"
@@ -41,7 +40,6 @@ def make_settings(**overrides) -> Settings:
 
 class AuthSessionTest(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        rate_limiter._events.clear()
         self.tmp = tempfile.TemporaryDirectory()
         self.engine = create_engine("sqlite:///" + self.tmp.name + "/s.sqlite", connect_args={"check_same_thread": False})
         Base.metadata.create_all(self.engine)

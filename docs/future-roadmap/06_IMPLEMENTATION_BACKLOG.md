@@ -44,6 +44,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R05 Shared throttling and AI monetary limits
 
+- **Status (2026-10-15):** implemented on branch `r05-throttling-ai-limits` (not merged/deployed); evidence in `docs/validation/2026-10-15/r05/README.md`. Trial allowance remains a product decision (per-user daily cap is the current bound).
 - **Scope:** rate-limit service, interview/résumé services, cost ledger model, admin view and tests; 8–14h.
 - **Work:** shared expiring limits for auth and expensive operations; trusted proxy interpretation; monetary reservation/reconciliation, model price versions, bounded retries/concurrency and trial allowance.
 - **Acceptance:** two workers respect the same limits; concurrent reservations cannot overspend; disabled AI blocks new billable operations; denied operation preserves input; unknown provider outcome is visible; alerts are not mistaken for hard caps.

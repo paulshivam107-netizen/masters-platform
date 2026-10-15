@@ -13,12 +13,12 @@ if str(ROOT_DIR) not in sys.path:
 from database import SessionLocal  # noqa: E402
 from main import app  # noqa: E402
 from models import AdminEvent, User  # noqa: E402
-from services.rate_limit import rate_limiter  # noqa: E402
+from services.rate_limit import reset_rate_limits  # noqa: E402
 
 
 class ApiSmokeTest(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        rate_limiter._events.clear()
+        reset_rate_limits()
         self.transport = httpx.ASGITransport(app=app)
         self.client = httpx.AsyncClient(transport=self.transport, base_url="http://testserver")
 
