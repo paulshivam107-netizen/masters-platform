@@ -57,3 +57,37 @@ test("search bots can retrieve public launch content while separate training bot
     safeJson({ text: "</script><script>alert(1)</script>" }),
   ).not.toContain("<");
 });
+test("priority interview pages have unique metadata and the right structured data", () => {
+  const routes = [
+    "/mba-interview-practice",
+    "/guides/mba-interview-from-resume",
+    "/guides/mba-interview-for-freshers",
+    "/guides/mba-interview-work-experience",
+  ];
+  const seen = new Set();
+  for (const route of Object.keys(publicPages)) {
+    const m = metadata(route, live);
+    expect(seen.has(m.title)).toBe(false);
+    expect(seen.has(m.description)).toBe(false);
+    seen.add(m.title);
+    seen.add(m.description);
+  }
+  for (const route of routes) {
+    const m = metadata(route, live);
+    expect(m.canonical).toBe(live.siteUrl + route);
+    expect(m.description.length).toBeLessThanOrEqual(200);
+    expect(publicPages[route].updated).toBe("2026-10-15");
+    const types = m.jsonLd["@graph"].map((n) => n["@type"]);
+    if (route.startsWith("/guides/")) {
+      expect(types).toEqual(
+        expect.arrayContaining(["Article", "BreadcrumbList"]),
+      );
+    } else {
+      expect(types).toContain("WebPage");
+      expect(types).not.toContain("Article");
+      expect(JSON.stringify(m.jsonLd)).not.toMatch(
+        /Review|Rating|Offer|price/i,
+      );
+    }
+  }
+});

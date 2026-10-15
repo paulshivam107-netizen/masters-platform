@@ -80,10 +80,10 @@ Search themes below are hypotheses, not measured search volumes. Validate with a
 | --- | --- | --- | --- |
 | Existing | `/guides/mba-application-checklist-india` | Distinguishes exam, school application and supporting work; useful template | Add a target programme |
 | Existing | `/guides/mba-interview-story-bank` | Reflection worksheet and a practical method | Record one answer |
-| 1 | `/mba-interview-practice` | Product demonstration, limits, privacy and clear price | Try a fictional sample |
-| 1 | `/guides/mba-interview-from-resume` | Original example showing three levels of follow-up from one claim | Use a reviewed résumé |
-| 1 | `/guides/mba-interview-for-freshers` | Examples across coursework, clubs, internships and family responsibility | Choose two-year practice |
-| 1 | `/guides/mba-interview-work-experience` | Explain ownership, alternatives and outcomes with fictional examples | Choose experienced practice |
+| 1 (drafted — founder review before publishing) | `/mba-interview-practice` | Product demonstration, limits, privacy and clear price | Try a fictional sample |
+| 1 (drafted — founder review before publishing) | `/guides/mba-interview-from-resume` | Original example showing three levels of follow-up from one claim | Use a reviewed résumé |
+| 1 (drafted — founder review before publishing) | `/guides/mba-interview-for-freshers` | Examples across coursework, clubs, internships and family responsibility | Choose two-year practice |
+| 1 (drafted — founder review before publishing) | `/guides/mba-interview-work-experience` | Explain ownership, alternatives and outcomes with fictional examples | Choose experienced practice |
 | 2 | `/guides/review-your-mock-interview` | A replay checklist and annotated fictional transcript | Record and review |
 | 2 | `/guides/mba-interview-why-now` | Reflection questions for distinct career stages, without canned answers | Start motivation practice |
 | 2 | `/guides/mba-application-deadlines` | Explain milestones, source checks and timezones rather than unverified dates | Track milestones once available |

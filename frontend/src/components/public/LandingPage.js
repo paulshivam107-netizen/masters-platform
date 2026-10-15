@@ -290,6 +290,11 @@ export default function LandingPage() {
           <section className="landing-resources">
             <span className="eyebrow">START WITH SOMETHING USEFUL</span>
             <h2>Guides for your next step</h2>
+            <p className="landing-resources-lead">
+              <Link to="/mba-interview-practice">
+                See how résumé-based interview practice works
+              </Link>
+            </p>
             <GuideCards />
           </section>
           <PublicFaq />

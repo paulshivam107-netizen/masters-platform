@@ -38,6 +38,7 @@ import {
 import {
   GuidesPage,
   GuidePage,
+  PracticePage,
   HelpPage,
   NotFoundPage,
 } from "./components/public/ResourcePages";
@@ -729,6 +730,7 @@ function AppRoutes() {
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/guides" element={<GuidesPage />} />
         <Route path="/guides/:slug" element={<GuidePage />} />
+        <Route path="/mba-interview-practice" element={<PracticePage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
