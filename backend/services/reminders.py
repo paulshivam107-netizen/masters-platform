@@ -1,3 +1,4 @@
+import logging
 import smtplib
 from datetime import date, datetime
 from email.mime.text import MIMEText
@@ -7,6 +8,8 @@ from sqlalchemy.orm import Session
 
 from models import ApplicationTracker, User
 from schemas import ReminderPreviewItem
+
+logger = logging.getLogger("mba.email")
 
 
 def parse_reminder_days(reminder_days_value: Optional[str]) -> set[int]:
@@ -70,7 +73,11 @@ def send_email_notification(
     smtp_password: Optional[str],
     smtp_from: str
 ) -> tuple[bool, bool, str]:
-    """Returns (sent, dry_run, message)."""
+    """Returns (sent, dry_run, message).
+
+    dry_run is True only when SMTP is not configured. A configured-but-failed send returns
+    (False, False, ...) so callers never mistake a delivery failure for a deliberate dry run.
+    """
     if not smtp_host or not smtp_user or not smtp_password:
         return False, True, "SMTP not configured. Ran in dry-run mode."
 
@@ -80,10 +87,17 @@ def send_email_notification(
     msg["To"] = recipient
 
     try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
-            server.starttls()
-            server.login(smtp_user, smtp_password)
-            server.sendmail(smtp_from, [recipient], msg.as_string())
+        if smtp_port == 465:
+            with smtplib.SMTP_SSL(smtp_host, smtp_port, timeout=10) as server:
+                server.login(smtp_user, smtp_password)
+                server.sendmail(smtp_from, [recipient], msg.as_string())
+        else:
+            with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+                server.starttls()
+                server.login(smtp_user, smtp_password)
+                server.sendmail(smtp_from, [recipient], msg.as_string())
         return True, False, "Email sent successfully."
     except Exception as exc:
-        return False, True, f"SMTP send failed, dry-run only: {exc}"
+        # Log the failure class only: message bodies contain one-time links.
+        logger.warning("Email delivery failed (%s) for subject %r", type(exc).__name__, subject)
+        return False, False, "Email delivery failed. Please try again later."

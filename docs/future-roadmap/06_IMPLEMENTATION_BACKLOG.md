@@ -12,6 +12,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R01 Auth email origins and real email delivery
 
+- **Status:** implemented on branch `r01-auth-email-origins`; evidence in [validation/2026-10-15/r01](../validation/2026-10-15/r01/README.md). Real-provider delivery check remains for when the domain and email service exist.
 - **Scope:** `backend/services/auth_flows.py`, matching frontend auth routes, configuration interface and tests; 2–5h.
 - **Work:** replace localhost email links with an explicitly validated public frontend origin; keep staging/production distinct; verify expired/used tokens and safe reset responses. Configure owner-provided SMTP/provider settings separately.
 - **Acceptance:** actual verification/reset emails lead to the correct HTTPS app; tokens work once; invalid/expired links explain recovery; no token in analytics/logs. Email failure does not misrepresent a successfully created account.

@@ -73,7 +73,8 @@ echo "[3/7] Backend API and interview regression tests"
     tests.test_interviews \
     tests.test_resume_questions \
     tests.test_interview_plan \
-    tests.test_admin_operations -v
+    tests.test_admin_operations \
+    tests.test_auth_email_flows -v
 )
 
 echo "[4/7] Frontend unit tests"

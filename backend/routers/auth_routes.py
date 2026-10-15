@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
@@ -53,6 +54,7 @@ except Exception:  # pragma: no cover - optional dependency fallback
 else:
     GOOGLE_AUTH_IMPORT_ERROR = None
 
+logger = logging.getLogger("mba.auth")
 router = APIRouter(prefix="/auth", tags=["auth"])
 settings = get_settings()
 
@@ -139,8 +141,15 @@ def signup(user_data: UserCreate, request: Request, db: Session = Depends(get_db
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    verification_token = issue_one_time_token(db, new_user, EMAIL_VERIFY_PURPOSE, ttl_minutes=60 * 24)
-    send_verification_email(settings, new_user.email, verification_token)
+    # The account exists at this point; an email problem must not turn signup into an error.
+    # The user can request a fresh verification link later.
+    try:
+        verification_token = issue_one_time_token(db, new_user, EMAIL_VERIFY_PURPOSE, ttl_minutes=60 * 24)
+        sent, dry_run, _ = send_verification_email(settings, new_user.email, verification_token)
+        if not sent and not dry_run:
+            logger.warning("Signup verification email delivery failed for user_id=%s", new_user.id)
+    except Exception:
+        logger.exception("Signup verification email could not be prepared for user_id=%s", new_user.id)
     return issue_auth_tokens(new_user, db)
 
 
@@ -268,18 +277,20 @@ def request_email_verification(payload: EmailActionRequest, request: Request, db
         window_seconds=10 * 60,
         email=payload.email,
     )
-    user = db.query(User).filter(User.email == payload.email).first()
-    if not user:
-        return {"success": True, "message": "If the email exists, a verification link has been sent."}
-    if user.email_verified:
-        return {"success": True, "message": "Email is already verified."}
-
-    token = issue_one_time_token(db, user, EMAIL_VERIFY_PURPOSE, ttl_minutes=60 * 24)
-    sent, dry_run, message = send_verification_email(settings, user.email, token)
+    # Same response whether or not the account exists or is already verified,
+    # so this endpoint cannot be used to discover registered emails.
     response = {
         "success": True,
-        "message": message if sent else ("Verification generated in dry-run mode." if dry_run else message),
+        "message": "If an unverified account exists for this email, a verification link has been sent.",
     }
+    user = db.query(User).filter(User.email == payload.email).first()
+    if not user or user.email_verified:
+        return response
+
+    token = issue_one_time_token(db, user, EMAIL_VERIFY_PURPOSE, ttl_minutes=60 * 24)
+    sent, dry_run, _ = send_verification_email(settings, user.email, token)
+    if not sent and not dry_run:
+        logger.warning("Verification email delivery failed for user_id=%s", user.id)
     if dry_run and settings.should_expose_dev_auth_tokens:
         response["dev_token"] = token
     return response
@@ -311,16 +322,16 @@ def forgot_password(payload: EmailActionRequest, request: Request, db: Session =
         window_seconds=10 * 60,
         email=payload.email,
     )
+    # Same response for known and unknown emails (no account enumeration).
+    response = {"success": True, "message": "If an account exists for this email, a reset link has been sent."}
     user = db.query(User).filter(User.email == payload.email).first()
     if not user:
-        return {"success": True, "message": "If the email exists, a reset link has been sent."}
+        return response
 
     token = issue_one_time_token(db, user, PASSWORD_RESET_PURPOSE, ttl_minutes=60)
-    sent, dry_run, message = send_password_reset_email(settings, user.email, token)
-    response = {
-        "success": True,
-        "message": message if sent else ("Reset generated in dry-run mode." if dry_run else message),
-    }
+    sent, dry_run, _ = send_password_reset_email(settings, user.email, token)
+    if not sent and not dry_run:
+        logger.warning("Password reset email delivery failed for user_id=%s", user.id)
     if dry_run and settings.should_expose_dev_auth_tokens:
         response["dev_token"] = token
     return response
@@ -339,6 +350,8 @@ def reset_password(payload: PasswordResetConfirmRequest, request: Request, db: S
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or expired reset token")
 
     user.hashed_password = get_password_hash(payload.new_password)
+    # Receiving the reset link proves control of the mailbox.
+    user.email_verified = True
     db.query(RefreshToken).filter(
         and_(
             RefreshToken.user_id == user.id,

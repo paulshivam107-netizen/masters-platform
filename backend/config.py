@@ -1,5 +1,6 @@
 from functools import lru_cache
 from typing import Optional
+from urllib.parse import urlsplit
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -29,6 +30,10 @@ class Settings(BaseSettings):
     SMTP_USER: Optional[str] = None
     SMTP_PASSWORD: Optional[str] = None
     SMTP_FROM: Optional[str] = None
+
+    # Browser-facing origin of the frontend, used to build links in auth emails.
+    # Must be an origin only (scheme + host [+ port]); production-like envs require HTTPS.
+    PUBLIC_APP_URL: str = "http://localhost:3000"
 
     CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
     CORS_ORIGIN_REGEX: Optional[str] = None
@@ -101,6 +106,42 @@ class Settings(BaseSettings):
         normalized = self.database_url_normalized.lower()
         # Common placeholder tokens copied from templates/UIs.
         return "[your-password]" in normalized or "your-password" in normalized
+
+    @property
+    def public_app_url_error(self) -> Optional[str]:
+        """Return a human-readable problem with PUBLIC_APP_URL, or None when it is usable."""
+        raw = (self.PUBLIC_APP_URL or "").strip()
+        if not raw:
+            return "PUBLIC_APP_URL is empty."
+        try:
+            parts = urlsplit(raw)
+            parts.port  # raises ValueError for a malformed port
+        except ValueError:
+            return "PUBLIC_APP_URL is not a valid URL."
+        if parts.scheme not in {"http", "https"} or not parts.hostname:
+            return "PUBLIC_APP_URL must be an absolute http(s) URL such as https://app.example.com."
+        if parts.username or parts.password:
+            return "PUBLIC_APP_URL must not contain credentials."
+        if parts.path not in {"", "/"} or parts.query or parts.fragment:
+            return "PUBLIC_APP_URL must be an origin only, without a path, query or fragment."
+        if self.is_production_like_env:
+            if parts.scheme != "https":
+                return "PUBLIC_APP_URL must use https in pilot/staging/production environments."
+            if parts.hostname in {"localhost", "127.0.0.1", "0.0.0.0", "::1"}:
+                return "PUBLIC_APP_URL cannot point to localhost in pilot/staging/production environments."
+        return None
+
+    @property
+    def public_app_origin(self) -> str:
+        error = self.public_app_url_error
+        if error:
+            raise ValueError(error)
+        parts = urlsplit(self.PUBLIC_APP_URL.strip())
+        return f"{parts.scheme}://{parts.netloc}".lower()
+
+    @property
+    def has_smtp_config(self) -> bool:
+        return bool(self.SMTP_HOST and self.SMTP_USER and self.SMTP_PASSWORD)
 
     @property
     def cors_has_localhost_origin(self) -> bool:

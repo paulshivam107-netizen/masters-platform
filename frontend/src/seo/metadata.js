@@ -56,11 +56,15 @@ function metadata(pathname, config = defaults) {
   const indexable = Boolean(page && origin && config.allowIndexing);
   const fallbackTitle = path.startsWith("/app")
     ? "Your application workspace"
-    : path === "/auth"
-      ? "Sign in or create an account"
-      : path === "/programs"
-        ? "Explore programmes"
-        : "Page not found";
+    : path === "/auth/verify-email"
+      ? "Verify your email"
+      : path === "/auth/reset-password"
+        ? "Choose a new password"
+        : path === "/auth" || path.startsWith("/auth/")
+          ? "Sign in or create an account"
+          : path === "/programs"
+            ? "Explore programmes"
+            : "Page not found";
   const title = `${page?.title || fallbackTitle} | ${config.siteName || "Masters"}`;
   const description =
     page?.description ||

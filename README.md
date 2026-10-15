@@ -73,7 +73,8 @@ Defined in `.env` (project root), consumed by backend settings:
 - `GOOGLE_CLIENT_ID` (optional)
 - `APP_ENV` (`development` by default; use `pilot`/`staging`/`production` for strict safety checks)
 - `EXPOSE_DEV_AUTH_TOKENS` (optional override; default behavior exposes dev auth tokens only in local/test-style environments)
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` (optional for reminders)
+- `PUBLIC_APP_URL` (frontend origin used in verification/reset email links; must be `https://` and non-localhost in pilot/staging/production)
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` (optional locally; required in pilot/staging/production — the API refuses to start without them. Port 465 uses implicit TLS, anything else STARTTLS)
 - `CORS_ORIGINS` (comma-separated list)
 - `ADMIN_EMAILS` (comma-separated emails that should have admin access)
 
@@ -263,6 +264,8 @@ python3 scripts/seed_pilot_data.py
   - `POST /auth/forgot-password`
   - `POST /auth/reset-password`
 - In local/test-style environments without SMTP, auth email endpoints can include `dev_token` for testing.
+- Emailed links open `/auth/verify-email` and `/auth/reset-password` with the one-time token in the URL fragment (`#token=…`), so it never reaches servers, logs or analytics. The page strips it from the address bar after reading it. Tokens are single-use; verification links expire after 24 hours and reset links after 60 minutes.
+- Forgot-password and resend-verification responses are identical whether or not the email is registered.
 - In `pilot`/`staging`/`production`, `dev_token` exposure is disabled.
 
 ## Admin Bootstrap (Local/Pilot)

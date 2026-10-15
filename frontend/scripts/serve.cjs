@@ -40,7 +40,10 @@ http
     }
     const clean = pathname.replace(/\/+$/, "") || "/";
     const privateRoute =
-      clean === "/auth" || clean === "/app" || clean.startsWith("/app/");
+      clean === "/auth" ||
+      clean.startsWith("/auth/") ||
+      clean === "/app" ||
+      clean.startsWith("/app/");
     let filename = privateRoute
       ? path.join(root, "app-shell.html")
       : path.join(root, clean);

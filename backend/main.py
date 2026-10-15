@@ -43,6 +43,15 @@ def ensure_startup_safety():
             "Set a real managed database connection string before startup."
         )
 
+    if settings.public_app_url_error:
+        raise RuntimeError(settings.public_app_url_error)
+
+    if settings.is_production_like_env and not settings.has_smtp_config:
+        raise RuntimeError(
+            "SMTP_HOST, SMTP_USER and SMTP_PASSWORD are required in pilot/staging/production "
+            "so verification and password-reset emails can be delivered."
+        )
+
     if settings.is_production_like_env and settings.cors_has_localhost_origin:
         raise RuntimeError(
             "CORS_ORIGINS cannot contain localhost/127.0.0.1 in pilot/staging/production environments."

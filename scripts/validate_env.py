@@ -56,6 +56,9 @@ def main():
     if settings.is_production_like_env and settings.should_expose_dev_auth_tokens:
         errors.append(f"EXPOSE_DEV_AUTH_TOKENS cannot be enabled when APP_ENV={app_env}.")
 
+    if settings.public_app_url_error:
+        errors.append(settings.public_app_url_error)
+
     if not settings.cors_origins_list:
         errors.append("CORS_ORIGINS is empty.")
     if settings.is_production_like_env and settings.cors_has_localhost_origin:

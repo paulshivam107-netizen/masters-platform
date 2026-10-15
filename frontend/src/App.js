@@ -34,6 +34,10 @@ import LandingPage from "./components/public/LandingPage";
 import ProgramsPage from "./components/public/ProgramsPage";
 import AuthPage from "./components/public/AuthPage";
 import {
+  ResetPasswordPage,
+  VerifyEmailPage,
+} from "./components/public/AuthLinkPage";
+import {
   GuidesPage,
   GuidePage,
   HelpPage,
@@ -776,6 +780,8 @@ function AppRoutes() {
         <Route path="/guides/:slug" element={<GuidePage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         <Route path="/app/*" element={<ProtectedAppRoute />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
