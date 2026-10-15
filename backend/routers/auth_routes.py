@@ -120,6 +120,7 @@ def google_auth_config():
 def signup(user_data: UserCreate, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_signup",
         limit=10,
         window_seconds=10 * 60,
@@ -156,6 +157,7 @@ def signup(user_data: UserCreate, request: Request, response: Response, db: Sess
 def login(user_data: UserLogin, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_login",
         limit=30,
         window_seconds=10 * 60,
@@ -174,6 +176,7 @@ def login(user_data: UserLogin, request: Request, response: Response, db: Sessio
 def login_with_google(payload: GoogleLoginRequest, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_google",
         limit=25,
         window_seconds=10 * 60,
@@ -216,6 +219,7 @@ def refresh_access_token(
 ):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_refresh",
         limit=120,
         window_seconds=10 * 60,
@@ -250,6 +254,7 @@ def logout_session(
 ):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_logout",
         limit=120,
         window_seconds=10 * 60,
@@ -285,6 +290,7 @@ def logout_session(
 def request_email_verification(payload: EmailActionRequest, request: Request, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_request_email_verification",
         limit=20,
         window_seconds=10 * 60,
@@ -313,6 +319,7 @@ def request_email_verification(payload: EmailActionRequest, request: Request, db
 def verify_email(payload: EmailVerificationConfirmRequest, request: Request, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_verify_email",
         limit=20,
         window_seconds=10 * 60,
@@ -330,6 +337,7 @@ def verify_email(payload: EmailVerificationConfirmRequest, request: Request, db:
 def forgot_password(payload: EmailActionRequest, request: Request, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_forgot_password",
         limit=20,
         window_seconds=10 * 60,
@@ -354,6 +362,7 @@ def forgot_password(payload: EmailActionRequest, request: Request, db: Session =
 def reset_password(payload: PasswordResetConfirmRequest, request: Request, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
+        db=db,
         action="auth_reset_password",
         limit=20,
         window_seconds=10 * 60,

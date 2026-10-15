@@ -231,3 +231,69 @@ class AdminEconomicsScenario(Base):
     assumptions_json = Column(Text, nullable=False)
     revision = Column(Integer, nullable=False, default=1)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class RateLimitBucket(Base):
+    """Shared fixed-window counter (R05). One row per hashed key and window; expired rows are purged."""
+    __tablename__ = "rate_limit_buckets"
+
+    # "<action>:<scope>:<sha256 prefix>:<window index>" - never a raw email or IP.
+    id = Column(String(160), primary_key=True)
+    count = Column(Integer, nullable=False, default=0)
+    expires_at = Column(DateTime, nullable=False, index=True)
+
+
+class AiPriceVersion(Base):
+    """Versioned provider prices in integer paise per million units (R05). Never floats."""
+    __tablename__ = "ai_price_versions"
+    __table_args__ = (UniqueConstraint("model", "version"),)
+
+    id = Column(Integer, primary_key=True)
+    model = Column(String(80), nullable=False, index=True)
+    version = Column(Integer, nullable=False)
+    input_unit = Column(String(24), nullable=False, default="tokens")
+    output_unit = Column(String(24), nullable=False, default="tokens")
+    input_paise_per_million = Column(Integer, nullable=False)
+    output_paise_per_million = Column(Integer, nullable=False)
+    request_paise = Column(Integer, nullable=False, default=0)
+    effective_from = Column(DateTime, nullable=False, default=datetime.utcnow)
+    note = Column(String(200), nullable=True)
+    created_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class AiSpendCounter(Base):
+    """Per-day committed AI exposure (reserved + settled + unknown) for the global and per-user caps."""
+    __tablename__ = "ai_spend_counters"
+
+    # "global:<day>" or "user:<id>:<day>". Updated with conditional atomic UPDATEs only.
+    id = Column(String(80), primary_key=True)
+    day = Column(Date, nullable=False, index=True)
+    committed_paise = Column(Integer, nullable=False, default=0)
+    in_flight = Column(Integer, nullable=False, default=0)
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class AiCostEntry(Base):
+    """Append-mostly AI cost ledger: reserved -> settled | released | unknown (R05)."""
+    __tablename__ = "ai_cost_entries"
+
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    day = Column(Date, nullable=False, index=True)
+    operation = Column(String(32), nullable=False)
+    reference_id = Column(String(36), nullable=True, index=True)
+    model = Column(String(80), nullable=False)
+    price_version_id = Column(Integer, ForeignKey("ai_price_versions.id"), nullable=True)
+    price_source = Column(String(16), nullable=False)
+    status = Column(String(16), nullable=False, default="reserved", index=True)
+    reserved_paise = Column(Integer, nullable=False)
+    actual_paise = Column(Integer, nullable=True)
+    input_units = Column(Integer, nullable=True)
+    output_units = Column(Integer, nullable=True)
+    usage_reported = Column(Boolean, nullable=False, default=False)
+    failure_code = Column(String(40), nullable=True)
+    note = Column(String(200), nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
+    resolved_at = Column(DateTime, nullable=True)
+    resolved_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)

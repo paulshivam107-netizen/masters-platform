@@ -16,10 +16,34 @@ MAX_RECORDING_SECONDS = 120
 
 
 class ProviderFailure(Exception):
-    def __init__(self, message="The AI service could not complete this step. Your saved interview is safe; please retry.", status=503, code="provider_error"):
+    """billing: "none" (provider certainly did not bill), "charged" (a response was received and
+    billed, ``usage`` when reported) or "unknown" (the request may have been accepted)."""
+
+    def __init__(self, message="The AI service could not complete this step. Your saved interview is safe; please retry.", status=503, code="provider_error",
+                 billing="none", usage=None):
         super().__init__(message)
         self.status = status
         self.code = code
+        self.billing = billing
+        self.usage = usage
+
+
+def charged(exc, usage):
+    """Mark a failure raised after a successful (billed) provider response."""
+    exc.billing, exc.usage = "charged", usage
+    return exc
+
+
+def text_model():
+    return os.getenv("INTERVIEW_TEXT_MODEL", "gpt-4.1-mini")
+
+
+def transcribe_model():
+    return os.getenv("INTERVIEW_TRANSCRIBE_MODEL", "gpt-transcribe")
+
+
+def speech_model():
+    return os.getenv("INTERVIEW_SPEECH_MODEL", "gpt-4o-mini-tts")
 
 
 def enabled():
@@ -35,6 +59,7 @@ def live_available():
 
 
 def _post(path, **kwargs):
+    # No automatic retries: a retry is a new user action with a new reservation.
     if not live_available():
         raise ProviderFailure("AI interviews are not connected yet. Please try the clearly labelled demo.")
     try:
@@ -52,10 +77,14 @@ def _post(path, **kwargs):
         if not 200 <= response.status_code < 300:
             raise ProviderFailure()
         return response
+    except (httpx.ConnectTimeout, httpx.ConnectError, httpx.PoolTimeout):
+        # The request never reached the provider: nothing can have been billed.
+        raise ProviderFailure("The AI service could not be reached. Your answer has not been advanced; please retry.", code="provider_unreachable") from None
     except httpx.TimeoutException:
-        raise ProviderFailure("The AI response timed out. Your answer has not been advanced; please retry.", code="provider_timeout") from None
+        # Sent but unanswered: the provider may have accepted and billed it.
+        raise ProviderFailure("The AI response timed out. Your answer has not been advanced; please retry.", code="provider_timeout", billing="unknown") from None
     except httpx.HTTPError:
-        raise ProviderFailure() from None
+        raise ProviderFailure(code="provider_connection_lost", billing="unknown") from None
 
 
 INSTRUCTIONS = """You conduct practice interviews for Indian MBA applicants.
@@ -83,7 +112,7 @@ Return the requested JSON schema, without markdown or additional text."""
 
 
 def _structured(task, context, transcript, schema_class, max_tokens=None, instructions=None):
-    model = os.getenv("INTERVIEW_TEXT_MODEL", "gpt-4.1-mini")
+    model = text_model()
     response = _post("responses", json={
         "model": model,
         "store": False,
@@ -95,8 +124,12 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
             "strict": True, "schema": schema_class.model_json_schema(),
         }},
     })
+    usage = {"model": model}
     try:
         body = response.json()
+        raw_usage = body.get("usage") or {}
+        usage.update({key: raw_usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")
+                      if isinstance(raw_usage.get(key), int)})
         if body.get("status") != "completed":
             raise ValueError("incomplete response")
         output = "".join(
@@ -105,13 +138,10 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
             for part in item.get("content", []) if part.get("type") == "output_text"
         )
         result = schema_class.model_validate_json(output).model_dump()
-        raw_usage = body.get("usage", {})
-        usage = {key: raw_usage[key] for key in ("input_tokens", "output_tokens", "total_tokens")
-                 if isinstance(raw_usage.get(key), int)}
-        usage["model"] = model
         return result, usage
-    except (ValueError, TypeError, KeyError, ValidationError):
-        raise ProviderFailure("The AI returned an incomplete response. Please retry this step.") from None
+    except (ValueError, TypeError, KeyError, AttributeError, ValidationError):
+        raise ProviderFailure("The AI returned an incomplete response. Please retry this step.",
+                              billing="charged", usage=usage) from None
 
 
 def next_question(context, transcript):
@@ -132,6 +162,14 @@ def next_question(context, transcript):
         "Return only a question, without feedback or an example answer.",
         context, transcript, NextQuestion, max_tokens=800,
     )
+    try:
+        return _check_next_question(result, context, transcript), usage
+    except (ProviderFailure, ValidationError) as exc:
+        failure = exc if isinstance(exc, ProviderFailure) else ProviderFailure("The next question was incomplete. Please retry.")
+        raise charged(failure, usage) from None
+
+
+def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
     if result["kind"] != "new_topic":
@@ -142,7 +180,7 @@ def next_question(context, transcript):
         raise ProviderFailure("The next question was incomplete. Please retry.")
     if any(t["role"] == "assistant" and t["text"].strip().casefold() == result["question"].strip().casefold() for t in transcript):
         raise ProviderFailure("The interviewer repeated a question. Please retry this step.")
-    return result, usage
+    return result
 
 
 def validate_feedback(result, transcript):
@@ -170,13 +208,17 @@ def feedback(context, transcript):
         "For academic or factual answers, avoid claiming correctness without reliable supplied reference material.",
         context, transcript, InterviewFeedback,
     )
-    return validate_feedback(result, transcript), usage
+    try:
+        return validate_feedback(result, transcript), usage
+    except (ProviderFailure, ValidationError) as exc:
+        failure = exc if isinstance(exc, ProviderFailure) else ProviderFailure("The debrief was incomplete. Please retry.")
+        raise charged(failure, usage) from None
 
 
 def transcribe(audio, content_type):
     extension = {"audio/webm": "webm", "audio/mp4": "mp4", "audio/wav": "wav", "audio/mpeg": "mp3"}[content_type]
     response = _post("audio/transcriptions", data={
-        "model": os.getenv("INTERVIEW_TRANSCRIBE_MODEL", "gpt-transcribe"),
+        "model": transcribe_model(),
         "response_format": "json",
         "prompt": "MBA application practice interview. Possible terms include CAT, GMAT, IIM, ISB, PGP, PGPX, EPGP and IPMX.",
     }, files={"file": ("answer." + extension, audio, content_type)})
@@ -186,19 +228,20 @@ def transcribe(audio, content_type):
             raise ValueError("empty or long transcript")
         return text
     except (ValueError, KeyError, AttributeError, TypeError):
-        raise ProviderFailure("A usable transcript could not be produced. Try a shorter recording or type your answer.") from None
+        raise ProviderFailure("A usable transcript could not be produced. Try a shorter recording or type your answer.",
+                              billing="charged") from None
 
 
 def speech(text):
     response = _post("audio/speech", json={
-        "model": os.getenv("INTERVIEW_SPEECH_MODEL", "gpt-4o-mini-tts"),
+        "model": speech_model(),
         "voice": "coral",
         "input": text,
         "instructions": "Speak clearly as a calm, professional MBA practice interviewer.",
         "response_format": "mp3",
     })
     if not response.content or len(response.content) > MAX_AUDIO_BYTES:
-        raise ProviderFailure("Question audio is unavailable. You can read the question and continue.")
+        raise ProviderFailure("Question audio is unavailable. You can read the question and continue.", billing="charged")
     return response.content
 
 

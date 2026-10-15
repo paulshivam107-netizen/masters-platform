@@ -25,7 +25,10 @@ USER app
 
 EXPOSE 8000
 
-# One worker per container until shared rate limiting lands (R05): the auth limiter is
-# in-process. --proxy-headers trusts the platform proxy for the client IP and scheme.
+# Rate limits and AI money caps are shared through the database (R05), so workers/replicas
+# may be added. --proxy-headers is kept for the scheme only: the app derives the client IP
+# itself from the rightmost TRUSTED_PROXY_HOPS entries of X-Forwarded-For (Railway: 1 hop),
+# because uvicorn with forwarded-allow-ips='*' would trust the client-controlled leftmost one.
 # Graceful shutdown lets in-flight requests finish during a redeploy.
+ENV TRUSTED_PROXY_HOPS=1
 CMD ["sh", "-c", "exec uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*' --timeout-graceful-shutdown 20 --no-server-header"]

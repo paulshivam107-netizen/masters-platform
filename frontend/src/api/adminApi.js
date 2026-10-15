@@ -73,6 +73,10 @@ export async function updatePilotFeedbackApi(id, payload) {
   const { data } = await apiClient.patch(`/admin/pilot/feedback/${id}`, payload);
   return data;
 }
+export async function resolveAiLedgerEntryApi(id, payload) {
+  const { data } = await apiClient.post(`/admin/pilot/ai-ledger/${id}/resolve`, payload);
+  return data;
+}
 export async function saveEconomicsApi(payload) {
   const { data } = await apiClient.put('/admin/pilot/economics', payload);
   return data;

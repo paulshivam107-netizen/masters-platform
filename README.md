@@ -214,7 +214,8 @@ bash scripts/run_checks.sh
 
 ## Pilot Guardrails Added
 
-- Rate limiting on `auth/*` and `telemetry/events` endpoints.
+- Shared, database-backed rate limiting (IP + account/e-mail layers) on `auth/*`, `telemetry/events` and interview routes; works across workers/replicas. Set `TRUSTED_PROXY_HOPS` to the number of proxies in front of the API (Railway: 1; the Docker image sets it) - the client IP is taken from the right of `X-Forwarded-For`, never the client-controlled left.
+- AI money caps (R05): every billable provider call reserves a conservative maximum cost (integer paise, versioned model prices) before dispatch and is reconciled afterwards; timeouts are recorded as *unknown outcome* and stay counted until resolved in Admin -> Spending -> Cost ledger & caps. Hard caps: `AI_GLOBAL_DAILY_CAP_PAISE` (default 50000), `AI_USER_DAILY_CAP_PAISE` (5000), `AI_GLOBAL_MAX_IN_FLIGHT` (20), `AI_USER_MAX_IN_FLIGHT` (2), `AI_MAX_ATTEMPTS_PER_REQUEST` (4). `AI_DAILY_ALERT_PAISE` is an alert only and never blocks. Admin APIs: `/admin/pilot/ai-ledger`, `/admin/pilot/ai-prices`.
 - Consistent error payloads with request IDs for validation/runtime failures.
 - Admin dashboard overview now includes:
   - DAU/WAU from telemetry

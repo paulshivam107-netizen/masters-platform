@@ -14,7 +14,8 @@ from models import ApplicationTracker, ResumeQuestionSet, User
 from resume_schemas import ResumeQuestionsCreate
 from routers.interview_routes import interview_user
 from services import interview_provider as provider
-from services.interviews import fingerprint, reserve_quota, require_live
+from services import ai_costs
+from services.interviews import fingerprint, reserve_cost, reserve_quota, require_live
 from services.resume_parser import MAX_BYTES
 from services.resume_questions import extract_document, generate_questions, owned_set, serialize_set
 
@@ -82,8 +83,11 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
             db.rollback()
             raise HTTPException(409, "These questions are still being prepared. Please wait before retrying.")
     reserve_quota(db, user.id)
-    db.commit()
     row_id = row.id
+    entry_id = reserve_cost(db, user.id, "resume_questions", provider.text_model(),
+                            ai_costs.text_tokens_upper_bound(len(payload.resume_text) + len(json.dumps(context)) + 6000),
+                            3800, row_id).id
+    db.commit()
     try:
         graph, usage = generate_questions(payload.resume_text, context)
         changed = db.query(ResumeQuestionSet).filter_by(id=row_id, pending_token=token).update({
@@ -91,7 +95,10 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
             "pending_token": None, "pending_until": None}, synchronize_session=False)
         if changed != 1:
             db.rollback()
+            ai_costs.finish(db, entry_id, "unknown", None, "save_conflict")
+            db.commit()
             raise HTTPException(409, "This question set changed. Refresh your saved sets before retrying.")
+        ai_costs.finish(db, entry_id, "charged", usage)
         db.commit()
         db.refresh(row)
         return serialize_set(row)
@@ -101,6 +108,10 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
         db.rollback()
         db.query(ResumeQuestionSet).filter_by(id=row_id, pending_token=token).update({
             "status": "failed", "pending_token": None, "pending_until": None}, synchronize_session=False)
+        if isinstance(exc, provider.ProviderFailure):
+            ai_costs.finish(db, entry_id, exc.billing, exc.usage, exc.code)
+        else:
+            ai_costs.finish(db, entry_id, "unknown", None, "save_failed")
         db.commit()
         message = str(exc) if isinstance(exc, provider.ProviderFailure) else "Questions could not be prepared. Your reviewed text is still here; please retry."
         raise HTTPException(503, message) from None

@@ -63,6 +63,10 @@ class Settings(BaseSettings):
     # Must be an origin only (scheme + host [+ port]); production-like envs require HTTPS.
     PUBLIC_APP_URL: str = "http://localhost:3000"
 
+    # Number of reverse proxies in front of the API that append to X-Forwarded-For (Railway: 1).
+    # 0 = use the socket peer. The client IP is the N-th entry from the right, never the leftmost.
+    TRUSTED_PROXY_HOPS: int = 0
+
     CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
     CORS_ORIGIN_REGEX: Optional[str] = None
     ADMIN_EMAILS: str = ""
