@@ -26,13 +26,17 @@ from sqlalchemy.orm import Session
 from models import (
     AdminEconomicsScenario,
     AdminEvent,
+    AiCostEntry,
+    AiPriceVersion,
     AiRuntimeConfig,
+    AiSpendCounter,
     ApplicationTracker,
     AuthToken,
     Essay,
     InterviewOperation,
     InterviewQuota,
     InterviewSession,
+    CatalogRevision,
     PilotFeedback,
     RefreshToken,
     ResumeQuestionSet,
@@ -71,6 +75,24 @@ DELETION_MANIFEST: dict[str, tuple[str, str, str]] = {
     "ai_runtime_config": ("not exported (site setting)", "updated_by_user_id cleared",
                           "Site-wide setting; only the reference to the admin who changed it is removed."),
     "alembic_version": ("not exported", "untouched", "Schema version, no personal data."),
+    # R05 rate limiting and AI cost control
+    "rate_limit_buckets": ("not exported", "untouched (expire on their own)",
+                           "Keys are one-way hashes of IP/email/account; they cannot be linked back to "
+                           "a person and disappear when their short window ends."),
+    "ai_cost_entries": ("the user's AI cost entries (amounts, model, status)",
+                        "anonymise (user_id, reference_id and note cleared; amounts kept)",
+                        "Money already committed or spent with the AI provider must still reconcile; "
+                        "the link to the person and to deleted content is removed."),
+    "ai_spend_counters": ("the user's daily spend counters", "delete per-user counters; keep global counters",
+                          "Global counters hold no personal data and enforce the site budget."),
+    "ai_price_versions": ("not exported (site setting)", "created_by_user_id cleared",
+                          "Price table; only the reference to the admin who entered it is removed."),
+    # R09 programme catalogue (public reference data)
+    "catalog_programs": ("not exported (public data)", "untouched", "Programme facts, no personal data."),
+    "catalog_cycles": ("not exported (public data)", "untouched", "Programme facts, no personal data."),
+    "catalog_rounds": ("not exported (public data)", "untouched", "Programme facts, no personal data."),
+    "catalog_revisions": ("not exported (public data)", "created_by_user_id and reviewer_user_id cleared",
+                          "Revision history stays; only the reference to the admin is removed."),
 }
 
 _EXCLUDED_FIELDS = {
@@ -160,6 +182,10 @@ def build_export(db: Session, user: User) -> dict:
                              .filter(AdminEvent.user_id == uid).order_by(AdminEvent.id)],
         "usage_counters": [_row(r) for r in db.query(InterviewQuota).filter(_quota_filter(uid))
                            .order_by(InterviewQuota.id)],
+        "ai_cost_entries": [_row(r, exclude={"user_id", "resolved_by_user_id"}) for r in db.query(AiCostEntry)
+                            .filter(AiCostEntry.user_id == uid).order_by(AiCostEntry.created_at, AiCostEntry.id)],
+        "ai_spend_counters": [_row(r) for r in db.query(AiSpendCounter)
+                              .filter(AiSpendCounter.id.like(f"user:{int(uid)}:%")).order_by(AiSpendCounter.id)],
         "sign_in_sessions": [_row(r, exclude={"user_id"}) for r in db.query(RefreshToken)
                              .filter(RefreshToken.user_id == uid).order_by(RefreshToken.id)],
         "admin_economics_scenario": _row(economics) if economics else None,
@@ -234,6 +260,19 @@ def delete_account(db: Session, user: User) -> dict:
         {AdminEvent.user_id: None, AdminEvent.payload_json: None}, synchronize_session=False)
     db.query(AiRuntimeConfig).filter(AiRuntimeConfig.updated_by_user_id == uid).update(
         {AiRuntimeConfig.updated_by_user_id: None}, synchronize_session=False)
+    counts["ai_cost_entries_anonymised"] = db.query(AiCostEntry).filter(AiCostEntry.user_id == uid).update(
+        {AiCostEntry.user_id: None, AiCostEntry.reference_id: None, AiCostEntry.note: None},
+        synchronize_session=False)
+    db.query(AiCostEntry).filter(AiCostEntry.resolved_by_user_id == uid).update(
+        {AiCostEntry.resolved_by_user_id: None}, synchronize_session=False)
+    counts["ai_spend_counters"] = db.query(AiSpendCounter).filter(
+        AiSpendCounter.id.like(f"user:{int(uid)}:%")).delete(synchronize_session=False)
+    db.query(AiPriceVersion).filter(AiPriceVersion.created_by_user_id == uid).update(
+        {AiPriceVersion.created_by_user_id: None}, synchronize_session=False)
+    db.query(CatalogRevision).filter(CatalogRevision.created_by_user_id == uid).update(
+        {CatalogRevision.created_by_user_id: None}, synchronize_session=False)
+    db.query(CatalogRevision).filter(CatalogRevision.reviewer_user_id == uid).update(
+        {CatalogRevision.reviewer_user_id: None}, synchronize_session=False)
     counts["admin_economics_scenarios"] = db.query(AdminEconomicsScenario).filter(
         AdminEconomicsScenario.user_id == uid).delete(synchronize_session=False)
     counts["interview_quotas"] = db.query(InterviewQuota).filter(_quota_filter(uid)).delete(

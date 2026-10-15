@@ -36,6 +36,12 @@ A deletion is refused with `409 operation_in_progress` while an interview or ré
 | `auth_tokens` (email-verify / reset links) | no (secrets) | **deleted** | Pending links stop working. |
 | `admin_economics_scenarios` (admins only) | yes | **deleted** | The admin's own planning inputs. |
 | `ai_runtime_config` | no | `updated_by_user_id` cleared | Site-wide setting; only the reference to the person is removed. |
+| `ai_cost_entries` (AI cost ledger) | yes (amounts, model, status) | **anonymised**: user, reference and note cleared; amounts kept | Money committed or spent with the AI provider must still reconcile. |
+| `ai_spend_counters` | the user's daily counters | per-user counters **deleted**; global kept | Global counters hold no personal data and enforce the site budget. |
+| `rate_limit_buckets` | no | untouched | Keys are one-way hashes and expire within minutes; they cannot identify anyone. |
+| `ai_price_versions` | no | `created_by_user_id` cleared | Price table; only the reference to the admin is removed. |
+| `catalog_programs`, `catalog_cycles`, `catalog_rounds` | no (public data) | untouched | Programme facts, no personal data. |
+| `catalog_revisions` | no (public data) | `created_by_user_id`, `reviewer_user_id` cleared | Revision history stays; only the reference to the admin is removed. |
 
 Not stored on the server at all (so not exported or deleted by the API): interview audio, original résumé files,
 reviewed résumé text. Notes, drafts and preferences kept in the browser are cleared by the app on deletion

@@ -247,5 +247,44 @@ class PostgresRuntimeTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(codes.count(200), 1, codes)
         self.assertTrue(all(code in (200, 409) for code in codes), codes)
 
+    def test_deleting_an_admin_with_ledger_and_catalogue_history_respects_foreign_keys(self):
+        """Postgres enforces FKs (SQLite tests do not): deletion must clear every reference."""
+        from datetime import date as _date
+        from models import AiCostEntry, CatalogCycle, CatalogProgram, CatalogRevision, User
+        from services.account_data import delete_account
+
+        with self.Session() as db:
+            admin = User(email=f"admin-{uuid.uuid4().hex[:8]}@example.com", name="Admin", role="admin",
+                         is_active=True, email_verified=True)
+            db.add(admin)
+            db.flush()
+            slug = "prog-" + uuid.uuid4().hex[:8]
+            db.add(CatalogProgram(id=slug, school_name="Example School", program_name="PGP",
+                                  degree="MBA", country="India"))
+            db.flush()
+            cycle = CatalogCycle(program_id=slug, cycle="2026-27")
+            db.add(cycle)
+            db.flush()
+            revision = CatalogRevision(cycle_id=cycle.id, revision_number=1, created_by_user_id=admin.id,
+                                       reviewer_user_id=admin.id)
+            entry = AiCostEntry(id=str(uuid.uuid4()), user_id=admin.id, day=_date.today(), operation="test",
+                                model="m", price_source="default", status="settled", reserved_paise=100,
+                                actual_paise=80, resolved_by_user_id=admin.id, note="private note")
+            db.add_all([revision, entry])
+            db.commit()
+            admin_id, revision_id, entry_id = admin.id, revision.id, entry.id
+
+            delete_account(db, db.get(User, admin_id))
+            db.commit()
+
+        with self.Session() as db:
+            self.assertIsNone(db.get(User, admin_id))
+            kept = db.get(CatalogRevision, revision_id)
+            self.assertIsNotNone(kept, "catalogue history is kept")
+            self.assertIsNone(kept.created_by_user_id)
+            self.assertIsNone(kept.reviewer_user_id)
+            ledger = db.get(AiCostEntry, entry_id)
+            self.assertEqual((ledger.user_id, ledger.note, ledger.actual_paise), (None, None, 80))
+
 if __name__ == "__main__":
     unittest.main()

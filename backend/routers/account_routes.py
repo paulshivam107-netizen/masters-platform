@@ -71,7 +71,7 @@ def require_reauthentication(db: Session, user: User, payload: AccountDeleteRequ
 
 @router.get("/export")
 def export_account(request: Request, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    enforce_rate_limit(request, action="account_export", limit=10, window_seconds=60 * 60, user_id=user.id)
+    enforce_rate_limit(request, action="account_export", limit=10, window_seconds=60 * 60, user_id=user.id, db=db)
     archive = build_export(db, user)
     db.add(AdminEvent(user_id=user.id, event_name="account_exported", payload_json=None))
     db.commit()
@@ -91,7 +91,7 @@ def delete_my_account(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    enforce_rate_limit(request, action="account_delete", limit=5, window_seconds=10 * 60, user_id=user.id)
+    enforce_rate_limit(request, action="account_delete", limit=5, window_seconds=10 * 60, user_id=user.id, db=db)
     require_reauthentication(db, user, payload, decode_token(credentials.credentials))
     try:
         counts = delete_account(db, user)

@@ -21,7 +21,6 @@ from routers import account_routes, application_routes, auth_routes, essay_route
 from services import auth_flows
 from services import interview_provider as provider
 from services.account_data import DELETION_MANIFEST
-from services.rate_limit import rate_limiter
 
 PASSWORD = "strong-password-123"
 COOKIE = "masters_refresh"
@@ -42,7 +41,6 @@ class ManifestTest(unittest.TestCase):
 
 class AccountDataTest(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
-        rate_limiter._events.clear()
         self.tmp = tempfile.TemporaryDirectory()
         self.engine = create_engine("sqlite:///" + self.tmp.name + "/a.sqlite", connect_args={"check_same_thread": False})
         Base.metadata.create_all(self.engine)

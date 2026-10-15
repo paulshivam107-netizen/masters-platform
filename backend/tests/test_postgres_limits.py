@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "scripts"))
 
 from models import AiCostEntry, AiSpendCounter, User  # noqa: E402
 from services import ai_costs, rate_limit  # noqa: E402
-from services.schema import migrate_to_head, schema_drift  # noqa: E402
+from services.schema import head_revision, migrate_to_head, schema_drift  # noqa: E402
 
 ADMIN_URL = os.environ.get("TEST_POSTGRES_ADMIN_URL")
 RUNTIME_ROLE = "app_runtime_r05_" + uuid.uuid4().hex[:6]
@@ -92,7 +92,7 @@ class PostgresLimitsTest(unittest.TestCase):
             conn.execute(text("DELETE FROM rate_limit_buckets"))
 
     def test_schema_at_head_matches_models(self):
-        self.assertEqual(self.status.current, "0005")
+        self.assertEqual(self.status.current, head_revision())
         self.assertEqual(schema_drift(self.owner_engine), [])
 
     def test_rate_limit_is_shared_by_two_worker_processes(self):
