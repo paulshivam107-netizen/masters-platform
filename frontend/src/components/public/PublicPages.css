@@ -865,3 +865,12 @@
     padding: 40px 0;
   }
 }
+
+.public-program-status {
+  margin: 0.25rem 0 0;
+  font-size: 0.85rem;
+}
+
+.public-program-status.is-unverified {
+  color: #a15c00;
+}

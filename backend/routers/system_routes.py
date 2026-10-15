@@ -1,14 +1,10 @@
 from fastapi import APIRouter
-from typing import Optional
-
-from fastapi import HTTPException, Query
 from sqlalchemy import text
 
 from config import get_settings
 from database import engine
+from routers.catalog_routes import public_router as catalog_public_router
 from services.schema import schema_status
-from schemas import ProgramCatalogItem, ProgramCatalogSearchResponse
-from services.program_catalog import load_program_catalog
 
 router = APIRouter(tags=["system"])
 settings = get_settings()
@@ -58,29 +54,5 @@ def db_health_check():
     }
 
 
-@router.get("/programs", response_model=ProgramCatalogSearchResponse)
-def list_program_catalog(
-    query: Optional[str] = Query(default=None, min_length=2, max_length=120),
-    limit: int = Query(default=25, ge=1, le=200),
-):
-    catalog = load_program_catalog()
-    if query:
-        needle = query.strip().lower()
-        catalog = [
-            item for item in catalog
-            if needle in (item.get("school_name", "").lower())
-            or needle in (item.get("program_name", "").lower())
-            or needle in (item.get("degree", "").lower())
-            or needle in (item.get("country", "").lower())
-        ]
-    items = [ProgramCatalogItem(**item) for item in catalog[:limit]]
-    return {"total": len(catalog), "items": items}
-
-
-@router.get("/programs/{program_id}", response_model=ProgramCatalogItem)
-def get_program_catalog_item(program_id: str):
-    catalog = load_program_catalog()
-    for item in catalog:
-        if item.get("id") == program_id:
-            return ProgramCatalogItem(**item)
-    raise HTTPException(status_code=404, detail="Program catalog item not found")
+# Public programme catalogue (R09): published, DB-backed records only.
+router.include_router(catalog_public_router)

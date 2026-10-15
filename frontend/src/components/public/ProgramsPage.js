@@ -4,33 +4,7 @@ import { listProgramCatalogApi } from "../../api";
 import { useAuth } from "../../contexts/AuthContext";
 import "./PublicPages.css";
 import PublicHeader from "./PublicHeader";
-
-const FALLBACK_PROGRAMS = [
-  {
-    id: "fallback-1",
-    school_name: "INSEAD",
-    program_name: "MBA",
-    degree: "MBA",
-    country: "France/Singapore",
-    city: "Fontainebleau",
-    application_fee: 250,
-    fee_currency: "EUR",
-    deadline_round_1: null,
-    source_url: "",
-  },
-  {
-    id: "fallback-2",
-    school_name: "Harvard Business School",
-    program_name: "MBA",
-    degree: "MBA",
-    country: "USA",
-    city: "Boston",
-    application_fee: 250,
-    fee_currency: "USD",
-    deadline_round_1: null,
-    source_url: "",
-  },
-];
+import { catalogStatusLabel } from "../../app/catalogAutofill";
 
 function formatFee(item) {
   if (
@@ -62,8 +36,10 @@ export default function ProgramsPage() {
         setError("No matching programs found. Try a broader search.");
       }
     } catch (err) {
-      setItems(FALLBACK_PROGRAMS);
-      setError("Showing sample catalog while live source is unavailable.");
+      setItems([]);
+      setError(
+        "The programme catalogue is unavailable right now. Please try again later.",
+      );
     } finally {
       setLoading(false);
     }
@@ -139,6 +115,13 @@ export default function ProgramsPage() {
                         : "Deadline not listed"}
                     </span>
                   </div>
+                  <p
+                    className={`public-program-status ${item.autofill_allowed ? "is-verified" : "is-unverified"}`}
+                    data-testid="program-verification"
+                  >
+                    {catalogStatusLabel(item)}
+                    {item.cycle ? ` · ${item.cycle} cycle` : ""}
+                  </p>
                   <div className="public-hero-actions">
                     <button
                       type="button"
@@ -154,7 +137,7 @@ export default function ProgramsPage() {
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Source
+                        Official source
                       </a>
                     ) : null}
                   </div>

@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 from auth import require_admin_user
 from database import get_db
 from routers.admin_operations import router as operations_router
+from routers.catalog_routes import admin_router as catalog_admin_router
 from models import AdminEvent, ApplicationTracker, Essay, PilotFeedback, User
 from schemas import (
     AdminAiRuntimeConfigResponse,
@@ -17,11 +18,9 @@ from schemas import (
     AdminEventRow,
     AdminFeedbackRow,
     AdminOverviewResponse,
-    AdminProgramCatalogUpsertRequest,
     AdminRoleUpdateRequest,
     AdminRoleUpdateResponse,
     AdminUserRow,
-    ProgramCatalogItem,
 )
 from services.ai_runtime import (
     ALLOWED_AI_PROVIDERS,
@@ -29,7 +28,6 @@ from services.ai_runtime import (
     provider_readiness,
     update_ai_runtime_config,
 )
-from services.program_catalog import build_program_id, load_program_catalog, save_program_catalog
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -317,81 +315,6 @@ async def update_user_role(
     return {"id": user.id, "email": user.email, "role": user.role}
 
 
-@router.post("/programs", response_model=ProgramCatalogItem, status_code=status.HTTP_201_CREATED)
-async def create_program_catalog_item(
-    payload: AdminProgramCatalogUpsertRequest,
-    _: User = Depends(require_admin_user),
-):
-    catalog = load_program_catalog()
-    requested_id = (payload.id or "").strip().lower()
-    program_id = requested_id or build_program_id(payload.school_name, payload.program_name, payload.degree)
-    if any(item.get("id") == program_id for item in catalog):
-        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="Program catalog item id already exists")
-
-    item = ProgramCatalogItem(
-        id=program_id,
-        school_name=payload.school_name,
-        program_name=payload.program_name,
-        degree=payload.degree,
-        country=payload.country,
-        city=payload.city,
-        application_fee=payload.application_fee,
-        fee_currency=payload.fee_currency,
-        deadline_round_1=payload.deadline_round_1,
-        deadline_round_2=payload.deadline_round_2,
-        source_url=payload.source_url,
-        last_updated=payload.last_updated,
-        confidence=payload.confidence,
-    )
-    catalog.append(item.model_dump())
-    save_program_catalog(catalog)
-    return item
-
-
-@router.put("/programs/{program_id}", response_model=ProgramCatalogItem)
-async def update_program_catalog_item(
-    program_id: str,
-    payload: AdminProgramCatalogUpsertRequest,
-    _: User = Depends(require_admin_user),
-):
-    catalog = load_program_catalog()
-    index = next((idx for idx, item in enumerate(catalog) if item.get("id") == program_id), None)
-    if index is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program catalog item not found")
-
-    item = ProgramCatalogItem(
-        id=program_id,
-        school_name=payload.school_name,
-        program_name=payload.program_name,
-        degree=payload.degree,
-        country=payload.country,
-        city=payload.city,
-        application_fee=payload.application_fee,
-        fee_currency=payload.fee_currency,
-        deadline_round_1=payload.deadline_round_1,
-        deadline_round_2=payload.deadline_round_2,
-        source_url=payload.source_url,
-        last_updated=payload.last_updated,
-        confidence=payload.confidence,
-    )
-    catalog[index] = item.model_dump()
-    save_program_catalog(catalog)
-    return item
-
-
-@router.delete("/programs/{program_id}", status_code=status.HTTP_200_OK)
-async def delete_program_catalog_item(
-    program_id: str,
-    _: User = Depends(require_admin_user),
-):
-    catalog = load_program_catalog()
-    next_catalog = [item for item in catalog if item.get("id") != program_id]
-    if len(next_catalog) == len(catalog):
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Program catalog item not found")
-    save_program_catalog(next_catalog)
-    return {"deleted": True, "id": program_id}
-
-
 @router.get("/ai/runtime", response_model=AdminAiRuntimeConfigResponse)
 async def get_ai_runtime_config(
     _: User = Depends(require_admin_user),
@@ -449,3 +372,4 @@ async def put_ai_runtime_config(
 
 
 router.include_router(operations_router)
+router.include_router(catalog_admin_router)

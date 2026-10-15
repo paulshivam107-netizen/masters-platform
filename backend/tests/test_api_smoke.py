@@ -210,58 +210,33 @@ class ApiSmokeTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(role_update.json()["role"], "admin")
 
         catalog_id = f"smoke-{uuid.uuid4().hex[:8]}"
-        catalog_create = await self.client.post(
-            "/admin/programs",
-            json={
-                "id": catalog_id,
-                "school_name": "Smoke Test School",
-                "program_name": "Pilot MBA",
-                "degree": "MBA",
-                "country": "USA",
-                "city": "Austin",
-                "application_fee": 180,
-                "fee_currency": "USD",
-                "deadline_round_1": "2026-09-01",
-                "deadline_round_2": "2027-01-10",
-                "source_url": "https://example.com/program",
-                "last_updated": "2026-02-14",
-                "confidence": "medium"
-            },
-            headers=headers
-        )
-        self.assertEqual(catalog_create.status_code, 201, catalog_create.text)
-        self.assertEqual(catalog_create.json()["id"], catalog_id)
-
-        catalog_update = await self.client.put(
-            f"/admin/programs/{catalog_id}",
-            json={
-                "school_name": "Smoke Test School",
-                "program_name": "Pilot MBA",
-                "degree": "MBA",
-                "country": "USA",
-                "city": "Austin",
-                "application_fee": 190,
-                "fee_currency": "USD",
-                "deadline_round_1": "2026-09-02",
-                "deadline_round_2": "2027-01-11",
-                "source_url": "https://example.com/program-updated",
-                "last_updated": "2026-02-14",
-                "confidence": "high"
-            },
-            headers=headers
-        )
-        self.assertEqual(catalog_update.status_code, 200, catalog_update.text)
-        self.assertEqual(catalog_update.json()["application_fee"], 190)
-
+        draft_body = {
+            "program_id": catalog_id,
+            "school_name": "Smoke Test School",
+            "program_name": "Pilot MBA",
+            "degree": "MBA",
+            "country": "USA",
+            "city": "Austin",
+            "cycle": "2026-27",
+            "application_fee": 180,
+            "fee_currency": "USD",
+            "rounds": [{"label": "Round 1", "deadline": "2026-09-01"}],
+            "source_url": "https://example.com/program",
+            "checked_at": date.today().isoformat(),
+        }
+        draft = await self.client.post("/admin/catalog/drafts", json=draft_body, headers=headers)
+        self.assertEqual(draft.status_code, 201, draft.text)
+        revision_id = draft.json()["id"]
+        self.assertEqual((await self.client.get(f"/programs/{catalog_id}")).status_code, 404)
+        submit = await self.client.post(f"/admin/catalog/revisions/{revision_id}/submit", headers=headers)
+        self.assertEqual(submit.status_code, 200, submit.text)
+        publish = await self.client.post(
+            f"/admin/catalog/revisions/{revision_id}/publish",
+            json={"verification_status": "unverified"}, headers=headers)
+        self.assertEqual(publish.status_code, 200, publish.text)
         catalog_get = await self.client.get(f"/programs/{catalog_id}")
         self.assertEqual(catalog_get.status_code, 200, catalog_get.text)
-        self.assertEqual(catalog_get.json()["confidence"], "high")
-
-        catalog_delete = await self.client.delete(f"/admin/programs/{catalog_id}", headers=headers)
-        self.assertEqual(catalog_delete.status_code, 200, catalog_delete.text)
-
-        catalog_get_deleted = await self.client.get(f"/programs/{catalog_id}")
-        self.assertEqual(catalog_get_deleted.status_code, 404, catalog_get_deleted.text)
+        self.assertFalse(catalog_get.json()["autofill_allowed"])
 
         self_demote = await self.client.patch(
             f"/admin/users/{me.json()['id']}/role",
