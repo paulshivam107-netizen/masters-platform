@@ -28,6 +28,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R03 HTTPS staging and production delivery
 
+- **Status:** deploy configuration implemented on branch `r03-deploy-config` (stacked on R02); evidence in [validation/2026-10-15/r03](../validation/2026-10-15/r03/README.md) and runbook in [DEPLOYMENT.md](../DEPLOYMENT.md). Remaining: owner creates accounts/domain, then the actual staging deploy and its route/status table.
 - **Scope:** build/deployment manifests, frontend delivery rules, backend container and health checks; 5–10h plus account setup.
 - **Work:** supported runtimes, reproducible installs, static frontend build, private shell and real 404 routing, separate environments and build variables.
 - **Acceptance:** fresh-account and returning-user deep links work; public HTML visible without JS; private noindex; all secrets backend-only; restart retains data; preview indexing disabled; logs redacted.

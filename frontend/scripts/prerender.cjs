@@ -89,7 +89,10 @@ for (const route of [...Object.keys(publicPages), "/programs", "/404"]) {
       ? path.join(build, "index.html")
       : route === "/404"
         ? path.join(build, "404.html")
-        : path.join(build, route.slice(1), "index.html");
+        : // "/guides/x" -> guides/x.html. Static hosts (Cloudflare Pages/Workers assets) serve
+          // file.html at the extensionless URL with no redirect, matching the canonical tag.
+          // A folder index (guides/x/index.html) would force a redirect to "/guides/x/".
+          path.join(build, route.slice(1) + ".html");
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, html(route, body));
 }

@@ -73,7 +73,7 @@ For every preview or staging deployment, leave indexing disabled and restrict ac
 
 ## Hosting requirements
 
-1. Serve the generated file for each public route. `/guides/mba-interview-story-bank` must receive its own `guides/mba-interview-story-bank/index.html`, not the homepage.
+1. Serve the generated file for each public route. `/guides/mba-interview-story-bank` must receive its own `guides/mba-interview-story-bank.html` (served at the extensionless URL with no redirect, matching its canonical tag), not the homepage. Since 15 Oct 2026 the build emits `name.html` files instead of `name/index.html`: Cloudflare Pages redirects a folder index from `/name` to `/name/`, which would make every canonical URL a redirect.
 2. Serve `app-shell.html` for `/auth`, `/app` and `/app/*`. Apply `X-Robots-Tag: noindex, nofollow` to these responses. Auth and API ownership checks enforce privacy; crawler directives do not.
 3. Serve `404.html` with status 404 for unknown URLs and missing files. Do not rewrite every unknown address to a 200 homepage.
 4. Choose HTTPS and one canonical hostname. Redirect alternative hostnames and trailing-slash duplicates consistently, preserving useful query parameters.
@@ -81,7 +81,7 @@ For every preview or staging deployment, leave indexing disabled and restrict ac
 6. Do not challenge legitimate public search crawlers with a blanket bot wall. Check the provider’s verification guidance before configuring any allowlist; do not weaken authenticated/API protections.
 7. Keep private account pages out of the sitemap and out of public templates, recordings and screenshots used for promotion.
 
-The included Node server demonstrates these routing behaviours locally. Existing deployment/container configuration was not changed or inspected; copy the behaviour into the selected host during the deployment step. A generic SPA fallback would undo an important part of this SEO implementation.
+The included Node server demonstrates these routing behaviours locally, and `frontend/public/_redirects` + `_headers` implement them on Cloudflare Pages (verified with Cloudflare's local runtime; see [DEPLOYMENT.md](DEPLOYMENT.md)). `npm run check:routes -- <url>` checks any deployment against this contract. A generic SPA fallback would undo an important part of this SEO implementation.
 
 Google notes that robots.txt alone is not a reliable way to prevent indexing; use `noindex` or authenticated access for that purpose. [Google developer guidance](https://developers.google.com/search/docs/fundamentals/get-started-developers)
 

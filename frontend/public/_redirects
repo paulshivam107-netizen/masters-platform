@@ -1,0 +1,7 @@
+# Cloudflare Pages: private app routes render the client-side app shell (status 200).
+# Public pages are prerendered files (e.g. guides/x.html served at /guides/x).
+# Anything else falls through to the real 404.html with a 404 status.
+/app        /app-shell  200
+/app/*      /app-shell  200
+/auth       /app-shell  200
+/auth/*     /app-shell  200

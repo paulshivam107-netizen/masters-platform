@@ -142,7 +142,7 @@ def ensure_schema_ready(engine: Engine, settings) -> SchemaStatus:
         if not status.is_current:
             raise SchemaNotReady(
                 f"Database schema revision is {status.current or 'unversioned'}, but this release "
-                f"requires {status.head}. Run `python scripts/db_migrate.py` with "
+                f"requires {status.head}. Run the release migration (`python manage_db.py` in backend/, or `python scripts/db_migrate.py`) with "
                 "MIGRATION_DATABASE_URL before starting the API."
             )
         return status

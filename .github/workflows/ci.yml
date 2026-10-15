@@ -59,3 +59,16 @@ jobs:
 
       - name: Run full checks
         run: bash scripts/run_checks.sh
+
+      - name: Production frontend build (indexing on) and routing contract
+        env:
+          REACT_APP_SITE_URL: https://www.masters-preview.in
+          REACT_APP_ALLOW_INDEXING: "true"
+          REACT_APP_API_URL: https://api.masters-preview.in
+        run: |
+          npm --prefix frontend run build
+          (cd frontend && PORT=3181 node scripts/serve.cjs &) && sleep 1
+          npm --prefix frontend run check:routes -- http://127.0.0.1:3181
+
+      - name: Build production API image
+        run: docker build -t masters-api:ci backend
