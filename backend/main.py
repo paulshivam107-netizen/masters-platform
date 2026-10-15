@@ -52,6 +52,12 @@ def ensure_startup_safety():
             "so verification and password-reset emails can be delivered."
         )
 
+    if settings.is_production_like_env and not settings.auth_cookie_secure:
+        raise RuntimeError("AUTH_COOKIE_SECURE cannot be disabled in pilot/staging/production environments.")
+
+    if settings.auth_cookie_samesite == "none" and not settings.auth_cookie_secure:
+        raise RuntimeError("AUTH_COOKIE_SAMESITE=none requires a secure cookie.")
+
     if settings.is_production_like_env and settings.cors_has_localhost_origin:
         raise RuntimeError(
             "CORS_ORIGINS cannot contain localhost/127.0.0.1 in pilot/staging/production environments."

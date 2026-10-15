@@ -29,8 +29,18 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 security = HTTPBearer()
 
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verify a password against its hash"""
+_DUMMY_HASH = None
+
+
+def verify_password(plain_password: str, hashed_password: Optional[str]) -> bool:
+    """Verify a password against its hash. Spends the same bcrypt time when there is no
+    stored hash, so login timing does not reveal whether an email is registered."""
+    global _DUMMY_HASH
+    if not hashed_password:
+        if _DUMMY_HASH is None:
+            _DUMMY_HASH = pwd_context.hash("timing-equaliser")
+        pwd_context.verify(plain_password, _DUMMY_HASH)
+        return False
     return pwd_context.verify(plain_password, hashed_password)
 
 
@@ -42,11 +52,9 @@ def get_password_hash(password: str) -> str:
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     """Create a JWT access token"""
     to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
+    now = datetime.utcnow()
+    expire = now + (expires_delta or timedelta(minutes=15))
+    to_encode.update({"exp": expire, "iat": now, "typ": "access"})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
@@ -63,6 +71,8 @@ def decode_token(token: str) -> dict:
     """Decode and verify a JWT token"""
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        if payload.get("typ", "access") != "access":
+            raise JWTError("not an access token")
         return payload
     except JWTError:
         raise HTTPException(
@@ -94,19 +104,33 @@ async def get_current_user(
         )
     
     user = db.query(User).filter(User.id == user_id).first()
-    if user is None:
+    if user is None or not user.is_active:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User not found",
+            detail="Could not validate credentials",
         )
-    
+
+    # Tokens issued for a browser session stop working as soon as that session is revoked
+    # (logout, password reset, reuse detection), not only when they expire.
+    session_id = payload.get("sid")
+    if session_id is not None:
+        from services.sessions import family_is_active
+
+        if not family_is_active(db, str(session_id)):
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Session has ended",
+            )
+
     return user
 
 
 def is_admin_user(user: User) -> bool:
     if (user.role or "").strip().lower() == "admin":
         return True
-    return (user.email or "").strip().lower() in set(settings.admin_email_list)
+    # ADMIN_EMAILS only bootstraps an admin once that mailbox is proven (verified email or
+    # Google sign-in). Otherwise anyone could register the founder's address first.
+    return bool(user.email_verified) and (user.email or "").strip().lower() in set(settings.admin_email_list)
 
 
 async def require_admin_user(current_user: User = Depends(get_current_user)) -> User:

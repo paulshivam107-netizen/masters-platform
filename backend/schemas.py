@@ -48,13 +48,15 @@ class UserResponse(BaseModel):
 
 class Token(BaseModel):
     access_token: str
-    refresh_token: str
+    # Always null for browser clients: the refresh token is set as an HttpOnly cookie.
+    refresh_token: Optional[str] = None
     token_type: str
     user: UserResponse
 
 
 class RefreshTokenRequest(BaseModel):
-    refresh_token: str = Field(min_length=10, max_length=2048)
+    # Legacy body token; current clients rely on the HttpOnly cookie instead.
+    refresh_token: Optional[str] = Field(default=None, min_length=10, max_length=2048)
 
 
 class LogoutRequest(BaseModel):

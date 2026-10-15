@@ -30,12 +30,6 @@ logger = logging.getLogger("mba.schema")
 
 BACKEND_DIR = Path(__file__).resolve().parents[1]
 BASELINE_REVISION = "0001"
-# Tables that existed when the 0001 baseline was cut. Legacy adoption may only create these.
-BASELINE_TABLES = (
-    "users", "essays", "applications", "refresh_tokens", "auth_tokens", "pilot_feedback",
-    "admin_events", "ai_runtime_config", "interview_sessions", "interview_operations",
-    "interview_quotas", "resume_question_sets", "admin_economics_scenarios",
-)
 
 
 class SchemaNotReady(RuntimeError):
@@ -84,20 +78,18 @@ def is_unversioned_legacy_db(connection: Connection) -> bool:
 
 def adopt_legacy_database(engine: Engine) -> None:
     """Bring a pre-Alembic database (created by the old startup create_all + ALTERs) to the
-    0001 baseline shape, then stamp it so normal migrations can run from there."""
-    from database import Base
-    import models  # noqa: F401
+    0001 baseline, so normal migrations can run from there.
+
+    0001 creates only the tables that are missing, always in their baseline shape (never from
+    the current models, which may already contain columns added by later revisions). The frozen
+    legacy ALTERs then add any columns that old tables lack.
+    """
     from services.legacy_schema import run_legacy_sqlite_migrations
 
-    logger.warning("Adopting pre-Alembic database: applying legacy upgrades, then stamping %s",
-                   BASELINE_REVISION)
-    # Same order the old startup code used: create missing tables, then additive ALTERs.
+    logger.warning("Adopting pre-Alembic database: creating missing baseline tables, then legacy upgrades")
     with engine.begin() as conn:
-        tables = [Base.metadata.tables[name] for name in BASELINE_TABLES]
-        Base.metadata.create_all(conn, tables=tables, checkfirst=True)
+        command.upgrade(alembic_config(conn), BASELINE_REVISION)
     run_legacy_sqlite_migrations(engine)
-    with engine.begin() as conn:
-        command.stamp(alembic_config(conn), BASELINE_REVISION)
 
 
 def migrate_to_head(engine: Engine) -> SchemaStatus:

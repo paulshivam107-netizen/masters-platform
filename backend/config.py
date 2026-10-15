@@ -32,8 +32,17 @@ class Settings(BaseSettings):
     # pilot/staging/production, where a release step runs migrations instead.
     AUTO_MIGRATE_ON_STARTUP: bool = True
     SECRET_KEY: str = "your-secret-key-change-in-production"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
+    # Short-lived bearer token held in browser memory only; renewed via the refresh cookie.
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    # Refresh token lives in an HttpOnly cookie scoped to /auth on the API host.
+    AUTH_COOKIE_NAME: str = "masters_refresh"
+    AUTH_COOKIE_SECURE: Optional[bool] = None  # default: off in development, on elsewhere
+    AUTH_COOKIE_SAMESITE: str = "lax"
+    AUTH_COOKIE_DOMAIN: Optional[str] = None
+    # A just-rotated refresh token presented again within this window is treated as a
+    # concurrent refresh (another tab), not theft.
+    REFRESH_REUSE_GRACE_SECONDS: int = 30
 
     MOCK_MODE: bool = True
     OPENAI_API_KEY: Optional[str] = None
@@ -72,6 +81,35 @@ class Settings(BaseSettings):
             seen.add(origin)
             deduped.append(origin)
         return deduped
+
+    @field_validator("AUTH_COOKIE_SECURE", mode="before")
+    @classmethod
+    def normalize_cookie_secure(cls, value):
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
+    @property
+    def auth_cookie_secure(self) -> bool:
+        if self.AUTH_COOKIE_SECURE is not None:
+            return bool(self.AUTH_COOKIE_SECURE)
+        return not self.is_development_env
+
+    @property
+    def auth_cookie_samesite(self) -> str:
+        value = (self.AUTH_COOKIE_SAMESITE or "lax").strip().lower()
+        return value if value in {"lax", "strict", "none"} else "lax"
+
+    def is_trusted_origin(self, origin: Optional[str]) -> bool:
+        """True when a browser Origin is one of the configured frontend origins."""
+        import re
+
+        if not origin:
+            return False
+        origin = origin.rstrip("/")
+        if origin in self.cors_origins_list:
+            return True
+        return bool(self.CORS_ORIGIN_REGEX and re.fullmatch(self.CORS_ORIGIN_REGEX, origin))
 
     @field_validator("EXPOSE_DEV_AUTH_TOKENS", mode="before")
     @classmethod

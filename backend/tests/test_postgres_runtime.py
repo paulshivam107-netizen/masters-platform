@@ -233,5 +233,19 @@ class PostgresRuntimeTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(sorted(r.status_code for r in responses), [200] + [400] * 7)
 
 
+    async def test_concurrent_cookie_refresh_rotates_exactly_once(self):
+        signup = await self.client.post("/auth/signup", json={
+            "email": f"tabs-{uuid.uuid4().hex[:8]}@example.com", "name": "Tabs", "password": "strong-password-123"})
+        cookie = signup.cookies["masters_refresh"]
+
+        async def refresh():
+            async with httpx.AsyncClient(transport=self.client._transport, base_url="http://testserver") as c:
+                return await c.post("/auth/refresh", cookies={"masters_refresh": cookie})
+
+        results = await asyncio.gather(*[refresh() for _ in range(8)])
+        codes = sorted(r.status_code for r in results)
+        self.assertEqual(codes.count(200), 1, codes)
+        self.assertTrue(all(code in (200, 409) for code in codes), codes)
+
 if __name__ == "__main__":
     unittest.main()

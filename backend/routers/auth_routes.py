@@ -1,24 +1,19 @@
 import logging
-from datetime import datetime, timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, Response, status
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 
 from auth import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    REFRESH_TOKEN_EXPIRE_DAYS,
-    create_access_token,
-    generate_refresh_token,
+    decode_token,
     get_current_user,
     get_password_hash,
-    hash_refresh_token,
     is_admin_user,
     verify_password,
 )
 from config import get_settings
 from database import get_db
-from models import RefreshToken, User
+from models import User
 from schemas import (
     EmailActionRequest,
     EmailVerificationConfirmRequest,
@@ -43,6 +38,17 @@ from services.auth_flows import (
     send_verification_email,
 )
 from services.rate_limit import enforce_rate_limit
+from services.sessions import (
+    SessionRejected,
+    clear_cookie_header,
+    clear_refresh_cookie,
+    family_for_token,
+    issue_session,
+    require_trusted_origin,
+    revoke_family,
+    revoke_user_sessions,
+    rotate_refresh_token,
+)
 
 try:
     from google.oauth2 import id_token as google_id_token
@@ -73,40 +79,33 @@ def verify_google_identity_token(token_value: str) -> tuple[str, str]:
             settings.GOOGLE_CLIENT_ID
         )
     except Exception as exc:
-        raise HTTPException(status_code=401, detail=f"Google token verification failed: {exc}") from exc
+        logger.info("Google token verification failed: %s", type(exc).__name__)
+        raise HTTPException(status_code=401, detail="Google sign-in could not be verified. Please try again.") from exc
 
     email = id_info.get("email")
     display_name = id_info.get("name") or (email.split("@")[0] if email else "Google User")
     if not email:
         raise HTTPException(status_code=400, detail="Google account email not available")
+    if id_info.get("email_verified") is False:
+        raise HTTPException(status_code=400, detail="Verify this email with Google before signing in")
     return email, display_name
 
 
-def issue_auth_tokens(user: User, db: Session) -> dict:
+def promote_bootstrap_admin(user: User, db: Session) -> None:
     if is_admin_user(user) and user.role != "admin":
         user.role = "admin"
         db.commit()
         db.refresh(user)
 
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": str(user.id)}, expires_delta=access_token_expires)
 
-    raw_refresh_token = generate_refresh_token()
-    refresh_token_expires_at = datetime.utcnow() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
-    refresh_token_row = RefreshToken(
-        user_id=user.id,
-        token_hash=hash_refresh_token(raw_refresh_token),
-        expires_at=refresh_token_expires_at
-    )
-    db.add(refresh_token_row)
-    db.commit()
+def token_response(user: User, access_token: str) -> dict:
+    # The refresh token is never returned to page scripts; it travels only in the HttpOnly cookie.
+    return {"access_token": access_token, "refresh_token": None, "token_type": "bearer", "user": user}
 
-    return {
-        "access_token": access_token,
-        "refresh_token": raw_refresh_token,
-        "token_type": "bearer",
-        "user": user
-    }
+
+def start_session(user: User, db: Session, response: Response) -> dict:
+    promote_bootstrap_admin(user, db)
+    return token_response(user, issue_session(db, settings, user, response))
 
 
 @router.get("/google/config", response_model=GoogleAuthConfigResponse)
@@ -118,7 +117,7 @@ def google_auth_config():
 
 
 @router.post("/signup", response_model=Token, status_code=status.HTTP_201_CREATED)
-def signup(user_data: UserCreate, request: Request, db: Session = Depends(get_db)):
+def signup(user_data: UserCreate, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
         action="auth_signup",
@@ -130,13 +129,13 @@ def signup(user_data: UserCreate, request: Request, db: Session = Depends(get_db
     if existing_user:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Email already registered")
 
-    hashed_password = get_password_hash(user_data.password)
     new_user = User(
         email=user_data.email,
         name=user_data.name,
-        hashed_password=hashed_password,
+        hashed_password=get_password_hash(user_data.password),
         email_verified=False,
-        role="admin" if user_data.email.strip().lower() in set(settings.admin_email_list) else "user"
+        # ADMIN_EMAILS grants admin only after the mailbox is verified (see is_admin_user).
+        role="user",
     )
     db.add(new_user)
     db.commit()
@@ -150,11 +149,11 @@ def signup(user_data: UserCreate, request: Request, db: Session = Depends(get_db
             logger.warning("Signup verification email delivery failed for user_id=%s", new_user.id)
     except Exception:
         logger.exception("Signup verification email could not be prepared for user_id=%s", new_user.id)
-    return issue_auth_tokens(new_user, db)
+    return start_session(new_user, db, response)
 
 
 @router.post("/login", response_model=Token)
-def login(user_data: UserLogin, request: Request, db: Session = Depends(get_db)):
+def login(user_data: UserLogin, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
         action="auth_login",
@@ -163,13 +162,16 @@ def login(user_data: UserLogin, request: Request, db: Session = Depends(get_db))
         email=user_data.email,
     )
     user = db.query(User).filter(User.email == user_data.email).first()
-    if not user or not verify_password(user_data.password, user.hashed_password):
+    password_ok = verify_password(user_data.password, user.hashed_password if user else None)
+    if not user or not password_ok:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
-    return issue_auth_tokens(user, db)
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="This account is inactive")
+    return start_session(user, db, response)
 
 
 @router.post("/google", response_model=Token)
-def login_with_google(payload: GoogleLoginRequest, request: Request, db: Session = Depends(get_db)):
+def login_with_google(payload: GoogleLoginRequest, request: Request, response: Response, db: Session = Depends(get_db)):
     enforce_rate_limit(
         request,
         action="auth_google",
@@ -183,88 +185,99 @@ def login_with_google(payload: GoogleLoginRequest, request: Request, db: Session
         user = User(
             email=email,
             name=display_name,
-            hashed_password=get_password_hash(f"google::{email}::{datetime.utcnow().timestamp()}"),
+            hashed_password=None,
             notification_email=email,
             email_provider="gmail",
             email_verified=True,
-            role="admin" if email.strip().lower() in set(settings.admin_email_list) else "user"
+            role="user",
         )
         db.add(user)
         db.commit()
         db.refresh(user)
-
-    return issue_auth_tokens(user, db)
+    elif not user.email_verified:
+        # Someone registered this address with a password but never proved they own it.
+        # Google has now proved ownership: drop that unverified password and its sessions
+        # so a pre-registered account cannot be used to watch the real owner's data.
+        user.hashed_password = None
+        user.email_verified = True
+        db.commit()
+        revoke_user_sessions(db, user.id, "ownership_proven")
+    if not user.is_active:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="This account is inactive")
+    return start_session(user, db, response)
 
 
 @router.post("/refresh", response_model=Token)
-def refresh_access_token(payload: RefreshTokenRequest, request: Request, db: Session = Depends(get_db)):
+def refresh_access_token(
+    request: Request,
+    response: Response,
+    payload: RefreshTokenRequest | None = None,
+    db: Session = Depends(get_db),
+):
     enforce_rate_limit(
         request,
         action="auth_refresh",
         limit=120,
         window_seconds=10 * 60,
     )
-    token_hash = hash_refresh_token(payload.refresh_token)
-    refresh_token_row = db.query(RefreshToken).filter(
-        and_(
-            RefreshToken.token_hash == token_hash,
-            RefreshToken.revoked == False  # noqa: E712
-        )
-    ).first()
-    if not refresh_token_row:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid refresh token")
-    if refresh_token_row.expires_at <= datetime.utcnow():
-        refresh_token_row.revoked = True
-        db.commit()
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Refresh token expired")
-
-    user = db.query(User).filter(User.id == refresh_token_row.user_id).first()
-    if not user:
-        refresh_token_row.revoked = True
-        db.commit()
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User not found")
-
-    refresh_token_row.revoked = True
-    db.commit()
-    return issue_auth_tokens(user, db)
+    cookie_token = request.cookies.get(settings.AUTH_COOKIE_NAME)
+    # Legacy clients stored the refresh token themselves and send it in the body. That path is
+    # kept so existing sessions migrate to the cookie on their next refresh.
+    raw_token = cookie_token or (payload.refresh_token if payload else None)
+    if cookie_token:
+        require_trusted_origin(request, settings)
+    if not raw_token:
+        raise SessionRejected("no_session", "You are not signed in.")
+    try:
+        user, access_token = rotate_refresh_token(db, settings, raw_token, response)
+    except SessionRejected as exc:
+        if exc.detail.get("code") == "refresh_superseded":
+            raise
+        # A dead refresh cookie is removed so the browser stops presenting it.
+        raise SessionRejected(exc.detail["code"], exc.detail["message"], exc.status_code,
+                              headers=clear_cookie_header(settings)) from None
+    promote_bootstrap_admin(user, db)
+    return token_response(user, access_token)
 
 
 @router.post("/logout")
 def logout_session(
-    payload: LogoutRequest,
     request: Request,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+    response: Response,
+    payload: LogoutRequest | None = None,
+    credentials: HTTPAuthorizationCredentials | None = Depends(HTTPBearer(auto_error=False)),
+    db: Session = Depends(get_db),
 ):
     enforce_rate_limit(
         request,
         action="auth_logout",
         limit=120,
         window_seconds=10 * 60,
-        user_id=current_user.id,
     )
-    if payload.all_sessions:
-        db.query(RefreshToken).filter(
-            and_(
-                RefreshToken.user_id == current_user.id,
-                RefreshToken.revoked == False  # noqa: E712
-            )
-        ).update({"revoked": True})
-        db.commit()
-        return {"success": True, "revoked": "all"}
+    payload = payload or LogoutRequest()
+    cookie_token = request.cookies.get(settings.AUTH_COOKIE_NAME)
+    if cookie_token:
+        require_trusted_origin(request, settings)
+    clear_refresh_cookie(response, settings)
 
-    if payload.refresh_token:
-        token_hash = hash_refresh_token(payload.refresh_token)
-        token_row = db.query(RefreshToken).filter(
-            and_(
-                RefreshToken.user_id == current_user.id,
-                RefreshToken.token_hash == token_hash,
-                RefreshToken.revoked == False  # noqa: E712
-            )
-        ).first()
-        if token_row:
-            token_row.revoked = True
-            db.commit()
+    # Identify the session from the cookie, a legacy body token, or the access token's sid.
+    claims = None
+    if credentials is not None:
+        try:
+            claims = decode_token(credentials.credentials)
+        except HTTPException:
+            claims = None
+    row = family_for_token(db, cookie_token or payload.refresh_token)
+    family_id = row.family_id if row else (claims or {}).get("sid")
+    user_id = row.user_id if row else (int(claims["sub"]) if claims and claims.get("sub") else None)
+
+    if payload.all_sessions:
+        if user_id is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Sign in to end all sessions")
+        revoke_user_sessions(db, user_id, "logout_all")
+        return {"success": True, "revoked": "all"}
+    if family_id:
+        revoke_family(db, str(family_id), "logout")
     return {"success": True, "revoked": "current"}
 
 
@@ -352,13 +365,8 @@ def reset_password(payload: PasswordResetConfirmRequest, request: Request, db: S
     user.hashed_password = get_password_hash(payload.new_password)
     # Receiving the reset link proves control of the mailbox.
     user.email_verified = True
-    db.query(RefreshToken).filter(
-        and_(
-            RefreshToken.user_id == user.id,
-            RefreshToken.revoked == False  # noqa: E712
-        )
-    ).update({"revoked": True})
     db.commit()
+    revoke_user_sessions(db, user.id, "password_reset")
     return {"success": True, "message": "Password updated successfully. Please log in again."}
 
 

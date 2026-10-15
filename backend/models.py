@@ -88,13 +88,19 @@ class ApplicationTracker(Base):
 
 
 class RefreshToken(Base):
+    """One row per issued refresh token. Rotation revokes the presented row and inserts a new
+    one in the same family (one family = one signed-in device/browser session). Presenting an
+    already-rotated token after the grace window revokes the whole family (theft detection)."""
     __tablename__ = "refresh_tokens"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     token_hash = Column(String, unique=True, nullable=False, index=True)
+    family_id = Column(String(36), nullable=False, index=True)
     expires_at = Column(DateTime, nullable=False, index=True)
     revoked = Column(Boolean, default=False, nullable=False)
+    revoked_reason = Column(String(32), nullable=True)
+    rotated_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="refresh_tokens")

@@ -4,11 +4,20 @@ export const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 
 export const apiClient = axios.create({
   baseURL: API_URL,
+  // Sends the HttpOnly refresh cookie (scoped to /auth on the API host) with auth calls.
+  withCredentials: true,
 });
 
+// The access token is kept in memory only, never in localStorage, so injected scripts
+// cannot lift a long-lived credential from storage.
+let accessToken = null;
 let sessionVersion = 0;
+export function getAuthToken() {
+  return accessToken;
+}
 export function setAuthToken(token, { newSession = false } = {}) {
   if (newSession) sessionVersion += 1;
+  accessToken = token || null;
   if (token) {
     apiClient.defaults.headers.common.Authorization = `Bearer ${token}`;
   } else {

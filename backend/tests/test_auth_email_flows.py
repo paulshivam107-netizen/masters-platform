@@ -147,7 +147,10 @@ class AuthEmailFlowTest(unittest.IsolatedAsyncioTestCase):
             await self.signup("second@example.com")
 
     async def test_reset_link_works_once_and_revokes_sessions(self):
-        signup = (await self.signup()).json()
+        signup_response = await self.signup()
+        old_cookie = signup_response.cookies.get("masters_refresh")
+        old_access = signup_response.json()["access_token"]
+        self.assertTrue(old_cookie)
         self.sent_emails.clear()
 
         response = await self.client.post("/auth/forgot-password", json={"email": "applicant@example.com"})
@@ -161,8 +164,11 @@ class AuthEmailFlowTest(unittest.IsolatedAsyncioTestCase):
 
         login = await self.client.post("/auth/login", json={"email": "applicant@example.com", "password": "new-password-456"})
         self.assertEqual(login.status_code, 200, login.text)
-        refresh = await self.client.post("/auth/refresh", json={"refresh_token": signup["refresh_token"]})
+        self.client.cookies.clear()
+        refresh = await self.client.post("/auth/refresh", cookies={"masters_refresh": old_cookie})
         self.assertEqual(refresh.status_code, 401)
+        me = await self.client.get("/auth/me", headers={"Authorization": f"Bearer {old_access}"})
+        self.assertEqual(me.status_code, 401, "old access token must stop working after a reset")
 
     async def test_new_reset_request_invalidates_previous_link(self):
         await self.signup()
