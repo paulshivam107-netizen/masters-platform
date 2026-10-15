@@ -36,6 +36,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R04 Authentication and ownership hardening
 
+- **Status:** implemented on branch `r04-auth-hardening` (stacked on R03); evidence in [validation/2026-10-15/r04](../validation/2026-10-15/r04/README.md). Remaining: Content-Security-Policy (not yet set) and a repeat of the browser check on the real `www`/`api` staging domains once R03 staging exists.
 - **Scope:** `backend/auth.py`, auth router/services, `frontend/src/contexts/AuthContext.js`, `frontend/src/api/client.js`, ownership tests; 8–16h.
 - **Work:** reviewed refresh-cookie/access-token strategy, CSRF/origin controls, rotation/replay/logout handling, admin permissions and multi-tab refresh behaviour. Decide managed-auth migration only if needed.
 - **Acceptance:** refresh cannot be replayed indefinitely; logout revokes supported sessions; A cannot read/update/delete/export B's data; account switching cannot replay queued work under the wrong identity; meaningful XSS/token risks reviewed.

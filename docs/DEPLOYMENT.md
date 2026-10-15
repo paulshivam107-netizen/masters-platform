@@ -73,6 +73,16 @@ Variables (Railway → Variables; secrets never go in the frontend):
 | `MOCK_MODE`, `OPENAI_API_KEY` / `GEMINI_API_KEY` | keep `MOCK_MODE=true` until R05/R07 (spend caps, live evaluation) are done |
 | `GOOGLE_CLIENT_ID` | optional |
 
+Sessions use an `HttpOnly`, `Secure`, `SameSite=Lax` refresh cookie set by `api.<domain>` (scoped to
+`/auth`) and a 15-minute in-memory access token (`ACCESS_TOKEN_EXPIRE_MINUTES`, default 15). The
+frontend and API **must be on the same registrable domain** (`www.<domain>` + `api.<domain>`) so the
+browser treats them as same-site and sends the cookie. Leave `AUTH_COOKIE_DOMAIN` empty (host-only on
+the API) and `AUTH_COOKIE_SAMESITE=lax`. Cloudflare Pages previews (`*.pages.dev`) are a different
+site: the cookie is not sent from there, so sign-in will not survive a reload or token expiry on a
+preview. Test auth on production or on a preview served from a subdomain of `<domain>`; do not loosen
+to `SameSite=None` to make previews work. `/auth/refresh` and `/auth/logout` also reject any `Origin`
+not in `CORS_ORIGINS`/`CORS_ORIGIN_REGEX`.
+
 The API refuses to start if `PUBLIC_APP_URL` is not HTTPS, SMTP is missing, CORS contains localhost,
 `SECRET_KEY` is weak, or the schema is not at head. Run `python scripts/validate_env.py` locally with
 the same values to see every problem at once.
@@ -118,6 +128,8 @@ curl -s https://api.<domain>/health/db                             # "schema_cur
 Then by hand, on a phone over mobile data: sign up with a real mailbox → open the verification email
 link → log out → "Forgot password?" → open the reset link → log in with the new password. Check that the
 links start with `https://www.<domain>/auth/` and that the address bar loses the `#token=` part.
+Also reload `/app` while signed in (you stay signed in), and check in DevTools → Application that
+`localStorage` holds no token and the `masters_refresh` cookie on `api.<domain>` is HttpOnly/Secure.
 
 Search setup (after the first production deploy): verify the domain in Google Search Console and Bing
 Webmaster Tools, submit `https://www.<domain>/sitemap.xml`, and inspect the home page and one guide.

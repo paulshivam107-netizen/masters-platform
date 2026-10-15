@@ -66,8 +66,10 @@ Defined in `.env` (project root), consumed by backend settings:
 
 - `DATABASE_URL` (default: `sqlite:///./mba_platform.db`)
 - `SECRET_KEY`
-- `ACCESS_TOKEN_EXPIRE_MINUTES`
-- `REFRESH_TOKEN_EXPIRE_DAYS`
+- `ACCESS_TOKEN_EXPIRE_MINUTES` (default `15`; access tokens live in browser memory only)
+- `REFRESH_TOKEN_EXPIRE_DAYS` (default `30`)
+- `AUTH_COOKIE_NAME` (default `masters_refresh`), `AUTH_COOKIE_SECURE` (default: off in `development`, on elsewhere), `AUTH_COOKIE_SAMESITE` (default `lax`), `AUTH_COOKIE_DOMAIN` (default: API host only)
+- `REFRESH_REUSE_GRACE_SECONDS` (default `30`; concurrent refreshes from other tabs inside this window get a retryable `409 refresh_superseded` instead of revoking the session)
 - `MOCK_MODE` (`true` by default)
 - `ANTHROPIC_API_KEY` (optional; required when `MOCK_MODE=false`)
 - `GOOGLE_CLIENT_ID` (optional)
@@ -285,9 +287,14 @@ python3 scripts/seed_pilot_data.py
 
 ## Auth Session Notes
 
-- Auth now returns both `access_token` and `refresh_token`.
-- `POST /auth/refresh` rotates refresh tokens and issues a new access token.
-- `POST /auth/logout` can revoke current refresh token or all sessions.
+- Login/signup/Google return a 15-minute `access_token` (JWT with a `sid` session-family claim) in the body. The frontend keeps it in memory only, never in `localStorage`.
+- The refresh token is set as an `HttpOnly` cookie scoped to `/auth` on the API host (`Secure` outside development, `SameSite=Lax` by default). It is never returned in a response body; the database stores only its SHA-256 hash.
+- `POST /auth/refresh` (cookie) rotates the refresh token and returns a new access token; a page load restores the session this way. Replaying a rotated token after the grace window revokes the whole session family; inside it, the reply is `409 refresh_superseded` (another tab refreshed first).
+- `POST /auth/logout` revokes the current session (or every session with `all_sessions: true`), clears the cookie, and revoked sessions' access tokens stop working immediately. Other open tabs are signed out via `BroadcastChannel`.
+- Cookie endpoints (`/auth/refresh`, `/auth/logout`) require a trusted `Origin` (from `CORS_ORIGINS`/`CORS_ORIGIN_REGEX`) in pilot/staging/production. Other endpoints use the `Authorization: Bearer` header.
+- Deactivated users are rejected on every request; `ADMIN_EMAILS` grants admin only after that email is verified.
+- Sessions saved by older app versions (`refresh_token` in `localStorage`) are migrated to the cookie once and the stored values are deleted.
+- The frontend and API must share a registrable domain for the cookie to work (see `docs/DEPLOYMENT.md`).
 - Email verification flow:
   - `POST /auth/request-email-verification`
   - `POST /auth/verify-email`
