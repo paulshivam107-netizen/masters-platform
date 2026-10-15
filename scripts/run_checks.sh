@@ -59,10 +59,14 @@ echo "[1/7] Environment validation"
 "${PYTHON_BIN}" "${ROOT_DIR}/scripts/validate_env.py"
 
 if [[ "${RUN_DB_DRILL:-0}" == "1" ]]; then
-  echo "[2/7] DB backup/restore drill"
+  echo "[2/7] DB backup/restore drill (local SQLite file copy)"
   "${PYTHON_BIN}" "${ROOT_DIR}/scripts/db_backup_restore.py" drill
+  if [[ -n "${TEST_POSTGRES_ADMIN_URL:-}" ]]; then
+    echo "      PostgreSQL encrypted backup -> scratch restore drill"
+    DRILL_ADMIN_URL="${TEST_POSTGRES_ADMIN_URL}" "${PYTHON_BIN}" "${ROOT_DIR}/scripts/db_restore_drill.py"
+  fi
 else
-  echo "[2/7] DB backup/restore drill skipped (set RUN_DB_DRILL=1 to enable)"
+  echo "[2/7] DB backup/restore drills skipped (set RUN_DB_DRILL=1; PostgreSQL drill also needs TEST_POSTGRES_ADMIN_URL)"
 fi
 
 echo "[3/7] Backend API, interview and schema regression tests"
@@ -77,6 +81,7 @@ echo "      (PostgreSQL runtime-role tests run when TEST_POSTGRES_ADMIN_URL is s
     tests.test_admin_operations \
     tests.test_auth_email_flows \
     tests.test_schema_migrations \
+    tests.test_account_data \
     tests.test_postgres_runtime -v
 )
 

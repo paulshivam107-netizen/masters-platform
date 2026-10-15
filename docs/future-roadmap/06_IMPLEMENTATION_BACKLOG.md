@@ -54,6 +54,7 @@ The status of every ticket below is **planned**, unless its description says it 
 - **Work:** scoped exports, deletion manifest across profiles/session copies/notes, retention exceptions, encrypted backup policy and isolated restore drill.
 - **Acceptance:** export belongs only to requesting user; deleted interview content is inaccessible; published backup-retention limitations are accurate; restored DB includes expected rows and functioning ownership; finance reconciliation survives restore.
 - **Dependency:** R02; final retention policy. **Do not:** describe a local SQLite backup as production PostgreSQL recovery.
+- **Status:** implemented on branch `r06-export-deletion-backup`; evidence in [validation/2026-10-15/r06](../validation/2026-10-15/r06/README.md), manifest in [DATA_RETENTION.md](../DATA_RETENTION.md), runbook in [BACKUP_RESTORE_RUNBOOK.md](../BACKUP_RESTORE_RUNBOOK.md). Remaining: owner records the Neon restore window, chooses backup storage/schedule and an off-database deletion log; legal review of the privacy wording; first drill against a real Neon backup.
 
 ### R07 Real provider evaluation and model contract
 

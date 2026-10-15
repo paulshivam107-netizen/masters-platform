@@ -138,13 +138,19 @@ Pilot environment template:
 cat .env.pilot.example
 ```
 
-SQLite backup/restore/drill utility:
+SQLite backup/restore/drill utility (**local SQLite development databases only**, not production;
+production PostgreSQL backups, the encrypted `scripts/db_backup_pg.sh` export and the
+`scripts/db_restore_drill.py` restore drill are in [docs/BACKUP_RESTORE_RUNBOOK.md](docs/BACKUP_RESTORE_RUNBOOK.md)):
 
 ```bash
 python3 scripts/db_backup_restore.py backup --label pre-pilot
 python3 scripts/db_backup_restore.py drill
 python3 scripts/db_backup_restore.py restore --from /absolute/path/to/backup.sqlite3 --force
 ```
+
+Account data (R06): signed-in users can download all their data (`GET /account/export`) and delete
+their account (`POST /account/delete`, password or a fresh Google sign-in required) from Settings.
+What is deleted, anonymised or retained (including backup expiry) is in [docs/DATA_RETENTION.md](docs/DATA_RETENTION.md).
 
 ## E2E Smoke (Playwright)
 

@@ -130,6 +130,8 @@ Webmaster Tools, submit `https://www.<domain>/sitemap.xml`, and inspect the home
   the Neon database to the pre-release point (Neon restore/branch) and redeploy the previous image.
   If users have written data since, fix forward with a new migration; do not restore over their writes.
   Take a Neon branch/snapshot before every release that contains a migration.
+- **Backups, restore and the monthly restore drill:** [BACKUP_RESTORE_RUNBOOK.md](BACKUP_RESTORE_RUNBOOK.md).
+  Account deletion and backup retention promises: [DATA_RETENTION.md](DATA_RETENTION.md).
 
 ## Local equivalents
 

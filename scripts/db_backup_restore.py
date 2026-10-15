@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+"""SQLite / LOCAL DEVELOPMENT ONLY. Copies the local mba_platform.db file.
+
+This is NOT a production backup. Production runs on PostgreSQL (Neon): see
+docs/BACKUP_RESTORE_RUNBOOK.md, scripts/db_backup_pg.sh and scripts/db_restore_drill.py.
+"""
 import argparse
 import shutil
 import sqlite3
@@ -51,7 +56,7 @@ def run_drill(db_path: Path, output_dir: Path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="SQLite backup/restore/drill utility for pilot environments.")
+    parser = argparse.ArgumentParser(description="SQLite-only backup/restore/drill for LOCAL development databases. Not for production PostgreSQL; see docs/BACKUP_RESTORE_RUNBOOK.md.")
     parser.add_argument("--db", type=Path, default=DEFAULT_DB_PATH, help="Path to sqlite database file.")
     parser.add_argument("--backup-dir", type=Path, default=DEFAULT_BACKUP_DIR, help="Directory for backup artifacts.")
     subparsers = parser.add_subparsers(dest="command", required=True)
