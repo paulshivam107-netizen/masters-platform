@@ -8,6 +8,7 @@ import ProgramsPage from "../components/public/ProgramsPage";
 import {
   GuidesPage,
   GuidePage,
+  PracticePage,
   HelpPage,
   NotFoundPage,
 } from "../components/public/ResourcePages";
@@ -21,6 +22,7 @@ export default function StaticSite({ path }) {
             <Route path="/" element={<LandingPage />} />
             <Route path="/guides" element={<GuidesPage />} />
             <Route path="/guides/:slug" element={<GuidePage />} />
+            <Route path="/mba-interview-practice" element={<PracticePage />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="*" element={<NotFoundPage />} />
