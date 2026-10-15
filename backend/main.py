@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import get_settings
 from database import engine
 from observability import install_observability
+from routers.account_routes import router as account_router
 from routers.application_routes import router as application_router
 from routers.admin_routes import router as admin_router
 from routers.auth_routes import router as auth_router
@@ -92,6 +93,7 @@ install_observability(app)
 
 app.include_router(system_router)
 app.include_router(auth_router)
+app.include_router(account_router)
 app.include_router(application_router)
 app.include_router(reminder_router)
 app.include_router(essay_router)

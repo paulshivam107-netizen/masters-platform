@@ -49,7 +49,7 @@ Historical local-pilot runbook. For an external pilot, use the [current roadmap]
 
 1. `APP_ENV=pilot python3 scripts/validate_env.py --strict`
 2. Optional backup drill weekly:
-   - `python3 scripts/db_backup_restore.py drill`
+   - `python3 scripts/db_backup_restore.py drill` (local SQLite only; PostgreSQL: docs/BACKUP_RESTORE_RUNBOOK.md)
 3. Fresh backup before schema or auth changes:
    - `python3 scripts/db_backup_restore.py backup --label pre-change`
 

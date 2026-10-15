@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React from "react";
 import { useTheme } from "../../../contexts/ThemeContext";
 import { CheckIcon, MoonIcon, SunIcon } from "../../../app/icons";
+import AccountDataCard from "./AccountDataCard";
 
 function Toggle({ label, detail, checked, onChange, testId }) {
   return (
@@ -52,6 +53,7 @@ export default function SettingsView({
   feedbackSending,
   feedbackStatus,
   submitPilotFeedback,
+  logout,
 }) {
   const { theme, setTheme } = useTheme();
   return (
@@ -269,6 +271,7 @@ export default function SettingsView({
           {feedbackStatus && <p role="status">{feedbackStatus}</p>}
         </form>
       </section>
+      <AccountDataCard user={user} logout={logout} />
     </div>
   );
 }
