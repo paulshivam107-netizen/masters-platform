@@ -1,4 +1,5 @@
 import React from "react";
+import { catalogStatusLabel } from "../../../app/catalogAutofill";
 
 function TrackerView({
   onOpenApplication,
@@ -43,6 +44,9 @@ function TrackerView({
     wasEditing.current = showApplicationForm;
   }, [showApplicationForm, editingApplicationId]);
   const [catalogSelectionId, setCatalogSelectionId] = React.useState("");
+  const selectedCatalogItem = (programCatalog || []).find(
+    (item) => item.id === catalogSelectionId,
+  );
   const update = (key, value) =>
     setApplicationFormData((prev) => ({ ...prev, [key]: value }));
   const field = (key, label, type = "text", options = {}) => (
@@ -230,9 +234,30 @@ function TrackerView({
                   {(programCatalog || []).map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.school_name} · {item.program_name}
+                      {item.autofill_allowed ? "" : " (unverified)"}
                     </option>
                   ))}
                 </select>
+                {selectedCatalogItem && (
+                  <p
+                    className="tracker-catalog-meta"
+                    data-testid="tracker-catalog-status"
+                  >
+                    {catalogStatusLabel(selectedCatalogItem)}
+                    {selectedCatalogItem.source_url && (
+                      <>
+                        {" · "}
+                        <a
+                          href={selectedCatalogItem.source_url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          Official source
+                        </a>
+                      </>
+                    )}
+                  </p>
+                )}
                 <small>
                   {programCatalogLoading
                     ? "Loading templates…"

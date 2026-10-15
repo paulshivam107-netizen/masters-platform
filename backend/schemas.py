@@ -192,67 +192,6 @@ class TelemetryEventIngestResponse(BaseModel):
     event_id: int
 
 
-class ProgramCatalogItem(BaseModel):
-    id: str
-    school_name: str
-    program_name: str
-    degree: str
-    country: str
-    city: Optional[str] = None
-    application_fee: Optional[float] = None
-    fee_currency: str = "USD"
-    deadline_round_1: Optional[str] = None
-    deadline_round_2: Optional[str] = None
-    source_url: Optional[str] = None
-    last_updated: Optional[str] = None
-    confidence: Literal["low", "medium", "high"] = "medium"
-
-
-class ProgramCatalogSearchResponse(BaseModel):
-    total: int
-    items: List[ProgramCatalogItem]
-
-
-class AdminProgramCatalogUpsertRequest(BaseModel):
-    id: Optional[str] = Field(default=None, min_length=2, max_length=180)
-    school_name: str = Field(min_length=2, max_length=180)
-    program_name: str = Field(min_length=2, max_length=180)
-    degree: str = Field(min_length=2, max_length=120)
-    country: str = Field(min_length=2, max_length=120)
-    city: Optional[str] = Field(default=None, max_length=120)
-    application_fee: Optional[float] = Field(default=None, ge=0)
-    fee_currency: str = Field(default="USD", min_length=3, max_length=3)
-    deadline_round_1: Optional[str] = Field(default=None, max_length=40)
-    deadline_round_2: Optional[str] = Field(default=None, max_length=40)
-    source_url: Optional[str] = Field(default=None, max_length=600)
-    last_updated: Optional[str] = Field(default=None, max_length=40)
-    confidence: Literal["low", "medium", "high"] = "medium"
-
-    @field_validator(
-        "id",
-        "school_name",
-        "program_name",
-        "degree",
-        "country",
-        "city",
-        "deadline_round_1",
-        "deadline_round_2",
-        "source_url",
-        "last_updated",
-    )
-    @classmethod
-    def trim_catalog_strings(cls, value: Optional[str]) -> Optional[str]:
-        if value is None:
-            return None
-        cleaned = value.strip()
-        return cleaned or None
-
-    @field_validator("fee_currency")
-    @classmethod
-    def normalize_catalog_currency(cls, value: str) -> str:
-        return value.strip().upper()
-
-
 class AdminOverviewResponse(BaseModel):
     total_users: int
     active_users: int

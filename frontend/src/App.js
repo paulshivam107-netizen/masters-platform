@@ -9,8 +9,6 @@ import {
   useLocation,
 } from "react-router-dom";
 import {
-  createAdminProgramCatalogItemApi,
-  deleteAdminProgramCatalogItemApi,
   getAdminEventCoverageApi,
   getAdminEventBreakdownApi,
   getAdminEventsApi,
@@ -19,7 +17,6 @@ import {
   getAdminAiRuntimeConfigApi,
   getAdminUsersApi,
   updateAdminAiRuntimeConfigApi,
-  updateAdminProgramCatalogItemApi,
   updateAdminUserRoleApi,
   listProgramCatalogApi,
   assistEssayOutlineApi,
@@ -30,6 +27,7 @@ import SidebarNav from "./components/layout/SidebarNav";
 import TopControls from "./components/layout/TopControls";
 import AdminView from "./components/views/workspace/AdminView";
 import WorkspaceArea from "./components/views/WorkspaceArea";
+import { catalogAutofillPatch } from "./app/catalogAutofill";
 import LandingPage from "./components/public/LandingPage";
 import ProgramsPage from "./components/public/ProgramsPage";
 import AuthPage from "./components/public/AuthPage";
@@ -509,18 +507,14 @@ function AppContent() {
   const handleApplyProgramCatalogItem = React.useCallback(
     (item) => {
       if (!item) return;
+      // R09: only verified, fresh, current-cycle records may fill deadline/fee.
+      const { warning } = catalogAutofillPatch(item);
       setApplicationFormData((prev) => ({
         ...prev,
-        school_name: item.school_name || prev.school_name,
-        program_name: item.program_name || prev.program_name,
-        fee_currency: item.fee_currency || prev.fee_currency || "USD",
-        application_fee:
-          item.application_fee === null || item.application_fee === undefined
-            ? prev.application_fee
-            : String(item.application_fee),
-        deadline: item.deadline_round_1 || prev.deadline,
+        ...catalogAutofillPatch(item, prev).patch,
         requirements_notes: prev.requirements_notes || "",
       }));
+      if (warning) notify(warning);
 
       const normalizedDegree = (item.degree || item.program_name || "").trim();
       if (
@@ -538,6 +532,7 @@ function AppContent() {
       setApplicationFormData,
       setApplicationDegreeChoice,
       setApplicationCustomDegree,
+      notify,
     ],
   );
 
@@ -545,44 +540,6 @@ function AppContent() {
     const response = await assistEssayOutlineApi(payload);
     return response;
   }, []);
-
-  const handleAdminSaveProgramCatalogItem = React.useCallback(
-    async (programId, payload) => {
-      try {
-        setAdminError("");
-        if (programId) {
-          await updateAdminProgramCatalogItemApi(programId, payload);
-        } else {
-          await createAdminProgramCatalogItemApi(payload);
-        }
-        await Promise.all([loadAdminData(), loadProgramCatalog()]);
-      } catch (error) {
-        const message =
-          error?.response?.data?.detail ||
-          "Failed to save program catalog item";
-        setAdminError(message);
-        throw new Error(message);
-      }
-    },
-    [loadAdminData, loadProgramCatalog],
-  );
-
-  const handleAdminDeleteProgramCatalogItem = React.useCallback(
-    async (programId) => {
-      try {
-        setAdminError("");
-        await deleteAdminProgramCatalogItemApi(programId);
-        await Promise.all([loadAdminData(), loadProgramCatalog()]);
-      } catch (error) {
-        const message =
-          error?.response?.data?.detail ||
-          "Failed to delete program catalog item";
-        setAdminError(message);
-        throw new Error(message);
-      }
-    },
-    [loadAdminData, loadProgramCatalog],
-  );
 
   React.useEffect(() => {
     document.querySelector(".main-content")?.scrollTo?.({ top: 0 });
@@ -722,12 +679,6 @@ function AppContent() {
                     currentUserId={user?.id}
                     onChangeRole={handleAdminRoleChange}
                     onRefresh={loadAdminData}
-                    programCatalog={programCatalog}
-                    programCatalogLoading={programCatalogLoading}
-                    onSaveProgramCatalogItem={handleAdminSaveProgramCatalogItem}
-                    onDeleteProgramCatalogItem={
-                      handleAdminDeleteProgramCatalogItem
-                    }
                     onUpdateAiRuntimeConfig={handleAdminUpdateAiRuntimeConfig}
                   />
                 ) : (

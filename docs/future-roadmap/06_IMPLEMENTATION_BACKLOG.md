@@ -75,6 +75,7 @@ The status of every ticket below is **planned**, unless its description says it 
 - **Work:** replace mutable container JSON with DB-backed revisions; source/freshness/rights status; draft → review → publish; import seed as unverified until checked.
 - **Acceptance:** restart/redeploy preserves changes; wrong-cycle data cannot silently autofill; unpublished/stale records remain visibly unverified; corrections retain history.
 - **Dependency:** R02. **Pilot shortcut:** disable factual catalogue editing/autofill and allow manual programme entry until this is complete; do not present seed data as authoritative.
+- **Status:** implemented on branch `r09-catalogue-durability` (migration 0007 on 0004); evidence in [validation/2026-10-15/r09](../validation/2026-10-15/r09/README.md). Remaining: an admin must import the seed and review/publish each programme against its official source before anything is public; rights status is stored but not yet editable in the UI.
 
 ### R10 Pilot instrumentation support and policies
 
