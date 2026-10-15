@@ -1,17 +1,28 @@
 from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from config import get_settings
+from sqlalchemy.orm import declarative_base, sessionmaker
+
+from config import get_settings, sqlalchemy_url
 
 settings = get_settings()
-DATABASE_URL = settings.DATABASE_URL
-if DATABASE_URL.startswith("sqlite"):
-    connect_args = {"check_same_thread": False}
-else:
-    # Fail fast on bad managed DB connectivity instead of hanging requests.
-    connect_args = {"connect_timeout": 5}
+DATABASE_URL = sqlalchemy_url(settings.DATABASE_URL)
 
-engine = create_engine(DATABASE_URL, connect_args=connect_args, pool_pre_ping=True)
+
+def engine_options(url: str) -> dict:
+    if url.startswith("sqlite"):
+        return {"connect_args": {"check_same_thread": False}, "pool_pre_ping": True}
+    return {
+        # Fail fast on bad managed DB connectivity instead of hanging requests.
+        "connect_args": {"connect_timeout": 5},
+        "pool_pre_ping": True,
+        "pool_size": settings.DB_POOL_SIZE,
+        "max_overflow": settings.DB_MAX_OVERFLOW,
+        "pool_timeout": settings.DB_POOL_TIMEOUT_SECONDS,
+        # Managed Postgres (Neon) closes idle connections; recycle before that happens.
+        "pool_recycle": settings.DB_POOL_RECYCLE_SECONDS,
+    }
+
+
+engine = create_engine(DATABASE_URL, **engine_options(DATABASE_URL))
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

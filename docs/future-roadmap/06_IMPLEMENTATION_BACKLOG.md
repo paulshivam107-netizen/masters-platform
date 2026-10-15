@@ -20,6 +20,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R02 PostgreSQL migrations and runtime roles
 
+- **Status:** implemented on branch `r02-postgres-migrations` (stacked on R01); evidence in [validation/2026-10-15/r02](../validation/2026-10-15/r02/README.md). Remaining: run the same steps against the real Neon project once created.
 - **Scope:** `backend/database.py`, `backend/main.py`, `backend/services/migrations.py`, migration tooling and synthetic DB tests; 10–18h.
 - **Work:** Alembic baseline/revisions, remove runtime DDL, define migration owner/runtime grants, reconcile RLS role assumptions and configure small explicit pools.
 - **Acceptance:** empty DB and upgrade-from-baseline work; runtime cannot change schema; actual runtime role completes owned operations and rejects other-user access; concurrent quota/idempotency cases pass; failed migration leaves old release recoverable.

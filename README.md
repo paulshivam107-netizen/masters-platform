@@ -245,7 +245,38 @@ bash scripts/run_checks.sh
 - Run end-to-end smoke:
   - `bash scripts/run_e2e_full.sh`
 
-## Migration + Seed (Pilot)
+## Database migrations
+
+The schema is versioned with Alembic (`backend/migrations/versions`). The API never changes the
+schema in pilot/staging/production; it refuses to start unless the database is at the release's
+migration head. In development (`APP_ENV=development`) it upgrades the local database at startup
+unless `AUTO_MIGRATE_ON_STARTUP=false`.
+
+```bash
+python3 scripts/db_migrate.py           # upgrade to head; adopts a pre-Alembic DB first
+python3 scripts/db_migrate.py status    # current vs head (exit 1 if behind)
+python3 scripts/db_migrate.py check     # exit 1 if the live schema drifts from the models
+```
+
+Release order for PostgreSQL (e.g. Neon):
+
+1. Back up / branch the database.
+2. `MIGRATION_DATABASE_URL=<owner, direct endpoint> python3 scripts/db_migrate.py`
+3. First time per database: `APP_RUNTIME_DB_PASSWORD=<secret> python3 scripts/db_roles.py` creates
+   the `app_runtime` role (row read/write only; cannot create, alter or drop anything).
+4. Start the API with `DATABASE_URL=<app_runtime, pooled endpoint>`; check `GET /health/db`
+   reports `schema_current: true`.
+
+Changing a model: edit `backend/models.py`, then from `backend/` run
+`alembic revision --autogenerate -m "describe change"`, review the generated file, and commit it.
+`tests/test_schema_migrations.py` fails if models and migrations disagree. Never edit a revision
+that has been applied to a shared database; add a new one.
+
+PostgreSQL runtime tests (`backend/tests/test_postgres_runtime.py`: restricted role, cross-account
+isolation, concurrent quota/idempotency/token use) run when `TEST_POSTGRES_ADMIN_URL` points at a
+disposable server; CI provides one.
+
+## Seed (local pilot data only)
 
 ```bash
 python3 scripts/db_migrate.py
@@ -311,7 +342,7 @@ Open `/app/admin` with an active admin account. Sections can be linked directly,
 
 ### Upgrade and validation
 
-Restart the backend after updating code. Standard startup creates the `admin_economics_scenarios` table and applies additive feedback/operation columns; `python scripts/db_migrate.py` performs the same migration explicitly. Back up any valuable database before upgrades. Never run seed/reset scripts against existing applicant data.
+Run `python scripts/db_migrate.py` before restarting the backend after updating code (development startup does this automatically). See [Database migrations](#database-migrations). Back up any valuable database before upgrades. Never run seed/reset scripts against existing applicant data.
 
 New regression coverage: `backend/tests/test_admin_operations.py`, `frontend/src/components/views/workspace/AdminPilot.test.js`, and `adminEconomics.test.js`. The standard CI runner includes the admin backend suite. Validation used an isolated SQLite database and synthetic admin/member accounts, with no provider calls. A real PostgreSQL upgrade and real-provider billing reconciliation remain deployment checks.
 

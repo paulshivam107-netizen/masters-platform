@@ -66,6 +66,13 @@ def main():
     if settings.is_production_like_env and settings.has_database_url_placeholder:
         errors.append("DATABASE_URL contains placeholder credentials. Replace with a real password/token.")
 
+    if settings.is_production_like_env and settings.is_postgres_database:
+        if not settings.MIGRATION_DATABASE_URL:
+            warnings.append("MIGRATION_DATABASE_URL is not set; migrations will use DATABASE_URL. "
+                            "Use a separate schema-owner connection and a restricted runtime role.")
+        elif settings.MIGRATION_DATABASE_URL.strip() == settings.DATABASE_URL.strip():
+            warnings.append("DATABASE_URL equals MIGRATION_DATABASE_URL: the API would run with schema-owner rights.")
+
     db_url = settings.DATABASE_URL
     if db_url.startswith("sqlite:///"):
         sqlite_path = db_url.replace("sqlite:///", "", 1)

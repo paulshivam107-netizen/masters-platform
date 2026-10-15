@@ -8,10 +8,29 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 DEFAULT_SECRET_VALUES = {"", "your-secret-key-change-in-production", "changeme", "secret", "default"}
 
 
+def sqlalchemy_url(url: str) -> str:
+    """Normalise provider-style URLs for SQLAlchemy 2 (which rejects the postgres:// scheme)."""
+    url = (url or "").strip()
+    if url.startswith("postgres://"):
+        return "postgresql://" + url[len("postgres://"):]
+    return url
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     DATABASE_URL: str = "sqlite:///./mba_platform.db"
+    # Schema-owner connection used only by migrations (Neon: direct, non-pooled endpoint).
+    # DATABASE_URL should then use a restricted runtime role. Falls back to DATABASE_URL.
+    MIGRATION_DATABASE_URL: Optional[str] = None
+    # Small explicit pool per API process. Neon's pooled endpoint multiplexes behind this.
+    DB_POOL_SIZE: int = 5
+    DB_MAX_OVERFLOW: int = 5
+    DB_POOL_TIMEOUT_SECONDS: int = 10
+    DB_POOL_RECYCLE_SECONDS: int = 300
+    # Development convenience: upgrade the schema at startup. Never honoured in
+    # pilot/staging/production, where a release step runs migrations instead.
+    AUTO_MIGRATE_ON_STARTUP: bool = True
     SECRET_KEY: str = "your-secret-key-change-in-production"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30

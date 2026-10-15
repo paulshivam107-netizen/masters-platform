@@ -13,7 +13,7 @@ from auth import create_access_token
 from database import Base, get_db
 from models import User, PilotFeedback, InterviewSession, InterviewOperation, AdminEvent, ResumeQuestionSet
 from routers.admin_operations import router
-from services.migrations import run_admin_operations_migrations
+from services.legacy_schema import run_admin_operations_migrations
 from services.interviews import run_step
 from services.interview_provider import ProviderFailure
 
