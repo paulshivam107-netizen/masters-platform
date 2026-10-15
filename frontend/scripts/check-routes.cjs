@@ -2,8 +2,13 @@
 // Verify a deployed (or locally served) frontend routes the way production should:
 //   npm run check:routes -- https://www.yourdomain.in
 //   npm run check:routes -- http://127.0.0.1:3181
+//   npm run check:routes -- https://<branch>.<project>.pages.dev --preview
+// --preview: the build has indexing disabled, so every page must be noindex.
 // Exits non-zero on any mismatch. Read-only GET requests only.
-const base = (process.argv[2] || "").replace(/\/+$/, "");
+const preview = process.argv.includes("--preview");
+const base = (
+  process.argv.slice(2).find((a) => !a.startsWith("--")) || ""
+).replace(/\/+$/, "");
 if (!/^https?:\/\//.test(base)) {
   console.error("Usage: node scripts/check-routes.cjs <base-url>");
   process.exit(2);
@@ -51,9 +56,10 @@ function robotsOf(res, html) {
       if (got !== location)
         problems.push(`location ${got || "(none)"}, expected ${location}`);
     }
-    if (robots && robotsOf(res, html) !== robots)
-      problems.push(`robots ${robotsOf(res, html)}, expected ${robots}`);
-    if (robots === "index") {
+    const wantRobots = preview && robots ? "noindex" : robots;
+    if (wantRobots && robotsOf(res, html) !== wantRobots)
+      problems.push(`robots ${robotsOf(res, html)}, expected ${wantRobots}`);
+    if (robots === "index" && !preview) {
       const canonical = (html.match(/<link rel="canonical" href="([^"]+)"/) ||
         [])[1];
       if (canonical && new URL(canonical).pathname !== path)

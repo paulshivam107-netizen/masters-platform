@@ -111,6 +111,7 @@ Redirect from `<project>.pages.dev` to `www.<domain>` so only one host serves pr
 
 ```bash
 npm --prefix frontend run check:routes -- https://www.<domain>   # 16 status/redirect/robots/canonical checks
+npm --prefix frontend run check:routes -- https://<branch>.<project>.pages.dev --preview   # preview builds
 curl -s https://api.<domain>/health/db                             # "schema_current": true
 ```
 
