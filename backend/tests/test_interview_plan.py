@@ -183,13 +183,17 @@ class ConflictTest(unittest.TestCase):
                         question="Your résumé lists an internship; could you explain the four interns reporting to you?")
         self.assertEqual(ok["kind"], "clarification")
 
-    def test_exhausted_branch_allows_only_a_conflict_clarification(self):
-        turns = exhausted_turns()
+    def test_branch_limit_allows_one_clarification_then_only_conflicts(self):
         latest = {"anchor_turn_id": "a3", "anchor_quote": "reviewed the evidence", "kind": "clarification",
-                  "question": "Could you reconcile that with what you said earlier?"}
+                  "question": "Could you give a concrete example of that?"}
+        self.assertEqual(self.check(exhausted_turns(), **latest)["kind"], "clarification")  # at the limit
+        with self.assertRaises(provider.ProviderFailure):  # follow-ups stay impossible at the limit
+            self.check(exhausted_turns(), **{**latest, "kind": "follow_up"})
+        beyond = exhausted_turns(follow_ups=3)  # one clarification already used up
+        latest.update(anchor_turn_id="a4")
         with self.assertRaises(provider.ProviderFailure):
-            self.check(turns, **latest)
-        self.assertEqual(self.check(turns, conflict="Differs from a1.", **latest)["kind"], "clarification")
+            self.check(beyond, **latest)
+        self.assertEqual(self.check(beyond, conflict="Differs from a1.", **latest)["kind"], "clarification")
 
     def test_model_cannot_end_the_session(self):
         body, _ = NextQuestionRequestTest.sent(self, exhausted_turns(follow_ups=1), {

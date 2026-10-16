@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v8"
+PROMPT_VERSION = "mba-interview-v9"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -189,9 +189,9 @@ def next_question(context, transcript):
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
         "Return only a question, without feedback or an example answer."
-        + (" next_step.move_on is TRUE: this branch is finished. Unless conflict is not empty, ask a new_topic "
-           "question about a different priority topic not yet covered; do not continue or refer back to the "
-           "previous story." if move_on else ""),
+        + (" next_step.move_on is TRUE: this branch is finished. Ask a new_topic question about a different "
+           "priority topic not yet covered, unless conflict is not empty or the latest answer is too vague to assess, "
+           "in which case ask one clarification of it; do not otherwise continue the previous story." if move_on else ""),
         context, transcript, NextQuestion, max_tokens=800, schema=_request_schema(transcript, move_on),
     )
     try:
@@ -207,7 +207,11 @@ def _check_next_question(result, context, transcript):
     conflict, move_on = result["conflict"].strip(), context["next_step"]["move_on"]
     if conflict and result["kind"] != "clarification":
         raise ProviderFailure("The interviewer needs to clarify your latest answer first. Please retry.")
-    if move_on and (result["kind"] == "follow_up" or (result["kind"] == "clarification" and not conflict)):
+    # At the branch limit one clarification of the latest answer is still allowed (a vague answer deserves
+    # it); beyond that only a stated conflict justifies another, so a thread cannot run on.
+    extra_clarification = result["kind"] == "clarification" and (
+        conflict or context["next_step"]["branch_depth"] <= context["next_step"]["max_follow_ups"])
+    if move_on and not (result["kind"] == "new_topic" or extra_clarification):
         raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
     if result["kind"] not in ("new_topic", "end_requested"):
         # A clarification probes the latest answer; a follow-up may return to any earlier answer.
