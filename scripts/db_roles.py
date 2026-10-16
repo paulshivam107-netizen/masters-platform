@@ -53,7 +53,15 @@ def apply_runtime_role(conn, role: str, password: str) -> None:
             cur.execute(sql.SQL("CREATE ROLE {} LOGIN PASSWORD {}").format(r, sql.Literal(password)))
         else:
             cur.execute(sql.SQL("ALTER ROLE {} WITH LOGIN PASSWORD {}").format(r, sql.Literal(password)))
-        cur.execute(sql.SQL("ALTER ROLE {} NOSUPERUSER NOCREATEDB NOCREATEROLE NOREPLICATION NOBYPASSRLS").format(r))
+        # Strip only attributes the role actually has: managed hosts such as Neon do not let the
+        # (non-superuser) owner even restate NOSUPERUSER. A held attribute that cannot be removed
+        # still fails loudly here.
+        cur.execute("SELECT rolsuper, rolcreatedb, rolcreaterole, rolreplication, rolbypassrls "
+                    "FROM pg_roles WHERE rolname = %s", (role,))
+        held = [name for name, value in zip(("SUPERUSER", "CREATEDB", "CREATEROLE", "REPLICATION", "BYPASSRLS"),
+                                            cur.fetchone()) if value]
+        if held:
+            cur.execute(sql.SQL("ALTER ROLE {} " + " ".join("NO" + name for name in held)).format(r))
         # Nobody but the owner may create objects in the app schema.
         cur.execute("REVOKE CREATE ON SCHEMA public FROM PUBLIC")
         cur.execute(sql.SQL("GRANT CONNECT ON DATABASE {} TO {}").format(sql.Identifier(database), r))
