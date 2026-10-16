@@ -73,6 +73,8 @@ class Run:
         self.max_spend_paise = max_spend_paise
         # Conservative: unknown outcomes count at their reservation.
         self.spent_paise = 0
+        # The latest parsed model output, so a rejected one can be inspected (results are gitignored).
+        self.last_output = None
         (out_dir / "sessions").mkdir(parents=True)
         self._calls = (out_dir / "calls.jsonl").open("a", encoding="utf-8")
 
@@ -88,6 +90,7 @@ class Run:
                 raise BudgetExceeded(f"next call could exceed {self.max_spend_paise} paise")
             started = time.perf_counter()
             result, usage, failure, billing, message = None, {}, None, "charged", None
+            self.last_output = None
             try:
                 result, usage = action()
             except provider.ProviderFailure as exc:
@@ -105,7 +108,8 @@ class Run:
             self.spent_paise += cost
             self._record({
                 "profile_id": profile_id, "step": step, "operation": operation, "attempt": attempt,
-                "ok": failure is None, "failure_code": failure, "failure_message": message, "billing": billing, "latency_ms": latency_ms,
+                "ok": failure is None, "failure_code": failure, "failure_message": message,
+                "rejected_output": self.last_output if failure else None, "billing": billing, "latency_ms": latency_ms,
                 "model": self.model, "input_tokens": input_tokens, "output_tokens": output_tokens,
                 "reserved_input_tokens": reserve_in, "reserved_output_tokens": reserve_out,
                 "reserved_paise": reserved, "cost_paise": cost,
@@ -228,6 +232,23 @@ def estimate(profiles, *, model=DEFAULT_MODEL, max_attempts=3):
 
 
 @contextlib.contextmanager
+def _capture_outputs(run):
+    """Wrap provider._structured (used by next_question, feedback and generate_questions)."""
+    original = provider._structured
+
+    def structured(*args, **kwargs):
+        result, usage = original(*args, **kwargs)
+        run.last_output = result
+        return result, usage
+
+    provider._structured = structured
+    try:
+        yield
+    finally:
+        provider._structured = original
+
+
+@contextlib.contextmanager
 def _model(model):
     previous = os.environ.get("INTERVIEW_TEXT_MODEL")
     os.environ["INTERVIEW_TEXT_MODEL"] = model
@@ -262,7 +283,7 @@ def run_suite(profiles, *, provider="fake", model=DEFAULT_MODEL, out_root=RESULT
             "started_at": datetime.now(timezone.utc).isoformat()}
     fake = FakeOpenAI(fault_every=fake_fault_every)
     try:
-        with _model(model), (fake.installed() if provider == "fake" else contextlib.nullcontext()):
+        with _model(model), _capture_outputs(run), (fake.installed() if provider == "fake" else contextlib.nullcontext()):
             for profile in profiles:
                 run_profile(run, profile)
     except BudgetExceeded:

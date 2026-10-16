@@ -78,6 +78,11 @@ class RunnerTest(unittest.TestCase):
                          ("provider_error", "charged")} <= failures, failures)
         self.assertIn("provider_timeout", {c["failure_code"] for c in calls})
         self.assertTrue(all(c["failure_message"] for c in calls if not c["ok"]))
+        # A parsed-but-rejected output is kept for diagnosis; transport failures have none.
+        bad_anchor = [c for c in calls if (c["rejected_output"] or {}).get("anchor_quote") == "text that is not in the answer"]
+        self.assertTrue(bad_anchor)
+        self.assertTrue(all(c["rejected_output"] is None for c in calls if c["failure_code"] == "provider_timeout"))
+        self.assertTrue(all(c["rejected_output"] is None for c in calls if c["ok"]))
         for call in calls:
             if call["billing"] == "none":
                 self.assertEqual(call["cost_paise"], 0)
