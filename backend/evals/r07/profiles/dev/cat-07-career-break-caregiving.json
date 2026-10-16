@@ -1,0 +1,39 @@
+{
+  "id": "cat-07-career-break-caregiving",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "BCom graduate, one-year career gap for caregiving",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 1,
+    "notes": "About one year of full-time work, then a gap of one year spent caregiving for a family member. Mention the gap only as the applicant describes it. Must not assume anything about the family member or reasons beyond caregiving."
+  },
+  "resume_text": "Neha Bansal (synthetic)\nEXPERIENCE\nAccounts Executive, a mid-sized logistics firm, Jaipur (Jul 2023 - Jun 2024)\n- Processed 300 vendor invoices a month; reconciled bank statements weekly\n- Reduced invoice backlog from 6 weeks to 2 weeks\nCareer break (Jul 2024 - Jun 2025): caregiving for a family member\n- During this period completed an online course on financial modelling\nEDUCATION\nB.Com, a university in Jaipur, 2023, 79%\nClass XII, Commerce, 90%\nSKILLS\nTally, Excel (pivot tables, VLOOKUP), GST basics",
+  "background": "One year as an accounts executive, followed by a year out of work for caregiving. Now ready to return.",
+  "goal": "Return through an MBA into corporate finance, ideally in a manufacturing or logistics company.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I worked for a year as an accounts executive at a logistics firm in Jaipur. I processed about 300 vendor invoices a month, and cut the invoice backlog from six weeks to two. After that I took a year off to look after a family member. It was my choice and I don't regret it. In that time I did an online course on financial modelling to stay current. I now want an MBA to move from processing accounts to making financial decisions."
+    },
+    {
+      "tag": "specific",
+      "text": "The backlog fell because I grouped invoices by vendor and cleared the oldest vendors first. I also asked the warehouse to send delivery proof on the same day, which stopped many queries. I did that in my second quarter."
+    },
+    {
+      "tag": "vague",
+      "text": "The break gave me many life lessons. I learned patience, resilience and time management, and I think it made me a more well-rounded person and ready for all challenges."
+    },
+    {
+      "tag": "stop",
+      "text": "I would like to end the session here, please. I need to attend to something at home now. Could I see the feedback?"
+    },
+    {
+      "tag": "unknown",
+      "text": "I am not sure what the exact vendor count was. I remember the invoice numbers more than the number of vendors, so I would not like to guess."
+    }
+  ]
+}

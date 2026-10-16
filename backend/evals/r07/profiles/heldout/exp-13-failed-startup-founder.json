@@ -1,0 +1,39 @@
+{
+  "id": "exp-13-failed-startup-founder",
+  "split": "heldout",
+  "route": "experienced",
+  "programme_name": "PGPX (IIM Ahmedabad)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "startup founder, company shut down",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Founded a startup that shut down after 3 years. Led a team of up to 9 at peak, not now. Currently winding up or between roles. Investor names and amounts are confidential. Must not assume the startup succeeded or still operates."
+  },
+  "resume_text": "Yash Trivedi (synthetic)\nEXPERIENCE\nCo-founder and CEO, a B2B grocery-supply startup, Bengaluru (2021-2024; shut down 2024)\n- Built a supply app for 600 kirana stores; peak team of 9\n- Reached monthly gross sales of Rs 1.2 crore at peak; ran out of runway when funding did not close\n- Wound up the company, cleared vendor dues and closed the operations in 2024\nProduct Analyst, an e-commerce company, Bengaluru (2019-2021)\nEDUCATION\nB.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA\nGMAT 720",
+  "background": "Six years of work, three of them running a startup that has since shut down. Previously a product analyst.",
+  "goal": "Return to a product or operations leadership role at a growth-stage company, and possibly found again later.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I spent three years co-founding a B2B grocery-supply startup in Bengaluru. We built an app for about 600 kirana stores, and at peak our team had nine people and gross sales of Rs 1.2 crore a month. We shut down in 2024 when a funding round did not close. I wound up the company and cleared our vendor dues. I'm applying now because I made most decisions on instinct, and I want to learn the finance and operating discipline I was missing."
+    },
+    {
+      "tag": "contradiction",
+      "text": "The funding round did close, actually. We shut down only because my co-founder wanted to leave. Money was never a problem for us."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know exactly why that investor pulled out. They gave us a short note, and I never got a full explanation."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think shutting down means I failed completely. Most of our retailers stayed for 18 months, and we paid everyone. I would like to talk about what I'd do differently."
+    },
+    {
+      "tag": "vague",
+      "text": "The startup journey taught me resilience, agility and learning from failure. It was a roller-coaster, and I now have a growth mindset that I can bring anywhere."
+    }
+  ]
+}

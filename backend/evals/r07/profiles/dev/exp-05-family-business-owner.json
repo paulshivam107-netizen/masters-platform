@@ -1,0 +1,39 @@
+{
+  "id": "exp-05-family-business-owner",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "IPMX (IIM Lucknow)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "family auto-parts business owner-operator",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 8,
+    "notes": "Runs the family auto-parts business; has about 22 employees. Business financials are family-confidential. Did not work elsewhere. Must not assume a corporate employer."
+  },
+  "resume_text": "Nikhil Agarwal (synthetic)\nEXPERIENCE\nManaging Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)\n- Run day-to-day operations with about 22 employees; 3 supervisors report to me\n- Added a second shift; monthly output went up from 9,000 to 13,000 pieces\n- Moved 70% of customer billing from cash to bank transfer\nTrainee, same business (2016-2017)\nEDUCATION\nB.Com, a university in Ludhiana, 2016, 70%\nClass XII, Commerce, 82%\nOTHER\nMember, local industries association; Hindi, Punjabi, English",
+  "background": "Eight years running my family's auto-parts business in Ludhiana, with about 22 employees. I've never worked elsewhere.",
+  "goal": "Professionalise the business, bring in systems and growth capital, and expand to a second plant.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me. Two years ago I added a second shift and our monthly output went up from 9,000 to 13,000 pieces. I also moved 70% of customer billing from cash to bank transfer. I'm applying to the one-year programme at IIM Lucknow because I learned everything on the job, and I'd like a framework for finance, costing and hiring."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think the assumption that family businesses lack discipline is right in our case. We keep stock registers, and we pay on fixed dates. I'd like you to ask about specific problems."
+    },
+    {
+      "tag": "vague",
+      "text": "Our business is built on trust and long-term relationships. We believe in quality and customer satisfaction, and our values have helped us grow steadily over the years."
+    },
+    {
+      "tag": "contradiction",
+      "text": "The second shift was my father's decision. I wasn't involved. I only managed the supervisors after he decided it."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share our profits, our customers' names or our bank loan details. They belong to the family and our partners, and I'd need their permission."
+    }
+  ]
+}

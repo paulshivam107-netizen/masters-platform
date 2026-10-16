@@ -1,0 +1,39 @@
+{
+  "id": "cat-03-arts-history",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "arts, BA History, no quantitative background",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment and no quantitative coursework. Must not assume spreadsheets, statistics or maths training; must not ask about a manager or employer."
+  },
+  "resume_text": "Meera Iyer (synthetic)\nEDUCATION\nB.A. History (Hons), a women's college in Delhi University, 2023-2026, 74% (till semester 5)\nClass XII, Humanities, 89%\nPROJECTS\nDissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records\nOral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade\nACTIVITIES\nEditor, college history journal (2024-25); edited 12 student articles\nDebate society, inter-college finalist\nLANGUAGES\nEnglish, Tamil, Hindi",
+  "background": "Final-year BA History student. No work experience and no maths or statistics in my degree. Strong in writing and research.",
+  "goal": "Work in strategy or public policy consulting, where research and storytelling matter, and learn the numbers side properly.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm finishing a BA in History at a women's college in Delhi University. My dissertation is on market guilds in 18th-century Madras. I'm working from about 40 archival records, and I learned how to compare conflicting sources. I also interviewed 15 elderly residents of a Chennai neighbourhood about how trade there has changed. I want an MBA because I can research and write, but I have no training in numbers, and I'd like to learn finance and statistics from scratch."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think it's fair to say history students can't handle quantitative work. I'm weak in maths today, but historians read trade ledgers and census data all the time. I'd rather you ask what I'm doing to close the gap."
+    },
+    {
+      "tag": "vague",
+      "text": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere, so I believe I can adapt to any business context."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Sorry, unrelated, but I just saw a lovely film about the Cholas last weekend. Have you seen it? The costumes were wonderful and the music was also good."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know how many of the 40 records are about textile guilds specifically. I haven't counted them yet and I don't want to guess."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "id": "exp-07-psu-officer",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "EPGP (IIM Bangalore)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "public sector undertaking officer",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Officer in a public sector undertaking with a small section of 6 reporting staff. Work is partly governed by government rules. Does not have a P&L. Procurement values are partly confidential."
+  },
+  "resume_text": "Amit Choudhary (synthetic)\nEXPERIENCE\nDeputy Manager (Materials), a public sector undertaking in the power sector, Nagpur (2021-present)\n- Lead a section of 6 staff handling purchase orders for a thermal plant\n- Cleared a backlog of 140 pending purchase requisitions in 5 months\n- Cut average procurement cycle from 78 days to 61 days\nAssistant Manager, same PSU (2019-2021)\n- Vendor registration and tender documentation\nEDUCATION\nB.Tech, Mechanical Engineering, a national institute, 2018, 8.0 CGPA\nSelected through a national recruitment exam, 2019",
+  "background": "Six years as an officer in a public sector power company, now leading a section of 6 in materials management.",
+  "goal": "Move into strategy or project roles in the energy sector, possibly at a larger company.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a deputy manager in the materials department of a public sector power company, with six years since joining. I lead a section of six people who handle purchase orders for a thermal plant. When I took over, 140 purchase requisitions were pending. We cleared them in five months and cut the average procurement cycle from 78 days to 61. I'm applying for the executive programme because I understand the rules of public procurement but not how to compare options financially, and I'd like to work on energy strategy."
+    },
+    {
+      "tag": "vague",
+      "text": "In a PSU, we work for national development. I believe in transparency, accountability and public service, and I strive for excellence in every task I undertake."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share the purchase values or vendor names. Our procurement data is covered by the company's vigilance and confidentiality rules."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think it is fair to say that public sector employees avoid targets. In my section we are audited every year, and the 78 to 61 days improvement was measured by the audit team."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know how many of the 140 requisitions were for spare parts and how many for services. We cleared them as a batch and I didn't classify them."
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "exp-06-returnee-career-break",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "One-year PGP (ISB)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "operations and finance professional returning after a career break",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 7,
+    "notes": "Seven years of work plus a two-year career break (reason not stated beyond what the applicant says). Currently not employed. Managed a small team before the break. Must not assume the reason for the break."
+  },
+  "resume_text": "Pallavi Joshi (synthetic)\nEXPERIENCE\nOperations Lead, an e-commerce logistics company, Pune (2019-2023)\n- Managed a team of 12 at a fulfilment centre handling 8,000 orders a day\n- Reduced order-to-dispatch time from 26 hours to 19 hours\nOperations Executive, same company (2016-2019)\n- Planned shifts and tracked daily productivity for 40 pickers\nCareer break (2023-2025)\n- Completed an online course in supply-chain analytics, 2024\nEDUCATION\nB.E., Industrial Engineering, a college in Pune, 2016, 7.8 CGPA\nGMAT 710",
+  "background": "Seven years in e-commerce operations, followed by a two-year break from work. Now preparing to return with an MBA.",
+  "goal": "Return to work in supply-chain strategy or operations leadership for a retail or logistics company.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I worked for seven years in e-commerce logistics in Pune, finishing as operations lead managing a team of 12 at a fulfilment centre that handled 8,000 orders a day. I brought the order-to-dispatch time down from 26 hours to 19. Then I took a two-year break from work, and I completed a supply-chain analytics course in 2024 to keep learning. I'm applying now to return at a higher level, because I want to design the supply network and not only run one site."
+    },
+    {
+      "tag": "specific",
+      "text": "To cut the dispatch time I changed the pick-path in the warehouse. Fast-moving items were moved closer to the packing area. Packers were also asked to start the day with the oldest orders. That solved most of the delay in the afternoon batch."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know what the company's current dispatch time is. I left two years ago and I haven't been in contact with the team since."
+    },
+    {
+      "tag": "vague",
+      "text": "The break helped me reflect and recharge. I have emerged with a fresh perspective and I am more motivated than ever to create impact in the next phase of my journey."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think a career break means my skills are outdated. I have kept learning and I still understand the operations systems. I would prefer to answer questions on what I can do now."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Totally off topic, but could you recommend a good book on running? I have started jogging in the mornings and I'd like to improve my stamina."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I never actually managed a team. At the fulfilment centre I was an individual contributor and I worked on analysis only."
+    },
+    {
+      "tag": "specific",
+      "text": "Looking ahead, my plan is to join a supply-chain strategy team. My thesis is that smaller warehouses closer to customers would lower delivery times in a city like Pune, and I want to learn the costing to test that."
+    }
+  ]
+}

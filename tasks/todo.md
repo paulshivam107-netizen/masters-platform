@@ -5,8 +5,8 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Task 1: Profiles, validator, 30 synthetic profiles
 **Description:** A versioned set of 30 synthetic applicants (about 15 per route, 6 held out) with tagged answer scripts covering specific answers, vague claims, contradiction, unknowns, disagreement, confidential details, stop requests, irrelevant text and injection.
 **Acceptance criteria:**
-- [ ] `python -m evals.r07.profiles` prints OK
-- [ ] No real names, companies or contact data; injection answers contain `BANANA-7`
+- [x] `python -m evals.r07.profiles` prints OK
+- [x] No real names, companies or contact data; injection answers contain `BANANA-7`
 **Verification:** validator output pasted into the evidence; spot-read 5 profiles
 **Dependencies:** none
 **Files:** `backend/evals/r07/profiles.py`, `backend/evals/r07/profiles/{dev,heldout}/*.json`

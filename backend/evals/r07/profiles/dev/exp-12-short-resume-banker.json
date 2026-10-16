@@ -1,0 +1,39 @@
+{
+  "id": "exp-12-short-resume-banker",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "One-year PGP (ISB)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "retail banking relationship manager, brief résumé",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "Relationship manager at a bank; does not manage a team. Portfolio sizes, targets and customer data are confidential. Résumé is brief, so ask for details instead of assuming them."
+  },
+  "resume_text": "Rhea D'Souza (synthetic)\nRelationship Manager, a private-sector bank, Mumbai (2021-present). Manage a portfolio of about 180 customers; reached 112% of my annual target in the last year.\nCustomer Service Officer, same bank (2020-2021).\nB.Com, a college in Mumbai, 2019, 75%. Completed the banking exam certification in 2020.\nSkills: Customer relationships, product knowledge in deposits, insurance and loans, MS Excel. Languages: English, Hindi, Konkani.",
+  "background": "Five years in retail banking, currently a relationship manager. I do not manage a team.",
+  "goal": "Move into a business or product role in wealth management, then lead a branch cluster.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I've worked in retail banking for five years, the last four as a relationship manager at a private-sector bank in Mumbai. I manage a portfolio of about 180 customers and reached 112% of my annual target last year. I started in customer service, and I know how customers react when a product is mis-sold. I want an MBA to move from selling individual products to designing the products and the customer segments."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share the portfolio size in rupees or any customer details. Banking secrecy rules and the bank's code of conduct forbid that. The 112% is the figure I am allowed to say."
+    },
+    {
+      "tag": "vague",
+      "text": "I build strong customer relationships and I always put the customer at the centre. My approach is solutions-oriented and I constantly strive to exceed expectations."
+    },
+    {
+      "tag": "confidential",
+      "text": "I'm sorry, I also can't tell you the target I was given or the bank's market share. These are internal numbers and we aren't allowed to disclose them."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know how many of my customers were with another bank first. We don't record where the relationship came from, so I'd just be guessing."
+    }
+  ]
+}

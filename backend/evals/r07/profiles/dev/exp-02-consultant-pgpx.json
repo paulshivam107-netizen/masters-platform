@@ -1,0 +1,39 @@
+{
+  "id": "exp-02-consultant-pgpx",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "PGPX (IIM Ahmedabad)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "management consulting, project team lead",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 9,
+    "notes": "Manages project teams of 4-6 consultants on engagements, not permanent line reports. Client names and fees are confidential. Must not assume P&L ownership."
+  },
+  "resume_text": "Sanjana Rao (synthetic)\nEXPERIENCE\nEngagement Manager, a global consulting firm, Mumbai (2021-present)\n- Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements\n- Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend\nSenior Consultant, same firm (2018-2021)\n- Built market-entry models for 3 consumer clients\nConsultant, a Big 4 advisory practice, Delhi (2016-2018)\nEDUCATION\nB.Tech, Chemical Engineering, a state engineering college, 2016, 8.2 CGPA\nGMAT 730",
+  "background": "Nine years in consulting, the last five as an engagement manager leading project teams. I do not own a P&L.",
+  "goal": "Move from advising to running a business unit, ideally in industrials or consumer goods.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I have nine years in consulting, the last five as an engagement manager at a global firm. I lead teams of four to six consultants on 9 to 12-week engagements, and I have delivered 11 of them. The one I'm proudest of was a cost-reduction programme for a manufacturing client, where we identified savings of about 14% of addressable spend. I'm applying now because I advise on decisions that someone else carries out, and I want to be the person who carries them out."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't name the client or share the rupee value of the savings. Our engagement letters prohibit that. The 14% figure is already the most I can say about it."
+    },
+    {
+      "tag": "vague",
+      "text": "My leadership style is collaborative and empowering. I focus on creating a high-performance culture and aligning the team towards a common vision, while ensuring client delight."
+    },
+    {
+      "tag": "contradiction",
+      "text": "On the cost programme I was a team member, not the lead. A partner designed the whole approach and I only built the spreadsheets."
+    },
+    {
+      "tag": "disagree",
+      "text": "I'm not sure it is fair to say a consultant has no accountability for results. We are measured on whether the client implements our recommendations. I would rather you ask how I follow through."
+    }
+  ]
+}

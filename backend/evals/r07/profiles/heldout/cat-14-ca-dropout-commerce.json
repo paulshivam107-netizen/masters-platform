@@ -1,0 +1,39 @@
+{
+  "id": "cat-14-ca-dropout-commerce",
+  "split": "heldout",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "commerce, BCom graduate, cleared CA Inter and left CA Final",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 1,
+    "notes": "Cleared CA Inter, did not complete CA Final, and is now a BCom graduate. About one year of articleship-style work only; no direct reports. Must not describe the person as a qualified chartered accountant."
+  },
+  "resume_text": "Arjun Malhotra (synthetic)\nEDUCATION\nB.Com, a university in Ludhiana, 2025, 74%\nCA Intermediate: cleared both groups in the first attempt, 2022\nCA Final: appeared for Group 1 in 2024, not cleared; discontinued\nClass XII, Commerce, 88%\nEXPERIENCE\nArticle assistant, a small chartered accountancy firm, Ludhiana (2022-2024, about 18 months, till I discontinued)\n- Prepared GST returns for 20 small clients\n- Assisted in a statutory audit of one trading company\nSKILLS\nTally, Excel, GST filings",
+  "background": "BCom graduate. Cleared CA Inter but did not clear CA Final. Some work as an article assistant, no full-time employment now.",
+  "goal": "Move to corporate finance through an MBA, and use my accounting base to become a CFO in the long run.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I cleared both groups of CA Intermediate in my first attempt, and I worked as an article assistant for about 18 months at a small firm in Ludhiana, preparing GST returns for 20 small clients. I then appeared for Group 1 of the CA Final in 2024 and did not clear it. I decided not to repeat it and finished my BCom instead. I'm applying for an MBA because I want to work in business decisions, not only compliance."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I did clear CA Final in the end, in my second attempt, so I am a qualified chartered accountant now. I should have mentioned that."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't think leaving CA Final should be treated as a failure. I looked at the other options and made a decision. I would like to be asked about what I learned in the articleship."
+    },
+    {
+      "tag": "unknown",
+      "text": "I do not remember exactly how many marks I missed in Group 1 by. I know it was close, but I did not keep the mark sheet."
+    },
+    {
+      "tag": "stop",
+      "text": "I'd rather not continue on this subject. Let us end the session here, please, and show me the feedback."
+    }
+  ]
+}

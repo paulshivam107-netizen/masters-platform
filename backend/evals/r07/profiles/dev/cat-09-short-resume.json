@@ -1,0 +1,39 @@
+{
+  "id": "cat-09-short-resume",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "commerce graduate, fresher, brief résumé",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Résumé is very short, so the interviewer should ask about details instead of assuming them. Must not assume internships, projects or leadership roles that are not on the résumé."
+  },
+  "resume_text": "Pooja Verma (synthetic), Lucknow\nB.Com, a university in Lucknow, 2025, 68%. Class XII, Commerce, 84%.\nFinal-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department.\nSkills: MS Word, Excel basics, Tally basics. Languages: Hindi, English.\nMember, college cultural club; volunteered at the annual day event with 200 guests.",
+  "background": "BCom graduate from Lucknow with a short résumé. No work experience yet.",
+  "goal": "Join a bank or a financial services company in a customer-facing role and grow into management.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I completed my BCom in Lucknow this year. My final project was a survey of 40 shoppers about how they use UPI for small purchases. Most said they use it for amounts below a few hundred rupees but still carry cash for vegetable vendors. I have no work experience yet. I want to do an MBA because I have studied accounts but have not learned how a financial company chooses its customers."
+    },
+    {
+      "tag": "vague",
+      "text": "I am a quick learner and a good communicator. I believe in teamwork and hard work, and I am passionate about learning new things every day."
+    },
+    {
+      "tag": "vague",
+      "text": "The survey results were very interesting and gave many insights about consumer behaviour in the digital era. I think it was a meaningful experience for me."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Do you know which is better for evening snacks, samosa or kachori? We always argue at home. I think kachori is better, especially from Lucknow's old market."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know how many of the 40 shoppers were women. I did not note down gender separately in my sheet."
+    }
+  ]
+}

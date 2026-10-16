@@ -1,0 +1,51 @@
+{
+  "id": "cat-06-it-services-2yrs",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "IT services testing, nontechnical role growth",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 2,
+    "notes": "About two years of full-time work as a software tester at an IT services firm. No direct reports; coordinated tasks with developers only. Not a programmer and not a people manager."
+  },
+  "resume_text": "Divya Pillai (synthetic)\nEXPERIENCE\nTest Analyst, an IT services firm, Chennai (2024-present)\n- Executed manual test cases for a banking client's loan module; logged 210 defects in the first year\n- Moved from testing screens to writing test plans; owned test planning for two releases\n- Trained 2 new joiners on the defect tracker (no reporting line)\nAssociate Test Engineer, same firm (2024)\n- Regression testing for a card-statement portal\nEDUCATION\nB.Sc. Computer Science, a college in Coimbatore, 2024, 76%\nSKILLS\nManual testing, SQL basics, defect tracking tools\nOTHER\nVolunteer, school reading programme, weekends",
+  "background": "Two years as a test analyst at an IT services firm. I am not a developer, and I have no direct reports.",
+  "goal": "Move from testing into business analysis, then product management for banking products.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a test analyst at an IT services firm in Chennai, with about two years of experience. I started with regression testing on a card-statement portal, and then moved to a banking client's loan module. In the first year I logged 210 defects. Later I wrote test plans for two releases, which is a step beyond running test cases. I now want an MBA because I understand how the software fails, but I don't understand how the bank decides what to build."
+    },
+    {
+      "tag": "vague",
+      "text": "My role involves working with multiple stakeholders in a fast-paced environment to ensure quality deliverables. I take ownership and drive results, and I believe I add value to the team and the organisation."
+    },
+    {
+      "tag": "specific",
+      "text": "The test-planning work for the two releases was my biggest responsibility. I listed the risky loan flows first, such as interest calculation and part-payments, and tested those before the screens. Two of my defects there were marked critical by the developers."
+    },
+    {
+      "tag": "contradiction",
+      "text": "As the owner of the test plans, I also had four testers reporting to me and I did their appraisals. That is the part of the job I am proudest of."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't tell you the client's name or the loan volumes. Our contract with them is confidential, so I can only describe my own testing tasks."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know what percentage of our defects were fixed before release. The developers tracked that and I never saw the final report."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't agree that testing is a purely technical role. Writing test plans needs judgement about business risk. So I would not say I have no business exposure."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Just to share, I am also trying to learn to bake sourdough bread at home. My first loaf was very hard, but the second one was better."
+    }
+  ]
+}

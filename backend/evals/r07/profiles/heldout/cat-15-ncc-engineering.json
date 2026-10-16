@@ -1,0 +1,39 @@
+{
+  "id": "cat-15-ncc-engineering",
+  "split": "heldout",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "mechanical engineering fresher, NCC 'C' certificate",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. NCC cadet leadership and a plant-visit internship only; never a job. Must not assume a military career or a corporate employer."
+  },
+  "resume_text": "Rohan Chauhan (synthetic)\nEDUCATION\nB.Tech, Mechanical Engineering, a state engineering college in Dehradun, 2022-2026, 7.5 CGPA\nClass XII, PCM, 85%\nNCC\nNCC 'C' certificate, grade B (2024); Senior Under Officer in the college NCC unit; led a drill squad of 30 cadets\nAttended 1 national-level camp\nPROJECT\nFinal-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours\nINTERNSHIP\nThree-week intern, an auto-components plant: observed the machining line and quality checks\nACTIVITIES\nMechanical society treasurer",
+  "background": "Final-year mechanical engineering student with an NCC 'C' certificate. No full-time job.",
+  "goal": "Join a manufacturing or operations role in an auto-components company and later move into plant operations leadership.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a final-year mechanical engineering student in Dehradun. I hold the NCC 'C' certificate with grade B, and as Senior Under Officer I led a drill squad of 30 cadets. My final-year project is a low-cost solar water heater prototype that reached 55 degrees Celsius in four hours. I also spent three weeks at an auto-components plant. I want an MBA because I found that production decisions are as much about people and cost as machines."
+    },
+    {
+      "tag": "vague",
+      "text": "NCC has taught me discipline, leadership and national integration. I believe in leading from the front and I will bring the same spirit to my MBA and to my career."
+    },
+    {
+      "tag": "specific",
+      "text": "The hardest thing as Senior Under Officer was that the 30 cadets were from very different years. Some of them arrived late for the 5:30 a.m. drill. I started a rule that late cadets did the opening drill, and the lateness stopped in a month."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Do you follow motorsport? I watched the last race with my friends, and I think the pit-stop strategy was the real story. It is quite similar to plant operations, in a way."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't describe the plant's rejection rates or the customer names from my internship. They told us not to share production data outside the plant."
+    }
+  ]
+}

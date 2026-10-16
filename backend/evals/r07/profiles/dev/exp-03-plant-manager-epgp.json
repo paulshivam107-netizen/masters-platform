@@ -1,0 +1,51 @@
+{
+  "id": "exp-03-plant-manager-epgp",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "EPGP (IIM Bangalore)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "manufacturing, plant head with about 200 people",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 12,
+    "notes": "Plant head with about 200 people in the plant, of whom 5 are direct reports (functional heads). Production volumes and customer names are confidential. Must not assume a corporate-office role."
+  },
+  "resume_text": "Anand Deshpande (synthetic)\nEXPERIENCE\nPlant Head, an auto-components manufacturer, Aurangabad (2020-present)\n- Run a plant of about 200 people; 5 functional heads report to me\n- Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance\n- Cut customer rejections from 1,800 ppm to 900 ppm\nProduction Manager, same company (2016-2020)\nProduction Engineer, an engineering company (2014-2016)\nEDUCATION\nB.E., Mechanical Engineering, a state engineering college, 2014, 68%\nCERTIFICATION\nSix Sigma Green Belt, 2017",
+  "background": "Twelve years in manufacturing, now plant head with about 200 people in the plant. Five functional heads report to me directly.",
+  "goal": "Move into general management or a business-head role at a manufacturing company.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I have twelve years in manufacturing and have been the plant head of an auto-components plant for the last six. About 200 people work there, and five functional heads report to me. My main work in the last two years was raising line efficiency from 71% to 82%, mostly through line-balancing and preventive maintenance. I'm applying for an executive MBA because I run the plant well but have no training in finance, pricing or strategy, which is what the next role needs."
+    },
+    {
+      "tag": "specific",
+      "text": "On line-balancing, I went through the longest-cycle station first and we found that two operators were waiting for material. We moved the supply point and added a kanban card. That alone gave us about three points of efficiency."
+    },
+    {
+      "tag": "vague",
+      "text": "I believe in empowering my people and creating a culture of ownership and excellence. We follow a continuous-improvement mindset across the shop floor, and that drives the numbers."
+    },
+    {
+      "tag": "contradiction",
+      "text": "The rejections fell from 1,800 ppm to 900 ppm in my first month as plant head. Honestly it was an easy gain and it took very little effort."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know the exact share of our rejections caused by the supplier's castings. The quality head tracks that, and I haven't looked at it recently."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't accept that a plant head only manages machines. Most of my day goes into people and customers. I'd ask you to reconsider the question, because I'm not an operations-only person."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't say our monthly volumes or which OEMs we supply. Those are covered by customer agreements, and I'd get into trouble."
+    },
+    {
+      "tag": "stop",
+      "text": "I think I've answered enough for today. Could we end the practice session here? I'd like to read the feedback."
+    }
+  ]
+}
