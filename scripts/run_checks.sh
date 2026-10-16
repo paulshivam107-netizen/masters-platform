@@ -86,7 +86,8 @@ echo "      (PostgreSQL runtime-role tests run when TEST_POSTGRES_ADMIN_URL is s
     tests.test_ai_limits \
     tests.test_postgres_limits \
     tests.test_account_data \
-    tests.test_program_catalog -v
+    tests.test_program_catalog \
+    tests.test_r07_eval -v
 )
 
 echo "[4/7] Frontend unit tests"

@@ -1,9 +1,9 @@
-"""python -m evals.r07 {validate,run} ... (run from backend/)."""
+"""python -m evals.r07 {validate,run,report} ... (run from backend/)."""
 import argparse
 import json
 import sys
 
-from evals.r07 import profiles, runner
+from evals.r07 import profiles, report, runner
 
 
 def main(argv=None):
@@ -20,7 +20,15 @@ def main(argv=None):
     run.add_argument("--confirm-spend", action="store_true", help="required for --provider openai")
     run.add_argument("--estimate", action="store_true", help="print the worst-case cost and make no calls")
     run.add_argument("--fake-fault-every", type=int, default=0, help="fake provider: inject a fault every N calls")
+    for name in ("report", "score"):
+        rebuild = sub.add_parser(name, help="rebuild report.md/summary.json, scoring any filled review CSVs")
+        rebuild.add_argument("run_dir")
     args = parser.parse_args(argv)
+
+    if args.command in ("report", "score"):
+        report.build(args.run_dir)
+        print(f"{args.run_dir}/report.md")
+        return 0
 
     if args.command == "validate":
         errors, stats = profiles.validate_all()
@@ -41,7 +49,8 @@ def main(argv=None):
     except runner.SpendNotConfirmed as exc:
         print(exc, file=sys.stderr)
         return 2
-    print(out_dir)
+    report.build(out_dir)
+    print(out_dir / "report.md")
     return 0
 
 

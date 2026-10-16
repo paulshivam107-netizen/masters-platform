@@ -6,7 +6,7 @@ from pathlib import Path
 
 import csv
 
-from evals.r07 import checks, profiles, runner
+from evals.r07 import checks, profiles, report, runner
 
 
 def profile(pid="cat-01-commerce-fresher"):
@@ -121,6 +121,37 @@ class RunnerTest(unittest.TestCase):
         self.assertEqual(len([p for p in points if p["kind"] in ("strength", "improvement")]),
                          len(feedback["strengths"]) + len(feedback["improvements"]))
         self.assertTrue(all(p["answer_text"] for p in points if p["kind"] in ("strength", "improvement")))
+
+
+    def test_report_scores_human_review(self):
+        run_dir = runner.run_suite([profile(), profile("exp-01-engineering-ic")], provider="fake", out_root=self.out,
+                                   fake_fault_every=4)
+        summary = report.build(run_dir)
+        grounded = summary["human_gates"]["grounded_follow_ups"]
+        self.assertEqual(grounded["status"], "pending")
+        self.assertEqual(grounded["reviewed"], 0)
+        self.assertEqual(summary["sessions"]["total"], 2)
+        self.assertGreater(summary["cost"]["per_session_paise"]["max"], 0)
+        self.assertIn("p95", summary["latency_ms"]["interview_answer"])
+        self.assertGreater(summary["reliability"]["failed_attempts"], 0)
+        self.assertTrue((run_dir / "report.md").read_text().startswith("# R07 evaluation report"))
+
+        path = run_dir / "review_questions.csv"
+        with path.open() as handle:
+            rows = list(csv.DictReader(handle))
+        eligible = [r for r in rows if r["eligible_probe"] == "True"]
+        for row in rows:
+            row.update(reviewer_relevant="Y", reviewer_invented_premise="N", reviewer_route_fit_ok="Y")
+        eligible[0]["reviewer_relevant"] = "n"
+        with path.open("w", newline="") as handle:
+            writer = csv.DictWriter(handle, fieldnames=checks.QUESTION_FIELDS)
+            writer.writeheader()
+            writer.writerows(rows)
+        grounded = report.build(run_dir)["human_gates"]["grounded_follow_ups"]
+        self.assertEqual((grounded["passed"], grounded["reviewed"], grounded["eligible"]),
+                         (len(eligible) - 1, len(eligible), len(eligible)))
+        self.assertEqual(grounded["status"], "pass" if (len(eligible) - 1) / len(eligible) >= 0.9 else "fail")
+        self.assertEqual(report.build(run_dir)["human_gates"]["invented_premises"]["status"], "pass")
 
 
 def session_with(questions, persona=None, answers=("I led the 40,000 rupee fest budget.",), resume="Treasurer, budget of Rs 40,000",

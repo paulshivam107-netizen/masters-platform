@@ -23,7 +23,7 @@ See `tasks/plan.md` for decisions, risks and open questions.
 **Scope:** M
 
 ## Checkpoint A
-- [ ] Validator OK; one fake session complete; no network
+- [x] Validator OK; one fake session complete; no network
 
 ## Task 3: Retries, failure accounting, spend guard
 **Description:** On `ProviderFailure`, retry up to N attempts and record the code and the billing outcome (`none` = 0, `charged` = actual usage or the reservation, `unknown` = the reservation). Stop before a call would push worst-case spend past `--max-spend-paise`. `--estimate` makes no calls. A live run requires `--confirm-spend`.
@@ -48,15 +48,18 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Task 5: Report and score
 **Description:** `report.md` contains a gates table (automatic results, human gates pending or scored), reliability by failure code, cost per session (mean/p50/max) and per operation, latency p50/p95, and actual-versus-reserved tokens. `python -m evals.r07 score <run_dir>` recomputes it from filled CSVs.
 **Acceptance criteria:**
-- [ ] The report shows numerators/denominators and the model, prompt, plan and eval versions plus the git SHA
-- [ ] A filled sample CSV produces the correct grounded-follow-up percentage
+- [x] The report shows numerators/denominators and the model, prompt, plan and eval versions plus the git SHA
+- [x] A filled sample CSV produces the correct grounded-follow-up percentage
 **Verification:** unit test on a small fixture
 **Dependencies:** 3, 4
 **Files:** `backend/evals/r07/report.py`, `__main__.py`, `test_r07_eval.py`, `backend/evals/r07/README.md`
 **Scope:** S
 
 ## Checkpoint B (review with owner before spend)
-- [ ] Full fake run with faults (30 profiles); `scripts/run_checks.sh --skip-e2e` green; README explains how to run
+- [x] Full fake run with faults (30 profiles): 64 injected failures, all recovered, 0 exhausted
+- [x] README explains how to run
+- [ ] `scripts/run_checks.sh` green in CI (locally: 126 pass, 15 Postgres skipped; test_resume_questions needs pypdf in the local venv)
+- [ ] Owner review before any paid call
 
 ## Task 6: API-level reliability test
 **Description:** Through the interview API, a timeout, malformed output or refusal keeps the answer, releases or marks the cost entry correctly, and a retry succeeds. Add tests only for gaps in the existing ones.
