@@ -28,8 +28,8 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Task 3: Retries, failure accounting, spend guard
 **Description:** On `ProviderFailure`, retry up to N attempts and record the code and the billing outcome (`none` = 0, `charged` = actual usage or the reservation, `unknown` = the reservation). Stop before a call would push worst-case spend past `--max-spend-paise`. `--estimate` makes no calls. A live run requires `--confirm-spend`.
 **Acceptance criteria:**
-- [ ] With `--fake-fault-every 3`, every injected fault type appears in `calls.jsonl` and each step either recovers or is marked exhausted
-- [ ] The budget-stop test passes; a live run without `--confirm-spend` exits before any call
+- [x] With `--fake-fault-every 3`, every injected fault type appears in `calls.jsonl` and each step either recovers or is marked exhausted
+- [x] The budget-stop test passes; a live run without `--confirm-spend` exits before any call
 **Verification:** unit tests
 **Dependencies:** 2
 **Files:** `runner.py`, `__main__.py`, `test_r07_eval.py`

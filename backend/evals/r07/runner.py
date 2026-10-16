@@ -30,6 +30,20 @@ DEFAULT_OPENINGS = {
 }
 
 
+# Upper bounds on model-written text that later calls carry, used by the offline estimate.
+MAX_PROFILE_CHARS = 12 * 320
+MAX_FOLLOW_UP_CHARS = 2 * 420
+MAX_QUESTION_TURN_CHARS = 1000
+
+
+class SpendNotConfirmed(Exception):
+    """A live run needs explicit confirmation that it will spend money."""
+
+
+class BudgetExceeded(Exception):
+    pass
+
+
 def price_for(model):
     if model in ai_costs.BUILTIN_PRICES:
         return ai_costs.Price(model, *ai_costs.BUILTIN_PRICES[model], "builtin")
@@ -49,45 +63,84 @@ def git_state():
 class Run:
     """One evaluation run: owns the output directory and the per-call ledger."""
 
-    def __init__(self, out_dir, provider_name, model):
+    def __init__(self, out_dir, provider_name, model, max_attempts=3, max_spend_paise=10_000):
         self.out_dir = out_dir
         self.provider_name = provider_name
         self.model = model
         self.price = price_for(model)
+        self.max_attempts = max_attempts
+        self.max_spend_paise = max_spend_paise
+        # Conservative: unknown outcomes count at their reservation.
+        self.spent_paise = 0
         (out_dir / "sessions").mkdir(parents=True)
         self._calls = (out_dir / "calls.jsonl").open("a", encoding="utf-8")
 
     def close(self):
         self._calls.close()
 
-    def call(self, profile_id, operation, reserve_in, reserve_out, action):
-        """Run one provider step; returns its result or None. Every attempt is recorded."""
+    def call(self, profile_id, step, operation, reserve_in, reserve_out, action):
+        """Run one provider step with up to max_attempts tries (a user pressing retry); returns
+        its result or None. Every attempt is recorded."""
         reserved = self.price.cost(reserve_in, reserve_out)
-        started = time.perf_counter()
-        result, usage, failure, billing = None, {}, None, "charged"
-        try:
-            result, usage = action()
-        except provider.ProviderFailure as exc:
-            failure, billing, usage = exc.code, exc.billing, exc.usage or {}
-        latency_ms = round((time.perf_counter() - started) * 1000)
-        input_tokens, output_tokens = usage.get("input_tokens"), usage.get("output_tokens")
-        if isinstance(input_tokens, int) and isinstance(output_tokens, int):
-            cost = self.price.cost(input_tokens, output_tokens)
-        else:
-            # Same rule as the app's ledger: charged without usage or unknown -> the reservation.
-            cost = 0 if billing == "none" else reserved
-        self._record({
-            "profile_id": profile_id, "operation": operation, "attempt": 1, "ok": failure is None,
-            "failure_code": failure, "billing": billing, "latency_ms": latency_ms, "model": self.model,
-            "input_tokens": input_tokens, "output_tokens": output_tokens,
-            "reserved_input_tokens": reserve_in, "reserved_output_tokens": reserve_out,
-            "reserved_paise": reserved, "cost_paise": cost,
-        })
-        return result
+        for attempt in range(1, self.max_attempts + 1):
+            if self.spent_paise + reserved > self.max_spend_paise:
+                raise BudgetExceeded(f"next call could exceed {self.max_spend_paise} paise")
+            started = time.perf_counter()
+            result, usage, failure, billing = None, {}, None, "charged"
+            try:
+                result, usage = action()
+            except provider.ProviderFailure as exc:
+                failure, billing, usage = exc.code, exc.billing, exc.usage or {}
+            latency_ms = round((time.perf_counter() - started) * 1000)
+            input_tokens, output_tokens = usage.get("input_tokens"), usage.get("output_tokens")
+            if billing == "none":
+                cost = 0
+            elif isinstance(input_tokens, int) and isinstance(output_tokens, int):
+                cost = self.price.cost(input_tokens, output_tokens)
+            else:
+                # Same rule as the app's ledger: charged without usage, or unknown -> the reservation.
+                cost = reserved
+            self.spent_paise += cost
+            self._record({
+                "profile_id": profile_id, "step": step, "operation": operation, "attempt": attempt,
+                "ok": failure is None, "failure_code": failure, "billing": billing, "latency_ms": latency_ms,
+                "model": self.model, "input_tokens": input_tokens, "output_tokens": output_tokens,
+                "reserved_input_tokens": reserve_in, "reserved_output_tokens": reserve_out,
+                "reserved_paise": reserved, "cost_paise": cost,
+            })
+            if failure is None:
+                return result
+        return None
 
     def _record(self, row):
         self._calls.write(json.dumps(row) + "\n")
         self._calls.flush()
+
+
+def reserve_resume(profile, resume_context):
+    return ai_costs.text_tokens_upper_bound(len(profile["resume_text"]) + len(json.dumps(resume_context)) + 6000), 3800
+
+
+def reserve_answer(context_chars, transcript_chars, answer_chars):
+    # services.interviews.estimate: context_json + transcript_json + the new answer + overhead.
+    chars = context_chars + transcript_chars + answer_chars + TEXT_OVERHEAD_CHARS
+    return ai_costs.text_tokens_upper_bound(chars), MAX_OUTPUT_TOKENS["answer"]
+
+
+def reserve_feedback(context_chars, transcript_chars):
+    return ai_costs.text_tokens_upper_bound(context_chars + transcript_chars + TEXT_OVERHEAD_CHARS), MAX_OUTPUT_TOKENS["feedback"]
+
+
+def resume_context_for(profile):
+    return {"route": profile["route"], "school": "General MBA practice", "programme": profile.get("programme_name") or "MBA"}
+
+
+def base_context(profile):
+    focus = profile.get("practice_focus", "balanced")
+    return {"route": profile["route"], "background": profile.get("background", ""), "goal": profile.get("goal", ""),
+            "school": "General MBA practice", "programme": profile.get("programme_name") or "MBA",
+            "practice_focus": focus, "question_limit": len(profile["answers"]),
+            "interview_plan": make_plan(profile["route"], focus)}
 
 
 def _follow_ups(graph, root):
@@ -103,18 +156,11 @@ def _follow_ups(graph, root):
 
 def run_profile(run, profile):
     pid, route = profile["id"], profile["route"]
-    programme = profile.get("programme_name") or "MBA"
-    resume_context = {"route": route, "school": "General MBA practice", "programme": programme}
-    graph = run.call(
-        pid, "resume_questions",
-        ai_costs.text_tokens_upper_bound(len(profile["resume_text"]) + len(json.dumps(resume_context)) + 6000), 3800,
-        lambda: generate_questions(profile["resume_text"], resume_context),
-    )
-    focus = profile.get("practice_focus", "balanced")
+    resume_context = resume_context_for(profile)
+    graph = run.call(pid, "resume", "resume_questions", *reserve_resume(profile, resume_context),
+                     lambda: generate_questions(profile["resume_text"], resume_context))
     answers = profile["answers"]
-    context = {"route": route, "background": profile.get("background", ""), "goal": profile.get("goal", ""),
-               "school": "General MBA practice", "programme": programme, "practice_focus": focus,
-               "question_limit": len(answers), "interview_plan": make_plan(route, focus)}
+    context = base_context(profile)
     opening = DEFAULT_OPENINGS[route]
     if graph:
         root = graph["roots"][0]
@@ -130,8 +176,8 @@ def run_profile(run, profile):
                            "request_id": str(uuid.uuid5(uuid.NAMESPACE_URL, f"r07/{pid}/{index}"))})
         if index == len(answers):
             break
-        chars = len(json.dumps(context)) + len(before) + len(answer["text"]) + TEXT_OVERHEAD_CHARS
-        question = run.call(pid, "interview_answer", ai_costs.text_tokens_upper_bound(chars), MAX_OUTPUT_TOKENS["answer"],
+        question = run.call(pid, f"a{index}", "interview_answer",
+                            *reserve_answer(len(json.dumps(context)), len(before), len(answer["text"])),
                             lambda: provider.next_question(context, transcript))
         if question is None:
             stopped_at = f"a{index}"
@@ -140,14 +186,38 @@ def run_profile(run, profile):
                            **{key: value for key, value in question.items() if key != "question"}})
     feedback = None
     if stopped_at is None:
-        chars = len(json.dumps(context)) + len(json.dumps(transcript)) + TEXT_OVERHEAD_CHARS
-        feedback = run.call(pid, "interview_feedback", ai_costs.text_tokens_upper_bound(chars), MAX_OUTPUT_TOKENS["feedback"],
+        feedback = run.call(pid, "feedback", "interview_feedback",
+                            *reserve_feedback(len(json.dumps(context)), len(json.dumps(transcript))),
                             lambda: provider.feedback(context, transcript))
     session = {"profile_id": pid, "split": profile["split"], "route": route, "persona": profile.get("persona", {}),
                "answer_tags": [a["tag"] for a in answers], "context": context, "question_graph": graph,
                "transcript": transcript, "feedback": feedback, "stopped_at": stopped_at}
     (run.out_dir / "sessions" / f"{pid}.json").write_text(json.dumps(session, indent=2, ensure_ascii=False), encoding="utf-8")
     return session
+
+
+def estimate(profiles, *, model=DEFAULT_MODEL, max_attempts=3):
+    """Worst-case spend from the app's own reservation formulas, with no provider calls."""
+    price, calls, worst = price_for(model), 0, 0
+
+    def add(units):
+        nonlocal calls, worst
+        calls += 1
+        worst += price.cost(*units)
+
+    for profile in profiles:
+        add(reserve_resume(profile, resume_context_for(profile)))
+        context_chars = len(json.dumps(base_context(profile))) + MAX_PROFILE_CHARS + MAX_FOLLOW_UP_CHARS + 400
+        transcript_chars = MAX_QUESTION_TURN_CHARS
+        for index, answer in enumerate(profile["answers"], 1):
+            if index == len(profile["answers"]):
+                transcript_chars += len(json.dumps(answer["text"])) + 120
+                break
+            add(reserve_answer(context_chars, transcript_chars, len(answer["text"])))
+            transcript_chars += len(json.dumps(answer["text"])) + 120 + MAX_QUESTION_TURN_CHARS
+        add(reserve_feedback(context_chars, transcript_chars))
+    return {"model": model, "price_source": price.source, "calls": calls,
+            "worst_case_paise": worst, "worst_case_with_retries_paise": worst * max_attempts}
 
 
 @contextlib.contextmanager
@@ -163,29 +233,43 @@ def _model(model):
             os.environ["INTERVIEW_TEXT_MODEL"] = previous
 
 
-def run_suite(profiles, *, provider="fake", model=DEFAULT_MODEL, out_root=RESULTS_DIR):
+def run_suite(profiles, *, provider="fake", model=DEFAULT_MODEL, out_root=RESULTS_DIR, max_attempts=3,
+              max_spend_paise=10_000, confirm_spend=False, fake_fault_every=0):
     if provider not in ("fake", "openai"):
         raise ValueError("provider must be fake or openai")
+    if provider == "openai":
+        if not confirm_spend:
+            raise SpendNotConfirmed("A live run spends money: pass --confirm-spend after checking --estimate.")
+        if not live_key_configured():
+            raise SpendNotConfirmed("OPENAI_API_KEY is not configured in backend/.env.")
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
     out_dir = Path(out_root) / f"{stamp}-{provider}-{model}"
-    run = Run(out_dir, provider, model)
+    run = Run(out_dir, provider, model, max_attempts, max_spend_paise)
     meta = {"provider": provider, "model": model, "prompt_version": provider_prompt_version(),
             "plan_version": PLAN_VERSION, "eval_version": profile_store.EVAL_VERSION,
             "price": {"source": run.price.source, "basis": ai_costs.PRICE_BASIS,
                       "input_paise_per_million": run.price.input_paise_per_million,
                       "output_paise_per_million": run.price.output_paise_per_million},
-            "profiles": [p["id"] for p in profiles], "git": git_state(),
+            "max_attempts": max_attempts, "max_spend_paise": max_spend_paise, "fake_fault_every": fake_fault_every,
+            "profiles": [p["id"] for p in profiles], "git": git_state(), "stopped": None,
             "started_at": datetime.now(timezone.utc).isoformat()}
-    fake = FakeOpenAI()
+    fake = FakeOpenAI(fault_every=fake_fault_every)
     try:
         with _model(model), (fake.installed() if provider == "fake" else contextlib.nullcontext()):
             for profile in profiles:
                 run_profile(run, profile)
+    except BudgetExceeded:
+        meta["stopped"] = "budget"
     finally:
         run.close()
+        meta["spent_paise_worst_case"] = run.spent_paise
         meta["finished_at"] = datetime.now(timezone.utc).isoformat()
         (out_dir / "run.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")
     return out_dir
+
+
+def live_key_configured():
+    return provider.live_available()
 
 
 def provider_prompt_version():
