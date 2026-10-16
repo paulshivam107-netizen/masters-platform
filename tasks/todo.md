@@ -38,8 +38,8 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Task 4: Automatic checks and review CSVs
 **Description:** Flags for each question and feedback point (repeat or near-repeat, canary, unexplained number, fresher workplace wording, admission prediction), plus `review_questions.csv` and `review_feedback.csv` with blank reviewer columns.
 **Acceptance criteria:**
-- [ ] Each check has a positive and a negative unit test
-- [ ] Every follow-up/clarification question has a CSV row; every feedback point has a row
+- [x] Each check has a positive and a negative unit test
+- [x] Every follow-up/clarification question has a CSV row; every feedback point has a row
 **Verification:** unit tests; open the CSVs from a fake run
 **Dependencies:** 2
 **Files:** `backend/evals/r07/checks.py`, `runner.py`, `test_r07_eval.py`

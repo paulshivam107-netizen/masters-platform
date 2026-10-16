@@ -13,6 +13,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
+from evals.r07 import checks
 from evals.r07 import profiles as profile_store
 from evals.r07.fake_openai import FakeOpenAI
 from services import ai_costs
@@ -190,7 +191,7 @@ def run_profile(run, profile):
                             *reserve_feedback(len(json.dumps(context)), len(json.dumps(transcript))),
                             lambda: provider.feedback(context, transcript))
     session = {"profile_id": pid, "split": profile["split"], "route": route, "persona": profile.get("persona", {}),
-               "answer_tags": [a["tag"] for a in answers], "context": context, "question_graph": graph,
+               "answer_tags": [a["tag"] for a in answers], "resume_text": profile["resume_text"], "context": context, "question_graph": graph,
                "transcript": transcript, "feedback": feedback, "stopped_at": stopped_at}
     (run.out_dir / "sessions" / f"{pid}.json").write_text(json.dumps(session, indent=2, ensure_ascii=False), encoding="utf-8")
     return session
@@ -262,6 +263,7 @@ def run_suite(profiles, *, provider="fake", model=DEFAULT_MODEL, out_root=RESULT
         meta["stopped"] = "budget"
     finally:
         run.close()
+        checks.write_review_files(out_dir)
         meta["spent_paise_worst_case"] = run.spent_paise
         meta["finished_at"] = datetime.now(timezone.utc).isoformat()
         (out_dir / "run.json").write_text(json.dumps(meta, indent=2), encoding="utf-8")

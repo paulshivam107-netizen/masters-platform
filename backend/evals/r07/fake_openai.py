@@ -66,13 +66,14 @@ def _words(text, count=6):
 
 def _next_question(context, transcript):
     asked = sum(t["role"] == "assistant" for t in transcript)
+    # No digits: the eval flags numbers that appear in neither the resume nor the answers.
     last = next(t for t in reversed(transcript) if t["role"] == "user")
     topic = TOPICS[asked % len(TOPICS)]
     quote = _words(last["text"])
     if context["next_step"]["move_on"] or not quote or quote not in last["text"]:
-        return {"question": f"Turning to {topic}, what is one example you would like to discuss (question {asked + 1})?",
+        return {"question": f"Turning to {topic}, what is one example you would like to discuss?",
                 "kind": "new_topic", "topic": topic, "anchor_turn_id": "", "anchor_quote": ""}
-    return {"question": f"You said \"{quote}\". What did you personally do there, and why (question {asked + 1})?",
+    return {"question": f"You said \"{quote}\". What did you personally do there, and why ({topic})?",
             "kind": "follow_up", "topic": topic, "anchor_turn_id": last["id"], "anchor_quote": quote}
 
 
@@ -90,7 +91,8 @@ def _feedback(context, transcript):
 def _resume_draft(context, transcript):
     lines = [line.strip()[:240] for line in context["reviewed_resume"].splitlines() if len(line.strip()) >= 12]
     lines = (lines * 9)[:9]
-    question = lambda i, depth: {"question": f"Tell me more about this line, depth {depth} branch {i}.", "evidence_quote": lines[i * 3 + depth - 1]}
+    question = lambda i, depth: {"question": f"Tell me more about this line, {'abc'[i]} {'xyz'[depth - 1]}.",
+                                 "evidence_quote": lines[i * 3 + depth - 1]}
     return {
         "profile": [{"category": "experience", "evidence_quote": line} for line in dict.fromkeys(lines)][:12],
         "branches": [{"opening": question(i, 1), "follow_up": question(i, 2), "deeper_follow_up": question(i, 3)}
