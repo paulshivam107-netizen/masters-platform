@@ -64,7 +64,14 @@ class ResumeParserTest(unittest.TestCase):
         self.assertEqual((len(graph["roots"]), len(graph["nodes"]), len(graph["edges"])), (3, 9, 6))
         self.assertTrue(all(n["evidence_quote"] in TEXT for n in graph["nodes"]))
         self.assertTrue(all("answer" not in n and "tips" not in n for n in graph["nodes"]))
+        # An ungrounded opening drops only its branch; the invented premise is never stored.
         invalid = draft(); invalid["branches"][0]["opening"]["evidence_quote"] = "Invented promotion"
+        with patch.object(provider, "_structured", return_value=(invalid, {})):
+            graph, _ = generate_questions(TEXT, {"route": "cat"})
+        self.assertEqual((len(graph["roots"]), graph["dropped"]["questions"]), (2, 3))
+        self.assertNotIn("Invented promotion", json.dumps(graph))
+        for branch in invalid["branches"]:
+            branch["opening"]["evidence_quote"] = "Invented promotion"
         with patch.object(provider, "_structured", return_value=(invalid, {})), self.assertRaises(provider.ProviderFailure):
             generate_questions(TEXT, {"route": "cat"})
 
