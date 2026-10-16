@@ -1,0 +1,104 @@
+{
+  "email": "r04-1792082363535@example.com",
+  "results": [
+    {
+      "name": "signup reaches workspace",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "localStorage holds no tokens",
+      "ok": true,
+      "detail": "keys=[\"ui_show_checklist\",\"masters:user:3:ui_dismissed_notifications\",\"masters:user:3:ui_interview_prep_by_application\",\"masters:user:3:ui_onboarding_hidden\",\"masters:user:3:ui_research_by_application\",\"ui_reduced_motion\",\"ui_theme\",\"ui_confirm_delete\",\"masters:user:3:ui_doc_status_by_application\",\"pilot_event_log_v1\",\"masters:user:3:ui_onboarding_dismissed\",\"masters:user:3:ui_decision_matrix_weights\"]"
+    },
+    {
+      "name": "sessionStorage holds no tokens",
+      "ok": true,
+      "detail": "keys=[]"
+    },
+    {
+      "name": "document.cookie cannot see refresh cookie",
+      "ok": true,
+      "detail": "document.cookie=\"\""
+    },
+    {
+      "name": "refresh cookie exists, HttpOnly, path /auth, SameSite Lax",
+      "ok": true,
+      "detail": "httpOnly=true path=/auth sameSite=Lax secure=false expiresInDays=30.0"
+    },
+    {
+      "name": "reload rotated the refresh cookie",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "reload keeps user signed in (cookie restore)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "profile saved after access token expired",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "expired access token recovered via refresh",
+      "ok": true,
+      "detail": "401=true refresh200=true"
+    },
+    {
+      "name": "second tab restores the same session",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "logout signs out tab 1",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "logout in tab 1 signs out tab 2 (BroadcastChannel)",
+      "ok": true,
+      "detail": "tab2 url=http://127.0.0.1:3401/auth?mode=login&next=%2Fapp"
+    },
+    {
+      "name": "logout cleared the refresh cookie",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "reload after logout stays signed out",
+      "ok": true,
+      "detail": "url=http://127.0.0.1:3401/auth?mode=login&next=%2Fapp"
+    },
+    {
+      "name": "replaying an old (rotated) refresh cookie after logout is rejected",
+      "ok": true,
+      "detail": "status=401"
+    }
+  ],
+  "apiLog": [
+    "16:39:23 POST /auth/refresh -> 401",
+    "16:39:24 POST /auth/signup -> 201",
+    "16:39:24 POST /auth/request-email-verification -> 200",
+    "16:39:24 POST /telemetry/events -> 201",
+    "16:39:24 GET /essays/ -> 200",
+    "16:39:24 GET /applications/ -> 200",
+    "16:39:24 GET /programs?limit=200 -> 200",
+    "16:39:26 POST /auth/refresh -> 200",
+    "16:39:26 GET /applications/ -> 200",
+    "16:39:26 GET /programs?limit=200 -> 200",
+    "16:39:26 GET /essays/ -> 200",
+    "16:40:37 PUT /auth/profile -> 401",
+    "16:40:37 POST /auth/refresh -> 200",
+    "16:40:37 PUT /auth/profile -> 200",
+    "16:40:37 GET /programs?limit=200 -> 200",
+    "16:40:37 GET /programs?limit=200 -> 200",
+    "16:40:40 POST /auth/refresh -> 200",
+    "16:40:40 GET /essays/ -> 200",
+    "16:40:40 GET /applications/ -> 200",
+    "16:40:40 GET /programs?limit=200 -> 200",
+    "16:40:43 POST /auth/logout -> 200",
+    "16:40:46 POST /auth/refresh -> 401"
+  ]
+}

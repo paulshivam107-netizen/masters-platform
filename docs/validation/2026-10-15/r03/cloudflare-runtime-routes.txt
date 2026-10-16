@@ -1,0 +1,18 @@
+ok   200  /
+ok   200  /guides
+ok   200  /guides/mba-interview-story-bank
+ok   200  /help
+ok   308  /guides/mba-interview-story-bank/
+ok   308  /guides/mba-interview-story-bank.html
+ok   200  /programs
+ok   200  /app
+ok   200  /app/interviews
+ok   200  /auth
+ok   200  /auth/verify-email
+ok   200  /auth/reset-password
+ok   404  /this-page-does-not-exist
+ok   404  /guides/not-a-real-guide
+ok   200  /robots.txt
+ok   200  /sitemap.xml
+
+All route checks passed.

@@ -12,6 +12,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R01 Auth email origins and real email delivery
 
+- **Status:** implemented on branch `r01-auth-email-origins`; evidence in [validation/2026-10-15/r01](../validation/2026-10-15/r01/README.md). Real-provider delivery check remains for when the domain and email service exist.
 - **Scope:** `backend/services/auth_flows.py`, matching frontend auth routes, configuration interface and tests; 2–5h.
 - **Work:** replace localhost email links with an explicitly validated public frontend origin; keep staging/production distinct; verify expired/used tokens and safe reset responses. Configure owner-provided SMTP/provider settings separately.
 - **Acceptance:** actual verification/reset emails lead to the correct HTTPS app; tokens work once; invalid/expired links explain recovery; no token in analytics/logs. Email failure does not misrepresent a successfully created account.
@@ -19,6 +20,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R02 PostgreSQL migrations and runtime roles
 
+- **Status:** implemented on branch `r02-postgres-migrations` (stacked on R01); evidence in [validation/2026-10-15/r02](../validation/2026-10-15/r02/README.md). Remaining: run the same steps against the real Neon project once created.
 - **Scope:** `backend/database.py`, `backend/main.py`, `backend/services/migrations.py`, migration tooling and synthetic DB tests; 10–18h.
 - **Work:** Alembic baseline/revisions, remove runtime DDL, define migration owner/runtime grants, reconcile RLS role assumptions and configure small explicit pools.
 - **Acceptance:** empty DB and upgrade-from-baseline work; runtime cannot change schema; actual runtime role completes owned operations and rejects other-user access; concurrent quota/idempotency cases pass; failed migration leaves old release recoverable.
@@ -26,6 +28,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R03 HTTPS staging and production delivery
 
+- **Status:** deploy configuration implemented on branch `r03-deploy-config` (stacked on R02); evidence in [validation/2026-10-15/r03](../validation/2026-10-15/r03/README.md) and runbook in [DEPLOYMENT.md](../DEPLOYMENT.md). Remaining: owner creates accounts/domain, then the actual staging deploy and its route/status table.
 - **Scope:** build/deployment manifests, frontend delivery rules, backend container and health checks; 5–10h plus account setup.
 - **Work:** supported runtimes, reproducible installs, static frontend build, private shell and real 404 routing, separate environments and build variables.
 - **Acceptance:** fresh-account and returning-user deep links work; public HTML visible without JS; private noindex; all secrets backend-only; restart retains data; preview indexing disabled; logs redacted.
@@ -33,6 +36,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R04 Authentication and ownership hardening
 
+- **Status:** implemented on branch `r04-auth-hardening` (stacked on R03); evidence in [validation/2026-10-15/r04](../validation/2026-10-15/r04/README.md). Remaining: Content-Security-Policy (not yet set) and a repeat of the browser check on the real `www`/`api` staging domains once R03 staging exists.
 - **Scope:** `backend/auth.py`, auth router/services, `frontend/src/contexts/AuthContext.js`, `frontend/src/api/client.js`, ownership tests; 8–16h.
 - **Work:** reviewed refresh-cookie/access-token strategy, CSRF/origin controls, rotation/replay/logout handling, admin permissions and multi-tab refresh behaviour. Decide managed-auth migration only if needed.
 - **Acceptance:** refresh cannot be replayed indefinitely; logout revokes supported sessions; A cannot read/update/delete/export B's data; account switching cannot replay queued work under the wrong identity; meaningful XSS/token risks reviewed.
@@ -40,6 +44,7 @@ The status of every ticket below is **planned**, unless its description says it 
 
 ### R05 Shared throttling and AI monetary limits
 
+- **Status (2026-10-15):** implemented on branch `r05-throttling-ai-limits` (not merged/deployed); evidence in `docs/validation/2026-10-15/r05/README.md`. Trial allowance remains a product decision (per-user daily cap is the current bound).
 - **Scope:** rate-limit service, interview/résumé services, cost ledger model, admin view and tests; 8–14h.
 - **Work:** shared expiring limits for auth and expensive operations; trusted proxy interpretation; monetary reservation/reconciliation, model price versions, bounded retries/concurrency and trial allowance.
 - **Acceptance:** two workers respect the same limits; concurrent reservations cannot overspend; disabled AI blocks new billable operations; denied operation preserves input; unknown provider outcome is visible; alerts are not mistaken for hard caps.
@@ -51,6 +56,7 @@ The status of every ticket below is **planned**, unless its description says it 
 - **Work:** scoped exports, deletion manifest across profiles/session copies/notes, retention exceptions, encrypted backup policy and isolated restore drill.
 - **Acceptance:** export belongs only to requesting user; deleted interview content is inaccessible; published backup-retention limitations are accurate; restored DB includes expected rows and functioning ownership; finance reconciliation survives restore.
 - **Dependency:** R02; final retention policy. **Do not:** describe a local SQLite backup as production PostgreSQL recovery.
+- **Status:** implemented on branch `r06-export-deletion-backup`; evidence in [validation/2026-10-15/r06](../validation/2026-10-15/r06/README.md), manifest in [DATA_RETENTION.md](../DATA_RETENTION.md), runbook in [BACKUP_RESTORE_RUNBOOK.md](../BACKUP_RESTORE_RUNBOOK.md). Remaining: owner records the Neon restore window, chooses backup storage/schedule and an off-database deletion log; legal review of the privacy wording; first drill against a real Neon backup.
 
 ### R07 Real provider evaluation and model contract
 
@@ -72,6 +78,7 @@ The status of every ticket below is **planned**, unless its description says it 
 - **Work:** replace mutable container JSON with DB-backed revisions; source/freshness/rights status; draft → review → publish; import seed as unverified until checked.
 - **Acceptance:** restart/redeploy preserves changes; wrong-cycle data cannot silently autofill; unpublished/stale records remain visibly unverified; corrections retain history.
 - **Dependency:** R02. **Pilot shortcut:** disable factual catalogue editing/autofill and allow manual programme entry until this is complete; do not present seed data as authoritative.
+- **Status:** implemented on branch `r09-catalogue-durability` (migration 0007 on 0004); evidence in [validation/2026-10-15/r09](../validation/2026-10-15/r09/README.md). Remaining: an admin must import the seed and review/publish each programme against its official source before anything is public; rights status is stored but not yet editable in the UI.
 
 ### R10 Pilot instrumentation support and policies
 

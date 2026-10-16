@@ -66,14 +66,17 @@ Defined in `.env` (project root), consumed by backend settings:
 
 - `DATABASE_URL` (default: `sqlite:///./mba_platform.db`)
 - `SECRET_KEY`
-- `ACCESS_TOKEN_EXPIRE_MINUTES`
-- `REFRESH_TOKEN_EXPIRE_DAYS`
+- `ACCESS_TOKEN_EXPIRE_MINUTES` (default `15`; access tokens live in browser memory only)
+- `REFRESH_TOKEN_EXPIRE_DAYS` (default `30`)
+- `AUTH_COOKIE_NAME` (default `masters_refresh`), `AUTH_COOKIE_SECURE` (default: off in `development`, on elsewhere), `AUTH_COOKIE_SAMESITE` (default `lax`), `AUTH_COOKIE_DOMAIN` (default: API host only)
+- `REFRESH_REUSE_GRACE_SECONDS` (default `30`; concurrent refreshes from other tabs inside this window get a retryable `409 refresh_superseded` instead of revoking the session)
 - `MOCK_MODE` (`true` by default)
 - `ANTHROPIC_API_KEY` (optional; required when `MOCK_MODE=false`)
 - `GOOGLE_CLIENT_ID` (optional)
 - `APP_ENV` (`development` by default; use `pilot`/`staging`/`production` for strict safety checks)
 - `EXPOSE_DEV_AUTH_TOKENS` (optional override; default behavior exposes dev auth tokens only in local/test-style environments)
-- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` (optional for reminders)
+- `PUBLIC_APP_URL` (frontend origin used in verification/reset email links; must be `https://` and non-localhost in pilot/staging/production)
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM` (optional locally; required in pilot/staging/production — the API refuses to start without them. Port 465 uses implicit TLS, anything else STARTTLS)
 - `CORS_ORIGINS` (comma-separated list)
 - `ADMIN_EMAILS` (comma-separated emails that should have admin access)
 
@@ -137,13 +140,19 @@ Pilot environment template:
 cat .env.pilot.example
 ```
 
-SQLite backup/restore/drill utility:
+SQLite backup/restore/drill utility (**local SQLite development databases only**, not production;
+production PostgreSQL backups, the encrypted `scripts/db_backup_pg.sh` export and the
+`scripts/db_restore_drill.py` restore drill are in [docs/BACKUP_RESTORE_RUNBOOK.md](docs/BACKUP_RESTORE_RUNBOOK.md)):
 
 ```bash
 python3 scripts/db_backup_restore.py backup --label pre-pilot
 python3 scripts/db_backup_restore.py drill
 python3 scripts/db_backup_restore.py restore --from /absolute/path/to/backup.sqlite3 --force
 ```
+
+Account data (R06): signed-in users can download all their data (`GET /account/export`) and delete
+their account (`POST /account/delete`, password or a fresh Google sign-in required) from Settings.
+What is deleted, anonymised or retained (including backup expiry) is in [docs/DATA_RETENTION.md](docs/DATA_RETENTION.md).
 
 ## E2E Smoke (Playwright)
 
@@ -213,7 +222,8 @@ bash scripts/run_checks.sh
 
 ## Pilot Guardrails Added
 
-- Rate limiting on `auth/*` and `telemetry/events` endpoints.
+- Shared, database-backed rate limiting (IP + account/e-mail layers) on `auth/*`, `telemetry/events` and interview routes; works across workers/replicas. Set `TRUSTED_PROXY_HOPS` to the number of proxies in front of the API (Railway: 1; the Docker image sets it) - the client IP is taken from the right of `X-Forwarded-For`, never the client-controlled left.
+- AI money caps (R05): every billable provider call reserves a conservative maximum cost (integer paise, versioned model prices) before dispatch and is reconciled afterwards; timeouts are recorded as *unknown outcome* and stay counted until resolved in Admin -> Spending -> Cost ledger & caps. Hard caps: `AI_GLOBAL_DAILY_CAP_PAISE` (default 50000), `AI_USER_DAILY_CAP_PAISE` (5000), `AI_GLOBAL_MAX_IN_FLIGHT` (20), `AI_USER_MAX_IN_FLIGHT` (2), `AI_MAX_ATTEMPTS_PER_REQUEST` (4). `AI_DAILY_ALERT_PAISE` is an alert only and never blocks. Admin APIs: `/admin/pilot/ai-ledger`, `/admin/pilot/ai-prices`.
 - Consistent error payloads with request IDs for validation/runtime failures.
 - Admin dashboard overview now includes:
   - DAU/WAU from telemetry
@@ -244,7 +254,38 @@ bash scripts/run_checks.sh
 - Run end-to-end smoke:
   - `bash scripts/run_e2e_full.sh`
 
-## Migration + Seed (Pilot)
+## Database migrations
+
+The schema is versioned with Alembic (`backend/migrations/versions`). The API never changes the
+schema in pilot/staging/production; it refuses to start unless the database is at the release's
+migration head. In development (`APP_ENV=development`) it upgrades the local database at startup
+unless `AUTO_MIGRATE_ON_STARTUP=false`.
+
+```bash
+python3 scripts/db_migrate.py           # upgrade to head; adopts a pre-Alembic DB first
+python3 scripts/db_migrate.py status    # current vs head (exit 1 if behind)
+python3 scripts/db_migrate.py check     # exit 1 if the live schema drifts from the models
+```
+
+Release order for PostgreSQL (e.g. Neon):
+
+1. Back up / branch the database.
+2. `MIGRATION_DATABASE_URL=<owner, direct endpoint> python3 scripts/db_migrate.py`
+3. First time per database: `APP_RUNTIME_DB_PASSWORD=<secret> python3 scripts/db_roles.py` creates
+   the `app_runtime` role (row read/write only; cannot create, alter or drop anything).
+4. Start the API with `DATABASE_URL=<app_runtime, pooled endpoint>`; check `GET /health/db`
+   reports `schema_current: true`.
+
+Changing a model: edit `backend/models.py`, then from `backend/` run
+`alembic revision --autogenerate -m "describe change"`, review the generated file, and commit it.
+`tests/test_schema_migrations.py` fails if models and migrations disagree. Never edit a revision
+that has been applied to a shared database; add a new one.
+
+PostgreSQL runtime tests (`backend/tests/test_postgres_runtime.py`: restricted role, cross-account
+isolation, concurrent quota/idempotency/token use) run when `TEST_POSTGRES_ADMIN_URL` points at a
+disposable server; CI provides one.
+
+## Seed (local pilot data only)
 
 ```bash
 python3 scripts/db_migrate.py
@@ -253,9 +294,14 @@ python3 scripts/seed_pilot_data.py
 
 ## Auth Session Notes
 
-- Auth now returns both `access_token` and `refresh_token`.
-- `POST /auth/refresh` rotates refresh tokens and issues a new access token.
-- `POST /auth/logout` can revoke current refresh token or all sessions.
+- Login/signup/Google return a 15-minute `access_token` (JWT with a `sid` session-family claim) in the body. The frontend keeps it in memory only, never in `localStorage`.
+- The refresh token is set as an `HttpOnly` cookie scoped to `/auth` on the API host (`Secure` outside development, `SameSite=Lax` by default). It is never returned in a response body; the database stores only its SHA-256 hash.
+- `POST /auth/refresh` (cookie) rotates the refresh token and returns a new access token; a page load restores the session this way. Replaying a rotated token after the grace window revokes the whole session family; inside it, the reply is `409 refresh_superseded` (another tab refreshed first).
+- `POST /auth/logout` revokes the current session (or every session with `all_sessions: true`), clears the cookie, and revoked sessions' access tokens stop working immediately. Other open tabs are signed out via `BroadcastChannel`.
+- Cookie endpoints (`/auth/refresh`, `/auth/logout`) require a trusted `Origin` (from `CORS_ORIGINS`/`CORS_ORIGIN_REGEX`) in pilot/staging/production. Other endpoints use the `Authorization: Bearer` header.
+- Deactivated users are rejected on every request; `ADMIN_EMAILS` grants admin only after that email is verified.
+- Sessions saved by older app versions (`refresh_token` in `localStorage`) are migrated to the cookie once and the stored values are deleted.
+- The frontend and API must share a registrable domain for the cookie to work (see `docs/DEPLOYMENT.md`).
 - Email verification flow:
   - `POST /auth/request-email-verification`
   - `POST /auth/verify-email`
@@ -263,6 +309,8 @@ python3 scripts/seed_pilot_data.py
   - `POST /auth/forgot-password`
   - `POST /auth/reset-password`
 - In local/test-style environments without SMTP, auth email endpoints can include `dev_token` for testing.
+- Emailed links open `/auth/verify-email` and `/auth/reset-password` with the one-time token in the URL fragment (`#token=…`), so it never reaches servers, logs or analytics. The page strips it from the address bar after reading it. Tokens are single-use; verification links expire after 24 hours and reset links after 60 minutes.
+- Forgot-password and resend-verification responses are identical whether or not the email is registered.
 - In `pilot`/`staging`/`production`, `dev_token` exposure is disabled.
 
 ## Admin Bootstrap (Local/Pilot)
@@ -304,11 +352,12 @@ Open `/app/admin` with an active admin account. Sections can be linked directly,
 - **Interviews:** failed/stalled operations, safe diagnostic categories, attempts and session IDs. Applicant retries resolve the queue automatically. No transcripts, resumes or recordings are exposed. Older failures show an unknown reason; requests rejected before an operation exists are not included.
 - **Spending:** recorded live interview/resume usage, optional text-cost estimates using rates entered by the admin, and the integrated economics calculator. Usage is not an invoice: deleted records, failed-call charges and audio costs are not fully captured. Calculator scenarios persist per admin account with edit-conflict protection. Temporary token rates are not saved.
 - **Feedback:** search and paginate reports; mark open, in progress or resolved, with internal notes. Resolution requires a note. Changes are audited and concurrent edits return a conflict instead of overwriting. No customer messages are sent.
-- **Users / Programmes / System:** existing controls grouped into focused screens. The AI pause switch covers live interviews; model selection in the existing settings form applies to essay reviews.
+- **Programmes:** DB-backed catalogue (R09). Drafts carry an official source URL, check date and admissions cycle; submit for review, then publish as verified or unverified. Corrections become new revisions and earlier ones stay in the history. `backend/data/program_catalog_seed.json` is import-only: `python manage_catalog.py import-seed` (idempotent) loads it as unverified drafts that are not public until published. Only verified, recently checked, current-cycle records autofill deadlines/fees; everything else is labelled "unverified — check the official source".
+- **Users / System:** existing controls grouped into focused screens. The AI pause switch covers live interviews; model selection in the existing settings form applies to essay reviews.
 
 ### Upgrade and validation
 
-Restart the backend after updating code. Standard startup creates the `admin_economics_scenarios` table and applies additive feedback/operation columns; `python scripts/db_migrate.py` performs the same migration explicitly. Back up any valuable database before upgrades. Never run seed/reset scripts against existing applicant data.
+Run `python scripts/db_migrate.py` before restarting the backend after updating code (development startup does this automatically). See [Database migrations](#database-migrations). Back up any valuable database before upgrades. Never run seed/reset scripts against existing applicant data.
 
 New regression coverage: `backend/tests/test_admin_operations.py`, `frontend/src/components/views/workspace/AdminPilot.test.js`, and `adminEconomics.test.js`. The standard CI runner includes the admin backend suite. Validation used an isolated SQLite database and synthetic admin/member accounts, with no provider calls. A real PostgreSQL upgrade and real-provider billing reconciliation remain deployment checks.
 

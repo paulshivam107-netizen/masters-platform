@@ -1,5 +1,6 @@
 from functools import lru_cache
 from typing import Optional
+from urllib.parse import urlsplit
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -7,13 +8,41 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 DEFAULT_SECRET_VALUES = {"", "your-secret-key-change-in-production", "changeme", "secret", "default"}
 
 
+def sqlalchemy_url(url: str) -> str:
+    """Normalise provider-style URLs for SQLAlchemy 2 (which rejects the postgres:// scheme)."""
+    url = (url or "").strip()
+    if url.startswith("postgres://"):
+        return "postgresql://" + url[len("postgres://"):]
+    return url
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
     DATABASE_URL: str = "sqlite:///./mba_platform.db"
+    # Schema-owner connection used only by migrations (Neon: direct, non-pooled endpoint).
+    # DATABASE_URL should then use a restricted runtime role. Falls back to DATABASE_URL.
+    MIGRATION_DATABASE_URL: Optional[str] = None
+    # Small explicit pool per API process. Neon's pooled endpoint multiplexes behind this.
+    DB_POOL_SIZE: int = 5
+    DB_MAX_OVERFLOW: int = 5
+    DB_POOL_TIMEOUT_SECONDS: int = 10
+    DB_POOL_RECYCLE_SECONDS: int = 300
+    # Development convenience: upgrade the schema at startup. Never honoured in
+    # pilot/staging/production, where a release step runs migrations instead.
+    AUTO_MIGRATE_ON_STARTUP: bool = True
     SECRET_KEY: str = "your-secret-key-change-in-production"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7
+    # Short-lived bearer token held in browser memory only; renewed via the refresh cookie.
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 30
+    # Refresh token lives in an HttpOnly cookie scoped to /auth on the API host.
+    AUTH_COOKIE_NAME: str = "masters_refresh"
+    AUTH_COOKIE_SECURE: Optional[bool] = None  # default: off in development, on elsewhere
+    AUTH_COOKIE_SAMESITE: str = "lax"
+    AUTH_COOKIE_DOMAIN: Optional[str] = None
+    # A just-rotated refresh token presented again within this window is treated as a
+    # concurrent refresh (another tab), not theft.
+    REFRESH_REUSE_GRACE_SECONDS: int = 30
 
     MOCK_MODE: bool = True
     OPENAI_API_KEY: Optional[str] = None
@@ -29,6 +58,14 @@ class Settings(BaseSettings):
     SMTP_USER: Optional[str] = None
     SMTP_PASSWORD: Optional[str] = None
     SMTP_FROM: Optional[str] = None
+
+    # Browser-facing origin of the frontend, used to build links in auth emails.
+    # Must be an origin only (scheme + host [+ port]); production-like envs require HTTPS.
+    PUBLIC_APP_URL: str = "http://localhost:3000"
+
+    # Number of reverse proxies in front of the API that append to X-Forwarded-For (Railway: 1).
+    # 0 = use the socket peer. The client IP is the N-th entry from the right, never the leftmost.
+    TRUSTED_PROXY_HOPS: int = 0
 
     CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
     CORS_ORIGIN_REGEX: Optional[str] = None
@@ -48,6 +85,35 @@ class Settings(BaseSettings):
             seen.add(origin)
             deduped.append(origin)
         return deduped
+
+    @field_validator("AUTH_COOKIE_SECURE", mode="before")
+    @classmethod
+    def normalize_cookie_secure(cls, value):
+        if isinstance(value, str) and not value.strip():
+            return None
+        return value
+
+    @property
+    def auth_cookie_secure(self) -> bool:
+        if self.AUTH_COOKIE_SECURE is not None:
+            return bool(self.AUTH_COOKIE_SECURE)
+        return not self.is_development_env
+
+    @property
+    def auth_cookie_samesite(self) -> str:
+        value = (self.AUTH_COOKIE_SAMESITE or "lax").strip().lower()
+        return value if value in {"lax", "strict", "none"} else "lax"
+
+    def is_trusted_origin(self, origin: Optional[str]) -> bool:
+        """True when a browser Origin is one of the configured frontend origins."""
+        import re
+
+        if not origin:
+            return False
+        origin = origin.rstrip("/")
+        if origin in self.cors_origins_list:
+            return True
+        return bool(self.CORS_ORIGIN_REGEX and re.fullmatch(self.CORS_ORIGIN_REGEX, origin))
 
     @field_validator("EXPOSE_DEV_AUTH_TOKENS", mode="before")
     @classmethod
@@ -101,6 +167,42 @@ class Settings(BaseSettings):
         normalized = self.database_url_normalized.lower()
         # Common placeholder tokens copied from templates/UIs.
         return "[your-password]" in normalized or "your-password" in normalized
+
+    @property
+    def public_app_url_error(self) -> Optional[str]:
+        """Return a human-readable problem with PUBLIC_APP_URL, or None when it is usable."""
+        raw = (self.PUBLIC_APP_URL or "").strip()
+        if not raw:
+            return "PUBLIC_APP_URL is empty."
+        try:
+            parts = urlsplit(raw)
+            parts.port  # raises ValueError for a malformed port
+        except ValueError:
+            return "PUBLIC_APP_URL is not a valid URL."
+        if parts.scheme not in {"http", "https"} or not parts.hostname:
+            return "PUBLIC_APP_URL must be an absolute http(s) URL such as https://app.example.com."
+        if parts.username or parts.password:
+            return "PUBLIC_APP_URL must not contain credentials."
+        if parts.path not in {"", "/"} or parts.query or parts.fragment:
+            return "PUBLIC_APP_URL must be an origin only, without a path, query or fragment."
+        if self.is_production_like_env:
+            if parts.scheme != "https":
+                return "PUBLIC_APP_URL must use https in pilot/staging/production environments."
+            if parts.hostname in {"localhost", "127.0.0.1", "0.0.0.0", "::1"}:
+                return "PUBLIC_APP_URL cannot point to localhost in pilot/staging/production environments."
+        return None
+
+    @property
+    def public_app_origin(self) -> str:
+        error = self.public_app_url_error
+        if error:
+            raise ValueError(error)
+        parts = urlsplit(self.PUBLIC_APP_URL.strip())
+        return f"{parts.scheme}://{parts.netloc}".lower()
+
+    @property
+    def has_smtp_config(self) -> bool:
+        return bool(self.SMTP_HOST and self.SMTP_USER and self.SMTP_PASSWORD)
 
     @property
     def cors_has_localhost_origin(self) -> bool:

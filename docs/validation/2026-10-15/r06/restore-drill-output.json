@@ -1,0 +1,54 @@
+{
+  "dump_bytes": 43984,
+  "mode": "synthetic",
+  "ownership_match": true,
+  "ownership_per_user": {
+    "user#1": {
+      "applications": 1,
+      "auth_tokens": 0,
+      "essays": 2,
+      "interview_operations": 1,
+      "interview_sessions": 1,
+      "pilot_feedback": 1,
+      "refresh_tokens": 0,
+      "resume_question_sets": 1
+    },
+    "user#2": {
+      "applications": 1,
+      "auth_tokens": 0,
+      "essays": 3,
+      "interview_operations": 1,
+      "interview_sessions": 1,
+      "pilot_feedback": 1,
+      "refresh_tokens": 0,
+      "resume_question_sets": 1
+    }
+  },
+  "post_restore_checks": {
+    "delete_account_ok": true,
+    "export_isolated": true,
+    "schema_drift": 0,
+    "sequence_continues": true
+  },
+  "restored_tables": {
+    "admin_economics_scenarios": 0,
+    "admin_events": 2,
+    "ai_runtime_config": 0,
+    "alembic_version": 1,
+    "applications": 2,
+    "auth_tokens": 0,
+    "essays": 5,
+    "interview_operations": 2,
+    "interview_quotas": 3,
+    "interview_sessions": 2,
+    "pilot_feedback": 2,
+    "refresh_tokens": 0,
+    "resume_question_sets": 2,
+    "users": 2
+  },
+  "restored_usage_tokens": 344,
+  "result": "PASS",
+  "row_counts_match": true,
+  "seconds": 1.5,
+  "usage_ledger_match": true
+}

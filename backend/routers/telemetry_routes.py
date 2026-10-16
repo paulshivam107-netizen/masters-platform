@@ -19,6 +19,7 @@ async def ingest_event(
 ):
     enforce_rate_limit(
         request,
+        db=db,
         action="telemetry_ingest",
         limit=180,
         window_seconds=60,

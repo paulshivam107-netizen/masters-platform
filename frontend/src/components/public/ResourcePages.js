@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { ArrowIcon, CheckIcon } from "../../app/icons";
 import { guides, faqs } from "../../content/guides";
+import { practice } from "../../content/practice";
 import PublicHeader from "./PublicHeader";
 import Brand from "../common/Brand";
 import "./PublicPages.css";
@@ -13,6 +14,7 @@ export function ResourceFooter() {
       <Brand />
       <p>Your MBA applications, in one place.</p>
       <nav aria-label="Footer">
+        <Link to="/mba-interview-practice">MBA interview practice</Link>
         <Link to="/guides">Guides</Link>
         <Link to="/help">Getting started & help</Link>
       </nav>
@@ -66,7 +68,97 @@ export function GuideCards() {
     </div>
   );
 }
-function ResourceShell({ children }) {
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+// Deterministic (no locale/ICU dependency) so prerendered and client HTML match.
+export function formatDate(iso) {
+  const [year, month, day] = iso.split("-").map(Number);
+  return `${day} ${months[month - 1]} ${year}`;
+}
+export function RelatedLinks({ links, heading = "Related reading" }) {
+  if (!links?.length) return null;
+  return (
+    <nav className="guide-related" aria-label={heading}>
+      <h2>{heading}</h2>
+      <ul>
+        {links.map(([href, label]) => (
+          <li key={href}>
+            <Link to={href}>{label}</Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}
+export function ExampleBlock({ example }) {
+  return (
+    <figure className="guide-example">
+      <figcaption>{example.label}</figcaption>
+      <dl>
+        {example.lines.map(([who, text], index) => (
+          <div key={index}>
+            <dt>{who}</dt>
+            <dd>{text}</dd>
+          </div>
+        ))}
+      </dl>
+      {example.note && <p className="guide-example-note">{example.note}</p>}
+    </figure>
+  );
+}
+function GuideSection({ section }) {
+  const List = section.ordered ? "ol" : "ul";
+  return (
+    <section id={section.id}>
+      <h2>{section.title}</h2>
+      {section.paragraphs?.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+      {section.example && <ExampleBlock example={section.example} />}
+      {section.after?.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+      {section.ladder && (
+        <ol className="guide-ladder">
+          {section.ladder.map((step) => (
+            <li key={step.level}>
+              <h3>{step.level}</h3>
+              <p className="guide-ladder-purpose">{step.purpose}</p>
+              <ul>
+                {step.questions.map((q) => (
+                  <li key={q}>“{q}”</li>
+                ))}
+              </ul>
+            </li>
+          ))}
+        </ol>
+      )}
+      {section.list && (
+        <List>
+          {section.list.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </List>
+      )}
+      {section.closing?.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
+    </section>
+  );
+}
+export function ResourceShell({ children }) {
   return (
     <div className="public-page">
       <div className="public-shell">
@@ -90,6 +182,9 @@ export function GuidesPage() {
           Practical guides and free templates for CAT-route, GMAT-route and
           executive MBA applications. Start with the part you need today.
         </p>
+        <Link className="text-button" to="/mba-interview-practice">
+          See how résumé-based interview practice works <ArrowIcon />
+        </Link>
       </section>
       <GuideCards />
     </ResourceShell>
@@ -110,7 +205,7 @@ export function GuidePage() {
         <header>
           <span className="eyebrow">
             {guide.readingTime} · UPDATED{" "}
-            <time dateTime={guide.updated}>8 October 2026</time>
+            <time dateTime={guide.updated}>{formatDate(guide.updated)}</time>
           </span>
           <h1>{guide.title}</h1>
           <p className="guide-summary">{guide.summary}</p>
@@ -124,30 +219,20 @@ export function GuidePage() {
           ))}
         </nav>
         {guide.sections.map((section) => (
-          <section id={section.id} key={section.id}>
-            <h2>{section.title}</h2>
-            {section.paragraphs?.map((p) => (
-              <p key={p}>{p}</p>
-            ))}
-            {section.list && (
-              <ul>
-                {section.list.map((item) => (
-                  <li key={item}>{item}</li>
-                ))}
-              </ul>
-            )}
-          </section>
+          <GuideSection section={section} key={section.id} />
         ))}
-        <aside className="guide-download">
-          <CheckIcon />
-          <div>
-            <h2>Make it your own</h2>
-            <p>A blank template, with no email required.</p>
-            <a className="text-button" download href={guide.template.href}>
-              {guide.template.label} ↓
-            </a>
-          </div>
-        </aside>
+        {guide.template && (
+          <aside className="guide-download">
+            <CheckIcon />
+            <div>
+              <h2>Make it your own</h2>
+              <p>A blank template, with no email required.</p>
+              <a className="text-button" download href={guide.template.href}>
+                {guide.template.label} ↓
+              </a>
+            </div>
+          </aside>
+        )}
         <section className="guide-next">
           <h2>Put one step into practice</h2>
           <ResourceCta next={guide.next}>{guide.cta}</ResourceCta>
@@ -156,8 +241,9 @@ export function GuidePage() {
             your school.
           </p>
         </section>
+        <RelatedLinks links={guide.related} />
         <Link className="text-button" to="/guides">
-          Browse the other guide <ArrowIcon />
+          Browse all guides <ArrowIcon />
         </Link>
       </article>
     </ResourceShell>
@@ -252,6 +338,82 @@ export function NotFoundPage() {
           Browse guides
         </Link>
       </section>
+    </ResourceShell>
+  );
+}
+
+export function PracticePage() {
+  const { how, example, routes, limits, privacy } = practice;
+  return (
+    <ResourceShell>
+      <article className="guide-article practice-page">
+        <header>
+          <span className="eyebrow">
+            INTERVIEW PRACTICE · UPDATED{" "}
+            <time dateTime={practice.updated}>
+              {formatDate(practice.updated)}
+            </time>
+          </span>
+          <h1>Practise MBA interviews that follow your résumé</h1>
+          <p className="guide-summary">{practice.answer}</p>
+          <ResourceCta next={practice.next}>{practice.cta}</ResourceCta>
+        </header>
+        <section id="how-it-works">
+          <h2>{how.title}</h2>
+          <ol>
+            {how.steps.map((step) => (
+              <li key={step}>{step}</li>
+            ))}
+          </ol>
+          <p>{how.note}</p>
+        </section>
+        <section id="example">
+          <h2>A short example</h2>
+          <p>{example.intro}</p>
+          <ExampleBlock example={example} />
+        </section>
+        <section id="routes">
+          <h2>{routes.title}</h2>
+          <div className="practice-routes">
+            {routes.items.map(([name, text, href, label]) => (
+              <div className="public-card" key={name}>
+                <h3>{name}</h3>
+                <p>{text}</p>
+                <Link className="text-button" to={href}>
+                  {label} <ArrowIcon />
+                </Link>
+              </div>
+            ))}
+          </div>
+          <p>{routes.note}</p>
+        </section>
+        <section id="limits">
+          <h2>{limits.title}</h2>
+          <ul>
+            {limits.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+        <section id="privacy">
+          <h2>{privacy.title}</h2>
+          <ul>
+            {privacy.items.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+          <p>{privacy.note}</p>
+        </section>
+        <section className="guide-next">
+          <h2>Try it on your own résumé</h2>
+          <ResourceCta next={practice.next}>{practice.cta}</ResourceCta>
+          <p>
+            Questions are drafted by AI during a pilot. They are practice
+            material, not a prediction of any admission outcome.
+          </p>
+        </section>
+        <RelatedLinks links={practice.related} />
+      </article>
     </ResourceShell>
   );
 }

@@ -10,7 +10,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: ci-postgres-password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     env:
+      TEST_POSTGRES_ADMIN_URL: postgresql://postgres:ci-postgres-password@127.0.0.1:5432/postgres
       PYTHONUNBUFFERED: "1"
       SECRET_KEY: "ci-secure-secret-key-for-checks-1234567890"
       E2E_EMAIL: ${{ secrets.E2E_EMAIL }}
@@ -46,3 +59,16 @@ jobs:
 
       - name: Run full checks
         run: bash scripts/run_checks.sh
+
+      - name: Production frontend build (indexing on) and routing contract
+        env:
+          REACT_APP_SITE_URL: https://www.masters-preview.in
+          REACT_APP_ALLOW_INDEXING: "true"
+          REACT_APP_API_URL: https://api.masters-preview.in
+        run: |
+          npm --prefix frontend run build
+          (cd frontend && PORT=3181 node scripts/serve.cjs &) && sleep 1
+          npm --prefix frontend run check:routes -- http://127.0.0.1:3181
+
+      - name: Build production API image
+        run: docker build -t masters-api:ci backend

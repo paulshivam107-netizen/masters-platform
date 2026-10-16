@@ -205,6 +205,7 @@ function WorkspaceArea({
           feedbackSending={feedbackSending}
           feedbackStatus={feedbackStatus}
           submitPilotFeedback={submitPilotFeedback}
+          logout={logout}
         />
       ) : activeNav === "notifications" ? (
         <NotificationsView
@@ -213,7 +214,7 @@ function WorkspaceArea({
           dismissedNotifications={dismissedNotifications}
           remindersEnabled={Boolean(
             profileFormData?.email_reminders_enabled ||
-              user?.email_reminders_enabled,
+            user?.email_reminders_enabled,
           )}
           clearNotificationHistory={clearNotificationHistory}
           setSelectedApplicationId={setSelectedApplicationId}

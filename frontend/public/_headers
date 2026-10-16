@@ -1,0 +1,27 @@
+# Cloudflare Pages response headers. Mirrors frontend/scripts/serve.cjs.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), geolocation=(), payment=(), microphone=(self)
+  Strict-Transport-Security: max-age=31536000
+
+/app
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+/app/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+/auth
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+/auth/*
+  X-Robots-Tag: noindex, nofollow
+  Cache-Control: no-cache
+/app-shell
+  X-Robots-Tag: noindex, nofollow
+/programs
+  X-Robots-Tag: noindex, nofollow
+
+/static/*
+  Cache-Control: public, max-age=31536000, immutable

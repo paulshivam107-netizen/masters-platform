@@ -1,14 +1,13 @@
-FROM node:18-alpine
+# DEVELOPMENT ONLY (docker-compose): runs the CRA dev server with hot reload.
+# Production serves the static build from Cloudflare Pages; see docs/DEPLOYMENT.md.
+# Never expose this container publicly.
+FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
+RUN npm ci --legacy-peer-deps
 
-# Install dependencies
-RUN npm install
-
-# Copy application code
 COPY . .
 
 EXPOSE 3000

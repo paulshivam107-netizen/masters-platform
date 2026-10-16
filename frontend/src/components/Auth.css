@@ -86,3 +86,32 @@
     gap: 17px;
   }
 }
+
+/* Emailed verification / reset link pages */
+.auth-link-shell {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 480px;
+  padding: 48px 16px 64px;
+}
+
+.auth-link-shell .auth-box {
+  background: var(--surface);
+  padding: 32px 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+}
+
+@media (max-width: 760px) {
+  .auth-link-shell {
+    padding-top: 8px;
+  }
+}
+
+.auth-link-button {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  margin-top: 12px;
+}

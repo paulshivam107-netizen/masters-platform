@@ -88,13 +88,19 @@ class ApplicationTracker(Base):
 
 
 class RefreshToken(Base):
+    """One row per issued refresh token. Rotation revokes the presented row and inserts a new
+    one in the same family (one family = one signed-in device/browser session). Presenting an
+    already-rotated token after the grace window revokes the whole family (theft detection)."""
     __tablename__ = "refresh_tokens"
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     token_hash = Column(String, unique=True, nullable=False, index=True)
+    family_id = Column(String(36), nullable=False, index=True)
     expires_at = Column(DateTime, nullable=False, index=True)
     revoked = Column(Boolean, default=False, nullable=False)
+    revoked_reason = Column(String(32), nullable=True)
+    rotated_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     user = relationship("User", back_populates="refresh_tokens")
@@ -225,3 +231,145 @@ class AdminEconomicsScenario(Base):
     assumptions_json = Column(Text, nullable=False)
     revision = Column(Integer, nullable=False, default=1)
     updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class RateLimitBucket(Base):
+    """Shared fixed-window counter (R05). One row per hashed key and window; expired rows are purged."""
+    __tablename__ = "rate_limit_buckets"
+
+    # "<action>:<scope>:<sha256 prefix>:<window index>" - never a raw email or IP.
+    id = Column(String(160), primary_key=True)
+    count = Column(Integer, nullable=False, default=0)
+    expires_at = Column(DateTime, nullable=False, index=True)
+
+
+class AiPriceVersion(Base):
+    """Versioned provider prices in integer paise per million units (R05). Never floats."""
+    __tablename__ = "ai_price_versions"
+    __table_args__ = (UniqueConstraint("model", "version"),)
+
+    id = Column(Integer, primary_key=True)
+    model = Column(String(80), nullable=False, index=True)
+    version = Column(Integer, nullable=False)
+    input_unit = Column(String(24), nullable=False, default="tokens")
+    output_unit = Column(String(24), nullable=False, default="tokens")
+    input_paise_per_million = Column(Integer, nullable=False)
+    output_paise_per_million = Column(Integer, nullable=False)
+    request_paise = Column(Integer, nullable=False, default=0)
+    effective_from = Column(DateTime, nullable=False, default=datetime.utcnow)
+    note = Column(String(200), nullable=True)
+    created_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class AiSpendCounter(Base):
+    """Per-day committed AI exposure (reserved + settled + unknown) for the global and per-user caps."""
+    __tablename__ = "ai_spend_counters"
+
+    # "global:<day>" or "user:<id>:<day>". Updated with conditional atomic UPDATEs only.
+    id = Column(String(80), primary_key=True)
+    day = Column(Date, nullable=False, index=True)
+    committed_paise = Column(Integer, nullable=False, default=0)
+    in_flight = Column(Integer, nullable=False, default=0)
+    updated_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+
+class AiCostEntry(Base):
+    """Append-mostly AI cost ledger: reserved -> settled | released | unknown (R05)."""
+    __tablename__ = "ai_cost_entries"
+
+    id = Column(String(36), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
+    day = Column(Date, nullable=False, index=True)
+    operation = Column(String(32), nullable=False)
+    reference_id = Column(String(36), nullable=True, index=True)
+    model = Column(String(80), nullable=False)
+    price_version_id = Column(Integer, ForeignKey("ai_price_versions.id"), nullable=True)
+    price_source = Column(String(16), nullable=False)
+    status = Column(String(16), nullable=False, default="reserved", index=True)
+    reserved_paise = Column(Integer, nullable=False)
+    actual_paise = Column(Integer, nullable=True)
+    input_units = Column(Integer, nullable=True)
+    output_units = Column(Integer, nullable=True)
+    usage_reported = Column(Boolean, nullable=False, default=False)
+    failure_code = Column(String(40), nullable=True)
+    note = Column(String(200), nullable=True)
+    created_at = Column(DateTime, nullable=False, default=datetime.utcnow, index=True)
+    resolved_at = Column(DateTime, nullable=True)
+    resolved_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+
+
+# --- Programme catalogue (R09) -------------------------------------------------------------
+# Programme -> intake cycle -> revisions. A revision is a snapshot of one cycle's facts and
+# rounds; corrections are new revisions and published ones are never edited in place.
+
+
+class CatalogProgram(Base):
+    __tablename__ = "catalog_programs"
+
+    id = Column(String(180), primary_key=True)  # stable slug, e.g. "iima-pgpx"
+    school_name = Column(String(180), nullable=False)
+    program_name = Column(String(180), nullable=False)
+    degree = Column(String(120), nullable=False)
+    country = Column(String(120), nullable=False)
+    city = Column(String(120), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    cycles = relationship("CatalogCycle", back_populates="program", order_by="CatalogCycle.cycle")
+
+
+class CatalogCycle(Base):
+    __tablename__ = "catalog_cycles"
+    __table_args__ = (UniqueConstraint("program_id", "cycle"),)
+
+    id = Column(Integer, primary_key=True)
+    program_id = Column(String(180), ForeignKey("catalog_programs.id"), nullable=False, index=True)
+    cycle = Column(String(16), nullable=False)  # admissions cycle, e.g. "2026-27"
+    published_revision_id = Column(Integer, nullable=True)
+    archived_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    program = relationship("CatalogProgram", back_populates="cycles")
+    revisions = relationship("CatalogRevision", back_populates="cycle_row",
+                             order_by="CatalogRevision.revision_number")
+
+
+class CatalogRevision(Base):
+    __tablename__ = "catalog_revisions"
+    __table_args__ = (UniqueConstraint("cycle_id", "revision_number"),)
+
+    id = Column(Integer, primary_key=True)
+    cycle_id = Column(Integer, ForeignKey("catalog_cycles.id"), nullable=False, index=True)
+    revision_number = Column(Integer, nullable=False)
+    # draft -> in_review -> published -> superseded (in_review -> draft when returned)
+    state = Column(String(16), nullable=False, default="draft", index=True)
+    # Reviewer's judgement: unverified | verified | stale | archived. Freshness is applied on read.
+    verification_status = Column(String(16), nullable=False, default="unverified")
+    rights_status = Column(String(16), nullable=False, default="unknown")  # unknown | facts_only | restricted
+    application_fee = Column(Float, nullable=True)
+    fee_currency = Column(String(3), nullable=False, default="INR")
+    source_url = Column(String(600), nullable=True)
+    checked_at = Column(Date, nullable=True)  # when a human last checked source_url
+    change_note = Column(Text, nullable=False, default="")
+    created_by_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    reviewer_user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    reviewed_at = Column(DateTime, nullable=True)
+    published_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+    cycle_row = relationship("CatalogCycle", back_populates="revisions")
+    rounds = relationship("CatalogRound", back_populates="revision", order_by="CatalogRound.sort_order",
+                          cascade="all, delete-orphan")
+
+
+class CatalogRound(Base):
+    __tablename__ = "catalog_rounds"
+
+    id = Column(Integer, primary_key=True)
+    revision_id = Column(Integer, ForeignKey("catalog_revisions.id"), nullable=False, index=True)
+    label = Column(String(60), nullable=False)
+    deadline = Column(Date, nullable=True)
+    sort_order = Column(Integer, nullable=False, default=0)
+
+    revision = relationship("CatalogRevision", back_populates="rounds")

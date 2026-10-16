@@ -1,4 +1,7 @@
-// Small static preview/reference server. Put HTTPS and deployment controls in the chosen host.
+// Small static preview/reference server that mirrors the production host's routing
+// (public/_redirects + public/_headers on Cloudflare Pages): "/x" serves x.html, "/x.html"
+// and "/x/" redirect to "/x", /app and /auth routes get the noindex app shell, and unknown
+// paths return the real 404 page. Put HTTPS and deployment controls in the chosen host.
 const http = require("node:http");
 const fs = require("node:fs");
 const path = require("node:path");
@@ -40,12 +43,26 @@ http
     }
     const clean = pathname.replace(/\/+$/, "") || "/";
     const privateRoute =
-      clean === "/auth" || clean === "/app" || clean.startsWith("/app/");
+      clean === "/auth" ||
+      clean.startsWith("/auth/") ||
+      clean === "/app" ||
+      clean.startsWith("/app/");
+    if (!privateRoute && clean.endsWith(".html") && clean !== "/404.html") {
+      res.writeHead(308, {
+        Location:
+          (clean.replace(/(\/index)?\.html$/, "") || "/") +
+          new URL(req.url, "http://localhost").search,
+      });
+      return res.end();
+    }
+    const isFile = (f) => fs.existsSync(f) && fs.statSync(f).isFile();
     let filename = privateRoute
       ? path.join(root, "app-shell.html")
-      : path.join(root, clean);
-    if (fs.existsSync(filename) && fs.statSync(filename).isDirectory())
-      filename = path.join(filename, "index.html");
+      : clean === "/"
+        ? path.join(root, "index.html")
+        : isFile(path.join(root, clean + ".html"))
+          ? path.join(root, clean + ".html")
+          : path.join(root, clean);
     let status = 200;
     if (!fs.existsSync(filename) || !fs.statSync(filename).isFile()) {
       status = 404;

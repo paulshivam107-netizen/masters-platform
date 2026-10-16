@@ -1,4 +1,5 @@
 import { guides } from "../content/guides";
+import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
   "/": {
@@ -19,6 +20,12 @@ const publicPages = {
       "Set up your first application, save an essay and practise an interview answer. Learn what the Masters pilot saves and how to get help.",
     kind: "website",
   },
+};
+publicPages[practice.path] = {
+  title: practice.title,
+  description: practice.description,
+  updated: practice.updated,
+  kind: "website",
 };
 for (const guide of guides)
   publicPages[`/guides/${guide.slug}`] = { ...guide, kind: "article" };
@@ -56,11 +63,15 @@ function metadata(pathname, config = defaults) {
   const indexable = Boolean(page && origin && config.allowIndexing);
   const fallbackTitle = path.startsWith("/app")
     ? "Your application workspace"
-    : path === "/auth"
-      ? "Sign in or create an account"
-      : path === "/programs"
-        ? "Explore programmes"
-        : "Page not found";
+    : path === "/auth/verify-email"
+      ? "Verify your email"
+      : path === "/auth/reset-password"
+        ? "Choose a new password"
+        : path === "/auth" || path.startsWith("/auth/")
+          ? "Sign in or create an account"
+          : path === "/programs"
+            ? "Explore programmes"
+            : "Page not found";
   const title = `${page?.title || fallbackTitle} | ${config.siteName || "Masters"}`;
   const description =
     page?.description ||

@@ -24,7 +24,8 @@
     "e2e:headed": "npx playwright test -c e2e/playwright.config.js --headed",
     "eject": "react-scripts eject",
     "postbuild": "node scripts/prerender.cjs",
-    "preview": "node scripts/serve.cjs"
+    "preview": "node scripts/serve.cjs",
+    "check:routes": "node scripts/check-routes.cjs"
   },
   "eslintConfig": {
     "extends": [

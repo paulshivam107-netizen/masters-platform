@@ -56,12 +56,22 @@ def main():
     if settings.is_production_like_env and settings.should_expose_dev_auth_tokens:
         errors.append(f"EXPOSE_DEV_AUTH_TOKENS cannot be enabled when APP_ENV={app_env}.")
 
+    if settings.public_app_url_error:
+        errors.append(settings.public_app_url_error)
+
     if not settings.cors_origins_list:
         errors.append("CORS_ORIGINS is empty.")
     if settings.is_production_like_env and settings.cors_has_localhost_origin:
         errors.append("CORS_ORIGINS cannot include localhost/127.0.0.1 in production-like environments.")
     if settings.is_production_like_env and settings.has_database_url_placeholder:
         errors.append("DATABASE_URL contains placeholder credentials. Replace with a real password/token.")
+
+    if settings.is_production_like_env and settings.is_postgres_database:
+        if not settings.MIGRATION_DATABASE_URL:
+            warnings.append("MIGRATION_DATABASE_URL is not set; migrations will use DATABASE_URL. "
+                            "Use a separate schema-owner connection and a restricted runtime role.")
+        elif settings.MIGRATION_DATABASE_URL.strip() == settings.DATABASE_URL.strip():
+            warnings.append("DATABASE_URL equals MIGRATION_DATABASE_URL: the API would run with schema-owner rights.")
 
     db_url = settings.DATABASE_URL
     if db_url.startswith("sqlite:///"):

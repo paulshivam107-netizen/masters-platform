@@ -2,13 +2,14 @@ import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import { MemoryRouter } from "react-router-dom";
 import AdminView from "./AdminView";
-import { FeedbackQueue, EconomicsCalculator } from "./AdminPilot";
+import { FeedbackQueue, EconomicsCalculator, AiLedger } from "./AdminPilot";
 import { ECONOMICS_DEFAULTS } from "./adminEconomics";
 import * as api from "../../../api/adminApi";
 jest.mock("../../../api/adminApi", () => ({
   getPilotAdminApi: jest.fn(),
   updatePilotFeedbackApi: jest.fn(),
   saveEconomicsApi: jest.fn(),
+  resolveAiLedgerEntryApi: jest.fn(),
 }));
 let root, container;
 const button = (label) =>
@@ -143,4 +144,26 @@ test("failed data load is not presented as an empty success state", async () => 
   expect(container.querySelector('[role="alert"]')).toBeTruthy();
   expect(container.textContent).not.toContain("No matching feedback.");
   expect(button("Try again")).toBeTruthy();
+});
+
+test("AI ledger separates alerts from hard caps and resolves unknown outcomes", async () => {
+  const ledger = {
+    items: [{ id: "e1", operation: "interview_answer", model: "gpt-4.1-mini", status: "unknown",
+      reserved_paise: 51, actual_paise: null, failure_code: "provider_timeout",
+      user_email: "a@example.com", created_at: "2026-10-15T10:00:00" }],
+    total: 1, unknown_total: 1, ai_enabled: true,
+    today: { committed_paise: 4100, global_daily_cap_paise: 50000, user_daily_cap_paise: 5000,
+      alert_paise: 4000, alert_triggered: true, cap_reached: false, in_flight: 0 },
+    reconciliation: { balanced: true },
+  };
+  api.getPilotAdminApi.mockResolvedValue(ledger);
+  api.resolveAiLedgerEntryApi.mockResolvedValue({});
+  await act(async () => root.render(<AiLedger active refresh={0} />));
+  expect(container.textContent).toContain("Alert only");
+  expect(container.textContent).toContain("does not block anything");
+  expect(container.textContent).not.toContain("Hard cap reached");
+  expect(container.textContent).toContain("provider_timeout");
+  await act(async () => button("Not charged").click());
+  expect(api.resolveAiLedgerEntryApi).toHaveBeenCalledWith("e1", { outcome: "not_charged" });
+  expect(api.getPilotAdminApi).toHaveBeenCalledTimes(2);
 });
