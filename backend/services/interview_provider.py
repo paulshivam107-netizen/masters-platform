@@ -8,6 +8,7 @@ from pydantic import ValidationError
 
 from config import get_settings
 from interview_schemas import InterviewFeedback, NextQuestion
+from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
@@ -187,9 +188,11 @@ def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
     if result["kind"] != "new_topic":
+        span = find_quote(result["anchor_quote"], last["text"]) if last else None
         if (not last or result["anchor_turn_id"] != last["id"] or not result["anchor_quote"].strip()
-                or result["anchor_quote"] not in last["text"] or context["next_step"]["move_on"]):
+                or span is None or context["next_step"]["move_on"]):
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
+        result["anchor_quote"] = span
     elif result["anchor_turn_id"] or result["anchor_quote"]:
         raise ProviderFailure("The next question was incomplete. Please retry.")
     if any(t["role"] == "assistant" and t["text"].strip().casefold() == result["question"].strip().casefold() for t in transcript):
@@ -202,8 +205,10 @@ def validate_feedback(result, transcript):
     answers = {turn["id"]: turn["text"] for turn in transcript if turn["role"] == "user"}
     for point in result["strengths"] + result["improvements"]:
         # Evidence must be an exact, nonempty substring of the cited answer.
-        if point["turn_id"] not in answers or not point["quote"].strip() or point["quote"] not in answers[point["turn_id"]]:
+        span = find_quote(point["quote"], answers[point["turn_id"]]) if point["turn_id"] in answers else None
+        if span is None:
             raise ProviderFailure("The feedback could not be matched to your answers. Please retry the debrief.")
+        point["quote"] = span
     return result
 
 

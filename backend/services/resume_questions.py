@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from models import ResumeQuestionSet
 from resume_schemas import ResumeQuestionDraft
 from services import interview_provider as provider
+from services.grounding import find_quote
 
 
 def extract_document(data, kind):
@@ -71,21 +72,23 @@ def _build_graph(result, resume_text, context):
     result = ResumeQuestionDraft.model_validate(result)
     profile = []
     for index, fact in enumerate(result.profile, 1):
-        if fact.evidence_quote not in resume_text:
+        span = find_quote(fact.evidence_quote, resume_text)
+        if span is None:
             raise provider.ProviderFailure("The profile could not be matched to your resume. Please retry.")
-        profile.append({"id": f"fact-{index}", **fact.model_dump()})
+        profile.append({"id": f"fact-{index}", **{**fact.model_dump(), "evidence_quote": span}})
     roots, nodes, edges = [], [], []
     seen = set()
     for index, branch in enumerate(result.branches, 1):
         previous = None
         for depth, question in enumerate((branch.opening, branch.follow_up, branch.deeper_follow_up), 1):
-            if question.evidence_quote not in resume_text or question.question.casefold() in seen:
+            span = find_quote(question.evidence_quote, resume_text)
+            if span is None or question.question.casefold() in seen:
                 raise provider.ProviderFailure("The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.")
             seen.add(question.question.casefold())
             node_id = f"resume-{index}-{depth}"
             if depth == 1:
                 roots.append(node_id)
-            nodes.append({"id": node_id, "text": question.question, "evidence_quote": question.evidence_quote,
+            nodes.append({"id": node_id, "text": question.question, "evidence_quote": span,
                           "topic": f"Resume topic {index}", "routes": [context["route"]], "sources": ["resume"]})
             if previous:
                 edges.append({"parent": previous, "child": node_id, "basis": "ai_connection", "sources": ["resume"]})
