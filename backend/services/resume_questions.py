@@ -72,7 +72,7 @@ def _build_graph(result, resume_text, context):
     result = ResumeQuestionDraft.model_validate(result)
     profile = []
     for index, fact in enumerate(result.profile, 1):
-        span = find_quote(fact.evidence_quote, resume_text)
+        span = find_quote(fact.evidence_quote, resume_text, max_length=240)
         if span is None:
             raise provider.ProviderFailure("The profile could not be matched to your resume. Please retry.")
         profile.append({"id": f"fact-{index}", **{**fact.model_dump(), "evidence_quote": span}})
@@ -81,7 +81,7 @@ def _build_graph(result, resume_text, context):
     for index, branch in enumerate(result.branches, 1):
         previous = None
         for depth, question in enumerate((branch.opening, branch.follow_up, branch.deeper_follow_up), 1):
-            span = find_quote(question.evidence_quote, resume_text)
+            span = find_quote(question.evidence_quote, resume_text, max_length=240)
             if span is None or question.question.casefold() in seen:
                 raise provider.ProviderFailure("The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.")
             seen.add(question.question.casefold())

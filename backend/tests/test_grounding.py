@@ -59,6 +59,39 @@ class FindQuoteTest(unittest.TestCase):
         self.assertIsNone(find_quote("led the tem", "led the team"))
 
 
+ANSWER = ("I'm applying now because the decisions I find most interesting, such as what to build and for which "
+          "merchants, are made one level above me, and I want the business training to make them well.")
+
+
+class EllipsisTest(unittest.TestCase):
+    """Live gpt-4.1-mini debriefs elided quotes; an elision is accepted only as the full original passage."""
+
+    def test_leading_ellipsis(self):
+        self.assertEqual(find_quote("...I want the business training to make them well.", ANSWER),
+                         "I want the business training to make them well")
+        self.assertEqual(find_quote("… are made one level above me", ANSWER), "are made one level above me")
+
+    def test_mid_quote_elision_returns_the_whole_passage(self):
+        span = find_quote("the decisions I find most interesting... are made one level above me", ANSWER)
+        self.assertEqual(span, "the decisions I find most interesting, such as what to build and for which merchants, "
+                               "are made one level above me")
+        self.assertIn(span, ANSWER)
+        self.assertEqual(find_quote("Well, not formally… there were three of us", "Well, not formally. There were three of us."),
+                         "Well, not formally. There were three of us")
+
+    def test_elision_pieces_must_match_in_order_and_unchanged(self):
+        self.assertIsNone(find_quote("are made one level above me... the decisions I find", ANSWER))
+        self.assertIsNone(find_quote("the decisions I find most exciting... one level above me", ANSWER))
+        self.assertIsNone(find_quote("the decisions... ab", ANSWER))  # a piece under three characters
+        self.assertIsNone(find_quote("...", ANSWER))
+
+    def test_max_length_limits_the_returned_passage(self):
+        quote = "I'm applying now... make them well"
+        self.assertEqual(find_quote(quote, ANSWER), ANSWER[:-1])
+        self.assertIsNone(find_quote(quote, ANSWER, max_length=60))
+        self.assertIsNone(find_quote("x" * 10, "x" * 10, max_length=5))
+
+
 class CallSiteTest(unittest.TestCase):
     def test_follow_up_anchor_is_stored_verbatim(self):
         turns = [{"role": "assistant", "id": "q1", "text": "What did you decide?"},
@@ -80,6 +113,9 @@ class CallSiteTest(unittest.TestCase):
         for item in checked["strengths"] + checked["improvements"]:
             self.assertEqual(item["quote"], "client’s\nrollout end to end")
             self.assertIn(item["quote"], transcript[1]["text"])
+        result["strengths"][0]["quote"] = "I owned the… end to end"
+        self.assertEqual(provider.validate_feedback(result, transcript)["strengths"][0]["quote"],
+                         "I owned the client’s\nrollout end to end")
         result["strengths"][0]["quote"] = "client managed rollout"
         with self.assertRaises(provider.ProviderFailure):
             provider.validate_feedback(result, transcript)

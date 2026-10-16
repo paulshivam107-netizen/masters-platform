@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v4"
+PROMPT_VERSION = "mba-interview-v5"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -168,7 +168,8 @@ def next_question(context, transcript):
         "Ask the next interview question. Go one topic deep: clarify a concrete claim, then probe its reasoning, "
         "alternatives or consequences. Use the latest answer rather than reading a prewritten sequence. "
         "For a follow_up or clarification, anchor_turn_id MUST identify the latest user answer and anchor_quote "
-        "MUST be a short exact substring of that answer supporting the question. For new_topic use empty anchors. "
+        "MUST be a short exact substring of that answer supporting the question: one continuous passage, never shortened "
+        "with an ellipsis. For new_topic use empty anchors. "
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
@@ -191,7 +192,7 @@ def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
     if result["kind"] not in ("new_topic", "end_requested"):
-        span = find_quote(result["anchor_quote"], last["text"]) if last else None
+        span = find_quote(result["anchor_quote"], last["text"], max_length=240) if last else None
         if (not last or result["anchor_turn_id"] != last["id"] or not result["anchor_quote"].strip()
                 or span is None or context["next_step"]["move_on"]):
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
@@ -209,7 +210,7 @@ def validate_feedback(result, transcript):
     answers = {turn["id"]: turn["text"] for turn in transcript if turn["role"] == "user"}
     for point in result["strengths"] + result["improvements"]:
         # Evidence must be an exact, nonempty substring of the cited answer.
-        span = find_quote(point["quote"], answers[point["turn_id"]]) if point["turn_id"] in answers else None
+        span = find_quote(point["quote"], answers[point["turn_id"]], max_length=400) if point["turn_id"] in answers else None
         if span is None:
             raise ProviderFailure("The feedback could not be matched to your answers. Please retry the debrief.")
         point["quote"] = span
@@ -221,7 +222,8 @@ def feedback(context, transcript):
     result, usage = _structured(
         "Provide a short debrief with 1-2 strengths, 1-3 actionable improvements and one retry exercise. "
         "For EVERY strength/improvement, cite the exact user turn_id and an exact short verbatim quote "
-        "from that answer. A quote must genuinely support the observation. Calibrate the summary to "
+        "from that answer: one continuous passage, never shortened with an ellipsis. A quote must genuinely "
+        "support the observation. Calibrate the summary to "
         "the amount of evidence; even very short answers permit only limited feedback. Do not invent "
         "achievements, fabricate rewritten facts, award admissions scores, or comment on vocal delivery. "
         "Use feedback_criteria appropriate to the applicant's actual background and chosen focus. "
