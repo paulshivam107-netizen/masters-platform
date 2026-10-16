@@ -87,11 +87,12 @@ class Run:
             if self.spent_paise + reserved > self.max_spend_paise:
                 raise BudgetExceeded(f"next call could exceed {self.max_spend_paise} paise")
             started = time.perf_counter()
-            result, usage, failure, billing = None, {}, None, "charged"
+            result, usage, failure, billing, message = None, {}, None, "charged", None
             try:
                 result, usage = action()
             except provider.ProviderFailure as exc:
-                failure, billing, usage = exc.code, exc.billing, exc.usage or {}
+                # The message is the user-facing text; it identifies which check rejected the output.
+                failure, billing, usage, message = exc.code, exc.billing, exc.usage or {}, str(exc)
             latency_ms = round((time.perf_counter() - started) * 1000)
             input_tokens, output_tokens = usage.get("input_tokens"), usage.get("output_tokens")
             if billing == "none":
@@ -104,7 +105,7 @@ class Run:
             self.spent_paise += cost
             self._record({
                 "profile_id": profile_id, "step": step, "operation": operation, "attempt": attempt,
-                "ok": failure is None, "failure_code": failure, "billing": billing, "latency_ms": latency_ms,
+                "ok": failure is None, "failure_code": failure, "failure_message": message, "billing": billing, "latency_ms": latency_ms,
                 "model": self.model, "input_tokens": input_tokens, "output_tokens": output_tokens,
                 "reserved_input_tokens": reserve_in, "reserved_output_tokens": reserve_out,
                 "reserved_paise": reserved, "cost_paise": cost,

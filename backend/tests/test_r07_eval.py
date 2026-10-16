@@ -48,7 +48,7 @@ class RunnerTest(unittest.TestCase):
             self.assertGreaterEqual(call["latency_ms"], 0)
         meta = json.loads((run_dir / "run.json").read_text())
         self.assertEqual(meta["model"], "gpt-4.1-mini")
-        self.assertEqual(meta["prompt_version"], "mba-interview-v2")
+        self.assertEqual(meta["prompt_version"], "mba-interview-v3")
         self.assertEqual(meta["eval_version"], profiles.EVAL_VERSION)
         self.assertEqual(meta["provider"], "fake")
 
@@ -68,6 +68,7 @@ class RunnerTest(unittest.TestCase):
         self.assertTrue({("provider_timeout", "unknown"), ("provider_limit", "none"),
                          ("provider_error", "charged")} <= failures, failures)
         self.assertIn("provider_timeout", {c["failure_code"] for c in calls})
+        self.assertTrue(all(c["failure_message"] for c in calls if not c["ok"]))
         for call in calls:
             if call["billing"] == "none":
                 self.assertEqual(call["cost_paise"], 0)

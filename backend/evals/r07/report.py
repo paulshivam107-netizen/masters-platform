@@ -108,7 +108,8 @@ def build(run_dir):
                      "stopped": {s["profile_id"]: s["stopped_at"] for s in sessions if s.get("stopped_at")}},
         "reliability": {"attempts": len(calls), "failed_attempts": len(failed), "steps": len(steps),
                         "recovered_steps": recovered, "exhausted_steps": len(exhausted),
-                        "failures_by_code": dict(Counter(f"{c['failure_code']} ({c['billing']})" for c in failed))},
+                        "failures_by_code": dict(Counter(f"{c['failure_code']} ({c['billing']})" for c in failed)),
+                        "failures_by_message": dict(Counter(c.get("failure_message") or "" for c in failed))},
         "cost": {"total_paise": sum(c["cost_paise"] for c in calls),
                  "per_session_paise": _stats([per_session[pid] for pid in completed]),
                  "per_call_paise": {op: _stats([c["cost_paise"] for c in rows]) for op, rows in by_operation.items()},
@@ -172,6 +173,9 @@ def render(summary):
         f"{summary['reliability']['exhausted_steps']} exhausted.", "",
     ]
     lines += [f"- {code}: {n}" for code, n in sorted(summary["reliability"]["failures_by_code"].items())] or ["- none"]
+    if summary["reliability"]["failures_by_message"]:
+        lines += ["", "By message:"] + [f"- {n}× {message}" for message, n in
+                                         sorted(summary["reliability"]["failures_by_message"].items(), key=lambda x: -x[1])]
     lines += [
         "", "## Cost", "",
         f"Total {_rupees(cost['total_paise'])}. Per completed session: mean {_rupees(per_session['mean'])}, "

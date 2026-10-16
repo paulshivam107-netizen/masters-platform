@@ -1,4 +1,5 @@
 """Bounded interview calls. Keys and provider errors never enter API responses."""
+import copy
 import json
 import os
 
@@ -10,7 +11,7 @@ from interview_schemas import InterviewFeedback, NextQuestion
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v2"
+PROMPT_VERSION = "mba-interview-v3"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -111,7 +112,7 @@ Evaluate only the supplied answers, never claims about speech delivery from text
 Return the requested JSON schema, without markdown or additional text."""
 
 
-def _structured(task, context, transcript, schema_class, max_tokens=None, instructions=None):
+def _structured(task, context, transcript, schema_class, max_tokens=None, instructions=None, schema=None):
     model = text_model()
     response = _post("responses", json={
         "model": model,
@@ -121,7 +122,7 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
         "max_output_tokens": max_tokens or (2200 if schema_class is InterviewFeedback else 450),
         "text": {"format": {
             "type": "json_schema", "name": schema_class.__name__,
-            "strict": True, "schema": schema_class.model_json_schema(),
+            "strict": True, "schema": schema or schema_class.model_json_schema(),
         }},
     })
     usage = {"model": model}
@@ -144,9 +145,20 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
                               billing="charged", usage=usage) from None
 
 
+def _new_topic_schema():
+    # Strict structured output then cannot return a follow-up: models ignored move_on in the
+    # prompt alone (R07 pilot), and every rejected attempt was billed.
+    schema = copy.deepcopy(NextQuestion.model_json_schema())
+    schema["properties"]["kind"] = {"type": "string", "enum": ["new_topic"]}
+    for field in ("anchor_turn_id", "anchor_quote"):
+        schema["properties"][field] = {"type": "string", "enum": [""]}
+    return schema
+
+
 def next_question(context, transcript):
     context = dict(context)
     context["next_step"] = next_step(context, transcript)
+    move_on = context["next_step"]["move_on"]
     if context.get("resume_follow_ups"):
         context["optional_question_bank_follow_ups"] = context["resume_follow_ups"]
     elif context.get("question_id"):
@@ -159,8 +171,10 @@ def next_question(context, transcript):
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
-        "Return only a question, without feedback or an example answer.",
-        context, transcript, NextQuestion, max_tokens=800,
+        "Return only a question, without feedback or an example answer."
+        + (" next_step.move_on is TRUE: this branch is finished. Ask about a different priority topic not yet "
+           "covered; do not continue or refer back to the previous story." if move_on else ""),
+        context, transcript, NextQuestion, max_tokens=800, schema=_new_topic_schema() if move_on else None,
     )
     try:
         return _check_next_question(result, context, transcript), usage
