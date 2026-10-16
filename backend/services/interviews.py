@@ -12,10 +12,44 @@ from sqlalchemy.exc import IntegrityError
 from models import AiRuntimeConfig, InterviewOperation, InterviewQuota, InterviewSession
 from services import ai_costs
 from services import interview_provider as provider
+from services.interview_plan import next_step
+
+# The third try of the same answer skips the model and asks a fixed question, so a session can
+# never be stuck on repeated grounding failures (R07). That try is not billed.
+FALLBACK_AFTER_ATTEMPTS = 3
+FALLBACK_QUESTIONS = {
+    "cat": [
+        "Which subject or project from your studies interests you most, and why?",
+        "Tell me about a time you worked with others towards a shared goal. What did you personally do?",
+        "Describe a setback in your studies or activities. What would you do differently now?",
+        "What would you like to learn in a two-year MBA that your studies so far have not taught you?",
+        "What do you hope to contribute to your classmates?",
+    ],
+    "experienced": [
+        "Tell me about a decision where the trade-offs were not obvious. How did you decide?",
+        "Describe a setback in your work. What did you learn from it?",
+        "How have you helped colleagues or peers do better work?",
+        "Why is this the right point in your career for a management programme?",
+        "What do you hope to contribute to your classmates?",
+    ],
+}
 
 # Instructions, schema and framing sent with every text call, beyond context + transcript.
 TEXT_OVERHEAD_CHARS = 8000
 MAX_OUTPUT_TOKENS = {"answer": 800, "feedback": 2200}
+
+
+def fallback_question(context, transcript):
+    """A fixed, route-appropriate new topic that has not been asked yet. No model call."""
+    asked = {t["text"].strip().casefold() for t in transcript if t["role"] == "assistant"}
+    candidates = FALLBACK_QUESTIONS[context["route"]] + list(context.get("resume_follow_ups") or []) + \
+        ["What else would you like the panel to understand about you?"]
+    question = next((q for q in candidates if q.strip().casefold() not in asked), candidates[-1])
+    step = next_step(context, transcript)
+    topic = next((topic for topic in step["priority_topics"] if topic not in step["covered_topics"]),
+                 step["priority_topics"][0])
+    return {"question": question, "kind": "new_topic", "topic": topic, "anchor_turn_id": "", "anchor_quote": "",
+            "fallback": True}
 
 
 def fingerprint(value):
@@ -157,7 +191,7 @@ def claim(db, session, request_id, version, kind, payload, billable=True):
     return op, token
 
 
-def complete(db, session, op, token, updates=None, result=None, usage=None):
+def complete(db, session, op, token, updates=None, result=None, usage=None, billing="charged"):
     values = {"pending_token": None, "pending_until": None, "updated_at": datetime.utcnow()}
     if updates:
         values.update(updates)
@@ -170,7 +204,7 @@ def complete(db, session, op, token, updates=None, result=None, usage=None):
     op.failure_code = None
     op.result_json = json.dumps(result) if result is not None else None
     op.usage_json = json.dumps(usage or {})
-    ai_costs.finish(db, ai_costs.reserved_entry_for(db, op.id), "charged", usage)
+    ai_costs.finish(db, ai_costs.reserved_entry_for(db, op.id), billing, usage)
     db.commit()
     db.refresh(session)
     return serialize(session)

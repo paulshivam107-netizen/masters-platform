@@ -98,6 +98,17 @@ class RunnerTest(unittest.TestCase):
             self.assertTrue(all(not c["ok"] for c in attempts[:-1]))
             self.assertTrue(attempts[-1]["ok"] or len(attempts) == 3)
 
+    def test_third_attempt_uses_the_apps_no_ai_fallback(self):
+        run_dir = self.run_one(fake_fault_every=1)  # every provider call fails
+        calls = [json.loads(line) for line in (run_dir / "calls.jsonl").read_text().splitlines()]
+        answers = [c for c in calls if c["operation"] == "interview_answer"]
+        self.assertEqual([c["attempt"] for c in answers if c["fallback"]], [3, 3, 3, 3])
+        self.assertTrue(all(c["cost_paise"] == 0 and c["model"] is None for c in answers if c["fallback"]))
+        session = json.loads((run_dir / "sessions" / "cat-01-commerce-fresher.json").read_text())
+        self.assertIsNone(session["stopped_at"])
+        self.assertTrue(all(t.get("fallback") for t in session["transcript"][2::2]))
+        self.assertEqual(report.build(run_dir)["reliability"]["fallback_steps"], 4)
+
     def test_budget_stops_before_overspending(self):
         run_dir = self.run_one(max_spend_paise=3)
         calls = [json.loads(line) for line in (run_dir / "calls.jsonl").read_text().splitlines()]

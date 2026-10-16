@@ -355,6 +355,23 @@ class BillableApiTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(called.call_count, 2)
         await self.assert_preserved(session)
 
+    async def test_third_try_of_one_answer_uses_a_no_ai_fallback_question(self):
+        session = await self.session()
+        request_id = str(uuid4())
+        failure = provider.ProviderFailure("The follow-up could not be matched to your answer.", billing="charged",
+                                           usage={"input_tokens": 900, "output_tokens": 40})
+        with patch.object(provider, "next_question", side_effect=failure) as called:
+            codes = [(await self.answer(session, request_id)).status_code for _ in range(2)]
+            third = await self.answer(session, request_id)
+        self.assertEqual(codes, [503, 503])
+        self.assertEqual(third.status_code, 200, third.text)
+        self.assertEqual(called.call_count, 2)  # the third try never reached the provider
+        question = third.json()["transcript"][-1]
+        self.assertEqual((question["id"], question["kind"], question["anchor_turn_id"], question["fallback"]),
+                         ("q2", "new_topic", "", True))
+        self.assertNotIn(question["text"].casefold(), [t["text"].casefold() for t in session["transcript"]])
+        self.assertEqual([e[0] for e in self.entries()], ["settled", "settled", "released"])
+
     async def test_price_versions_admin_api(self):
         created = await self.client.post("/admin/pilot/ai-prices", headers=self.admin, json={
             "model": "gpt-4.1-mini", "input_paise_per_million": 4_000, "output_paise_per_million": 16_000})

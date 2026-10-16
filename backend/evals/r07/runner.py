@@ -19,7 +19,7 @@ from evals.r07.fake_openai import FakeOpenAI
 from services import ai_costs
 from services import interview_provider as provider
 from services.interview_plan import PLAN_VERSION, make_plan
-from services.interviews import MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS
+from services.interviews import FALLBACK_AFTER_ATTEMPTS, MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS, fallback_question
 from services.resume_questions import generate_questions
 
 RESULTS_DIR = Path(__file__).with_name("results")
@@ -81,11 +81,19 @@ class Run:
     def close(self):
         self._calls.close()
 
-    def call(self, profile_id, step, operation, reserve_in, reserve_out, action):
+    def call(self, profile_id, step, operation, reserve_in, reserve_out, action, fallback=None):
         """Run one provider step with up to max_attempts tries (a user pressing retry); returns
-        its result or None. Every attempt is recorded."""
+        its result or None. Every attempt is recorded. With ``fallback``, the app's no-AI
+        question replaces the model from attempt FALLBACK_AFTER_ATTEMPTS, as the answer route does."""
         reserved = self.price.cost(reserve_in, reserve_out)
         for attempt in range(1, self.max_attempts + 1):
+            if fallback and attempt >= FALLBACK_AFTER_ATTEMPTS:
+                self._record({"profile_id": profile_id, "step": step, "operation": operation, "attempt": attempt,
+                              "ok": True, "fallback": True, "failure_code": None, "failure_message": None,
+                              "rejected_output": None, "billing": "none", "latency_ms": 0, "model": None,
+                              "input_tokens": None, "output_tokens": None, "reserved_input_tokens": reserve_in,
+                              "reserved_output_tokens": reserve_out, "reserved_paise": reserved, "cost_paise": 0})
+                return fallback()
             if self.spent_paise + reserved > self.max_spend_paise:
                 raise BudgetExceeded(f"next call could exceed {self.max_spend_paise} paise")
             started = time.perf_counter()
@@ -108,7 +116,7 @@ class Run:
             self.spent_paise += cost
             self._record({
                 "profile_id": profile_id, "step": step, "operation": operation, "attempt": attempt,
-                "ok": failure is None, "failure_code": failure, "failure_message": message,
+                "ok": failure is None, "fallback": False, "failure_code": failure, "failure_message": message,
                 "rejected_output": self.last_output if failure else None, "billing": billing, "latency_ms": latency_ms,
                 "model": self.model, "input_tokens": input_tokens, "output_tokens": output_tokens,
                 "reserved_input_tokens": reserve_in, "reserved_output_tokens": reserve_out,
@@ -185,7 +193,8 @@ def run_profile(run, profile):
             break
         question = run.call(pid, f"a{index}", "interview_answer",
                             *reserve_answer(len(json.dumps(context)), len(before), len(answer["text"])),
-                            lambda: provider.next_question(context, transcript))
+                            lambda: provider.next_question(context, transcript),
+                            fallback=lambda: fallback_question(context, transcript))
         if question is None:
             stopped_at = f"a{index}"
             break

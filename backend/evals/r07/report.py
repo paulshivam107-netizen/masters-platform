@@ -108,6 +108,7 @@ def build(run_dir):
                      "stopped": {s["profile_id"]: s["stopped_at"] for s in sessions if s.get("stopped_at")}},
         "reliability": {"attempts": len(calls), "failed_attempts": len(failed), "steps": len(steps),
                         "recovered_steps": recovered, "exhausted_steps": len(exhausted),
+                        "fallback_steps": sum(bool(c.get("fallback")) for c in calls),
                         "failures_by_code": dict(Counter(f"{c['failure_code']} ({c['billing']})" for c in failed)),
                         "failures_by_message": dict(Counter(c.get("failure_message") or "" for c in failed))},
         "cost": {"total_paise": sum(c["cost_paise"] for c in calls),
@@ -170,7 +171,8 @@ def render(summary):
         "## Reliability", "",
         f"{summary['reliability']['failed_attempts']} failed of {summary['reliability']['attempts']} attempts; "
         f"{summary['reliability']['recovered_steps']} steps recovered on retry, "
-        f"{summary['reliability']['exhausted_steps']} exhausted.", "",
+        f"{summary['reliability']['exhausted_steps']} exhausted; "
+        f"{summary['reliability']['fallback_steps']} answered by the no-AI fallback question.", "",
     ]
     lines += [f"- {code}: {n}" for code, n in sorted(summary["reliability"]["failures_by_code"].items())] or ["- none"]
     if summary["reliability"]["failures_by_message"]:
