@@ -222,12 +222,21 @@ def _check_next_question(result, context, transcript):
 def validate_feedback(result, transcript):
     result = InterviewFeedback.model_validate(result).model_dump()
     answers = {turn["id"]: turn["text"] for turn in transcript if turn["role"] == "user"}
-    for point in result["strengths"] + result["improvements"]:
-        # Evidence must be an exact, nonempty substring of the cited answer.
-        span = find_quote(point["quote"], answers[point["turn_id"]], max_length=400) if point["turn_id"] in answers else None
-        if span is None:
+    dropped = 0
+    for key in ("strengths", "improvements"):
+        kept = []
+        for point in result[key]:
+            # Evidence must be an exact, nonempty substring of the cited answer.
+            span = find_quote(point["quote"], answers[point["turn_id"]], max_length=400) if point["turn_id"] in answers else None
+            if span is None:
+                dropped += 1
+                continue
+            kept.append({**point, "quote": span})
+        if not kept:
             raise ProviderFailure("The feedback could not be matched to your answers. Please retry the debrief.")
-        point["quote"] = span
+        result[key] = kept
+    if dropped:
+        result["dropped_points"] = dropped
     return result
 
 

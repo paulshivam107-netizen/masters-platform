@@ -138,8 +138,117 @@ class CallSiteTest(unittest.TestCase):
         self.assertEqual(len(graph["nodes"]), 9)
         self.assertTrue(all(n["evidence_quote"] in text for n in graph["nodes"]))
         draft["branches"][0]["opening"]["evidence_quote"] = "Invented promotion"
+        partial = resume_questions._build_graph(draft, text, {"route": "experienced"})
+        self.assertEqual(partial["roots"], ["resume-1-1", "resume-2-1"])
+        self.assertEqual(len(partial["nodes"]), 6)
+
+
+RESUME = "Led a 5-person team on the ERP rollout.\nAnalyst at Acme Corp, 2019-2022.\nMBA aspirant."
+ROUTE = {"route": "experienced"}
+
+
+def _q(label, quote="Analyst at Acme Corp"):
+    return {"question": f"Tell me more about {label} please?", "evidence_quote": quote}
+
+
+def _branch(n, bad=()):
+    keys = ("opening", "follow_up", "deeper_follow_up")
+    return {k: _q(f"{n}{k}", "Never written" if k in bad else "Analyst at Acme Corp") for k in keys}
+
+
+def _fact(quote="Analyst at Acme Corp"):
+    return {"category": "experience", "evidence_quote": quote}
+
+
+class PartialGraphTest(unittest.TestCase):
+    def build(self, facts, branches):
+        branches = list(branches)
+        while len(branches) < 3:  # the draft schema requires exactly 3 branches
+            branches.append(_branch(len(branches) + 7))
+        return resume_questions._build_graph({"profile": facts, "branches": branches}, RESUME, ROUTE)
+
+    def test_bad_fact_dropped_and_renumbered(self):
+        graph = self.build([_fact("Not in resume"), _fact(), _fact("MBA aspirant")], [_branch(1)])
+        self.assertEqual([f["id"] for f in graph["profile"]], ["fact-1", "fact-2"])
+        self.assertEqual(graph["profile"][1]["evidence_quote"], "MBA aspirant")
+        self.assertEqual(graph["dropped"], {"facts": 1, "questions": 0})
+
+    def test_bad_follow_up_truncates_branch(self):
+        graph = self.build([_fact()], [_branch(1, bad=("follow_up",)), _branch(2), _branch(3)])
+        self.assertEqual([n["id"] for n in graph["nodes"]],
+                         ["resume-1-1"] + [f"resume-{b}-{d}" for b in (2, 3) for d in (1, 2, 3)])
+        self.assertEqual(len(graph["edges"]), 4)
+        self.assertEqual(graph["dropped"]["questions"], 2)
+
+    def test_bad_deeper_follow_up_keeps_two(self):
+        graph = self.build([_fact()], [_branch(1, bad=("deeper_follow_up",))])
+        self.assertEqual(len(graph["nodes"]), 2 + 6)
+        self.assertEqual(graph["dropped"]["questions"], 1)
+
+    def test_bad_opening_drops_branch_and_renumbers(self):
+        graph = self.build([_fact()], [_branch(1, bad=("opening",)), _branch(2)])
+        self.assertEqual(graph["roots"], ["resume-1-1", "resume-2-1"])
+        self.assertEqual(len(graph["nodes"]), 6)
+        self.assertTrue(all(e["parent"] in {n["id"] for n in graph["nodes"]} and
+                            e["child"] in {n["id"] for n in graph["nodes"]} for e in graph["edges"]))
+        self.assertEqual(graph["dropped"]["questions"], 3)
+
+    def test_duplicate_question_truncates(self):
+        branch = _branch(1)
+        branch["follow_up"]["question"] = branch["opening"]["question"].upper()
+        graph = self.build([_fact()], [branch])
+        self.assertEqual(len(graph["nodes"]), 1 + 6)
+
+    def test_all_facts_bad_raises(self):
+        with self.assertRaisesRegex(provider.ProviderFailure, "profile could not be matched"):
+            self.build([_fact("Not in resume"), _fact("Also absent")], [_branch(1)])
+
+    def test_all_openings_bad_raises(self):
+        with self.assertRaisesRegex(provider.ProviderFailure, "could not be grounded"):
+            self.build([_fact()], [_branch(n, bad=("opening",)) for n in (1, 2, 3)])
+
+    def test_clean_draft_reports_zero_dropped(self):
+        graph = self.build([_fact()], [_branch(1)])
+        self.assertEqual(graph["dropped"], {"facts": 0, "questions": 0})
+
+
+class PartialFeedbackTest(unittest.TestCase):
+    TRANSCRIPT = [{"role": "assistant", "id": "q1", "text": "Tell me."},
+                  {"role": "user", "id": "a1", "text": "I owned the rollout end to end and cut costs."}]
+
+    def result(self, strengths, improvements):
+        point = lambda q: {"turn_id": "a1", "quote": q, "observation": "Obs."}
+        return {"summary": "Fine.", "strengths": [point(q) for q in strengths],
+                "improvements": [{**point(q), "suggestion": "Add numbers."} for q in improvements],
+                "next_exercise": "Retry."}
+
+    def test_bad_improvement_dropped_rest_verbatim(self):
+        checked = provider.validate_feedback(
+            self.result(["owned the rollout"], ["Invented words", "cut costs", "I OWNED the rollout"]), self.TRANSCRIPT)
+        self.assertEqual([i["quote"] for i in checked["improvements"]], ["cut costs", "I owned the rollout"])
+        self.assertEqual(checked["strengths"][0]["quote"], "owned the rollout")
+        self.assertEqual(checked["dropped_points"], 1)
+
+    def test_all_strengths_bad_raises(self):
         with self.assertRaises(provider.ProviderFailure):
-            resume_questions._build_graph(draft, text, {"route": "experienced"})
+            provider.validate_feedback(self.result(["Invented", "Also invented"], ["cut costs"]), self.TRANSCRIPT)
+
+    def test_all_improvements_bad_raises(self):
+        with self.assertRaises(provider.ProviderFailure):
+            provider.validate_feedback(self.result(["cut costs"], ["Invented"]), self.TRANSCRIPT)
+
+    def test_unknown_turn_id_is_dropped(self):
+        result = self.result(["cut costs", "owned the rollout"], ["cut costs"])
+        result["strengths"][0]["turn_id"] = "a2"
+        checked = provider.validate_feedback(result, self.TRANSCRIPT)
+        self.assertEqual(len(checked["strengths"]), 1)
+        self.assertEqual(checked["dropped_points"], 1)
+
+    def test_clean_feedback_has_no_dropped_key_and_satisfies_schema(self):
+        from interview_schemas import InterviewFeedback
+        checked = provider.validate_feedback(self.result(["cut costs"], ["cut costs"]), self.TRANSCRIPT)
+        self.assertNotIn("dropped_points", checked)
+        InterviewFeedback.model_validate(checked)
 
 
 if __name__ == "__main__":

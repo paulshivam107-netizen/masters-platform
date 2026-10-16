@@ -70,21 +70,29 @@ def generate_questions(resume_text, context):
 
 def _build_graph(result, resume_text, context):
     result = ResumeQuestionDraft.model_validate(result)
-    profile = []
-    for index, fact in enumerate(result.profile, 1):
+    profile, dropped_facts, dropped_questions = [], 0, 0
+    for fact in result.profile:
         span = find_quote(fact.evidence_quote, resume_text, max_length=240)
         if span is None:
-            raise provider.ProviderFailure("The profile could not be matched to your resume. Please retry.")
-        profile.append({"id": f"fact-{index}", **{**fact.model_dump(), "evidence_quote": span}})
+            dropped_facts += 1
+            continue
+        profile.append({"id": f"fact-{len(profile) + 1}", **{**fact.model_dump(), "evidence_quote": span}})
+    if not profile:
+        raise provider.ProviderFailure("The profile could not be matched to your resume. Please retry.")
     roots, nodes, edges = [], [], []
     seen = set()
-    for index, branch in enumerate(result.branches, 1):
-        previous = None
-        for depth, question in enumerate((branch.opening, branch.follow_up, branch.deeper_follow_up), 1):
+    for branch in result.branches:
+        index = len(roots) + 1
+        kept = []
+        for question in (branch.opening, branch.follow_up, branch.deeper_follow_up):
             span = find_quote(question.evidence_quote, resume_text, max_length=240)
             if span is None or question.question.casefold() in seen:
-                raise provider.ProviderFailure("The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.")
+                break
             seen.add(question.question.casefold())
+            kept.append((question, span))
+        dropped_questions += 3 - len(kept)
+        previous = None
+        for depth, (question, span) in enumerate(kept, 1):
             node_id = f"resume-{index}-{depth}"
             if depth == 1:
                 roots.append(node_id)
@@ -93,5 +101,8 @@ def _build_graph(result, resume_text, context):
             if previous:
                 edges.append({"parent": previous, "child": node_id, "basis": "ai_connection", "sources": ["resume"]})
             previous = node_id
+    if not roots:
+        raise provider.ProviderFailure("The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.")
     return {"version": "resume-v2", "profile": profile, "roots": roots, "nodes": nodes, "edges": edges,
-            "sources": [{"id": "resume", "label": "Your reviewed resume"}]}
+            "sources": [{"id": "resume", "label": "Your reviewed resume"}],
+            "dropped": {"facts": dropped_facts, "questions": dropped_questions}}
