@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { forgotPasswordApi, resetPasswordApi } from "../api";
-import {
-  requestGoogleIdToken,
-  resolveGoogleClientId,
-} from "../app/googleIdentity";
+import GoogleSignInButton from "./GoogleSignInButton";
 import { trackEvent } from "../app/telemetry";
 import "./Auth.css";
 import { authError } from "../api/authErrors";
@@ -40,19 +37,16 @@ function Login({ onSwitchToSignup }) {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin = async (idToken) => {
     setError("");
     setMessage("");
+    if (!idToken) {
+      setError("Google did not return a sign-in token. Please try again.");
+      trackEvent("auth_login_failure", { method: "google" });
+      return;
+    }
     setLoading(true);
     try {
-      const clientId = await resolveGoogleClientId();
-      if (!clientId) {
-        setError(
-          "Google sign-in is not configured yet. Please try email login for now.",
-        );
-        return;
-      }
-      const idToken = await requestGoogleIdToken(clientId);
       await loginWithGoogle(idToken);
       trackEvent("auth_login_success", { method: "google" });
     } catch (err) {
@@ -184,14 +178,12 @@ function Login({ onSwitchToSignup }) {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
-          <button
-            type="button"
-            className="auth-button auth-button-google"
+          <GoogleSignInButton
+            onCredential={handleGoogleLogin}
+            onError={(err) => setError(err.message)}
             disabled={loading}
-            onClick={handleGoogleLogin}
-          >
-            Continue with Google
-          </button>
+            text="continue_with"
+          />
         </form>
 
         <div className="auth-inline-actions">

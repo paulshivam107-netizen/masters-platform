@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { requestEmailVerificationApi } from "../api";
-import {
-  requestGoogleIdToken,
-  resolveGoogleClientId,
-} from "../app/googleIdentity";
+import GoogleSignInButton from "./GoogleSignInButton";
 import { trackEvent } from "../app/telemetry";
 import "./Auth.css";
 import { authError } from "../api/authErrors";
@@ -52,20 +49,17 @@ function Signup({ onSwitchToLogin }) {
     }
   };
 
-  const handleGoogleSignup = async () => {
+  const handleGoogleSignup = async (idToken) => {
     setError("");
     setMessage("");
     setDevToken("");
+    if (!idToken) {
+      setError("Google did not return a sign-in token. Please try again.");
+      trackEvent("auth_signup_failure", { method: "google" });
+      return;
+    }
     setLoading(true);
     try {
-      const clientId = await resolveGoogleClientId();
-      if (!clientId) {
-        setError(
-          "Google sign-in is not configured yet. Please use email signup for now.",
-        );
-        return;
-      }
-      const idToken = await requestGoogleIdToken(clientId);
       await loginWithGoogle(idToken);
       trackEvent("auth_signup_success", { method: "google" });
     } catch (err) {
@@ -180,14 +174,12 @@ function Signup({ onSwitchToLogin }) {
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
-          <button
-            type="button"
-            className="auth-button auth-button-google"
+          <GoogleSignInButton
+            onCredential={handleGoogleSignup}
+            onError={(err) => setError(err.message)}
             disabled={loading}
-            onClick={handleGoogleSignup}
-          >
-            Continue with Google
-          </button>
+            text="signup_with"
+          />
         </form>
 
         <p className="auth-switch">
