@@ -41,6 +41,21 @@ class InterviewPlanTest(unittest.TestCase):
         with patch.object(provider, "_structured", return_value=(answer, {})):
             self.assertEqual(provider.next_question({"route": "experienced"}, turns)[0]["kind"], "new_topic")
 
+    def test_end_requested_and_new_topic_anchors_are_blanked_not_rejected(self):
+        turns = [{"role": "assistant", "id": "q1", "text": "Opening"},
+                 {"role": "user", "id": "a1", "text": "I'd like to stop the session now, could I see the feedback?"}]
+        for kind in ("end_requested", "new_topic"):
+            answer = {"question": "Of course, we will stop here. Thank you.", "kind": kind, "topic": "projects",
+                      "anchor_turn_id": "a1", "anchor_quote": "stop the session"}
+            with patch.object(provider, "_structured", return_value=(answer, {})):
+                result = provider.next_question({"route": "cat"}, turns)[0]
+            self.assertEqual((result["kind"], result["anchor_turn_id"], result["anchor_quote"]), (kind, "", ""))
+        # The repeat check still applies.
+        answer["question"] = "Opening question"
+        turns[0]["text"] = "Opening question"
+        with patch.object(provider, "_structured", return_value=(answer, {})), self.assertRaises(provider.ProviderFailure):
+            provider.next_question({"route": "cat"}, turns)
+
 
 def exhausted_turns(follow_ups=2):
     turns = [{"role": "assistant", "id": "q1", "text": "Opening"}]
@@ -68,7 +83,7 @@ class NextQuestionRequestTest(unittest.TestCase):
         body, (result, _) = self.sent(exhausted_turns(), output)
         schema = body["text"]["format"]["schema"]
         self.assertTrue(body["text"]["format"]["strict"])
-        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic"])
+        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic", "end_requested"])
         self.assertEqual(schema["properties"]["anchor_turn_id"]["enum"], [""])
         self.assertEqual(schema["properties"]["anchor_quote"]["enum"], [""])
         self.assertIn("move_on is TRUE", body["instructions"])
@@ -80,7 +95,7 @@ class NextQuestionRequestTest(unittest.TestCase):
                   "anchor_turn_id": "a2", "anchor_quote": "reviewed the evidence"}
         body, (result, _) = self.sent(turns, output)
         self.assertEqual(set(body["text"]["format"]["schema"]["properties"]["kind"]["enum"]),
-                         {"follow_up", "clarification", "new_topic"})
+                         {"follow_up", "clarification", "new_topic", "end_requested"})
         self.assertNotIn("move_on is TRUE", body["instructions"])
         self.assertEqual(result["kind"], "follow_up")
 
@@ -88,4 +103,4 @@ class NextQuestionRequestTest(unittest.TestCase):
         self.sent(exhausted_turns(), {"question": "What do you hope to learn in the MBA?", "kind": "new_topic",
                                       "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
         from interview_schemas import NextQuestion
-        self.assertEqual(len(NextQuestion.model_json_schema()["properties"]["kind"]["enum"]), 3)
+        self.assertEqual(len(NextQuestion.model_json_schema()["properties"]["kind"]["enum"]), 4)

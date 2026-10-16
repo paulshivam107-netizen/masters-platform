@@ -185,7 +185,8 @@ def answer(session_id: UUID, payload: InterviewAnswer, user: User = Depends(inte
                 question, usage = provider.next_question(json.loads(session.context_json), transcript)
             transcript.append({"id": f"q{count + 2}", "role": "assistant", "text": question["question"],
                                **{key: value for key, value in question.items() if key != "question"}})
-            status = "active"
+            # A stop request closes the interview: the closing message is the last turn.
+            status = "ready_for_feedback" if question.get("kind") == "end_requested" else "active"
         return complete(db, session, op, token, {"transcript_json": json.dumps(transcript), "status": status}, usage=usage)
     return run_step(db, session, op, token, perform)
 
