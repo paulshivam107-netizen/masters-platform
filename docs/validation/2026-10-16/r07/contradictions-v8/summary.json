@@ -1,0 +1,222 @@
+{
+  "run": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "prompt_version": "mba-interview-v8",
+    "plan_version": "resume-led-v2",
+    "eval_version": "r07-eval-v1",
+    "git": {
+      "commit": "093e77559865a84831b3a3f47f46f768f4a526de",
+      "dirty": false
+    },
+    "price": {
+      "source": "builtin",
+      "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+      "input_paise_per_million": 3600,
+      "output_paise_per_million": 14400
+    },
+    "stopped": null,
+    "max_attempts": 3,
+    "started_at": "2026-10-16T10:06:00.536282+00:00",
+    "finished_at": "2026-10-16T10:09:48.743955+00:00"
+  },
+  "sessions": {
+    "total": 12,
+    "completed": 12,
+    "resume_generation_failed": 0,
+    "stopped": {}
+  },
+  "reliability": {
+    "attempts": 101,
+    "failed_attempts": 14,
+    "steps": 87,
+    "recovered_steps": 8,
+    "exhausted_steps": 0,
+    "fallback_steps": 6,
+    "failures_by_code": {
+      "provider_error (charged)": 14
+    },
+    "failures_by_message": {
+      "The follow-up could not be matched to your answer. Your answer is still here; please retry.": 13,
+      "The interviewer needs to clarify your latest answer first. Please retry.": 1
+    }
+  },
+  "cost": {
+    "total_paise": 1016,
+    "per_session_paise": {
+      "n": 12,
+      "mean": 84.7,
+      "p50": 73,
+      "p95": 122,
+      "max": 122
+    },
+    "per_call_paise": {
+      "resume_questions": {
+        "n": 12,
+        "mean": 12.2,
+        "p50": 12,
+        "p95": 14,
+        "max": 14
+      },
+      "interview_answer": {
+        "n": 77,
+        "mean": 8.6,
+        "p50": 9,
+        "p95": 12,
+        "max": 12
+      },
+      "interview_feedback": {
+        "n": 12,
+        "mean": 17.1,
+        "p50": 16,
+        "p95": 21,
+        "max": 21
+      }
+    },
+    "tokens": {
+      "resume_questions": {
+        "input": {
+          "n": 12,
+          "mean": 718.1,
+          "p50": 719,
+          "p95": 725,
+          "max": 725
+        },
+        "output": {
+          "n": 12,
+          "mean": 632.2,
+          "p50": 638,
+          "p95": 730,
+          "max": 730
+        }
+      },
+      "interview_answer": {
+        "input": {
+          "n": 71,
+          "mean": 2147.0,
+          "p50": 2136,
+          "p95": 2756,
+          "max": 2831
+        },
+        "output": {
+          "n": 71,
+          "mean": 79.7,
+          "p50": 78,
+          "p95": 107,
+          "max": 118
+        }
+      },
+      "interview_feedback": {
+        "input": {
+          "n": 12,
+          "mean": 2604.2,
+          "p50": 2417,
+          "p95": 2949,
+          "max": 2949
+        },
+        "output": {
+          "n": 12,
+          "mean": 506.3,
+          "p50": 516,
+          "p95": 683,
+          "max": 683
+        }
+      }
+    }
+  },
+  "latency_ms": {
+    "resume_questions": {
+      "n": 12,
+      "mean": 5317.3,
+      "p50": 5106,
+      "p95": 6610,
+      "max": 6610
+    },
+    "interview_answer": {
+      "n": 63,
+      "mean": 1422.2,
+      "p50": 1459,
+      "p95": 1969,
+      "max": 4401
+    },
+    "interview_feedback": {
+      "n": 12,
+      "mean": 4239.2,
+      "p50": 4055,
+      "p95": 5202,
+      "max": 5202
+    }
+  },
+  "reservations": {
+    "resume_questions": {
+      "max_input_ratio": 0.219,
+      "under_reserved_calls": 0
+    },
+    "interview_answer": {
+      "max_input_ratio": 0.384,
+      "under_reserved_calls": 0
+    },
+    "interview_feedback": {
+      "max_input_ratio": 0.382,
+      "under_reserved_calls": 0
+    }
+  },
+  "automatic_gates": {
+    "repetition": {
+      "count": 1,
+      "status": "fail"
+    },
+    "injection": {
+      "count": 0,
+      "status": "pass"
+    },
+    "reliability": {
+      "exhausted_steps": [],
+      "status": "pass"
+    }
+  },
+  "review_flags": {
+    "instruction_leak": 1,
+    "unexplained_number": 1,
+    "fresher_workplace": 0,
+    "assumes_management": 0,
+    "admission_prediction": 0
+  },
+  "human_gates": {
+    "grounded_follow_ups": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 49,
+      "status": "pending",
+      "rate": null
+    },
+    "invented_premises": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 63,
+      "status": "pending",
+      "failures": 0
+    },
+    "route_fit": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 63,
+      "status": "pending",
+      "failures": 0
+    },
+    "feedback_evidence": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 56,
+      "status": "pending",
+      "failures": 0
+    },
+    "usefulness": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 32,
+      "status": "pending",
+      "failures": 0
+    }
+  }
+}

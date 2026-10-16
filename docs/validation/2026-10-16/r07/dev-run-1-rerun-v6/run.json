@@ -1,0 +1,30 @@
+{
+  "provider": "openai",
+  "model": "gpt-4.1-mini",
+  "prompt_version": "mba-interview-v6",
+  "plan_version": "resume-led-v2",
+  "eval_version": "r07-eval-v1",
+  "price": {
+    "source": "builtin",
+    "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+    "input_paise_per_million": 3600,
+    "output_paise_per_million": 14400
+  },
+  "max_attempts": 3,
+  "max_spend_paise": 10000,
+  "fake_fault_every": 0,
+  "profiles": [
+    "cat-06-it-services-2yrs",
+    "exp-02-consultant-pgpx",
+    "exp-10-ngo-teacher",
+    "exp-12-short-resume-banker"
+  ],
+  "git": {
+    "commit": "12889df652a6dde55579b7f2d7045a361ee962ae",
+    "dirty": false
+  },
+  "stopped": null,
+  "started_at": "2026-10-16T06:28:11.882040+00:00",
+  "spent_paise_worst_case": 301,
+  "finished_at": "2026-10-16T06:29:31.480156+00:00"
+}

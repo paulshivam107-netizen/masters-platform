@@ -1,0 +1,464 @@
+{
+  "profile_id": "cat-08-family-business-surat",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "family textile trading business, Surat",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 2,
+    "notes": "Works in the family textile trading firm for 2 years. Is not the owner; no formal title and no staff of their own. Business financials are family-confidential. Must not assume corporate employment."
+  },
+  "answer_tags": [
+    "specific",
+    "confidential",
+    "vague",
+    "contradiction",
+    "disagree"
+  ],
+  "resume_text": "Harsh Patel (synthetic)\nEXPERIENCE\nTrade Assistant, family textile trading firm, Surat (2024-present)\n- Handle orders from 25 regular retailers across Gujarat and Rajasthan\n- Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month\n- Follow up on payments; overdue accounts reduced from 9 to 5\nEDUCATION\nB.Com, a university in Surat, 2024, 72%\nClass XII, Commerce, 80%\nSKILLS\nTally, Excel, Gujarati, Hindi, English\nOTHER\nTreasurer, local traders' youth association, 2025",
+  "context": {
+    "route": "cat",
+    "background": "Two years in my family's textile trading business in Surat. I assist in orders and collections. I am not the owner.",
+    "goal": "Take the business to larger markets through better finance and operations, or work in a retail company.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-08-family-business-surat",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Trade Assistant, family textile trading firm, Surat (2024-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Handle orders from 25 regular retailers across Gujarat and Rajasthan"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Follow up on payments; overdue accounts reduced from 9 to 5"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Surat, 2024, 72%"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 80%"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-9",
+        "category": "skill",
+        "evidence_quote": "Gujarati"
+      },
+      {
+        "id": "fact-10",
+        "category": "skill",
+        "evidence_quote": "Hindi"
+      },
+      {
+        "id": "fact-11",
+        "category": "skill",
+        "evidence_quote": "English"
+      },
+      {
+        "id": "fact-12",
+        "category": "achievement",
+        "evidence_quote": "Treasurer, local traders' youth association, 2025"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-08-family-business-surat",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "You mentioned handling orders from 25 regular retailers across Gujarat and Rajasthan. How do you manage relationships with such a wide range of clients?",
+      "What challenges have you faced in maintaining those client relationships and how have you addressed them?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Trade Assistant, family textile trading firm, Surat (2024-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Handle orders from 25 regular retailers across Gujarat and Rajasthan"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Follow up on payments; overdue accounts reduced from 9 to 5"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Surat, 2024, 72%"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 80%"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-9",
+        "category": "skill",
+        "evidence_quote": "Gujarati"
+      },
+      {
+        "id": "fact-10",
+        "category": "skill",
+        "evidence_quote": "Hindi"
+      },
+      {
+        "id": "fact-11",
+        "category": "skill",
+        "evidence_quote": "English"
+      },
+      {
+        "id": "fact-12",
+        "category": "achievement",
+        "evidence_quote": "Treasurer, local traders' youth association, 2025"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You have been working as a Trade Assistant at your family textile firm since 2024. Can you describe your key daily responsibilities?",
+        "evidence_quote": "Trade Assistant, family textile trading firm, Surat (2024-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "You mentioned handling orders from 25 regular retailers across Gujarat and Rajasthan. How do you manage relationships with such a wide range of clients?",
+        "evidence_quote": "Handle orders from 25 regular retailers across Gujarat and Rajasthan",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "What challenges have you faced in maintaining those client relationships and how have you addressed them?",
+        "evidence_quote": "Handle orders from 25 regular retailers across Gujarat and Rajasthan",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You introduced a WhatsApp catalogue and a simple order sheet that increased repeat orders from 12 to 18 a month. Could you explain this initiative?",
+        "evidence_quote": "Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What steps did you take to implement this change within the firm and with the retailers?",
+        "evidence_quote": "Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did you measure the success of this initiative beyond repeat order numbers?",
+        "evidence_quote": "Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "As the Treasurer of the local traders' youth association in 2025, what responsibilities did you handle?",
+        "evidence_quote": "Treasurer, local traders' youth association, 2025",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did your experience at the family firm help you in fulfilling your treasurer duties?",
+        "evidence_quote": "Treasurer, local traders' youth association, 2025",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "Can you recount a specific challenge you faced as Treasurer and how you resolved it?",
+        "evidence_quote": "Treasurer, local traders' youth association, 2025",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You have been working as a Trade Assistant at your family textile firm since 2024. Can you describe your key daily responsibilities?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "For the last two years I have worked in our family's textile trading firm in Surat. I handle orders from about 25 regular retailers across Gujarat and Rajasthan. I started a WhatsApp catalogue with a simple order sheet, and repeat orders went up from 12 to 18 a month. I also follow up on payments. I want an MBA because I learned the trade from my father, but I don't have a method for planning inventory or pricing.",
+      "request_id": "9905d853-a9a8-5bdc-b979-92d976b2f45e"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned starting a WhatsApp catalogue and order sheet that increased repeat orders from 12 to 18 a month. Can you explain how you came up with this idea and what steps you took to implement it?",
+      "kind": "follow_up",
+      "topic": "contribution",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I started a WhatsApp catalogue with a simple order sheet, and repeat orders went up from 12 to 18 a month"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I can't share our turnover, margins or the names of our big buyers. That is the family's private information, so I can describe my own tasks only.",
+      "request_id": "dcb5008b-cc24-5bf6-b342-05581b471697"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned starting a WhatsApp catalogue with a simple order sheet that increased repeat orders. Could you describe your role specifically in creating and maintaining this catalogue system?",
+      "kind": "follow_up",
+      "topic": "contribution",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I started a WhatsApp catalogue with a simple order sheet, and repeat orders went up from 12 to 18 a month"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Our business is in a very dynamic and competitive sector. We continuously focus on customer satisfaction and process excellence, and I try to bring a modern outlook to the traditional business.",
+      "request_id": "7bc207a5-ab6a-534c-afae-1be18d879ea8"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned trying to bring a modern outlook to the traditional business. Can you give an example of a specific change or innovation you introduced to improve customer satisfaction or process excellence?",
+      "kind": "follow_up",
+      "topic": "contribution",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I try to bring a modern outlook to the traditional business"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Overdue accounts came down from 9 to 5, but I did that alone as the business owner. Actually my father has retired and I have been running the firm entirely.",
+      "request_id": "95124d21-1594-58ea-99ce-f83af1d33a8a"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned running the firm entirely since your father retired and reducing overdue accounts from 9 to 5 on your own. What strategies or steps did you take to achieve this improvement in managing payments?",
+      "kind": "new_topic",
+      "topic": "contribution",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "You are assuming that a family business does not give real responsibility. I disagree. I speak to retailers daily and I answer for my orders. It is not a lesser job than working in a company.",
+      "request_id": "5ca2a1ca-d1eb-5d3e-a2d9-da591edc7cdf"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrates practical responsibility in their family textile trading business, taking ownership of order management and payment follow-ups. They show initiative by introducing the WhatsApp catalogue that improved repeat orders and have taken full operational control after the father's retirement. The motivation for MBA is grounded in the need to learn professional methods for planning and pricing. However, clearer explanations of their direct personal contributions to innovations and methods for improvement would strengthen their narrative. More detailed examples of their problem-solving and reflection on lessons learned would enhance the interview.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I handle orders from about 25 regular retailers across Gujarat and Rajasthan. I started a WhatsApp catalogue with a simple order sheet, and repeat orders went up from 12 to 18 a month",
+        "observation": "Shows clear personal initiative and a quantifiable positive impact in the family business."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "Actually my father has retired and I have been running the firm entirely",
+        "observation": "Takes full responsibility for running the business, demonstrating ownership beyond an assistant role."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a3",
+        "quote": "I try to bring a modern outlook to the traditional business",
+        "observation": "The statement is general and does not specify any concrete example or personal involvement.",
+        "suggestion": "Practice explaining a specific change you implemented to modernize the business, detailing your role and its outcome in 60 seconds."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I speak to retailers daily and I answer for my orders. It is not a lesser job than working in a company",
+        "observation": "While showing confidence, this answer counters an assumption but lacks specific examples of accountability or challenges faced.",
+        "suggestion": "Prepare one example of a challenge you faced independently and how you managed it, explaining your decision-making process."
+      }
+    ],
+    "next_exercise": "Describe in one minute a specific challenge you faced with managing retailer relationships, the options you considered to solve it, the decision you took, and the result."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

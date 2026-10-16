@@ -1,0 +1,422 @@
+{
+  "profile_id": "exp-10-ngo-teacher",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "school teacher and NGO programme work, nontechnical",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Six years in teaching and NGO programme coordination. Managed a small team of 4 programme staff in the last two years. No tech or finance background. Must not assume corporate or technical experience."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "unknown",
+    "contradiction",
+    "irrelevant"
+  ],
+  "resume_text": "Lakshmi Narayanan (synthetic)\nEXPERIENCE\nProgramme Coordinator, an education NGO, Hyderabad (2023-present)\n- Run a remedial-learning programme in 18 government schools; 4 field staff report to me\n- Raised the share of children reading at grade level from 31% to 48% in 2 years\n- Manage a programme budget of Rs 55 lakh from two donors\nTeacher (English and Social Science), a private school, Hyderabad (2019-2023)\n- Taught 150 students a year in classes 6 to 8\nEDUCATION\nB.A. English, a college in Hyderabad, 2018\nB.Ed., 2019",
+  "context": {
+    "route": "experienced",
+    "background": "Six years in teaching and an education NGO. I lead a small programme team. I have no technical or finance background.",
+    "goal": "Lead a larger education or social enterprise, and learn the finance and measurement skills needed.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-10-ngo-teacher",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Programme Coordinator, an education NGO, Hyderabad (2023-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run a remedial-learning programme in 18 government schools; 4 field staff report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Teacher (English and Social Science), a private school, Hyderabad (2019-2023)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.A. English, a college in Hyderabad, 2018"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "B.Ed., 2019"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-10-ngo-teacher",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What approaches did you use to improve reading levels from 31% to 48% in the children under your programme?",
+      "How did you involve your field staff in implementing those remedial-learning strategies?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Programme Coordinator, an education NGO, Hyderabad (2023-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run a remedial-learning programme in 18 government schools; 4 field staff report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Teacher (English and Social Science), a private school, Hyderabad (2019-2023)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.A. English, a college in Hyderabad, 2018"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "B.Ed., 2019"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your role and key responsibilities as Programme Coordinator at the education NGO?",
+        "evidence_quote": "Programme Coordinator, an education NGO, Hyderabad (2023-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What approaches did you use to improve reading levels from 31% to 48% in the children under your programme?",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did you involve your field staff in implementing those remedial-learning strategies?",
+        "evidence_quote": "4 field staff report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What were the main challenges you faced teaching English and Social Science to middle school students?",
+        "evidence_quote": "Teacher (English and Social Science), a private school, Hyderabad (2019-2023)",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did your teaching experience influence your approach to managing educational programmes?",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you provide an example where you adapted your teaching methods to improve student engagement or outcomes?",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "How do you manage the programme budget of Rs 55 lakh from two donors to meet your objectives?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What processes do you have in place to ensure accountability and effective utilization of these funds?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "Have you encountered any financial challenges or trade-offs while managing this budget? How did you address them?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ]
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your role and key responsibilities as Programme Coordinator at the education NGO?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I taught for four years at a private school in Hyderabad and for the last two years I've coordinated a remedial-learning programme for an education NGO. It runs in 18 government schools, four field staff report to me, and we manage Rs 55 lakh from two donors. Over two years the share of children reading at grade level went from 31% to 48%. I'm applying for an MBA because I know how learning improves but I can't yet scale a programme or read a budget properly.",
+      "request_id": "a02cb4b5-bdfd-5e48-9a00-cbe1f32be8e6"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What approaches did you use to improve reading levels from 31% to 48% in the children under your programme?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "the share of children reading at grade level went from 31% to 48%"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact. I believe in holistic development and inclusive growth.",
+      "request_id": "8454d73f-23e7-596f-85bb-b346c81ee600"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned your belief in holistic development and inclusive growth. Could you give a specific example of how you implemented these principles in your remedial-learning programme?",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I believe in holistic development and inclusive growth"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I don't know how the 48% figure compares with other NGOs working in the same districts. We compared ourselves only with our own baseline.",
+      "request_id": "3e7d0c5d-79a7-5950-a911-f3320abc7951"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "How do you prioritize and allocate your programme's budget to balance quality impact and resource constraints?",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them.",
+      "request_id": "3ae793f9-7361-565d-a22f-17a12349df42"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Since you clarified that the field staff report to the director and not directly to you, can you explain your role in coordinating with them and how you manage programme implementation without formal reporting lines?",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "By the way, have you heard about the new metro line in Hyderabad? My commute to the schools could be shorter. I'm thinking of moving closer to the station.",
+      "request_id": "06da9827-5e6c-51b1-a6b4-03fc0f90c373"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrated a clear understanding of their role and a commitment to educational impact, particularly through remedial learning programmes. However, there were significant gaps in clarifying personal ownership, leadership scope, and specific strategies used to achieve outcomes. The responses were sometimes generic or off-topic, and the candidate struggled to explain how they coordinate without formal authority or how they allocate resources effectively.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I taught for four years at a private school in Hyderabad and for the last two years I've coordinated a remedial-learning programme for an education NGO. It runs in 18 government schools, four field staff report to me, and we manage Rs 55 lakh from two donors. Over two years the share of children reading at grade level went from 31% to 48%",
+        "observation": "Provides a detailed summary of role, scope, and a substantiated outcome."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact. I believe in holistic development and inclusive growth",
+        "observation": "Answer is generic and does not specify concrete approaches or examples used to improve reading levels as asked.",
+        "suggestion": "Focus on describing specific strategies or interventions you implemented and their impact."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them",
+        "observation": "Clarifies no direct reports contrary to earlier claim, indicating a need for clearer ownership description.",
+        "suggestion": "Clearly explain your coordinating role, how you influence and collaborate with field staff despite no direct authority."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "By the way, have you heard about the new metro line in Hyderabad? My commute to the schools could be shorter. I'm thinking of moving closer to the station",
+        "observation": "Response is off-topic and does not engage with the interview question about programme management or coordination.",
+        "suggestion": "Maintain focus on the question posed and provide relevant answers during the interview."
+      }
+    ],
+    "next_exercise": "Prepare a concise 2-3 minute explanation of a past project where you had to coordinate with multiple stakeholders without formal authority. Include your approach to influence, challenges faced, how you ensured effective implementation, and what you learned from the experience."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

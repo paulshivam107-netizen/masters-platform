@@ -1,0 +1,404 @@
+{
+  "profile_id": "cat-06-it-services-2yrs",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "IT services testing, nontechnical role growth",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 2,
+    "notes": "About two years of full-time work as a software tester at an IT services firm. No direct reports; coordinated tasks with developers only. Not a programmer and not a people manager."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "specific",
+    "contradiction",
+    "confidential",
+    "unknown",
+    "disagree",
+    "irrelevant"
+  ],
+  "resume_text": "Divya Pillai (synthetic)\nEXPERIENCE\nTest Analyst, an IT services firm, Chennai (2024-present)\n- Executed manual test cases for a banking client's loan module; logged 210 defects in the first year\n- Moved from testing screens to writing test plans; owned test planning for two releases\n- Trained 2 new joiners on the defect tracker (no reporting line)\nAssociate Test Engineer, same firm (2024)\n- Regression testing for a card-statement portal\nEDUCATION\nB.Sc. Computer Science, a college in Coimbatore, 2024, 76%\nSKILLS\nManual testing, SQL basics, defect tracking tools\nOTHER\nVolunteer, school reading programme, weekends",
+  "context": {
+    "route": "cat",
+    "background": "Two years as a test analyst at an IT services firm. I am not a developer, and I have no direct reports.",
+    "goal": "Move from testing into business analysis, then product management for banking products.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 8,
+    "interview_plan": {
+      "version": "resume-led-v1",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-06-it-services-2yrs",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Executed manual test cases for a banking client's loan module; logged 210 defects in the first year"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Moved from testing screens to writing test plans; owned test planning for two releases"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Trained 2 new joiners on the defect tracker (no reporting line)"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Regression testing for a card-statement portal"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.Sc. Computer Science, a college in Coimbatore, 2024, 76%"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "Manual testing"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "SQL basics"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "defect tracking tools"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Volunteer, school reading programme, weekends"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-06-it-services-2yrs",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face while logging such a high number of defects, and how did you prioritize them?",
+      "How did your defect logging impact the overall release cycle or product quality in that project?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Executed manual test cases for a banking client's loan module; logged 210 defects in the first year"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Moved from testing screens to writing test plans; owned test planning for two releases"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Trained 2 new joiners on the defect tracker (no reporting line)"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Regression testing for a card-statement portal"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.Sc. Computer Science, a college in Coimbatore, 2024, 76%"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "Manual testing"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "SQL basics"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "defect tracking tools"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Volunteer, school reading programme, weekends"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your primary responsibilities while executing manual test cases for the banking client's loan module?",
+        "evidence_quote": "Executed manual test cases for a banking client's loan module; logged 210 defects in the first year",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face while logging such a high number of defects, and how did you prioritize them?",
+        "evidence_quote": "Executed manual test cases for a banking client's loan module; logged 210 defects in the first year",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did your defect logging impact the overall release cycle or product quality in that project?",
+        "evidence_quote": "Executed manual test cases for a banking client's loan module; logged 210 defects in the first year",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What changes or improvements did you implement when you moved from testing screens to writing test plans?",
+        "evidence_quote": "Moved from testing screens to writing test plans; owned test planning for two releases",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did owning test planning for two releases affect your understanding of the software development lifecycle?",
+        "evidence_quote": "Moved from testing screens to writing test plans; owned test planning for two releases",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you share an example where your test plan uncovered an issue that manual testing alone might have missed?",
+        "evidence_quote": "Moved from testing screens to writing test plans; owned test planning for two releases",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Could you elaborate on your experience training two new joiners on the defect tracker despite having no reporting line?",
+        "evidence_quote": "Trained 2 new joiners on the defect tracker (no reporting line)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What strategies did you use to ensure the new joiners effectively understood and used the defect tracking tools?",
+        "evidence_quote": "Trained 2 new joiners on the defect tracker (no reporting line)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How do you think this informal training experience contributed to your leadership or teamwork skills?",
+        "evidence_quote": "Trained 2 new joiners on the defect tracker (no reporting line)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ]
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your primary responsibilities while executing manual test cases for the banking client's loan module?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a test analyst at an IT services firm in Chennai, with about two years of experience. I started with regression testing on a card-statement portal, and then moved to a banking client's loan module. In the first year I logged 210 defects. Later I wrote test plans for two releases, which is a step beyond running test cases. I now want an MBA because I understand how the software fails, but I don't understand how the bank decides what to build.",
+      "request_id": "2fca1ee6-89bb-55f2-86e0-f0963d0ec2de"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What challenges did you face while logging such a high number of defects, and how did you prioritize them?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "In the first year I logged 210 defects"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "My role involves working with multiple stakeholders in a fast-paced environment to ensure quality deliverables. I take ownership and drive results, and I believe I add value to the team and the organisation.",
+      "request_id": "08e79b9b-bc60-521b-8e35-e6fde2438447"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you provide a specific example of a defect you logged and explain how you managed communication with stakeholders to ensure it was properly addressed?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "My role involves working with multiple stakeholders in a fast-paced environment to ensure quality deliverables"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "The test-planning work for the two releases was my biggest responsibility. I listed the risky loan flows first, such as interest calculation and part-payments, and tested those before the screens. Two of my defects there were marked critical by the developers.",
+      "request_id": "d5a4ee2c-d9e3-5eee-999d-a0729ae1a21a"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned prioritizing risky loan flows like interest calculation and part-payments in your test plans. What was your approach to identifying these risky areas, and did you consider any alternative prioritization methods?",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "As the owner of the test plans, I also had four testers reporting to me and I did their appraisals. That is the part of the job I am proudest of.",
+      "request_id": "b0bfeb48-fda0-56bd-a2a7-cf890633625f"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned that you had four testers reporting to you and handled their appraisals. Could you share how you approached giving feedback during these appraisals and what impact it had on your team members?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "As the owner of the test plans, I also had four testers reporting to me and I did their appraisals"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I can't tell you the client's name or the loan volumes. Our contract with them is confidential, so I can only describe my own testing tasks.",
+      "request_id": "1c7cbb8c-9899-5dff-b478-6ae00003a50f"
+    }
+  ],
+  "feedback": null,
+  "stopped_at": "a5",
+  "ended_by_request": false
+}

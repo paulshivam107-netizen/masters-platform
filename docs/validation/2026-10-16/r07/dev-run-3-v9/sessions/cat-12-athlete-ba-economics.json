@@ -1,0 +1,411 @@
+{
+  "profile_id": "cat-12-athlete-ba-economics",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "economics graduate, state-level athlete",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Sports achievements are at state level only; not national. Must not assume a coach role, a sponsor or professional contract."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "contradiction",
+    "irrelevant"
+  ],
+  "resume_text": "Vikram Singh Rathore (synthetic)\nEDUCATION\nB.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)\nClass XII, Arts, 81%\nSPORTS\nState-level 800 metres runner: silver in the state meet (2024); 3 district gold medals\nCaptain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes\nPROJECT\nEconomics term paper: price changes of onions in the local mandi over 18 months, using public data\nSKILLS\nExcel, basic statistics\nLANGUAGES\nHindi, English, Marwari",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BA Economics student and a state-level athlete. No work experience.",
+    "goal": "Join a sports business, a consumer company or a bank, and later work in sports management.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-12-athlete-ba-economics",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Arts, 81%"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "State-level 800 metres runner: silver in the state meet (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "3 district gold medals"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes"
+      },
+      {
+        "id": "fact-6",
+        "category": "project",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic statistics"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Hindi"
+      },
+      {
+        "id": "fact-10",
+        "category": "interest",
+        "evidence_quote": "English"
+      },
+      {
+        "id": "fact-11",
+        "category": "interest",
+        "evidence_quote": "Marwari"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-12-athlete-ba-economics",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face while organising early morning training sessions, and how did you overcome them?",
+      "How do you think these leadership experiences will help you in managing teams during your MBA?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Arts, 81%"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "State-level 800 metres runner: silver in the state meet (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "3 district gold medals"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes"
+      },
+      {
+        "id": "fact-6",
+        "category": "project",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic statistics"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Hindi"
+      },
+      {
+        "id": "fact-10",
+        "category": "interest",
+        "evidence_quote": "English"
+      },
+      {
+        "id": "fact-11",
+        "category": "interest",
+        "evidence_quote": "Marwari"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Could you describe your role and responsibilities as the captain of your college athletics team?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face while organising early morning training sessions, and how did you overcome them?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How do you think these leadership experiences will help you in managing teams during your MBA?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Can you discuss the key findings of your economics term paper on onion price changes in the local mandi?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What data sources did you use for your analysis, and how did you ensure their reliability?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Based on your study, what recommendations would you make to stakeholders to stabilize onion prices?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 3
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Could you describe your role and responsibilities as the captain of your college athletics team?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm finishing BA Economics at a government college in Jodhpur. I run the 800 metres and won silver at the state meet in 2024. Last year I captained our college team and organised daily 6 a.m. training for 18 athletes. For a term paper I studied onion prices at the local mandi over 18 months using public data. I want an MBA because sports taught me discipline, and economics gave me theory. I'd like the practical side of running an organisation.",
+      "request_id": "e92e9b07-d474-50f5-9322-75a2b6f08bb6"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What challenges did you face while organising early morning training sessions, and how did you overcome them?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "Last year I captained our college team and organised daily 6 a.m. training for 18 athletes"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I think the question assumes that sport is a hobby. At state level it needs planning, budgeting for travel and recovery, and long-term goals. I consider it as serious as an internship.",
+      "request_id": "879ec371-db8c-58bf-b3e5-1c0cce4ee3da"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you explain more about your term paper on onion prices? What methods and data did you use, and what insights did you gain?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "For a term paper I studied onion prices at the local mandi over 18 months using public data"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Sports has taught me a great deal about leadership, grit and teamwork. I believe those learnings are applicable everywhere and that I will bring a winning mindset to any organisation.",
+      "request_id": "904f462d-77d5-512a-a031-84069bbb3fb9"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned sports taught you leadership and teamwork; can you give a specific example from your experience as captain where you applied these qualities to solve a team challenge?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "Sports has taught me a great deal about leadership, grit and teamwork"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I won gold at the national meet in 2024, which is what really changed my confidence. The silver was only the state one before that.",
+      "request_id": "024068ff-1fa4-5a97-ac8b-48e93c38cf85"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned winning gold at the national meet in 2024, but your resume notes a silver at the state meet as your highest medal that year. Could you clarify this for me?",
+      "conflict": "Gold at national meet in 2024 conflicts with resume stating silver at state meet in 2024 as highest achievement.",
+      "kind": "clarification",
+      "topic": "behaviour",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I won gold at the national meet in 2024, which is what really changed my confidence"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "Quick question, what do you think about the new cricket league auction? My friends and I were discussing that yesterday. I felt some of the prices were not justified.",
+      "request_id": "82d6d502-fda2-5a15-91f8-7c70d0a87e30"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate presents a solid combination of academic learning in economics and high-level athletics experience, demonstrating leadership skills as a college team captain. They clearly link their sports background with qualities such as discipline, grit, and teamwork and express motivation to apply these traits in an MBA context. However, there are missed opportunities for detailed examples and clarification of key experiences, including a factual inconsistency about sports achievements and limited elaboration on academic projects and leadership challenges.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "Last year I captained our college team and organised daily 6 a.m. training for 18 athletes",
+        "observation": "Shows leadership and organisational experience managing a sizeable team under challenging conditions early in the morning."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I want an MBA because sports taught me discipline, and economics gave me theory. I'd like the practical side of running an organisation",
+        "observation": "Clearly articulates motivation for pursuing an MBA linking personal experiences and academic background."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I think the question assumes that sport is a hobby. At state level it needs planning, budgeting for travel and recovery, and long-term goals",
+        "observation": "Did not directly address the challenge and resolution in organising early training sessions as asked, instead redefined sport's seriousness.",
+        "suggestion": "Practice recounting a specific challenge faced when organising early training and the concrete steps taken to overcome it, including any trade-offs or teamwork involved."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "Sports has taught me a great deal about leadership, grit and teamwork. I believe those learnings are applicable everywhere and that I will bring a winning mindset to any organisation",
+        "observation": "Gives a broad statement about sports’ value but lacks a specific example illustrating leadership or teamwork applied to solve a problem.",
+        "suggestion": "Prepare an example-based story highlighting a particular leadership challenge during your captaincy, describing your personal role, decisions made, and outcomes."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I won gold at the national meet in 2024, which is what really changed my confidence",
+        "observation": "Provides information conflicting with the resume's highest achievement, creating uncertainty about accuracy or clarity of accomplishments.",
+        "suggestion": "Clarify your sports achievements accurately and be ready to explain the significance and timeline to ensure consistent messaging."
+      }
+    ],
+    "next_exercise": "Describe a specific situation during your captaincy when you faced a challenge managing the athletics team schedule or motivation. Outline the problem, options you considered, the decision you took, the result, and what you learned, tailoring your answer to fit a 90-second response."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

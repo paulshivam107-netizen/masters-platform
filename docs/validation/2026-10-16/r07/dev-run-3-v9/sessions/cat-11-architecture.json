@@ -1,0 +1,432 @@
+{
+  "profile_id": "cat-11-architecture",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "architecture, BArch student with design projects",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Studio design projects and a short site-visit internship only. Must not assume a firm, a manager or paid project work."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "unknown",
+    "stop",
+    "specific"
+  ],
+  "resume_text": "Aditi Kulkarni (synthetic)\nEDUCATION\nB.Arch (final year, 5-year programme), a college of architecture in Pune, 2021-2026, 7.9 CGPA\nClass XII, PCM, 90%\nDESIGN PROJECTS\nHousing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft\nHeritage studio: documented a 19th-century wada, 22 measured drawings\nINTERNSHIP\nSix-week intern, a small architecture studio: drew site details and visited 3 construction sites\nSKILLS\nAutoCAD, SketchUp, basic Revit\nACTIVITIES\nDesign team lead for the college's annual exhibition (2024)",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BArch student with studio projects. No full-time work experience.",
+    "goal": "Work in real estate development or urban planning on the business side, and eventually lead housing projects.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-11-architecture",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Arch (final year, 5-year programme), a college of architecture in Pune, 2021-2026, 7.9 CGPA"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, PCM, 90%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Housing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft"
+      },
+      {
+        "id": "fact-4",
+        "category": "project",
+        "evidence_quote": "Heritage studio: documented a 19th-century wada, 22 measured drawings"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Six-week intern, a small architecture studio: drew site details and visited 3 construction sites"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "AutoCAD"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "SketchUp"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic Revit"
+      },
+      {
+        "id": "fact-9",
+        "category": "achievement",
+        "evidence_quote": "Design team lead for the college's annual exhibition (2024)"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-11-architecture",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face in keeping the cost estimate within Rs 1,800 per sq ft and how did you address them?",
+      "How do you think this project has prepared you to handle budget constraints in real-world architectural projects?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Arch (final year, 5-year programme), a college of architecture in Pune, 2021-2026, 7.9 CGPA"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, PCM, 90%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Housing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft"
+      },
+      {
+        "id": "fact-4",
+        "category": "project",
+        "evidence_quote": "Heritage studio: documented a 19th-century wada, 22 measured drawings"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Six-week intern, a small architecture studio: drew site details and visited 3 construction sites"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "AutoCAD"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "SketchUp"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic Revit"
+      },
+      {
+        "id": "fact-9",
+        "category": "achievement",
+        "evidence_quote": "Design team lead for the college's annual exhibition (2024)"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your approach in designing the 40-unit low-income housing scheme with shared courtyards?",
+        "evidence_quote": "Housing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face in keeping the cost estimate within Rs 1,800 per sq ft and how did you address them?",
+        "evidence_quote": "cost estimate within Rs 1,800 per sq ft",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How do you think this project has prepared you to handle budget constraints in real-world architectural projects?",
+        "evidence_quote": "Housing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What was your process for documenting the 19th-century wada with 22 measured drawings?",
+        "evidence_quote": "Heritage studio: documented a 19th-century wada, 22 measured drawings",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did this experience influence your understanding of architectural heritage and its preservation?",
+        "evidence_quote": "Heritage studio: documented a 19th-century wada, 22 measured drawings",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you share how you balanced accuracy and creativity in this heritage documentation project?",
+        "evidence_quote": "Heritage studio: documented a 19th-century wada, 22 measured drawings",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "What responsibilities did you have as the design team lead for your college's annual exhibition in 2024?",
+        "evidence_quote": "Design team lead for the college's annual exhibition (2024)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did you coordinate your team and manage timelines to ensure the exhibition was successful?",
+        "evidence_quote": "Design team lead for the college's annual exhibition (2024)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "What did you learn from this leadership role that you plan to apply in your future career?",
+        "evidence_quote": "Design team lead for the college's annual exhibition (2024)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your approach in designing the 40-unit low-income housing scheme with shared courtyards?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm in the final year of a five-year BArch in Pune. My housing studio project was a 40-unit low-income scheme with shared courtyards, and I kept the cost estimate within Rs 1,800 per square foot. I also did a six-week internship at a small studio where I visited three construction sites. I found that the best design decisions were often limited by cost and approvals, and I want an MBA to understand those parts of real estate.",
+      "request_id": "b0624a90-50ef-539d-b66e-fd22ecc9cb1a"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What challenges did you face in keeping the cost estimate within Rs 1,800 per sq ft and how did you address them?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "My housing studio project was a 40-unit low-income scheme with shared courtyards, and I kept the cost estimate within Rs 1,800 per square foot"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I believe design thinking can solve any problem. It is about empathy, innovation and creating holistic experiences, and I think it can bring a lot of value in the real estate domain.",
+      "request_id": "70fbf5f8-4da2-54fd-b0a8-b5f2ea348ec2"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you clarify what specific challenges you actually faced in keeping the cost within Rs 1,800 per sq ft, and what concrete steps you took to overcome them?",
+      "conflict": "",
+      "kind": "clarification",
+      "topic": "projects",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I believe design thinking can solve any problem"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I'm not sure about how the Rs 1,800 figure compares with the market now. I took the rate from my college's guideline sheet, and I haven't checked it with a contractor.",
+      "request_id": "081e0f52-2a5e-513e-820d-b254a55df67d"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "During your six-week internship at the architecture studio, what specific tasks did you handle when drawing site details and visiting construction sites?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Can we please stop? My studio submission is due tomorrow and I need to get back to it. I would like to end the session and see the feedback.",
+      "request_id": "243bc6a8-a094-50f8-80bf-d2c38852fb8d"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Of course, we will stop here. Thank you for practising today. Open the debrief whenever you are ready.",
+      "kind": "end_requested",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "detected": true
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has a clear focus on real estate and architecture, linking their design studio project and internship experience to their MBA motivation. However, detail on handling project challenges was missing, and responses lacked concrete examples. Some answers were off-topic or avoided the question asked, indicating room for improvement in focus and depth of explanation.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "My housing studio project was a 40-unit low-income scheme with shared courtyards, and I kept the cost estimate within Rs 1,800 per square foot",
+        "observation": "Good summary of key project details demonstrating relevant academic experience and cost considerations."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I found that the best design decisions were often limited by cost and approvals, and I want an MBA to understand those parts of real estate",
+        "observation": "Clear motivation for MBA linked to understanding business and regulatory constraints in real estate development."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I believe design thinking can solve any problem. It is about empathy, innovation and creating holistic experiences, and I think it can bring a lot of value in the real estate domain",
+        "observation": "Response did not directly answer the question about cost challenges in the project.",
+        "suggestion": "Practice answering questions with specific examples related to the question. For instance, describe a particular cost challenge in the housing project and how you addressed it."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I'm not sure about how the Rs 1,800 figure compares with the market now. I took the rate from my college's guideline sheet, and I haven't checked it with a contractor",
+        "observation": "Lacked concrete understanding or verification of cost realism, showing a gap in real-world project context understanding.",
+        "suggestion": "Before interviews, reflect on project data and verify its relevance or limitations, and prepare to acknowledge such gaps clearly with reasoning."
+      }
+    ],
+    "next_exercise": "Prepare and rehearse a 60-second answer describing one specific challenge you faced during your housing project or internship (e.g., budget limit, site constraints) including the decision you made, alternatives you considered, and the outcome or learning."
+  },
+  "stopped_at": null,
+  "ended_by_request": true
+}

@@ -1,0 +1,435 @@
+{
+  "profile_id": "exp-05-family-business-owner",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "family auto-parts business owner-operator",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 8,
+    "notes": "Runs the family auto-parts business; has about 22 employees. Business financials are family-confidential. Did not work elsewhere. Must not assume a corporate employer."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "contradiction",
+    "confidential"
+  ],
+  "resume_text": "Nikhil Agarwal (synthetic)\nEXPERIENCE\nManaging Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)\n- Run day-to-day operations with about 22 employees; 3 supervisors report to me\n- Added a second shift; monthly output went up from 9,000 to 13,000 pieces\n- Moved 70% of customer billing from cash to bank transfer\nTrainee, same business (2016-2017)\nEDUCATION\nB.Com, a university in Ludhiana, 2016, 70%\nClass XII, Commerce, 82%\nOTHER\nMember, local industries association; Hindi, Punjabi, English",
+  "context": {
+    "route": "experienced",
+    "background": "Eight years running my family's auto-parts business in Ludhiana, with about 22 employees. I've never worked elsewhere.",
+    "goal": "Professionalise the business, bring in systems and growth capital, and expand to a second plant.",
+    "school": "General MBA practice",
+    "programme": "IPMX (IIM Lucknow)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-05-family-business-owner",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Trainee, same business (2016-2017)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2016, 70%"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 82%"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Member, local industries association"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-05-family-business-owner",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What were the main challenges in running day-to-day operations with a team of 22 employees and 3 supervisors?",
+      "How did you manage communication and accountability among supervisors and employees to ensure smooth operations?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Trainee, same business (2016-2017)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2016, 70%"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 82%"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Member, local industries association"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your role and key responsibilities as Managing Partner in your family auto-parts business?",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What were the main challenges in running day-to-day operations with a team of 22 employees and 3 supervisors?",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did you manage communication and accountability among supervisors and employees to ensure smooth operations?",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What motivated you to add a second shift to the manufacturing process, and how did it impact production?",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What operational adjustments or resource planning were necessary to implement the second shift successfully?",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Did you face any employee or quality control challenges with the new shift, and how did you address them?",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you explain the process and benefits of moving 70% of customer billing from cash to bank transfer?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What strategies did you use to convince customers to adopt bank transfers over cash payments?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How did this change affect the company’s cash flow management and financial reporting?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 1,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your role and key responsibilities as Managing Partner in your family auto-parts business?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me. Two years ago I added a second shift and our monthly output went up from 9,000 to 13,000 pieces. I also moved 70% of customer billing from cash to bank transfer. I'm applying to the one-year programme at IIM Lucknow because I learned everything on the job, and I'd like a framework for finance, costing and hiring.",
+      "request_id": "13dc35ea-8a34-53fe-a109-9f843dd14e3c"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What were the main challenges you faced in running day-to-day operations with a team of 22 employees and 3 supervisors?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I don't think the assumption that family businesses lack discipline is right in our case. We keep stock registers, and we pay on fixed dates. I'd like you to ask about specific problems.",
+      "request_id": "eec86606-6623-52b3-8ef0-0ac94b9b33f8"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned moving 70% of customer billing from cash to bank transfer. What motivated that change, and how did you manage the transition with your customers?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I also moved 70% of customer billing from cash to bank transfer"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Our business is built on trust and long-term relationships. We believe in quality and customer satisfaction, and our values have helped us grow steadily over the years.",
+      "request_id": "b6e5c7b5-6b62-511f-9ede-8d9b1b76e495"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "How did you communicate these values of trust and quality to your customers during the shift to 70% bank transfer payments, and did you face any resistance?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "Our business is built on trust and long-term relationships"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "The second shift was my father's decision. I wasn't involved. I only managed the supervisors after he decided it.",
+      "request_id": "e883b4e4-fb70-5a6e-b5dc-8e6c0b30eb6d"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You said your father decided to add the second shift and you managed the supervisors afterward. Can you describe how you handled the challenges or changes this second shift brought to your daily operations?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I can't share our profits, our customers' names or our bank loan details. They belong to the family and our partners, and I'd need their permission.",
+      "request_id": "eaef13fd-ddd2-54a4-bc2e-c94d5ac6d2cf"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has solid hands-on experience managing and scaling a family auto-parts business with about 22 employees, showing personal ownership in operations and implementing payment systems. However, there is limited articulation of challenges faced or specific problems solved, and minimal detail on the candidate's individual role in key decisions like adding a second shift. Responses lack concrete examples of personal judgment or learning from setbacks. The candidate is cautious about sharing sensitive details, which limits insight into business outcomes and peer contributions.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me. Two years ago I added a second shift and our monthly output went up from 9,000 to 13,000 pieces",
+        "observation": "Demonstrates significant personal ownership and scope of responsibility including operational scale-up."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I also moved 70% of customer billing from cash to bank transfer",
+        "observation": "Shows initiative in improving business processes and financial systems."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I don't think the assumption that family businesses lack discipline is right in our case. We keep stock registers, and we pay on fixed dates",
+        "observation": "Candidate deflects question about operational challenges and does not provide specific examples.",
+        "suggestion": "Practice describing one or two concrete operational challenges you faced and how you addressed them, focusing on your personal role."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "The second shift was my father's decision. I wasn't involved. I only managed the supervisors after he decided it",
+        "observation": "Candidate is not engaging with decision-making or challenges related to a major operational change mentioned in resume.",
+        "suggestion": "Prepare to discuss your own involvement and management challenges in implementing changes, even if initiated by others, highlighting your handling of consequences or supervising role."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I can't share our profits, our customers' names or our bank loan details. They belong to the family and our partners, and I'd need their permission",
+        "observation": "Candidate's reluctance limits evidence of business outcomes and financial judgment.",
+        "suggestion": "Focus on sharing non-confidential aspects of outcomes, like percentage growth, process improvements, or lessons learned without revealing sensitive details."
+      }
+    ],
+    "next_exercise": "Retell a recent example where you faced and resolved a specific operational or team challenge in your business, explaining your decision, alternatives you considered, and the outcome, all within 60 seconds."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

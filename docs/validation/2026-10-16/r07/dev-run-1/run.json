@@ -1,0 +1,50 @@
+{
+  "provider": "openai",
+  "model": "gpt-4.1-mini",
+  "prompt_version": "mba-interview-v5",
+  "plan_version": "resume-led-v1",
+  "eval_version": "r07-eval-v1",
+  "price": {
+    "source": "builtin",
+    "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+    "input_paise_per_million": 3600,
+    "output_paise_per_million": 14400
+  },
+  "max_attempts": 3,
+  "max_spend_paise": 10000,
+  "fake_fault_every": 0,
+  "profiles": [
+    "cat-01-commerce-fresher",
+    "cat-02-cs-engineering-tier2",
+    "cat-03-arts-history",
+    "cat-04-science-physics",
+    "cat-05-non-metro-hindi-medium",
+    "cat-06-it-services-2yrs",
+    "cat-07-career-break-caregiving",
+    "cat-08-family-business-surat",
+    "cat-09-short-resume",
+    "cat-10-sales-exec",
+    "cat-11-architecture",
+    "cat-12-athlete-ba-economics",
+    "exp-01-engineering-ic",
+    "exp-02-consultant-pgpx",
+    "exp-03-plant-manager-epgp",
+    "exp-04-fmcg-brand-isb",
+    "exp-05-family-business-owner",
+    "exp-06-returnee-career-break",
+    "exp-07-psu-officer",
+    "exp-08-doctor-healthcare-mgmt",
+    "exp-09-ex-navy-officer",
+    "exp-10-ngo-teacher",
+    "exp-11-pharma-sales",
+    "exp-12-short-resume-banker"
+  ],
+  "git": {
+    "commit": "ca3ae98484528b1ff0cf4be15b562e254049976a",
+    "dirty": false
+  },
+  "stopped": null,
+  "started_at": "2026-10-16T06:01:59.340023+00:00",
+  "spent_paise_worst_case": 1705,
+  "finished_at": "2026-10-16T06:09:16.983646+00:00"
+}

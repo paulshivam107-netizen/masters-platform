@@ -1,0 +1,39 @@
+{
+  "id": "cat-08-family-business-surat",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "family textile trading business, Surat",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 2,
+    "notes": "Works in the family textile trading firm for 2 years. Is not the owner; no formal title and no staff of their own. Business financials are family-confidential. Must not assume corporate employment."
+  },
+  "resume_text": "Harsh Patel (synthetic)\nEXPERIENCE\nTrade Assistant, family textile trading firm, Surat (2024-present)\n- Handle orders from 25 regular retailers across Gujarat and Rajasthan\n- Introduced WhatsApp catalogue and a simple order sheet; repeat orders rose from 12 to 18 a month\n- Follow up on payments; overdue accounts reduced from 9 to 5\nEDUCATION\nB.Com, a university in Surat, 2024, 72%\nClass XII, Commerce, 80%\nSKILLS\nTally, Excel, Gujarati, Hindi, English\nOTHER\nTreasurer, local traders' youth association, 2025",
+  "background": "Two years in my family's textile trading business in Surat. I assist in orders and collections. I am not the owner.",
+  "goal": "Take the business to larger markets through better finance and operations, or work in a retail company.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "For the last two years I have worked in our family's textile trading firm in Surat. I handle orders from about 25 regular retailers across Gujarat and Rajasthan. I started a WhatsApp catalogue with a simple order sheet, and repeat orders went up from 12 to 18 a month. I also follow up on payments. I want an MBA because I learned the trade from my father, but I don't have a method for planning inventory or pricing."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share our turnover, margins or the names of our big buyers. That is the family's private information, so I can describe my own tasks only."
+    },
+    {
+      "tag": "vague",
+      "text": "Our business is in a very dynamic and competitive sector. We continuously focus on customer satisfaction and process excellence, and I try to bring a modern outlook to the traditional business."
+    },
+    {
+      "tag": "contradiction",
+      "text": "Overdue accounts came down from 9 to 5, but I did that alone as the business owner. Actually my father has retired and I have been running the firm entirely."
+    },
+    {
+      "tag": "disagree",
+      "text": "You are assuming that a family business does not give real responsibility. I disagree. I speak to retailers daily and I answer for my orders. It is not a lesser job than working in a company."
+    }
+  ]
+}

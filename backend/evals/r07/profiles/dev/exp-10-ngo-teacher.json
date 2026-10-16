@@ -1,0 +1,39 @@
+{
+  "id": "exp-10-ngo-teacher",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "One-year PGP (ISB)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "school teacher and NGO programme work, nontechnical",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Six years in teaching and NGO programme coordination. Managed a small team of 4 programme staff in the last two years. No tech or finance background. Must not assume corporate or technical experience."
+  },
+  "resume_text": "Lakshmi Narayanan (synthetic)\nEXPERIENCE\nProgramme Coordinator, an education NGO, Hyderabad (2023-present)\n- Run a remedial-learning programme in 18 government schools; 4 field staff report to me\n- Raised the share of children reading at grade level from 31% to 48% in 2 years\n- Manage a programme budget of Rs 55 lakh from two donors\nTeacher (English and Social Science), a private school, Hyderabad (2019-2023)\n- Taught 150 students a year in classes 6 to 8\nEDUCATION\nB.A. English, a college in Hyderabad, 2018\nB.Ed., 2019",
+  "background": "Six years in teaching and an education NGO. I lead a small programme team. I have no technical or finance background.",
+  "goal": "Lead a larger education or social enterprise, and learn the finance and measurement skills needed.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I taught for four years at a private school in Hyderabad and for the last two years I've coordinated a remedial-learning programme for an education NGO. It runs in 18 government schools, four field staff report to me, and we manage Rs 55 lakh from two donors. Over two years the share of children reading at grade level went from 31% to 48%. I'm applying for an MBA because I know how learning improves but I can't yet scale a programme or read a budget properly."
+    },
+    {
+      "tag": "vague",
+      "text": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact. I believe in holistic development and inclusive growth."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know how the 48% figure compares with other NGOs working in the same districts. We compared ourselves only with our own baseline."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "By the way, have you heard about the new metro line in Hyderabad? My commute to the schools could be shorter. I'm thinking of moving closer to the station."
+    }
+  ]
+}

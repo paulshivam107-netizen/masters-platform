@@ -1,0 +1,444 @@
+{
+  "profile_id": "cat-12-athlete-ba-economics",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "economics graduate, state-level athlete",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Sports achievements are at state level only; not national. Must not assume a coach role, a sponsor or professional contract."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "contradiction",
+    "irrelevant"
+  ],
+  "resume_text": "Vikram Singh Rathore (synthetic)\nEDUCATION\nB.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)\nClass XII, Arts, 81%\nSPORTS\nState-level 800 metres runner: silver in the state meet (2024); 3 district gold medals\nCaptain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes\nPROJECT\nEconomics term paper: price changes of onions in the local mandi over 18 months, using public data\nSKILLS\nExcel, basic statistics\nLANGUAGES\nHindi, English, Marwari",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BA Economics student and a state-level athlete. No work experience.",
+    "goal": "Join a sports business, a consumer company or a bank, and later work in sports management.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-12-athlete-ba-economics",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Arts, 81%"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "State-level 800 metres runner: silver in the state meet (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "3 district gold medals"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes"
+      },
+      {
+        "id": "fact-6",
+        "category": "project",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic statistics"
+      },
+      {
+        "id": "fact-9",
+        "category": "education",
+        "evidence_quote": "Hindi, English, Marwari"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-12-athlete-ba-economics",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "Which specific subjects or topics within economics have interested you the most during your studies?",
+      "Have you applied any economic theories from your coursework to real-world observations or projects outside classroom?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Arts, 81%"
+      },
+      {
+        "id": "fact-3",
+        "category": "achievement",
+        "evidence_quote": "State-level 800 metres runner: silver in the state meet (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "3 district gold medals"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes"
+      },
+      {
+        "id": "fact-6",
+        "category": "project",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "basic statistics"
+      },
+      {
+        "id": "fact-9",
+        "category": "education",
+        "evidence_quote": "Hindi, English, Marwari"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You have scored 69% till semester 5 in your B.A. Economics (Hons) course. Can you describe your academic strengths and challenges so far?",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "Which specific subjects or topics within economics have interested you the most during your studies?",
+        "evidence_quote": "B.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Have you applied any economic theories from your coursework to real-world observations or projects outside classroom?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You were captain of your college athletics team and organized early morning training sessions. How did this leadership role shape your skills?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What challenges did you face while managing the team and how did you address them?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you share an example where your leadership contributed to the team's success or morale?",
+        "evidence_quote": "Captain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Your economics term paper studied price changes of onions over 18 months in the local mandi. What insights did you gain from this analysis?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "Can you explain the methodology and data sources you used for this project?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How do you think such price fluctuation studies could impact policymaking or local markets?",
+        "evidence_quote": "Economics term paper: price changes of onions in the local mandi over 18 months, using public data",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 1,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You have scored 69% till semester 5 in your B.A. Economics (Hons) course. Can you describe your academic strengths and challenges so far?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm finishing BA Economics at a government college in Jodhpur. I run the 800 metres and won silver at the state meet in 2024. Last year I captained our college team and organised daily 6 a.m. training for 18 athletes. For a term paper I studied onion prices at the local mandi over 18 months using public data. I want an MBA because sports taught me discipline, and economics gave me theory. I'd like the practical side of running an organisation.",
+      "request_id": "e92e9b07-d474-50f5-9322-75a2b6f08bb6"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned your term paper on onion prices over 18 months using public data. What economic concepts or methods did you apply in that project to analyze the price changes?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "For a term paper I studied onion prices at the local mandi over 18 months using public data"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I think the question assumes that sport is a hobby. At state level it needs planning, budgeting for travel and recovery, and long-term goals. I consider it as serious as an internship.",
+      "request_id": "879ec371-db8c-58bf-b3e5-1c0cce4ee3da"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You have highlighted the serious planning and budgeting involved in your sports activities. Could you describe a specific instance where you had to manage a challenge related to budgeting or scheduling for your team, and how you resolved it?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "At state level it needs planning, budgeting for travel and recovery, and long-term goals"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Sports has taught me a great deal about leadership, grit and teamwork. I believe those learnings are applicable everywhere and that I will bring a winning mindset to any organisation.",
+      "request_id": "904f462d-77d5-512a-a031-84069bbb3fb9"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Which subject or project from your studies interests you most, and why?",
+      "kind": "new_topic",
+      "topic": "education",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "fallback": true
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I won gold at the national meet in 2024, which is what really changed my confidence. The silver was only the state one before that.",
+      "request_id": "024068ff-1fa4-5a97-ac8b-48e93c38cf85"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned that winning gold at the national meet in 2024 really changed your confidence. How has this achievement influenced your plans for your MBA and your career goals?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I won gold at the national meet in 2024, which is what really changed my confidence"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "Quick question, what do you think about the new cricket league auction? My friends and I were discussing that yesterday. I felt some of the prices were not justified.",
+      "request_id": "82d6d502-fda2-5a15-91f8-7c70d0a87e30"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has a strong profile with leadership in sports and consistent academic progress in economics. They express a clear motivation for an MBA linked to their sports discipline and economic theory. However, there are weaknesses in linking academic projects to specific economic methods, concrete examples of managing challenges, and staying focused on interview questions. The candidate shows motivation but could improve in demonstrating analytical application and answering behavioral questions with clear examples.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I run the 800 metres and won silver at the state meet in 2024. Last year I captained our college team and organised daily 6 a.m. training for 18 athletes",
+        "observation": "Demonstrates leadership and discipline through sports achievements and team captaincy."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I want an MBA because sports taught me discipline, and economics gave me theory. I'd like the practical side of running an organisation",
+        "observation": "Clearly articulates motivation for MBA linking sports discipline and economics theory with future organisational goals."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I think the question assumes that sport is a hobby. At state level it needs planning, budgeting for travel and recovery, and long-term goals",
+        "observation": "Did not directly answer the question about economic concepts or methods used in the term paper.",
+        "suggestion": "Practice explaining a project by naming the specific economic theories or data analysis methods applied, e.g., supply-demand analysis or statistical trends, and retell that in 60 seconds highlighting decision points."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "Sports has taught me a great deal about leadership, grit and teamwork. I believe those learnings are applicable everywhere and that I will bring a winning mindset to any organisation",
+        "observation": "Response is vague and lacks a concrete example of handling a budgeting or scheduling challenge in sports leadership.",
+        "suggestion": "Recall a specific budgeting or scheduling problem faced, describe the steps taken to resolve it, and practice narrating the situation-action-result story succinctly."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "Quick question, what do you think about the new cricket league auction? My friends and I were discussing that yesterday. I felt some of the prices were not justified",
+        "observation": "Shifted away from interview focus and did not maintain professionalism in addressing interview questions.",
+        "suggestion": "Work on staying focused and answering only questions asked during an interview; practice politely steering conversation back if tempted to pose questions or discuss unrelated topics."
+      }
+    ],
+    "next_exercise": "Retell your onion price term paper project in 60 seconds, explaining which economic concepts you applied, why, and what you concluded, including any challenges and your own contributions."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

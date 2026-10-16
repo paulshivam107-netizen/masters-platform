@@ -1,0 +1,411 @@
+{
+  "profile_id": "exp-01-engineering-ic",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "software engineering, individual contributor",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 6,
+    "notes": "Senior IC; has never had direct reports. Must not be assumed to be a people manager. Some metrics are confidential."
+  },
+  "answer_tags": [
+    "specific",
+    "confidential",
+    "contradiction",
+    "irrelevant",
+    "stop"
+  ],
+  "resume_text": "Rahul Menon (synthetic)\nEXPERIENCE\nSenior Software Engineer, a payments company, Bengaluru (2022-present)\n- Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8\n- Mentored two junior engineers through their first production launches\nSoftware Engineer, an IT services firm, Pune (2019-2022)\n- Built reporting dashboards for a European retail client\nEDUCATION\nB.Tech, Electronics and Communication, a state engineering college, 2019, 7.4 CGPA\nOTHER\nGMAT 700. Volunteer maths tutor at a government school on weekends (2021-present)",
+  "context": {
+    "route": "experienced",
+    "background": "Six years in software engineering, the last three in payments infrastructure. I have never had direct reports; I lead through code reviews and design documents.",
+    "goal": "Move into product management for financial infrastructure, then lead a fintech product line.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-01-engineering-ic",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Mentored two junior engineers through their first production launches"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Built reporting dashboards for a European retail client"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "B.Tech, Electronics and Communication, a state engineering college, 2019, 7.4 CGPA"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "GMAT 700"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Volunteer maths tutor at a government school on weekends (2021-present)"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-01-engineering-ic",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did you coordinate with your team and stakeholders to ensure the migration met the desired reliability and performance goals?",
+      "Looking back, what improvements or different approaches would you consider if you were to lead a similar migration again?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Mentored two junior engineers through their first production launches"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Built reporting dashboards for a European retail client"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "B.Tech, Electronics and Communication, a state engineering college, 2019, 7.4 CGPA"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "GMAT 700"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Volunteer maths tutor at a government school on weekends (2021-present)"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You led the migration of a settlement service from a monolith to three services, reducing on-call pages from 30 to 8 per month. Can you walk me through the key challenges you faced during this migration?",
+        "evidence_quote": "Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did you coordinate with your team and stakeholders to ensure the migration met the desired reliability and performance goals?",
+        "evidence_quote": "Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Looking back, what improvements or different approaches would you consider if you were to lead a similar migration again?",
+        "evidence_quote": "Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You have experience mentoring two junior engineers through their first production launches. What approach did you take to guide them effectively?",
+        "evidence_quote": "Mentored two junior engineers through their first production launches",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "Can you describe a specific challenge one of your mentees faced and how you helped them overcome it?",
+        "evidence_quote": "Mentored two junior engineers through their first production launches",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How has mentoring others influenced your own approach to leadership and team collaboration?",
+        "evidence_quote": "Mentored two junior engineers through their first production launches",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "You built reporting dashboards for a European retail client during your tenure at an IT services firm. What were the main functionalities you implemented in these dashboards?",
+        "evidence_quote": "Built reporting dashboards for a European retail client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did you gather and incorporate client feedback throughout the dashboard development process?",
+        "evidence_quote": "Built reporting dashboards for a European retail client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "What impact did these dashboards have on the client’s business operations or decision-making?",
+        "evidence_quote": "Built reporting dashboards for a European retail client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You led the migration of a settlement service from a monolith to three services, reducing on-call pages from 30 to 8 per month. Can you walk me through the key challenges you faced during this migration?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I've spent six years as a software engineer, the last three at a payments company in Bengaluru. My biggest piece of work was splitting our settlement service out of the monolith into three services. I wrote the design document, got sign-off from two other teams and ran the cut-over over four weekends. On-call pages dropped from roughly 30 a month to 8. I'm applying now because the decisions I find most interesting, such as what to build and for which merchants, are made one level above me, and I want the business training to make them well.",
+      "request_id": "f00f8b79-30d4-5a5b-b1ac-190af3dc7df9"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "How did you coordinate with your team and stakeholders to ensure the migration met the desired reliability and performance goals?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I wrote the design document, got sign-off from two other teams and ran the cut-over over four weekends"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I can't share the transaction volumes or revenue numbers; they're confidential to the company. What I can say is that settlement runs every night for all of our merchants, so an outage there is visible to customers the next morning.",
+      "request_id": "f0f518cc-87d6-5c94-98ae-cb81bf2b96aa"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you explain the monitoring and rollback mechanisms you put in place during the four-weekend cut-over period to handle any unexpected issues without impacting customers?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I wrote the design document, got sign-off from two other teams and ran the cut-over over four weekends"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Actually, I managed the whole team for that migration. Well, not formally. There were three of us and I was the one who wrote the plan, but I didn't have anyone reporting to me.",
+      "request_id": "1c366c7a-5687-57b1-9a02-aef9fc499f73"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned you managed the whole team for the migration informally. How did you handle any disagreements or differing opinions within the team during this project?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "Actually, I managed the whole team for that migration. Well, not formally. There were three of us and I was the one who wrote the plan"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "By the way, do you know whether the ISB hostel allows cooking? I'm vegetarian and I was wondering about the mess food.",
+      "request_id": "2bc07819-4489-5ed7-b016-629bf62ed186"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Let's focus on your team interactions. Can you share an example of a time when you helped a junior engineer improve their performance or solve a challenging problem?",
+      "kind": "new_topic",
+      "topic": "contribution",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "Can we stop here? I'd like to end the practice session now and look at the feedback.",
+      "request_id": "b5f97f53-7a57-5640-a990-d3ac364aa3a2"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrated clear personal ownership and a good understanding of the scope of a complex technical migration project, communicating key steps and outcomes effectively. They showed motivation linked to wanting a broader impact on business decisions. However, the answers lacked detail on stakeholder coordination, specific monitoring or rollback strategies, and conflict resolution within the team. The candidate shifted off-topic once and chose to stop the session before covering contributions to peers or learning from setbacks.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I wrote the design document, got sign-off from two other teams and ran the cut-over over four weekends. On-call pages dropped from roughly 30 a month to 8",
+        "observation": "Demonstrated clear personal ownership and understanding of impactful project outcomes."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I'm applying now because the decisions I find most interesting, such as what to build and for which merchants, are made one level above me, and I want the business training to make them well",
+        "observation": "Clearly articulated career rationale and motivation for pursuing an MBA."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I can't share the transaction volumes or revenue numbers; they're confidential to the company",
+        "observation": "Did not elaborate on coordination with teams and stakeholders during migration to meet reliability and performance goals.",
+        "suggestion": "Practice describing internal collaboration and coordination methods used (e.g., meetings, documentation, feedback loops) without breaching confidentiality; retell this example focusing on processes rather than numbers."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I managed the whole team for that migration. Well, not formally. There were three of us and I was the one who wrote the plan",
+        "observation": "Did not provide specific examples of handling disagreements or differing opinions within the team.",
+        "suggestion": "Recall a specific instance of conflict or differing views during a project and explain how you addressed it, highlighting your leadership and communication skills."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "By the way, do you know whether the ISB hostel allows cooking? I'm vegetarian and I was wondering about the mess food",
+        "observation": "Deviation from topic interrupted the flow of the interview and limited discussion of contributions and peer interactions.",
+        "suggestion": "Focus responses on the interview topics and try to avoid off-topic questions during interviews; prepare separate time or context to clarify logistics or personal questions."
+      }
+    ],
+    "next_exercise": "Practice narrating the migration project focusing on your coordination with stakeholders and team members. Include how you addressed any technical or interpersonal challenges and the controls you put in place to monitor performance and manage risks, all without sharing confidential data. Aim to summarize in one to two minutes, highlighting your leadership and communication approaches."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

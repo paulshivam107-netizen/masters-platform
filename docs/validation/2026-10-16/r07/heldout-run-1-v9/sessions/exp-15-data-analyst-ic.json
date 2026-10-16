@@ -1,0 +1,429 @@
+{
+  "profile_id": "exp-15-data-analyst-ic",
+  "split": "heldout",
+  "route": "experienced",
+  "persona": {
+    "background_type": "data analyst, individual contributor",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "Five years as an individual contributor analyst; has never had direct reports. Company metrics are confidential. Must not assume managerial experience or a data-science title."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "confidential",
+    "disagree",
+    "unknown"
+  ],
+  "resume_text": "Priyanka Das (synthetic)\nEXPERIENCE\nSenior Data Analyst, a retail e-commerce company, Bengaluru (2022-present)\n- Build dashboards and SQL models for the pricing team; used by 25 category managers\n- Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points\nData Analyst, an analytics services firm, Kolkata (2020-2022)\n- Built churn reports for a telecom client\nEDUCATION\nB.Sc. Statistics, a college in Kolkata, 2019, 8.3 CGPA\nM.Sc. Statistics, a university in Kolkata, 2020\nSKILLS\nSQL, Python (pandas), Tableau, A/B testing",
+  "context": {
+    "route": "experienced",
+    "background": "Five years as a data analyst, all as an individual contributor. I have never had direct reports.",
+    "goal": "Move from analysis to a business leadership role, starting in pricing or category strategy.",
+    "school": "General MBA practice",
+    "programme": "EPGP (IIM Bangalore)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-15-data-analyst-ic",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Senior Data Analyst, a retail e-commerce company, Bengaluru (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Build dashboards and SQL models for the pricing team; used by 25 category managers"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Data Analyst, an analytics services firm, Kolkata (2020-2022)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Built churn reports for a telecom client"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Sc. Statistics, a college in Kolkata, 2019, 8.3 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "M.Sc. Statistics, a university in Kolkata, 2020"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "SQL, Python (pandas), Tableau, A/B testing"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-15-data-analyst-ic",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did building dashboards and SQL models specifically assist the pricing team and category managers?",
+      "What challenges did you face while creating these dashboards, and how did you ensure they met the team's needs?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Senior Data Analyst, a retail e-commerce company, Bengaluru (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Build dashboards and SQL models for the pricing team; used by 25 category managers"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Data Analyst, an analytics services firm, Kolkata (2020-2022)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Built churn reports for a telecom client"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Sc. Statistics, a college in Kolkata, 2019, 8.3 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "M.Sc. Statistics, a university in Kolkata, 2020"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "SQL, Python (pandas), Tableau, A/B testing"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you explain your role and key responsibilities as a Senior Data Analyst at the retail e-commerce company?",
+        "evidence_quote": "Senior Data Analyst, a retail e-commerce company, Bengaluru (2022-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did building dashboards and SQL models specifically assist the pricing team and category managers?",
+        "evidence_quote": "Build dashboards and SQL models for the pricing team; used by 25 category managers",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "What challenges did you face while creating these dashboards, and how did you ensure they met the team's needs?",
+        "evidence_quote": "Build dashboards and SQL models for the pricing team; used by 25 category managers",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Tell me more about the analysis on discount depth that led to an improvement in margin by about 1.2 percentage points.",
+        "evidence_quote": "Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What data and methods did you use to conduct this analysis, and how did you communicate your findings to stakeholders?",
+        "evidence_quote": "Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you describe the specific rule changes implemented as a result and how you monitored their impact over time?",
+        "evidence_quote": "Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "What were your main tasks while building churn reports for the telecom client at the analytics services firm?",
+        "evidence_quote": "Built churn reports for a telecom client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What key insights did these churn reports reveal, and how were they used by the client?",
+        "evidence_quote": "Built churn reports for a telecom client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "What tools and techniques did you employ to ensure accuracy and relevance in these churn reports?",
+        "evidence_quote": "Built churn reports for a telecom client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you explain your role and key responsibilities as a Senior Data Analyst at the retail e-commerce company?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a senior data analyst at a retail e-commerce company in Bengaluru, with five years of experience. I build SQL models and dashboards for the pricing team, and about 25 category managers use them. My most useful piece of work was an analysis on discount depth. It led to a rule change that improved margin by roughly 1.2 percentage points. I've always been an individual contributor, and I'm applying now to make the decisions I currently only inform.",
+      "request_id": "cd70c1a8-ad25-53cf-aacd-e69832f9bd2f"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "How did building dashboards and SQL models specifically assist the pricing team and category managers?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I build SQL models and dashboards for the pricing team, and about 25 category managers use them"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I am a data-driven professional with a passion for insights. I leverage advanced analytics and storytelling to drive business value and I enjoy working cross-functionally.",
+      "request_id": "14ace6f7-71b9-5a5a-8eff-6de45539f4ff"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you clarify how the dashboards and SQL models you built helped the pricing team and category managers in their decision-making or daily work?",
+      "conflict": "Answer does not address how dashboards and SQL models assist pricing team and category managers.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I am a data-driven professional with a passion for insights"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I can't share the sales values, the margin base or the category names. That is internal information, and I can only say the 1.2 points.",
+      "request_id": "7db28adb-c630-5d3e-b70b-d74511a29583"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Could you describe a specific challenge you faced while working on the discount depth analysis and how you addressed it to achieve the margin improvement?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't agree that analysts only support others. In this case the pricing rule changed because of my analysis, and I presented it to the category heads. I'd ask you to treat it as my decision-making evidence.",
+      "request_id": "5c03e6bc-9e8f-5d91-a26f-ebf2b71932b5"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Can you walk me through how you identified the key factors in discount depth that led to the pricing rule change?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "the pricing rule changed because of my analysis"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know whether the margin gain has lasted since I moved to other work. I no longer track that metric, so I wouldn't like to claim anything.",
+      "request_id": "faff3362-3901-51c0-a78a-06b11e6491a3"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has strong experience as an individual contributor data analyst in retail e-commerce, with quantified impact on pricing rules improving margins. They show ownership by presenting their analysis to category heads, demonstrating some involvement beyond pure data work. However, the candidate struggled to clearly articulate how their dashboards specifically assisted business users and did not provide concrete examples of challenges handled or learning from setbacks. The motivation to transition into business leadership is clear but could be better connected with specific experiences and reflections. Contributions to peers and detailed explanation of trade-offs or judgment calls remain largely unaddressed.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "My most useful piece of work was an analysis on discount depth. It led to a rule change that improved margin by roughly 1.2 percentage points",
+        "observation": "Shows measurable impact and ownership of an important project influencing pricing rules."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "In this case the pricing rule changed because of my analysis, and I presented it to the category heads",
+        "observation": "Demonstrates involvement in decision-making forums and communication beyond pure analysis."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I am a data-driven professional with a passion for insights. I leverage advanced analytics and storytelling to drive business value and I enjoy working cross-functionally",
+        "observation": "Candidate did not explain how dashboards and SQL models helped the pricing team and category managers specifically.",
+        "suggestion": "Practice explaining a concrete example of how your dashboards affected users' daily decision-making, including insights delivered and any feedback or improvements made."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't know whether the margin gain has lasted since I moved to other work. I no longer track that metric, so I wouldn't like to claim anything",
+        "observation": "Candidate did not demonstrate follow-through or reflection on the outcome and sustainability of their work.",
+        "suggestion": "Prepare to discuss post-project reflections or learning, including how you track success or what you would do differently if given another chance."
+      }
+    ],
+    "next_exercise": "Take your example of the discount depth analysis and describe in 60 seconds the decision you influenced, the key factors you identified, the trade-offs or challenges you faced, and the confirmed business impact, including your role in communicating to stakeholders."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

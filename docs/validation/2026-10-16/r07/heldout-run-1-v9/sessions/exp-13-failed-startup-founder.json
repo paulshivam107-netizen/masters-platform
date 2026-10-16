@@ -1,0 +1,425 @@
+{
+  "profile_id": "exp-13-failed-startup-founder",
+  "split": "heldout",
+  "route": "experienced",
+  "persona": {
+    "background_type": "startup founder, company shut down",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Founded a startup that shut down after 3 years. Led a team of up to 9 at peak, not now. Currently winding up or between roles. Investor names and amounts are confidential. Must not assume the startup succeeded or still operates."
+  },
+  "answer_tags": [
+    "specific",
+    "contradiction",
+    "unknown",
+    "disagree",
+    "vague"
+  ],
+  "resume_text": "Yash Trivedi (synthetic)\nEXPERIENCE\nCo-founder and CEO, a B2B grocery-supply startup, Bengaluru (2021-2024; shut down 2024)\n- Built a supply app for 600 kirana stores; peak team of 9\n- Reached monthly gross sales of Rs 1.2 crore at peak; ran out of runway when funding did not close\n- Wound up the company, cleared vendor dues and closed the operations in 2024\nProduct Analyst, an e-commerce company, Bengaluru (2019-2021)\nEDUCATION\nB.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA\nGMAT 720",
+  "context": {
+    "route": "experienced",
+    "background": "Six years of work, three of them running a startup that has since shut down. Previously a product analyst.",
+    "goal": "Return to a product or operations leadership role at a growth-stage company, and possibly found again later.",
+    "school": "General MBA practice",
+    "programme": "PGPX (IIM Ahmedabad)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-13-failed-startup-founder",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Co-founder and CEO, a B2B grocery-supply startup, Bengaluru (2021-2024; shut down 2024)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Built a supply app for 600 kirana stores; peak team of 9"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Reached monthly gross sales of Rs 1.2 crore at peak; ran out of runway when funding did not close"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Wound up the company, cleared vendor dues and closed the operations in 2024"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Product Analyst, an e-commerce company, Bengaluru (2019-2021)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "achievement",
+        "evidence_quote": "GMAT 720"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-13-failed-startup-founder",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What were the key challenges you faced in building the supply app used by 600 kirana stores, and how did you address those challenges?",
+      "Given the startup shut down in 2024 after funding did not close, what lessons did you take away regarding fundraising and managing cash flow?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Co-founder and CEO, a B2B grocery-supply startup, Bengaluru (2021-2024; shut down 2024)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Built a supply app for 600 kirana stores; peak team of 9"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Reached monthly gross sales of Rs 1.2 crore at peak; ran out of runway when funding did not close"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Wound up the company, cleared vendor dues and closed the operations in 2024"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Product Analyst, an e-commerce company, Bengaluru (2019-2021)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "achievement",
+        "evidence_quote": "GMAT 720"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You mentioned you co-founded and led a B2B grocery-supply startup in Bengaluru from 2021 to 2024; could you elaborate on your primary motivations to start this venture?",
+        "evidence_quote": "Co-founder and CEO, a B2B grocery-supply startup, Bengaluru (2021-2024; shut down 2024)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What were the key challenges you faced in building the supply app used by 600 kirana stores, and how did you address those challenges?",
+        "evidence_quote": "Built a supply app for 600 kirana stores; peak team of 9",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Given the startup shut down in 2024 after funding did not close, what lessons did you take away regarding fundraising and managing cash flow?",
+        "evidence_quote": "ran out of runway when funding did not close",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Can you describe your role and main contributions as a Product Analyst at the e-commerce company in Bengaluru from 2019 to 2021?",
+        "evidence_quote": "Product Analyst, an e-commerce company, Bengaluru (2019-2021)",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did your technical background in Computer Science support your work in product analysis during this period?",
+        "evidence_quote": "B.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you provide a specific example of a project or analysis that had a measurable impact on the company’s product or customer experience?",
+        "evidence_quote": "Product Analyst, an e-commerce company, Bengaluru (2019-2021)",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "You secured a GMAT score of 720; what strategies did you employ to prepare for this test, and how do you believe this reflects your aptitude for business studies?",
+        "evidence_quote": "GMAT 720",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How do you plan to leverage your GMAT preparation experience in your upcoming MBA coursework or professional development?",
+        "evidence_quote": "GMAT 720",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "Are there particular business concepts or skills you are eager to develop further in the program, building on your prior academic and professional experience?",
+        "evidence_quote": "B.Tech, Computer Science, a state engineering college, 2019, 7.7 CGPA",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You mentioned you co-founded and led a B2B grocery-supply startup in Bengaluru from 2021 to 2024; could you elaborate on your primary motivations to start this venture?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I spent three years co-founding a B2B grocery-supply startup in Bengaluru. We built an app for about 600 kirana stores, and at peak our team had nine people and gross sales of Rs 1.2 crore a month. We shut down in 2024 when a funding round did not close. I wound up the company and cleared our vendor dues. I'm applying now because I made most decisions on instinct, and I want to learn the finance and operating discipline I was missing.",
+      "request_id": "0f0d3caa-67a3-56c4-beec-64b4cbeb8fe9"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What were the key challenges you faced in building the supply app used by 600 kirana stores, and how did you address those challenges?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "We built an app for about 600 kirana stores"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "The funding round did close, actually. We shut down only because my co-founder wanted to leave. Money was never a problem for us.",
+      "request_id": "049b6d30-4dca-5b6a-8465-23940565b1d2"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You stated earlier that the company shut down due to funding not closing, but now say it was because your co-founder left despite funding being available. Could you clarify the actual reason for the shutdown?",
+      "conflict": "You mentioned in a1 that the startup shut down in 2024 when a funding round did not close, but in a2 you said the funding round did close and the shutdown was due to your co-founder leaving.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "The funding round did close, actually. We shut down only because my co-founder wanted to leave"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I don't know exactly why that investor pulled out. They gave us a short note, and I never got a full explanation.",
+      "request_id": "c06f44d9-5229-5f21-a661-86d5bf1fc6dc"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Given the uncertainty around the funding round and the co-founder's departure, how did you personally manage decision-making and prioritization during the winding down of the startup?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't think shutting down means I failed completely. Most of our retailers stayed for 18 months, and we paid everyone. I would like to talk about what I'd do differently.",
+      "request_id": "10ce4b30-0d54-596b-a4c3-de9245f207ed"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned you'd like to talk about what you'd do differently. Could you share one specific decision or strategy you would change if you were to start a similar venture again, and why?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I would like to talk about what I'd do differently"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "The startup journey taught me resilience, agility and learning from failure. It was a roller-coaster, and I now have a growth mindset that I can bring anywhere.",
+      "request_id": "08075e58-ef59-567c-a3c2-45f3034a7f01"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrated valuable entrepreneurial experience with personal ownership of a startup from ideation to closure, showing resilience and reflection on their journey despite the shutdown. However, there are inconsistencies in their narrative regarding the reasons for the startup closure, and specific learnings or concrete changes they would make in future ventures were not clearly articulated. The candidate also struggled to provide specifics on decision-making during critical times and to clarify conflicting points about funding and the co-founder's exit.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I spent three years co-founding a B2B grocery-supply startup in Bengaluru. We built an app for about 600 kirana stores, and at peak our team had nine people and gross sales of Rs 1.2 crore a month",
+        "observation": "Shows substantial personal ownership and scope in running a startup to scale, indicating operational experience and leadership."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "The startup journey taught me resilience, agility and learning from failure. It was a roller-coaster, and I now have a growth mindset that I can bring anywhere",
+        "observation": "Demonstrates reflective learning from setbacks and an adaptive growth mindset valuable for future challenges."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "The funding round did close, actually. We shut down only because my co-founder wanted to leave. Money was never a problem for us",
+        "observation": "Contradicts earlier account about funding not closing, leading to unclear understanding of the startup's closure reason.",
+        "suggestion": "Prepare a clear, consistent narrative about the startup's end, including the roles of funding and co-founder departure, and practice explaining it concisely with focus on your personal impact and lessons."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I don't think shutting down means I failed completely. Most of our retailers stayed for 18 months, and we paid everyone. I would like to talk about what I'd do differently",
+        "observation": "Expresses willingness to reflect but does not specify which decisions or strategies would be changed.",
+        "suggestion": "Develop and rehearse at least one concrete example of a decision or strategy you would alter, explaining why and how it would improve outcomes."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I don't know exactly why that investor pulled out. They gave us a short note, and I never got a full explanation",
+        "observation": "Shows lack of clarity on key factors affecting the startup's trajectory, limiting demonstration of judgment and trade-offs.",
+        "suggestion": "Work on framing uncertain information confidently, focusing on your response and decisions despite unknown factors, to show ownership and judgment."
+      }
+    ],
+    "next_exercise": "Retell your startup story in 2 minutes, clearly outlining your role, the key milestones, the reason for closure with a consistent explanation, and one specific lesson or decision you would approach differently next time. Emphasize your personal contributions and learning from setbacks."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

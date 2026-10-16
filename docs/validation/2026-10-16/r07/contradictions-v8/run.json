@@ -1,0 +1,38 @@
+{
+  "provider": "openai",
+  "model": "gpt-4.1-mini",
+  "prompt_version": "mba-interview-v8",
+  "plan_version": "resume-led-v2",
+  "eval_version": "r07-eval-v1",
+  "price": {
+    "source": "builtin",
+    "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+    "input_paise_per_million": 3600,
+    "output_paise_per_million": 14400
+  },
+  "max_attempts": 3,
+  "max_spend_paise": 10000,
+  "fake_fault_every": 0,
+  "profiles": [
+    "cat-04-science-physics",
+    "cat-06-it-services-2yrs",
+    "cat-08-family-business-surat",
+    "cat-10-sales-exec",
+    "cat-12-athlete-ba-economics",
+    "exp-01-engineering-ic",
+    "exp-02-consultant-pgpx",
+    "exp-03-plant-manager-epgp",
+    "exp-05-family-business-owner",
+    "exp-06-returnee-career-break",
+    "exp-09-ex-navy-officer",
+    "exp-10-ngo-teacher"
+  ],
+  "git": {
+    "commit": "093e77559865a84831b3a3f47f46f768f4a526de",
+    "dirty": false
+  },
+  "stopped": null,
+  "started_at": "2026-10-16T10:06:00.536282+00:00",
+  "spent_paise_worst_case": 1016,
+  "finished_at": "2026-10-16T10:09:48.743955+00:00"
+}

@@ -1,0 +1,39 @@
+{
+  "id": "cat-11-architecture",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "architecture, BArch student with design projects",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Studio design projects and a short site-visit internship only. Must not assume a firm, a manager or paid project work."
+  },
+  "resume_text": "Aditi Kulkarni (synthetic)\nEDUCATION\nB.Arch (final year, 5-year programme), a college of architecture in Pune, 2021-2026, 7.9 CGPA\nClass XII, PCM, 90%\nDESIGN PROJECTS\nHousing design studio: 40-unit low-income housing scheme with shared courtyards; cost estimate within Rs 1,800 per sq ft\nHeritage studio: documented a 19th-century wada, 22 measured drawings\nINTERNSHIP\nSix-week intern, a small architecture studio: drew site details and visited 3 construction sites\nSKILLS\nAutoCAD, SketchUp, basic Revit\nACTIVITIES\nDesign team lead for the college's annual exhibition (2024)",
+  "background": "Final-year BArch student with studio projects. No full-time work experience.",
+  "goal": "Work in real estate development or urban planning on the business side, and eventually lead housing projects.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm in the final year of a five-year BArch in Pune. My housing studio project was a 40-unit low-income scheme with shared courtyards, and I kept the cost estimate within Rs 1,800 per square foot. I also did a six-week internship at a small studio where I visited three construction sites. I found that the best design decisions were often limited by cost and approvals, and I want an MBA to understand those parts of real estate."
+    },
+    {
+      "tag": "vague",
+      "text": "I believe design thinking can solve any problem. It is about empathy, innovation and creating holistic experiences, and I think it can bring a lot of value in the real estate domain."
+    },
+    {
+      "tag": "unknown",
+      "text": "I'm not sure about how the Rs 1,800 figure compares with the market now. I took the rate from my college's guideline sheet, and I haven't checked it with a contractor."
+    },
+    {
+      "tag": "stop",
+      "text": "Can we please stop? My studio submission is due tomorrow and I need to get back to it. I would like to end the session and see the feedback."
+    },
+    {
+      "tag": "specific",
+      "text": "As design team lead for the exhibition, I coordinated twelve classmates over three weeks. The hardest part was that people wanted their own models in the front. I made a simple floor plan of the hall and we agreed the positions by theme."
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 """Programme-aware practice plans; the applicant's answers determine the branches."""
 
-PLAN_VERSION = "resume-led-v1"
+PLAN_VERSION = "resume-led-v2"
 FOCUS_TOPICS = {
     "resume": ["education", "experience", "projects", "interests"],
     "behavioural": ["behaviour"],
@@ -27,12 +27,16 @@ def make_plan(route, focus):
 def next_step(context, transcript):
     plan = context.get("interview_plan") or make_plan(context["route"], context.get("practice_focus", "balanced"))
     depth = 0
-    for turn in reversed(transcript):
+    for index in range(len(transcript) - 1, -1, -1):
+        turn = transcript[index]
         if turn["role"] != "assistant":
             continue
         if turn.get("kind") not in ("follow_up", "clarification"):
             break
         depth += 1
+        previous = transcript[index - 1] if index else None
+        if turn.get("anchor_turn_id") and previous and turn["anchor_turn_id"] != previous.get("id"):
+            break  # It returned to an earlier answer: that started a new branch.
     covered = list(dict.fromkeys(t["topic"] for t in transcript if t.get("topic")))
     return {**plan, "branch_depth": depth, "covered_topics": covered,
             "move_on": depth >= plan["max_follow_ups"],

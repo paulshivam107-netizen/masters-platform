@@ -43,3 +43,6 @@ frontend/test-results/
 .idea/
 *.swp
 *.swo
+
+# R07 evaluation run outputs (evidence is copied to docs/validation)
+backend/evals/r07/results/

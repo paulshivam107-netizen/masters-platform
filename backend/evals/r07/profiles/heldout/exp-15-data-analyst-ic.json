@@ -1,0 +1,39 @@
+{
+  "id": "exp-15-data-analyst-ic",
+  "split": "heldout",
+  "route": "experienced",
+  "programme_name": "EPGP (IIM Bangalore)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "data analyst, individual contributor",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "Five years as an individual contributor analyst; has never had direct reports. Company metrics are confidential. Must not assume managerial experience or a data-science title."
+  },
+  "resume_text": "Priyanka Das (synthetic)\nEXPERIENCE\nSenior Data Analyst, a retail e-commerce company, Bengaluru (2022-present)\n- Build dashboards and SQL models for the pricing team; used by 25 category managers\n- Analysis on discount depth led to a change in rules that improved margin by about 1.2 percentage points\nData Analyst, an analytics services firm, Kolkata (2020-2022)\n- Built churn reports for a telecom client\nEDUCATION\nB.Sc. Statistics, a college in Kolkata, 2019, 8.3 CGPA\nM.Sc. Statistics, a university in Kolkata, 2020\nSKILLS\nSQL, Python (pandas), Tableau, A/B testing",
+  "background": "Five years as a data analyst, all as an individual contributor. I have never had direct reports.",
+  "goal": "Move from analysis to a business leadership role, starting in pricing or category strategy.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a senior data analyst at a retail e-commerce company in Bengaluru, with five years of experience. I build SQL models and dashboards for the pricing team, and about 25 category managers use them. My most useful piece of work was an analysis on discount depth. It led to a rule change that improved margin by roughly 1.2 percentage points. I've always been an individual contributor, and I'm applying now to make the decisions I currently only inform."
+    },
+    {
+      "tag": "vague",
+      "text": "I am a data-driven professional with a passion for insights. I leverage advanced analytics and storytelling to drive business value and I enjoy working cross-functionally."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share the sales values, the margin base or the category names. That is internal information, and I can only say the 1.2 points."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't agree that analysts only support others. In this case the pricing rule changed because of my analysis, and I presented it to the category heads. I'd ask you to treat it as my decision-making evidence."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know whether the margin gain has lasted since I moved to other work. I no longer track that metric, so I wouldn't like to claim anything."
+    }
+  ]
+}

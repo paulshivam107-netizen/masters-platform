@@ -1,0 +1,39 @@
+{
+  "id": "cat-04-science-physics",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "science, BSc Physics, research internship",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. One research internship in a university lab; was a trainee, not a supervisor. Must not assume work experience or direct reports."
+  },
+  "resume_text": "Siddharth Menon (synthetic)\nEDUCATION\nB.Sc. Physics (Hons), a state university in Kerala, 2023-2026, 8.4 CGPA (till semester 5)\nClass XII, Science, 93%\nRESEARCH INTERNSHIP\nEight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin\nPROJECTS\nSemester project: pendulum timing with a phone camera, error under 2%\nACTIVITIES\nPhysics Association secretary (2024-25); ran 6 weekly problem-solving sessions for juniors\nScholarship: state merit scholarship, 2023",
+  "background": "Final-year BSc Physics student with one summer research internship. No full-time job.",
+  "goal": "Join a technology or energy company in a business-analyst role and later move into operations strategy.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a final-year BSc Physics student. Last summer I spent eight weeks as an intern at a national research institute, helping with a thin-film measurement experiment. My job was to record readings, about 120 in all, and plot them. I enjoyed the work but realised that I like asking why a lab's equipment is bought and how projects are chosen more than the experiments. That is why I want an MBA."
+    },
+    {
+      "tag": "specific",
+      "text": "As secretary of the Physics Association I ran six weekly problem-solving sessions for juniors. Attendance was low at first, so I moved them to the evening after classes and it improved."
+    },
+    {
+      "tag": "contradiction",
+      "text": "In the internship I supervised three other interns and set their daily targets. It was the first time I managed a small team."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't share the details of the thin-film results. The lab asked interns not to discuss unpublished data, so I can only describe the method in general terms."
+    },
+    {
+      "tag": "stop",
+      "text": "I think that's enough for today. Could we end the session here? I'd like to see my feedback now."
+    }
+  ]
+}

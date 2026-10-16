@@ -1,0 +1,39 @@
+{
+  "id": "exp-08-doctor-healthcare-mgmt",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "PGPX (IIM Ahmedabad)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "doctor, MBBS, clinician moving into healthcare management",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "MBBS doctor working as a clinician for 5 years. No patient data may be used or invented; speak only about processes and teams in general. Has led a rota of junior staff informally, no formal management post."
+  },
+  "resume_text": "Dr. Ishaan Bhatt (synthetic)\nEXPERIENCE\nMedical Officer, a 120-bed private hospital, Ahmedabad (2022-present)\n- Cover the outpatient department and emergency shifts, about 40 consultations a shift\n- Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)\n- Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours\nResident Medical Officer, a district hospital (2020-2022)\nEDUCATION\nMBBS, a government medical college, Gujarat, 2019\nINTERNSHIP\nOne-year compulsory rotating internship (2019-2020)",
+  "background": "Five years as a clinician. Interested in the management of hospitals. I do not have a formal management role.",
+  "goal": "Move into hospital operations or healthcare management, and later manage a multi-specialty hospital.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm an MBBS doctor and have worked for five years, the last three as a medical officer in a 120-bed private hospital in Ahmedabad. I cover outpatient and emergency shifts and make the monthly duty rota for eight junior doctors, though that is an informal duty. I was also part of a hospital committee that reduced the discharge delay from 4 hours to 2.5. That is when I realised how much patient experience depends on operations. I want an MBA to move into hospital management."
+    },
+    {
+      "tag": "vague",
+      "text": "Healthcare is a noble field, and I believe in patient-centric care. I would like to leverage my clinical background and transform healthcare delivery with a holistic approach."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't give any case details or patient numbers beyond the general shift load. Patient information is protected, so I don't use even anonymised examples in interviews."
+    },
+    {
+      "tag": "disagree",
+      "text": "I don't agree that doctors are poor at management. We run emergencies, coordinate teams and decide under pressure. What we lack is financial training, and that is what I am asking the MBA for."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I was appointed as the hospital's operations head last year, and I manage the nursing staff and administration. That is my formal role."
+    }
+  ]
+}

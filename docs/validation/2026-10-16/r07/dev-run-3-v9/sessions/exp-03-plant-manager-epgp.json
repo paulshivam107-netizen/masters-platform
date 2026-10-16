@@ -1,0 +1,433 @@
+{
+  "profile_id": "exp-03-plant-manager-epgp",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "manufacturing, plant head with about 200 people",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 12,
+    "notes": "Plant head with about 200 people in the plant, of whom 5 are direct reports (functional heads). Production volumes and customer names are confidential. Must not assume a corporate-office role."
+  },
+  "answer_tags": [
+    "specific",
+    "specific",
+    "vague",
+    "contradiction",
+    "unknown",
+    "disagree",
+    "confidential",
+    "stop"
+  ],
+  "resume_text": "Anand Deshpande (synthetic)\nEXPERIENCE\nPlant Head, an auto-components manufacturer, Aurangabad (2020-present)\n- Run a plant of about 200 people; 5 functional heads report to me\n- Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance\n- Cut customer rejections from 1,800 ppm to 900 ppm\nProduction Manager, same company (2016-2020)\nProduction Engineer, an engineering company (2014-2016)\nEDUCATION\nB.E., Mechanical Engineering, a state engineering college, 2014, 68%\nCERTIFICATION\nSix Sigma Green Belt, 2017",
+  "context": {
+    "route": "experienced",
+    "background": "Twelve years in manufacturing, now plant head with about 200 people in the plant. Five functional heads report to me directly.",
+    "goal": "Move into general management or a business-head role at a manufacturing company.",
+    "school": "General MBA practice",
+    "programme": "EPGP (IIM Bangalore)",
+    "practice_focus": "balanced",
+    "question_limit": 8,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-03-plant-manager-epgp",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Plant Head, an auto-components manufacturer, Aurangabad (2020-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run a plant of about 200 people; 5 functional heads report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Cut customer rejections from 1,800 ppm to 900 ppm"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Production Manager, same company (2016-2020)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Production Engineer, an engineering company (2014-2016)"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.E., Mechanical Engineering, a state engineering college, 2014, 68%"
+      },
+      {
+        "id": "fact-8",
+        "category": "achievement",
+        "evidence_quote": "Six Sigma Green Belt, 2017"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-03-plant-manager-epgp",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What strategies did you implement to improve line efficiency from 71% to 82% over two years?",
+      "How did line-balancing and preventive maintenance specifically contribute to reducing inefficiencies and what obstacles did you face during these implementations?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Plant Head, an auto-components manufacturer, Aurangabad (2020-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run a plant of about 200 people; 5 functional heads report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Cut customer rejections from 1,800 ppm to 900 ppm"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Production Manager, same company (2016-2020)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Production Engineer, an engineering company (2014-2016)"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.E., Mechanical Engineering, a state engineering college, 2014, 68%"
+      },
+      {
+        "id": "fact-8",
+        "category": "achievement",
+        "evidence_quote": "Six Sigma Green Belt, 2017"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your key responsibilities and challenges as the Plant Head at the auto-components manufacturer?",
+        "evidence_quote": "Plant Head, an auto-components manufacturer, Aurangabad (2020-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What strategies did you implement to improve line efficiency from 71% to 82% over two years?",
+        "evidence_quote": "Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did line-balancing and preventive maintenance specifically contribute to reducing inefficiencies and what obstacles did you face during these implementations?",
+        "evidence_quote": "Raised line efficiency from 71% to 82% over 2 years through line-balancing and preventive maintenance",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You mentioned cutting customer rejections from 1,800 ppm to 900 ppm. What quality measures did you introduce to achieve this reduction?",
+        "evidence_quote": "Cut customer rejections from 1,800 ppm to 900 ppm",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did your Six Sigma Green Belt certification influence your approach to quality improvement and defect reduction?",
+        "evidence_quote": "Six Sigma Green Belt, 2017",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you provide an example of a specific Six Sigma tool or project that contributed significantly to lowering customer rejections?",
+        "evidence_quote": "Six Sigma Green Belt, 2017",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 3
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your key responsibilities and challenges as the Plant Head at the auto-components manufacturer?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I have twelve years in manufacturing and have been the plant head of an auto-components plant for the last six. About 200 people work there, and five functional heads report to me. My main work in the last two years was raising line efficiency from 71% to 82%, mostly through line-balancing and preventive maintenance. I'm applying for an executive MBA because I run the plant well but have no training in finance, pricing or strategy, which is what the next role needs.",
+      "request_id": "2afd29c6-63c4-5218-87ce-04e9b5f1922d"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What strategies did you implement to improve line efficiency from 71% to 82% over two years?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "raising line efficiency from 71% to 82%, mostly through line-balancing and preventive maintenance"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "On line-balancing, I went through the longest-cycle station first and we found that two operators were waiting for material. We moved the supply point and added a kanban card. That alone gave us about three points of efficiency.",
+      "request_id": "bd742782-f751-5ef8-b884-85c4dbda9c3d"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "How did you decide on prioritizing the longest-cycle station first for line-balancing, and were there alternative approaches you considered?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "On line-balancing, I went through the longest-cycle station first"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I believe in empowering my people and creating a culture of ownership and excellence. We follow a continuous-improvement mindset across the shop floor, and that drives the numbers.",
+      "request_id": "8741b8ae-eaca-51d8-882f-8856a2cf86ce"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you give an example of how you empowered your team to take ownership on the shop floor, and what impact it had?",
+      "conflict": "",
+      "kind": "clarification",
+      "topic": "behaviour",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I believe in empowering my people and creating a culture of ownership and excellence"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "The rejections fell from 1,800 ppm to 900 ppm in my first month as plant head. Honestly it was an easy gain and it took very little effort.",
+      "request_id": "8444336b-6494-5cf9-a990-bc583f0bc52b"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Tell me about a decision where the trade-offs were not obvious. How did you decide?",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "fallback": true
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know the exact share of our rejections caused by the supplier's castings. The quality head tracks that, and I haven't looked at it recently.",
+      "request_id": "6e08ddbb-fd58-5f2d-bfb8-5ebd83964614"
+    },
+    {
+      "id": "q6",
+      "role": "assistant",
+      "text": "How did you approach preventive maintenance to improve line efficiency, and what challenges did you encounter during its implementation?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "raising line efficiency from 71% to 82%, mostly through line-balancing and preventive maintenance"
+    },
+    {
+      "id": "a6",
+      "role": "user",
+      "text": "I don't accept that a plant head only manages machines. Most of my day goes into people and customers. I'd ask you to reconsider the question, because I'm not an operations-only person.",
+      "request_id": "bc9e345c-5ec9-5cf4-8845-c6cdaca68d4d"
+    },
+    {
+      "id": "q7",
+      "role": "assistant",
+      "text": "How do you balance addressing both people management and operational improvements in your role as Plant Head?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a6",
+      "anchor_quote": "Most of my day goes into people and customers"
+    },
+    {
+      "id": "a7",
+      "role": "user",
+      "text": "I can't say our monthly volumes or which OEMs we supply. Those are covered by customer agreements, and I'd get into trouble.",
+      "request_id": "f8951714-199c-56c8-8d32-719cfccd5cc0"
+    },
+    {
+      "id": "q8",
+      "role": "assistant",
+      "text": "Outside of confidentiality constraints, can you describe how you have managed customer relationships and their expectations at your plant?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "motivation",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a8",
+      "role": "user",
+      "text": "I think I've answered enough for today. Could we end the practice session here? I'd like to read the feedback.",
+      "request_id": "89b4246e-ef66-5e94-8c3f-40beff8e1fd0"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrated clear ownership and a strong focus on operational improvements by detailing specific actions to improve line efficiency. Their approach to empowering teams reflects leadership qualities conducive to managing large teams. However, they could improve by providing more concrete examples of decision-making trade-offs and contribute more nuanced reflections on setbacks and customer relationship management. The candidate might benefit from practicing structured storytelling to explain decisions involving trade-offs and learning from challenges, which are critical in general management roles.",
+    "strengths": [
+      {
+        "turn_id": "a2",
+        "quote": "On line-balancing, I went through the longest-cycle station first and we found that two operators were waiting for material. We moved the supply point and added a kanban card. That alone gave us about three points of efficiency",
+        "observation": "Shows concrete ownership and a clear, practical approach to improving line efficiency with a specific example."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I believe in empowering my people and creating a culture of ownership and excellence. We follow a continuous-improvement mindset across the shop floor, and that drives the numbers",
+        "observation": "Demonstrates leadership philosophy emphasizing empowerment and continuous improvement, which is important for managing large teams effectively."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a5",
+        "quote": "I don't know the exact share of our rejections caused by the supplier's castings. The quality head tracks that, and I haven't looked at it recently",
+        "observation": "Unable to provide specifics on quality issues or ownership beyond delegation, limiting insight into decision-making and accountability.",
+        "suggestion": "Practice narrating a specific quality-related challenge you faced, what trade-offs you considered, and how you acted, even if outcome details are approximate."
+      },
+      {
+        "turn_id": "a6",
+        "quote": "I don't accept that a plant head only manages machines. Most of my day goes into people and customers. I'd ask you to reconsider the question, because I'm not an operations-only person",
+        "observation": "Did not elaborate on how operational and people management responsibilities are balanced in practice.",
+        "suggestion": "Prepare an example showing how you balanced operational improvements and people management simultaneously, highlighting trade-offs or prioritization."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't know the exact share of our rejections caused by the supplier's castings. The quality head tracks that, and I haven't looked at it recently",
+        "observation": "Lack of insight into challenges and trade-offs when addressing supplier quality issues.",
+        "suggestion": "Recount a scenario where you had to manage supplier quality or customer expectations, focusing on your judgment and learning."
+      }
+    ],
+    "next_exercise": "Describe a recent complex decision involving competing priorities or trade-offs at your plant. Use the STAR method to explain the situation, your specific choices, alternatives considered, the outcome, and what you learned."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

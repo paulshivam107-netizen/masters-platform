@@ -1,0 +1,39 @@
+{
+  "id": "cat-12-athlete-ba-economics",
+  "split": "dev",
+  "route": "cat",
+  "programme_name": "Two-year PGP",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "economics graduate, state-level athlete",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Sports achievements are at state level only; not national. Must not assume a coach role, a sponsor or professional contract."
+  },
+  "resume_text": "Vikram Singh Rathore (synthetic)\nEDUCATION\nB.A. Economics (Hons), a government college in Jodhpur, 2023-2026, 69% (till semester 5)\nClass XII, Arts, 81%\nSPORTS\nState-level 800 metres runner: silver in the state meet (2024); 3 district gold medals\nCaptain, college athletics team (2025): organised the team's daily 6 a.m. training for 18 athletes\nPROJECT\nEconomics term paper: price changes of onions in the local mandi over 18 months, using public data\nSKILLS\nExcel, basic statistics\nLANGUAGES\nHindi, English, Marwari",
+  "background": "Final-year BA Economics student and a state-level athlete. No work experience.",
+  "goal": "Join a sports business, a consumer company or a bank, and later work in sports management.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm finishing BA Economics at a government college in Jodhpur. I run the 800 metres and won silver at the state meet in 2024. Last year I captained our college team and organised daily 6 a.m. training for 18 athletes. For a term paper I studied onion prices at the local mandi over 18 months using public data. I want an MBA because sports taught me discipline, and economics gave me theory. I'd like the practical side of running an organisation."
+    },
+    {
+      "tag": "disagree",
+      "text": "I think the question assumes that sport is a hobby. At state level it needs planning, budgeting for travel and recovery, and long-term goals. I consider it as serious as an internship."
+    },
+    {
+      "tag": "vague",
+      "text": "Sports has taught me a great deal about leadership, grit and teamwork. I believe those learnings are applicable everywhere and that I will bring a winning mindset to any organisation."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I won gold at the national meet in 2024, which is what really changed my confidence. The silver was only the state one before that."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Quick question, what do you think about the new cricket league auction? My friends and I were discussing that yesterday. I felt some of the prices were not justified."
+    }
+  ]
+}

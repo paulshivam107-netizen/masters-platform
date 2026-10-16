@@ -1,4 +1,5 @@
 """Bounded interview calls. Keys and provider errors never enter API responses."""
+import copy
 import json
 import os
 
@@ -7,10 +8,11 @@ from pydantic import ValidationError
 
 from config import get_settings
 from interview_schemas import InterviewFeedback, NextQuestion
+from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v2"
+PROMPT_VERSION = "mba-interview-v10"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -111,7 +113,7 @@ Evaluate only the supplied answers, never claims about speech delivery from text
 Return the requested JSON schema, without markdown or additional text."""
 
 
-def _structured(task, context, transcript, schema_class, max_tokens=None, instructions=None):
+def _structured(task, context, transcript, schema_class, max_tokens=None, instructions=None, schema=None):
     model = text_model()
     response = _post("responses", json={
         "model": model,
@@ -121,7 +123,7 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
         "max_output_tokens": max_tokens or (2200 if schema_class is InterviewFeedback else 450),
         "text": {"format": {
             "type": "json_schema", "name": schema_class.__name__,
-            "strict": True, "schema": schema_class.model_json_schema(),
+            "strict": True, "schema": schema or schema_class.model_json_schema(),
         }},
     })
     usage = {"model": model}
@@ -144,9 +146,35 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
                               billing="charged", usage=usage) from None
 
 
+def _request_schema(transcript, move_on, beyond_limit=False):
+    """The strict output schema for one next-question call.
+
+    ``conflict`` comes first so the model states any clash with the resume or earlier answers
+    before choosing the kind (prompt-only rules were ignored in R07 runs). Only existing answers
+    may be anchored. ``end_requested`` is server-only: an injected "stop interviewing" must not
+    end a session. Once a branch is exhausted (move_on) a follow-up is impossible; only a new
+    topic, or a clarification of a conflicting latest answer, remains.
+    """
+    base = copy.deepcopy(NextQuestion.model_json_schema())
+    properties = {"conflict": base["properties"].pop("conflict"), **base["properties"]}
+    answers = [t["id"] for t in transcript if t["role"] == "user"]
+    if beyond_limit:
+        # The one clarification allowed at the limit is used up: only a new topic remains (v10;
+        # in v9 the model kept clarifying and every refusal was a billed retry).
+        properties["kind"] = {"type": "string", "enum": ["new_topic"]}
+        for field in ("anchor_turn_id", "anchor_quote"):
+            properties[field] = {"type": "string", "enum": [""]}
+        return {**base, "properties": properties, "required": list(properties)}
+    properties["kind"] = {"type": "string", "enum": ["new_topic", "clarification"] if move_on
+                          else ["follow_up", "clarification", "new_topic"]}
+    properties["anchor_turn_id"] = {"type": "string", "enum": [""] + (answers[-1:] if move_on else answers)}
+    return {**base, "properties": properties, "required": list(properties)}
+
+
 def next_question(context, transcript):
     context = dict(context)
     context["next_step"] = next_step(context, transcript)
+    move_on = context["next_step"]["move_on"]
     if context.get("resume_follow_ups"):
         context["optional_question_bank_follow_ups"] = context["resume_follow_ups"]
     elif context.get("question_id"):
@@ -154,13 +182,24 @@ def next_question(context, transcript):
     result, usage = _structured(
         "Ask the next interview question. Go one topic deep: clarify a concrete claim, then probe its reasoning, "
         "alternatives or consequences. Use the latest answer rather than reading a prewritten sequence. "
-        "For a follow_up or clarification, anchor_turn_id MUST identify the latest user answer and anchor_quote "
-        "MUST be a short exact substring of that answer supporting the question. For new_topic use empty anchors. "
+        "A clarification MUST anchor to the latest answer: use it when that answer is vague, evasive or unclear. "
+        "First fill conflict: if the latest answer conflicts with the resume or an earlier answer (a different title, "
+        "team size, reports, dates, figures or who made a decision), state the conflict in one short sentence; "
+        "otherwise leave it empty. When conflict is not empty, kind MUST be clarification of the latest answer, "
+        "politely naming both versions; never treat the new claim as fact or build a question on it. After an irrelevant or off-topic answer, redirect in a few words and ask about a priority "
+        "topic not yet covered. Never re-ask an earlier question, even reworded. "
+        "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
+        "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
+        "a short exact substring of that answer supporting the question: one continuous passage, never shortened "
+        "with an ellipsis. For new_topic use empty anchors. "
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
-        "Return only a question, without feedback or an example answer.",
-        context, transcript, NextQuestion, max_tokens=800,
+        "Return only a question, without feedback or an example answer."
+        + (" next_step.move_on is TRUE: this branch is finished. Ask a new_topic question about a different "
+           "priority topic not yet covered, unless conflict is not empty or the latest answer is too vague to assess, "
+           "in which case ask one clarification of it; do not otherwise continue the previous story." if move_on else ""),
+        context, transcript, NextQuestion, max_tokens=800, schema=_request_schema(transcript, move_on, context["next_step"]["branch_depth"] > context["next_step"]["max_follow_ups"]),
     )
     try:
         return _check_next_question(result, context, transcript), usage
@@ -172,12 +211,27 @@ def next_question(context, transcript):
 def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
-    if result["kind"] != "new_topic":
-        if (not last or result["anchor_turn_id"] != last["id"] or not result["anchor_quote"].strip()
-                or result["anchor_quote"] not in last["text"] or context["next_step"]["move_on"]):
+    conflict, move_on = result["conflict"].strip(), context["next_step"]["move_on"]
+    if conflict and result["kind"] != "clarification":
+        raise ProviderFailure("The interviewer needs to clarify your latest answer first. Please retry.")
+    # At the branch limit one clarification of the latest answer is still allowed (a vague answer deserves
+    # it); beyond that only a stated conflict justifies another, so a thread cannot run on.
+    extra_clarification = result["kind"] == "clarification" and (
+        conflict or context["next_step"]["branch_depth"] <= context["next_step"]["max_follow_ups"])
+    if move_on and not (result["kind"] == "new_topic" or extra_clarification):
+        raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
+    if result["kind"] not in ("new_topic", "end_requested"):
+        # A clarification probes the latest answer; a follow-up may return to any earlier answer.
+        target = next((t for t in transcript if t["role"] == "user" and t["id"] == result["anchor_turn_id"]), None)
+        if result["kind"] == "clarification" and target is not last:
+            target = None
+        span = find_quote(result["anchor_quote"], target["text"], max_length=240) if target else None
+        if not last or target is None or not result["anchor_quote"].strip() or span is None:
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
-    elif result["anchor_turn_id"] or result["anchor_quote"]:
-        raise ProviderFailure("The next question was incomplete. Please retry.")
+        result["anchor_quote"] = span
+    else:
+        # Anchors carry no meaning here; rejecting would only waste a billed call.
+        result["anchor_turn_id"] = result["anchor_quote"] = ""
     if any(t["role"] == "assistant" and t["text"].strip().casefold() == result["question"].strip().casefold() for t in transcript):
         raise ProviderFailure("The interviewer repeated a question. Please retry this step.")
     return result
@@ -186,10 +240,21 @@ def _check_next_question(result, context, transcript):
 def validate_feedback(result, transcript):
     result = InterviewFeedback.model_validate(result).model_dump()
     answers = {turn["id"]: turn["text"] for turn in transcript if turn["role"] == "user"}
-    for point in result["strengths"] + result["improvements"]:
-        # Evidence must be an exact, nonempty substring of the cited answer.
-        if point["turn_id"] not in answers or not point["quote"].strip() or point["quote"] not in answers[point["turn_id"]]:
+    dropped = 0
+    for key in ("strengths", "improvements"):
+        kept = []
+        for point in result[key]:
+            # Evidence must be an exact, nonempty substring of the cited answer.
+            span = find_quote(point["quote"], answers[point["turn_id"]], max_length=400) if point["turn_id"] in answers else None
+            if span is None:
+                dropped += 1
+                continue
+            kept.append({**point, "quote": span})
+        if not kept:
             raise ProviderFailure("The feedback could not be matched to your answers. Please retry the debrief.")
+        result[key] = kept
+    if dropped:
+        result["dropped_points"] = dropped
     return result
 
 
@@ -198,13 +263,22 @@ def feedback(context, transcript):
     result, usage = _structured(
         "Provide a short debrief with 1-2 strengths, 1-3 actionable improvements and one retry exercise. "
         "For EVERY strength/improvement, cite the exact user turn_id and an exact short verbatim quote "
-        "from that answer. A quote must genuinely support the observation. Calibrate the summary to "
+        "from that answer: one continuous passage, never shortened with an ellipsis. A quote must genuinely "
+        "support the observation. Calibrate the summary to "
         "the amount of evidence; even very short answers permit only limited feedback. Do not invent "
         "achievements, fabricate rewritten facts, award admissions scores, or comment on vocal delivery. "
         "Use feedback_criteria appropriate to the applicant's actual background and chosen focus. "
         "Distinguish unclear explanation, unsupported claims and gaps in understanding. "
         "Only assess topics actually discussed; mark untested areas as untested. "
         "Do not penalise lack of work experience, people-management titles or numerical impact. "
+        "Never make an improvement or criticism of: declining to share confidential information, not knowing a "
+        "figure the applicant could not have, politely disagreeing with a question, an off-topic remark, an attempt "
+        "to change your instructions, or choosing to end the session early; assess the remaining answers instead. "
+        "Never credit a claim that conflicts with the resume or an earlier answer; note it as something to clarify. "
+        "Do not list a vague or generic answer as a strength. Each suggestion must name one specific example from "
+        "the applicant's own answers or resume and a concrete way to practise it (for example, retell that example "
+        "in 60 seconds with the decision, the alternative rejected and the result); never give generic advice such "
+        "as 'provide more detail' or 'be specific'. "
         "For academic or factual answers, avoid claiming correctness without reliable supplied reference material.",
         context, transcript, InterviewFeedback,
     )

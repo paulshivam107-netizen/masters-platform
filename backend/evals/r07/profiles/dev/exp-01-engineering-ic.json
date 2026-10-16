@@ -1,0 +1,19 @@
+{
+  "id": "exp-01-engineering-ic",
+  "split": "dev",
+  "route": "experienced",
+  "programme_name": "One-year PGP (ISB)",
+  "practice_focus": "balanced",
+  "persona": {"background_type": "software engineering, individual contributor", "employment": true, "managed_people": false, "work_years": 6,
+              "notes": "Senior IC; has never had direct reports. Must not be assumed to be a people manager. Some metrics are confidential."},
+  "resume_text": "Rahul Menon (synthetic)\nEXPERIENCE\nSenior Software Engineer, a payments company, Bengaluru (2022-present)\n- Led the migration of the settlement service from a monolith to three services; on-call pages fell from about 30 a month to 8\n- Mentored two junior engineers through their first production launches\nSoftware Engineer, an IT services firm, Pune (2019-2022)\n- Built reporting dashboards for a European retail client\nEDUCATION\nB.Tech, Electronics and Communication, a state engineering college, 2019, 7.4 CGPA\nOTHER\nGMAT 700. Volunteer maths tutor at a government school on weekends (2021-present)",
+  "background": "Six years in software engineering, the last three in payments infrastructure. I have never had direct reports; I lead through code reviews and design documents.",
+  "goal": "Move into product management for financial infrastructure, then lead a fintech product line.",
+  "answers": [
+    {"tag": "specific", "text": "I've spent six years as a software engineer, the last three at a payments company in Bengaluru. My biggest piece of work was splitting our settlement service out of the monolith into three services. I wrote the design document, got sign-off from two other teams and ran the cut-over over four weekends. On-call pages dropped from roughly 30 a month to 8. I'm applying now because the decisions I find most interesting, such as what to build and for which merchants, are made one level above me, and I want the business training to make them well."},
+    {"tag": "confidential", "text": "I can't share the transaction volumes or revenue numbers; they're confidential to the company. What I can say is that settlement runs every night for all of our merchants, so an outage there is visible to customers the next morning."},
+    {"tag": "contradiction", "text": "Actually, I managed the whole team for that migration. Well, not formally. There were three of us and I was the one who wrote the plan, but I didn't have anyone reporting to me."},
+    {"tag": "irrelevant", "text": "By the way, do you know whether the ISB hostel allows cooking? I'm vegetarian and I was wondering about the mess food."},
+    {"tag": "stop", "text": "Can we stop here? I'd like to end the practice session now and look at the feedback."}
+  ]
+}

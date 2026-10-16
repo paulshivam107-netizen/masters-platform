@@ -214,6 +214,24 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(replay.status_code, 200)
                 self.assertEqual(called.call_count, 1)
 
+    async def test_end_requested_closes_the_interview_for_the_debrief(self):
+        with patch.object(provider, "api_key", return_value="unit-test-key"):
+            session = await self.create(provider="openai", consent=True)
+            closing = {"question": "Of course, we will stop here. Thank you.", "kind": "end_requested",
+                       "topic": "projects", "anchor_turn_id": "", "anchor_quote": ""}
+            with patch.object(provider, "next_question", return_value=(closing, {})):
+                response = await self.send(session, text="I'd like to stop the session now, could I see the feedback?")
+            self.assertEqual(response.status_code, 200, response.text)
+            ended = response.json()
+            self.assertEqual(ended["status"], "ready_for_feedback")
+            self.assertEqual(ended["transcript"][-1]["kind"], "end_requested")
+            report = provider.demo_feedback(ended["transcript"])
+            with patch.object(provider, "feedback", return_value=(report, {})):
+                done = await self.client.post(f"/interviews/sessions/{session['id']}/finish", headers=self.headers,
+                    json={"request_id": str(uuid4()), "expected_version": ended["version"]})
+            self.assertEqual(done.status_code, 200, done.text)
+            self.assertEqual(done.json()["status"], "completed")
+
     async def test_durable_quota_blocks_provider_call(self):
         with patch.object(provider, "api_key", return_value="unit-test-key"), patch.dict(os.environ, {"INTERVIEW_USER_DAILY_CALLS": "1"}):
             session = await self.create(provider="openai", consent=True)

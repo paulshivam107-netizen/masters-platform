@@ -1,0 +1,429 @@
+{
+  "profile_id": "exp-05-family-business-owner",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "family auto-parts business owner-operator",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 8,
+    "notes": "Runs the family auto-parts business; has about 22 employees. Business financials are family-confidential. Did not work elsewhere. Must not assume a corporate employer."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "contradiction",
+    "confidential"
+  ],
+  "resume_text": "Nikhil Agarwal (synthetic)\nEXPERIENCE\nManaging Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)\n- Run day-to-day operations with about 22 employees; 3 supervisors report to me\n- Added a second shift; monthly output went up from 9,000 to 13,000 pieces\n- Moved 70% of customer billing from cash to bank transfer\nTrainee, same business (2016-2017)\nEDUCATION\nB.Com, a university in Ludhiana, 2016, 70%\nClass XII, Commerce, 82%\nOTHER\nMember, local industries association; Hindi, Punjabi, English",
+  "context": {
+    "route": "experienced",
+    "background": "Eight years running my family's auto-parts business in Ludhiana, with about 22 employees. I've never worked elsewhere.",
+    "goal": "Professionalise the business, bring in systems and growth capital, and expand to a second plant.",
+    "school": "General MBA practice",
+    "programme": "IPMX (IIM Lucknow)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-05-family-business-owner",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Trainee, same business (2016-2017)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2016, 70%"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 82%"
+      },
+      {
+        "id": "fact-8",
+        "category": "interest",
+        "evidence_quote": "Member, local industries association"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-05-family-business-owner",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did you manage the workforce and supervisor responsibilities to ensure consistent quality across both shifts?",
+      "What operational metrics or feedback mechanisms did you use to monitor and improve productivity after adding the second shift?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Trainee, same business (2016-2017)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2016, 70%"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 82%"
+      },
+      {
+        "id": "fact-8",
+        "category": "interest",
+        "evidence_quote": "Member, local industries association"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You mentioned adding a second shift which increased monthly output from 9,000 to 13,000 pieces. Can you explain the process and challenges involved in implementing this change?",
+        "evidence_quote": "Added a second shift; monthly output went up from 9,000 to 13,000 pieces",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did you manage the workforce and supervisor responsibilities to ensure consistent quality across both shifts?",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "What operational metrics or feedback mechanisms did you use to monitor and improve productivity after adding the second shift?",
+        "evidence_quote": "Run day-to-day operations with about 22 employees; 3 supervisors report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You transitioned 70% of customer billing from cash to bank transfer. What motivated this change and how did customers respond?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What steps did you take internally to facilitate this payment transformation and ensure accuracy in transactions?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Did you face any resistance or challenges with technology or customer preferences during this transition, and how did you address them?",
+        "evidence_quote": "Moved 70% of customer billing from cash to bank transfer",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you describe your role and key learnings from your trainee period in the family auto-parts business before becoming Managing Partner?",
+        "evidence_quote": "Trainee, same business (2016-2017)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did your responsibilities evolve from trainee to managing partner, and what skills were crucial for this transition?",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "What challenges did you encounter taking on leadership after your trainee period, and how did you overcome them?",
+        "evidence_quote": "Managing Partner, family auto-parts manufacturing and trading business, Ludhiana (2017-present)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 1,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You mentioned adding a second shift which increased monthly output from 9,000 to 13,000 pieces. Can you explain the process and challenges involved in implementing this change?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me. Two years ago I added a second shift and our monthly output went up from 9,000 to 13,000 pieces. I also moved 70% of customer billing from cash to bank transfer. I'm applying to the one-year programme at IIM Lucknow because I learned everything on the job, and I'd like a framework for finance, costing and hiring.",
+      "request_id": "13dc35ea-8a34-53fe-a109-9f843dd14e3c"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned that you run day-to-day operations with about 22 employees and three supervisors reporting to you. How do you manage your supervisors and employees to maintain consistent quality and productivity, especially after adding the second shift?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "We have about 22 employees, and three supervisors report to me"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I don't think the assumption that family businesses lack discipline is right in our case. We keep stock registers, and we pay on fixed dates. I'd like you to ask about specific problems.",
+      "request_id": "eec86606-6623-52b3-8ef0-0ac94b9b33f8"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Can you describe a specific problem you encountered in managing quality or productivity during the addition of the second shift, and how you addressed it?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I'd like you to ask about specific problems"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "Our business is built on trust and long-term relationships. We believe in quality and customer satisfaction, and our values have helped us grow steadily over the years.",
+      "request_id": "b6e5c7b5-6b62-511f-9ede-8d9b1b76e495"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you tell me about a time when you had to handle a setback or failure in your business, and what you learned from that experience?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "The second shift was my father's decision. I wasn't involved. I only managed the supervisors after he decided it.",
+      "request_id": "e883b4e4-fb70-5a6e-b5dc-8e6c0b30eb6d"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Since you mentioned that your father decided to add the second shift and you managed the supervisors after, can you elaborate on your role in overseeing the supervisors and ensuring the quality and productivity of both shifts?",
+      "conflict": "You previously said you added the second shift, but now say your father decided it and you only managed supervisors afterward.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I only managed the supervisors after he decided it"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I can't share our profits, our customers' names or our bank loan details. They belong to the family and our partners, and I'd need their permission.",
+      "request_id": "eaef13fd-ddd2-54a4-bc2e-c94d5ac6d2cf"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrates long-term operational involvement in a family auto-parts business and a clear motivation to formalize knowledge through an MBA. However, there is ambiguity regarding the candidate's direct ownership of significant changes like adding a second shift, and limited concrete examples of personal problem-solving or leadership in challenges. Confidentiality constraints limit evidence of impact measurement. The discussion would benefit from more precise examples of personal initiative, decision-making, and lessons learned from setbacks.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I've run our family's auto-parts business in Ludhiana for eight years. We have about 22 employees, and three supervisors report to me",
+        "observation": "Shows sustained personal ownership and leadership over operations and staff."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I'm applying to the one-year programme at IIM Lucknow because I learned everything on the job, and I'd like a framework for finance, costing and hiring",
+        "observation": "Clearly articulates motivation for MBA and learning goals aligned to his role."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a4",
+        "quote": "The second shift was my father's decision. I wasn't involved. I only managed the supervisors after he decided it",
+        "observation": "Ambiguity about candidate's ownership of the important operational change previously described as his initiative.",
+        "suggestion": "Practice narrating a clear account distinguishing your contributions versus others', focusing on decisions and actions you directly managed."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "Our business is built on trust and long-term relationships. We believe in quality and customer satisfaction, and our values have helped us grow steadily over the years",
+        "observation": "Response generalized and does not address the requested example of solving a specific problem or setback.",
+        "suggestion": "Recount a concrete example of a challenge or setback you personally faced, what you did to resolve it, and what you learned."
+      }
+    ],
+    "next_exercise": "Prepare a 60-second structured story of a specific challenge you faced managing supervisors or quality—state the situation, your role and choices, the actions you took, and the outcome or lesson learned."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

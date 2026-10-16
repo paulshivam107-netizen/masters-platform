@@ -1,0 +1,431 @@
+{
+  "profile_id": "exp-07-psu-officer",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "public sector undertaking officer",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Officer in a public sector undertaking with a small section of 6 reporting staff. Work is partly governed by government rules. Does not have a P&L. Procurement values are partly confidential."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "confidential",
+    "disagree",
+    "unknown"
+  ],
+  "resume_text": "Amit Choudhary (synthetic)\nEXPERIENCE\nDeputy Manager (Materials), a public sector undertaking in the power sector, Nagpur (2021-present)\n- Lead a section of 6 staff handling purchase orders for a thermal plant\n- Cleared a backlog of 140 pending purchase requisitions in 5 months\n- Cut average procurement cycle from 78 days to 61 days\nAssistant Manager, same PSU (2019-2021)\n- Vendor registration and tender documentation\nEDUCATION\nB.Tech, Mechanical Engineering, a national institute, 2018, 8.0 CGPA\nSelected through a national recruitment exam, 2019",
+  "context": {
+    "route": "experienced",
+    "background": "Six years as an officer in a public sector power company, now leading a section of 6 in materials management.",
+    "goal": "Move into strategy or project roles in the energy sector, possibly at a larger company.",
+    "school": "General MBA practice",
+    "programme": "EPGP (IIM Bangalore)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-07-psu-officer",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Deputy Manager (Materials), a public sector undertaking in the power sector, Nagpur (2021-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Lead a section of 6 staff handling purchase orders for a thermal plant"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Cleared a backlog of 140 pending purchase requisitions in 5 months"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Assistant Manager, same PSU (2019-2021)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Vendor registration and tender documentation"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.Tech, Mechanical Engineering, a national institute, 2018, 8.0 CGPA"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "Selected through a national recruitment exam, 2019"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-07-psu-officer",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face managing the team and how did you address them?",
+      "How did your leadership impact your team's performance and the procurement process?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Deputy Manager (Materials), a public sector undertaking in the power sector, Nagpur (2021-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Lead a section of 6 staff handling purchase orders for a thermal plant"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Cleared a backlog of 140 pending purchase requisitions in 5 months"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Assistant Manager, same PSU (2019-2021)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Vendor registration and tender documentation"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.Tech, Mechanical Engineering, a national institute, 2018, 8.0 CGPA"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "Selected through a national recruitment exam, 2019"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You mentioned leading a section of 6 staff handling purchase orders at a thermal plant. Could you describe your main responsibilities in that role?",
+        "evidence_quote": "Lead a section of 6 staff handling purchase orders for a thermal plant",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face managing the team and how did you address them?",
+        "evidence_quote": "Lead a section of 6 staff handling purchase orders for a thermal plant",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did your leadership impact your team's performance and the procurement process?",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You significantly reduced the procurement cycle from 78 days to 61 days. What specific strategies did you implement to achieve this?",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "Can you explain how these strategies affected the overall efficiency and cost of the procurement process?",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Were these improvements sustained over time and did you face resistance while implementing changes?",
+        "evidence_quote": "Cut average procurement cycle from 78 days to 61 days",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you discuss your experience clearing a backlog of 140 pending purchase requisitions in 5 months?",
+        "evidence_quote": "Cleared a backlog of 140 pending purchase requisitions in 5 months",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What process improvements or prioritization methods did you use to clear this backlog efficiently?",
+        "evidence_quote": "Cleared a backlog of 140 pending purchase requisitions in 5 months",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How did resolving this backlog impact your team and the operations at the power plant?",
+        "evidence_quote": "Cleared a backlog of 140 pending purchase requisitions in 5 months",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You mentioned leading a section of 6 staff handling purchase orders at a thermal plant. Could you describe your main responsibilities in that role?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a deputy manager in the materials department of a public sector power company, with six years since joining. I lead a section of six people who handle purchase orders for a thermal plant. When I took over, 140 purchase requisitions were pending. We cleared them in five months and cut the average procurement cycle from 78 days to 61. I'm applying for the executive programme because I understand the rules of public procurement but not how to compare options financially, and I'd like to work on energy strategy.",
+      "request_id": "a514311e-eff6-5a7d-8658-4d054b56ab68"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned clearing 140 pending purchase requisitions and reducing the procurement cycle. What challenges did you face managing your team during this process and how did you address them?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "We cleared them in five months and cut the average procurement cycle from 78 days to 61"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "In a PSU, we work for national development. I believe in transparency, accountability and public service, and I strive for excellence in every task I undertake.",
+      "request_id": "86e93152-6cb9-5809-a95a-21a1d0349707"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Could you give a specific example of a difficulty your team encountered while reducing the procurement cycle, and how your leadership contributed to resolving it?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "We cleared them in five months and cut the average procurement cycle from 78 days to 61"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I can't share the purchase values or vendor names. Our procurement data is covered by the company's vigilance and confidentiality rules.",
+      "request_id": "4d7339f6-334e-5af7-8ad9-f39b97895bf8"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned working within strict confidentiality and vigilance rules while leading procurement improvements. How did these constraints influence the trade-offs you made in managing the procurement process?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "Our procurement data is covered by the company's vigilance and confidentiality rules"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't think it is fair to say that public sector employees avoid targets. In my section we are audited every year, and the 78 to 61 days improvement was measured by the audit team.",
+      "request_id": "812b176b-98f9-5aca-9a6c-0d18668e5fb3"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You highlighted a measurable improvement in procurement cycle time from 78 to 61 days, as verified by audits. What specific changes or initiatives did you implement to achieve this improvement?",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know how many of the 140 requisitions were for spare parts and how many for services. We cleared them as a batch and I didn't classify them.",
+      "request_id": "67ab1cda-429a-5f36-951c-b1717da103d8"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate effectively described their leadership role in procurement improvements at a public sector thermal plant, notably clearing a backlog and reducing procurement cycle time. They demonstrated awareness of accountability and public service values, while respecting confidentiality constraints. However, there was limited specific illustration of personal problem-solving or trade-offs in managing the team and process, and some answers lacked detail on initiatives implemented or learning experiences.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "We cleared them in five months and cut the average procurement cycle from 78 days to 61",
+        "observation": "Demonstrated clear ownership of a significant process improvement with substantiated outcomes."
+      },
+      {
+        "turn_id": "a2",
+        "quote": "I believe in transparency, accountability and public service, and I strive for excellence in every task I undertake",
+        "observation": "Expressed strong alignment to public service values that guide their professional conduct."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I believe in transparency, accountability and public service, and I strive for excellence in every task I undertake",
+        "observation": "Did not provide a concrete example of challenges faced or how leadership addressed them during procurement improvements.",
+        "suggestion": "Practice narrating a specific challenge encountered while managing your team, describing the problem, your actions, and the outcome."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I don't think it is fair to say that public sector employees avoid targets. In my section we are audited every year, and the 78 to 61 days improvement was measured by the audit team",
+        "observation": "Focus shifted to defending a stereotype rather than explaining specific trade-offs or judgment calls made under confidentiality constraints.",
+        "suggestion": "Try explaining a scenario where compliance requirements influenced decisions you made, outlining the trade-offs and your reasoning."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't know how many of the 140 requisitions were for spare parts and how many for services. We cleared them as a batch and I didn't classify them",
+        "observation": "Lack of detail about the initiatives or process improvements underlying the measurable reduction in cycle time.",
+        "suggestion": "Prepare to describe concrete initiatives you led or contributed to that improved procurement efficiency, including your role and impact."
+      }
+    ],
+    "next_exercise": "Retell a specific example of a leadership challenge you faced in managing your procurement team. Include the problem encountered, the options you considered, the decision you made and why, and the result of your actions."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

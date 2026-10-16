@@ -1,0 +1,51 @@
+{
+  "id": "exp-14-big4-ca",
+  "split": "heldout",
+  "route": "experienced",
+  "programme_name": "One-year PGP (ISB)",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "chartered accountant at a Big 4 firm, audit and assurance",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Chartered accountant of 6 years at a Big 4 firm. Supervises audit associates on engagements (team of 3-4), not permanent reports. Client names and fees are confidential. Must not assume consulting or industry experience."
+  },
+  "resume_text": "Mohit Saxena (synthetic)\nEXPERIENCE\nAudit Senior, a Big 4 firm, Gurugram (2022-present)\n- Supervise 3-4 audit associates per engagement; completed 9 statutory audits\n- Led the audit of a company with 14 locations; delivered 5 days before the deadline\n- Identified a revenue-recognition error that led to a restatement for one client\nAudit Associate, same firm (2019-2022)\n- Executed audit procedures on 6 manufacturing clients\nEDUCATION\nChartered Accountant, ICAI, 2019 (cleared both groups on the first attempt)\nB.Com (Hons), a college in Delhi University, 2016, 81%",
+  "background": "Six years in audit at a Big 4 firm. I supervise audit associates on engagements. CA by qualification.",
+  "goal": "Move into corporate finance and strategy at an operating company, as an interim step to a CFO role.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I'm a chartered accountant with six years in audit at a Big 4 firm in Gurugram. I've completed nine statutory audits and supervise three to four associates on each engagement. On one audit, of a company with 14 locations, I led the fieldwork and we delivered five days before the deadline. In another I found a revenue-recognition error that led to a restatement. I want an MBA because I've spent six years checking decisions, and I'd like to make some."
+    },
+    {
+      "tag": "confidential",
+      "text": "I can't name the clients or tell you the size of the restatement. The audit is confidential, and professional rules prevent me from disclosing it."
+    },
+    {
+      "tag": "specific",
+      "text": "On the 14-location audit, I split the locations into three groups by risk and sent the associates in rotation. I reviewed the high-risk group myself. That let us finish early without cutting any procedures."
+    },
+    {
+      "tag": "vague",
+      "text": "Audit is about integrity and attention to detail. I add value by ensuring compliance and by providing assurance to all stakeholders in the financial ecosystem."
+    },
+    {
+      "tag": "contradiction",
+      "text": "I was the engagement partner for that restatement. I signed the audit report, and I decided how to handle the client's objections."
+    },
+    {
+      "tag": "unknown",
+      "text": "I don't know whether the client's share price moved after the restatement. We don't track that, and I didn't follow the news."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Sorry to change the topic, but do you know if ISB gives a laptop to the students? I had read something about it, but I couldn't find anything on the site."
+    },
+    {
+      "tag": "stop",
+      "text": "I'd like to stop the session now, please. I have a client call coming up. Could you end it and show me the summary?"
+    }
+  ]
+}
