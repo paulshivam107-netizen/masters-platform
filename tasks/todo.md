@@ -58,7 +58,7 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Checkpoint B (review with owner before spend)
 - [x] Full fake run with faults (30 profiles): 64 injected failures, all recovered, 0 exhausted
 - [x] README explains how to run
-- [ ] `scripts/run_checks.sh` green in CI (locally: 126 pass, 15 Postgres skipped; test_resume_questions needs pypdf in the local venv)
+- [x] `scripts/run_checks.sh` green in CI (run 38855192465, e2b391a: 127 backend tests incl. Postgres)
 - [ ] Owner review before any paid call
 
 ## Task 6: API-level reliability test
