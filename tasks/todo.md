@@ -15,8 +15,8 @@ See `tasks/plan.md` for decisions, risks and open questions.
 ## Task 2: One profile end to end on the fake provider
 **Description:** The runner builds the app's context, generates résumé facts and questions, plays the scripted answers through `next_question`, requests `feedback` and records each call (operation, attempt, tokens, reservation, cost in paise, latency, outcome).
 **Acceptance criteria:**
-- [ ] `python -m evals.r07 run --provider fake --ids cat-01-commerce-fresher` writes a session JSON and `calls.jsonl`
-- [ ] Context matches `interview_routes.create_session`, including the résumé profile, follow-ups and plan
+- [x] `python -m evals.r07 run --provider fake --ids cat-01-commerce-fresher` writes a session JSON and `calls.jsonl`
+- [x] Context matches `interview_routes.create_session`, including the résumé profile, follow-ups and plan
 **Verification:** a unit test runs one profile with the fake and asserts the transcript length and the call records
 **Dependencies:** 1
 **Files:** `backend/evals/r07/runner.py`, `fake_openai.py`, `__main__.py`, `backend/tests/test_r07_eval.py`
