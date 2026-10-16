@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v3"
+PROMPT_VERSION = "mba-interview-v4"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -150,7 +150,7 @@ def _new_topic_schema():
     # Strict structured output then cannot return a follow-up: models ignored move_on in the
     # prompt alone (R07 pilot), and every rejected attempt was billed.
     schema = copy.deepcopy(NextQuestion.model_json_schema())
-    schema["properties"]["kind"] = {"type": "string", "enum": ["new_topic"]}
+    schema["properties"]["kind"] = {"type": "string", "enum": ["new_topic", "end_requested"]}
     for field in ("anchor_turn_id", "anchor_quote"):
         schema["properties"][field] = {"type": "string", "enum": [""]}
     return schema
@@ -172,6 +172,9 @@ def next_question(context, transcript):
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
+        "If the latest answer clearly asks to stop or end the session, return kind end_requested with a short, polite "
+        "closing message as question (no new question, no feedback), the topic of the current turn and empty anchors; "
+        "never use end_requested for uncertainty, refusing one question or irrelevant answers. "
         "Return only a question, without feedback or an example answer."
         + (" next_step.move_on is TRUE: this branch is finished. Ask about a different priority topic not yet "
            "covered; do not continue or refer back to the previous story." if move_on else ""),
@@ -187,14 +190,15 @@ def next_question(context, transcript):
 def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
-    if result["kind"] != "new_topic":
+    if result["kind"] not in ("new_topic", "end_requested"):
         span = find_quote(result["anchor_quote"], last["text"]) if last else None
         if (not last or result["anchor_turn_id"] != last["id"] or not result["anchor_quote"].strip()
                 or span is None or context["next_step"]["move_on"]):
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
         result["anchor_quote"] = span
-    elif result["anchor_turn_id"] or result["anchor_quote"]:
-        raise ProviderFailure("The next question was incomplete. Please retry.")
+    else:
+        # Anchors carry no meaning here; rejecting would only waste a billed call.
+        result["anchor_turn_id"] = result["anchor_quote"] = ""
     if any(t["role"] == "assistant" and t["text"].strip().casefold() == result["question"].strip().casefold() for t in transcript):
         raise ProviderFailure("The interviewer repeated a question. Please retry this step.")
     return result

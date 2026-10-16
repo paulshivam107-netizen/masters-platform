@@ -6,11 +6,14 @@ and measures nothing about model quality: it only proves the harness and failure
 """
 import contextlib
 import json
+import re
 from unittest.mock import patch
 
 import httpx
 
 FAULTS = ("timeout", "rate_limit", "malformed", "incomplete", "bad_anchor")
+# Only explicit requests to end, so a "specific" answer mentioning a stop doesn't end the fake run.
+STOP_REQUEST = re.compile(r"\b(stop|end) (here|now|the (practice )?session|this session)\b|\bend the practice\b")
 TOPICS = ("education", "experience", "projects", "behaviour", "motivation", "contribution", "interests")
 
 
@@ -36,7 +39,7 @@ class FakeOpenAI:
         payload = json.loads(body["input"])
         output = {"NextQuestion": _next_question, "InterviewFeedback": _feedback,
                   "ResumeQuestionDraft": _resume_draft}[schema](payload["context"], payload["transcript"])
-        if fault == "bad_anchor" and schema == "NextQuestion" and output["kind"] != "new_topic":
+        if fault == "bad_anchor" and schema == "NextQuestion" and output["kind"] in ("follow_up", "clarification"):
             output["anchor_quote"] = "text that is not in the answer"
         text = "not json {" if fault == "malformed" else json.dumps(output)
         return httpx.Response(200, json={
@@ -70,6 +73,10 @@ def _next_question(context, transcript):
     last = next(t for t in reversed(transcript) if t["role"] == "user")
     topic = TOPICS[asked % len(TOPICS)]
     quote = _words(last["text"])
+    lowered = last["text"].lower()
+    if STOP_REQUEST.search(lowered):
+        return {"question": "Understood, we will stop here. Thank you for practising today.",
+                "kind": "end_requested", "topic": TOPICS[0], "anchor_turn_id": "", "anchor_quote": ""}
     if context["next_step"]["move_on"] or not quote or quote not in last["text"]:
         return {"question": f"Turning to {topic}, what is one example you would like to discuss?",
                 "kind": "new_topic", "topic": topic, "anchor_turn_id": "", "anchor_quote": ""}

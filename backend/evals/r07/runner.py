@@ -172,6 +172,7 @@ def run_profile(run, profile):
                        question_id=root, resume_follow_ups=_follow_ups(graph, root))
     transcript = [{"id": "q1", "role": "assistant", "text": opening}]
     stopped_at = None
+    ended_by_request = False
     for index, answer in enumerate(answers, 1):
         before = json.dumps(transcript)
         transcript.append({"id": f"a{index}", "role": "user", "text": answer["text"],
@@ -186,6 +187,9 @@ def run_profile(run, profile):
             break
         transcript.append({"id": f"q{index + 1}", "role": "assistant", "text": question["question"],
                            **{key: value for key, value in question.items() if key != "question"}})
+        if question["kind"] == "end_requested":
+            ended_by_request = True
+            break
     feedback = None
     if stopped_at is None:
         feedback = run.call(pid, "feedback", "interview_feedback",
@@ -193,7 +197,8 @@ def run_profile(run, profile):
                             lambda: provider.feedback(context, transcript))
     session = {"profile_id": pid, "split": profile["split"], "route": route, "persona": profile.get("persona", {}),
                "answer_tags": [a["tag"] for a in answers], "resume_text": profile["resume_text"], "context": context, "question_graph": graph,
-               "transcript": transcript, "feedback": feedback, "stopped_at": stopped_at}
+               "transcript": transcript, "feedback": feedback, "stopped_at": stopped_at,
+               "ended_by_request": ended_by_request}
     (run.out_dir / "sessions" / f"{pid}.json").write_text(json.dumps(session, indent=2, ensure_ascii=False), encoding="utf-8")
     return session
 

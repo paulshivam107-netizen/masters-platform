@@ -320,6 +320,7 @@ export default function InterviewStudio({
   const question = session?.transcript
     .filter((turn) => turn.role === "assistant")
     .slice(-1)[0];
+  const closing = question?.kind === "end_requested" ? question : null;
   const hearQuestion = () => {
     if (audio.playing) {
       audio.stopPlayback();
@@ -941,6 +942,7 @@ export default function InterviewStudio({
             <div className="studio-ready">
               <CheckIcon />
               <h3>Your answers are saved.</h3>
+              {closing && <p>{closing.text}</p>}
               <p>Get a short debrief and one exercise to try next.</p>
               <button
                 className="new-essay-btn"
@@ -1006,7 +1008,9 @@ export default function InterviewStudio({
                 <strong>
                   {turn.role === "user"
                     ? `Your answer ${turn.id.slice(1)}`
-                    : `Question ${turn.id.slice(1)}`}
+                    : turn.kind === "end_requested"
+                      ? "Closing message"
+                      : `Question ${turn.id.slice(1)}`}
                 </strong>
                 <p>{turn.text}</p>
               </article>

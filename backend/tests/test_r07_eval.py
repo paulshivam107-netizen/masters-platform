@@ -48,9 +48,18 @@ class RunnerTest(unittest.TestCase):
             self.assertGreaterEqual(call["latency_ms"], 0)
         meta = json.loads((run_dir / "run.json").read_text())
         self.assertEqual(meta["model"], "gpt-4.1-mini")
-        self.assertEqual(meta["prompt_version"], "mba-interview-v3")
+        self.assertEqual(meta["prompt_version"], "mba-interview-v4")
         self.assertEqual(meta["eval_version"], profiles.EVAL_VERSION)
         self.assertEqual(meta["provider"], "fake")
+
+    def test_stop_request_ends_the_session_and_still_gets_feedback(self):
+        run_dir = runner.run_suite([profile("cat-11-architecture")], provider="fake", out_root=self.out)
+        session = json.loads((run_dir / "sessions" / "cat-11-architecture.json").read_text())
+        self.assertTrue(session["ended_by_request"])
+        self.assertIsNone(session["stopped_at"])
+        self.assertIsNotNone(session["feedback"])
+        self.assertEqual(session["transcript"][-1]["kind"], "end_requested")
+        self.assertEqual(session["transcript"][-1]["id"], "q5")
 
     def test_fake_run_never_uses_the_network(self):
         # A real client would need a key; the fake must not leak one into files either.
