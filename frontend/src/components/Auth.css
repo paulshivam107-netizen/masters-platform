@@ -3,7 +3,7 @@
 }
 .auth-box {
   width: 100%;
-  max-width: 450px;
+  max-width: 400px;
   margin: 0 auto;
 }
 .auth-box h2 {
@@ -121,6 +121,12 @@
   align-items: center;
   min-height: 44px;
   margin-top: 12px;
+}
+/* Google renders its button in an iframe. With the page in dark color-scheme the browser
+   paints that iframe opaque white; a light scheme on the host keeps it transparent. */
+.auth-google-frame {
+  color-scheme: light;
+  min-height: 40px;
 }
 .auth-google-slot.is-disabled {
   opacity: 0.6;

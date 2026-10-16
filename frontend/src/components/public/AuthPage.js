@@ -6,7 +6,7 @@ import Signup from "../Signup";
 import "./PublicPages.css";
 import Brand from "../common/Brand";
 import ThemeToggle from "../common/ThemeToggle";
-import JourneyArtwork from "../common/JourneyArtwork";
+import InterviewPreview from "../common/InterviewPreview";
 
 function parseMode(value) {
   return value === "signup" ? "signup" : "login";
@@ -63,20 +63,17 @@ export default function AuthPage() {
       </header>
       <div className="auth-split-layout">
         <aside className="auth-story">
-          <span className="eyebrow">MAKE SPACE FOR YOUR AMBITION</span>
+          <span className="eyebrow">MOCK INTERVIEWS THAT LISTEN</span>
           <h1>
-            Your next chapter.
+            Practise the interview
             <br />
-            All in one place.
+            before it counts.
           </h1>
           <p>
-            A calmer way to organise your applications, shape your story and
-            prepare for what comes next.
+            Questions drawn from your résumé, follow-ups drawn from your
+            answers, and a debrief you can act on.
           </p>
-          <JourneyArtwork />
-          <span className="auth-story-foot">
-            Small steps. Meaningful progress.
-          </span>
+          <InterviewPreview />
         </aside>
         <div className="public-auth-shell">
           {mode === "login" ? (

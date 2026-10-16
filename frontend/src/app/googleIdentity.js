@@ -44,7 +44,7 @@ export async function waitForGoogleIdentity(timeoutMs = GOOGLE_LOAD_TIMEOUT_MS) 
  * after a dismissal), which surfaced as "Google sign-in is unavailable".
  * Google allows one initialize() per page, so the latest mounted button receives credentials.
  */
-export function renderGoogleButton(googleIdentity, clientId, container, { onCredential, text, width }) {
+export function renderGoogleButton(googleIdentity, clientId, container, { onCredential, text, width, theme }) {
   credentialHandler = onCredential;
   if (initializedFor !== clientId) {
     googleIdentity.initialize({
@@ -55,9 +55,10 @@ export function renderGoogleButton(googleIdentity, clientId, container, { onCred
     });
     initializedFor = clientId;
   }
+  container.replaceChildren();
   googleIdentity.renderButton(container, {
     type: 'standard',
-    theme: 'outline',
+    theme: theme || 'outline',
     size: 'large',
     shape: 'rectangular',
     logo_alignment: 'center',
