@@ -23,7 +23,7 @@ class InterviewPlanTest(unittest.TestCase):
         answer = {"question": "Why did you compare those two approaches?", "kind": "follow_up", "topic": "projects",
                   "anchor_turn_id": "a1", "anchor_quote": "compared two approaches"}
         with patch.object(provider, "_structured", return_value=(answer, {})) as call:
-            self.assertEqual(provider.next_question({"route": "cat"}, turns)[0], answer)
+            self.assertEqual(provider.next_question({"route": "cat"}, turns)[0], {**answer, "conflict": ""})
             self.assertEqual(call.call_args.args[1]["next_step"]["branch_depth"], 0)
         for change in [{"anchor_quote": "Managed a large team"}, {"anchor_turn_id": "a2"}, {"question": "What did you decide?"}]:
             with patch.object(provider, "_structured", return_value=({**answer, **change}, {})), self.assertRaises(provider.ProviderFailure):
@@ -83,9 +83,11 @@ class NextQuestionRequestTest(unittest.TestCase):
         body, (result, _) = self.sent(exhausted_turns(), output)
         schema = body["text"]["format"]["schema"]
         self.assertTrue(body["text"]["format"]["strict"])
-        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic", "end_requested"])
-        self.assertEqual(schema["properties"]["anchor_turn_id"]["enum"], [""])
-        self.assertEqual(schema["properties"]["anchor_quote"]["enum"], [""])
+        # A follow-up is impossible; a clarification may only target the latest answer (a3).
+        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic", "clarification"])
+        self.assertEqual(schema["properties"]["anchor_turn_id"]["enum"], ["", "a3"])
+        self.assertEqual(list(schema["properties"])[0], "conflict")
+        self.assertEqual(schema["required"], list(schema["properties"]))
         self.assertIn("move_on is TRUE", body["instructions"])
         self.assertEqual(result["kind"], "new_topic")
 
@@ -95,7 +97,7 @@ class NextQuestionRequestTest(unittest.TestCase):
                   "anchor_turn_id": "a2", "anchor_quote": "reviewed the evidence"}
         body, (result, _) = self.sent(turns, output)
         self.assertEqual(set(body["text"]["format"]["schema"]["properties"]["kind"]["enum"]),
-                         {"follow_up", "clarification", "new_topic", "end_requested"})
+                         {"follow_up", "clarification", "new_topic"})
         self.assertNotIn("move_on is TRUE", body["instructions"])
         self.assertEqual(result["kind"], "follow_up")
 
@@ -159,3 +161,39 @@ class AnchorRulesTest(unittest.TestCase):
         turns[4].update(anchor_turn_id="a1")                     # q3 jumps back past a2: a new branch
         self.assertEqual(next_step({"route": "cat"}, turns)["branch_depth"], 1)
         self.assertFalse(next_step({"route": "cat"}, turns)["move_on"])
+
+
+class ConflictTest(unittest.TestCase):
+    """v8: a stated conflict forces a clarification of the latest answer; the model cannot end a session."""
+    TURNS = answered("I interned at a lab for six weeks.", "I also had four interns reporting to me there.")
+
+    def check(self, turns=None, **change):
+        turns = turns or self.TURNS
+        result = {"conflict": "", "question": "How did you split the work with the other interns?", "kind": "follow_up",
+                  "topic": "experience", "anchor_turn_id": "a1", "anchor_quote": "interned at a lab", **change}
+        return provider._check_next_question(result, {"next_step": next_step({"route": "cat"}, turns)}, turns)
+
+    def test_conflict_requires_a_clarification_of_the_latest_answer(self):
+        note = "Résumé shows a six-week internship; the answer claims four reports."
+        with self.assertRaises(provider.ProviderFailure):
+            self.check(conflict=note)
+        with self.assertRaises(provider.ProviderFailure):  # a clarification of an older answer
+            self.check(conflict=note, kind="clarification")
+        ok = self.check(conflict=note, kind="clarification", anchor_turn_id="a2", anchor_quote="four interns reporting to me",
+                        question="Your résumé lists an internship; could you explain the four interns reporting to you?")
+        self.assertEqual(ok["kind"], "clarification")
+
+    def test_exhausted_branch_allows_only_a_conflict_clarification(self):
+        turns = exhausted_turns()
+        latest = {"anchor_turn_id": "a3", "anchor_quote": "reviewed the evidence", "kind": "clarification",
+                  "question": "Could you reconcile that with what you said earlier?"}
+        with self.assertRaises(provider.ProviderFailure):
+            self.check(turns, **latest)
+        self.assertEqual(self.check(turns, conflict="Differs from a1.", **latest)["kind"], "clarification")
+
+    def test_model_cannot_end_the_session(self):
+        body, _ = NextQuestionRequestTest.sent(self, exhausted_turns(follow_ups=1), {
+            "conflict": "", "question": "What evidence did you weigh most?", "kind": "follow_up", "topic": "projects",
+            "anchor_turn_id": "a2", "anchor_quote": "reviewed the evidence"})
+        self.assertNotIn("end_requested", body["text"]["format"]["schema"]["properties"]["kind"]["enum"])
+        self.assertNotIn("end_requested", body["instructions"])

@@ -47,6 +47,8 @@ class InterviewSpeech(InterviewAction):
 
 class NextQuestion(BaseModel):
     model_config = ConfigDict(extra="forbid")
+    # Any clash between the latest answer and the resume or earlier answers; empty when none.
+    conflict: str = Field(default="", max_length=300)
     question: str = Field(min_length=10, max_length=650)
     kind: Literal["follow_up", "clarification", "new_topic", "end_requested"]
     topic: Literal["education", "experience", "projects", "behaviour", "motivation", "contribution", "interests"]

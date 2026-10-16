@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v7"
+PROMPT_VERSION = "mba-interview-v8"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -146,22 +146,22 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
                               billing="charged", usage=usage) from None
 
 
-def _new_topic_schema():
-    # Strict structured output then cannot return a follow-up: models ignored move_on in the
-    # prompt alone (R07 pilot), and every rejected attempt was billed.
-    schema = copy.deepcopy(NextQuestion.model_json_schema())
-    schema["properties"]["kind"] = {"type": "string", "enum": ["new_topic", "end_requested"]}
-    for field in ("anchor_turn_id", "anchor_quote"):
-        schema["properties"][field] = {"type": "string", "enum": [""]}
-    return schema
+def _request_schema(transcript, move_on):
+    """The strict output schema for one next-question call.
 
-
-def _anchor_schema(transcript):
-    # Only answers that exist may be anchored; the quote is still checked server-side.
-    schema = copy.deepcopy(NextQuestion.model_json_schema())
-    schema["properties"]["anchor_turn_id"] = {"type": "string",
-                                              "enum": [""] + [t["id"] for t in transcript if t["role"] == "user"]}
-    return schema
+    ``conflict`` comes first so the model states any clash with the resume or earlier answers
+    before choosing the kind (prompt-only rules were ignored in R07 runs). Only existing answers
+    may be anchored. ``end_requested`` is server-only: an injected "stop interviewing" must not
+    end a session. Once a branch is exhausted (move_on) a follow-up is impossible; only a new
+    topic, or a clarification of a conflicting latest answer, remains.
+    """
+    base = copy.deepcopy(NextQuestion.model_json_schema())
+    properties = {"conflict": base["properties"].pop("conflict"), **base["properties"]}
+    answers = [t["id"] for t in transcript if t["role"] == "user"]
+    properties["kind"] = {"type": "string", "enum": ["new_topic", "clarification"] if move_on
+                          else ["follow_up", "clarification", "new_topic"]}
+    properties["anchor_turn_id"] = {"type": "string", "enum": [""] + (answers[-1:] if move_on else answers)}
+    return {**base, "properties": properties, "required": list(properties)}
 
 
 def next_question(context, transcript):
@@ -176,9 +176,10 @@ def next_question(context, transcript):
         "Ask the next interview question. Go one topic deep: clarify a concrete claim, then probe its reasoning, "
         "alternatives or consequences. Use the latest answer rather than reading a prewritten sequence. "
         "A clarification MUST anchor to the latest answer: use it when that answer is vague, evasive or unclear. "
-        "If the latest answer conflicts with the resume or an earlier answer (for example a new title, team, reports "
-        "or figure), ask a polite clarification that names both versions; never treat the new claim as fact or build "
-        "a question on it. After an irrelevant or off-topic answer, redirect in a few words and ask about a priority "
+        "First fill conflict: if the latest answer conflicts with the resume or an earlier answer (a different title, "
+        "team size, reports, dates, figures or who made a decision), state the conflict in one short sentence; "
+        "otherwise leave it empty. When conflict is not empty, kind MUST be clarification of the latest answer, "
+        "politely naming both versions; never treat the new claim as fact or build a question on it. After an irrelevant or off-topic answer, redirect in a few words and ask about a priority "
         "topic not yet covered. Never re-ask an earlier question, even reworded. "
         "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
         "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
@@ -187,13 +188,11 @@ def next_question(context, transcript):
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
         "The optional question bank contains possible prompts, not a required sequence or claims about this applicant. "
-        "If the latest answer clearly asks to stop or end the session, return kind end_requested with a short, polite "
-        "closing message as question (no new question, no feedback), the topic of the current turn and empty anchors; "
-        "never use end_requested for uncertainty, refusing one question or irrelevant answers. "
         "Return only a question, without feedback or an example answer."
-        + (" next_step.move_on is TRUE: this branch is finished. Ask about a different priority topic not yet "
-           "covered; do not continue or refer back to the previous story." if move_on else ""),
-        context, transcript, NextQuestion, max_tokens=800, schema=_new_topic_schema() if move_on else _anchor_schema(transcript),
+        + (" next_step.move_on is TRUE: this branch is finished. Unless conflict is not empty, ask a new_topic "
+           "question about a different priority topic not yet covered; do not continue or refer back to the "
+           "previous story." if move_on else ""),
+        context, transcript, NextQuestion, max_tokens=800, schema=_request_schema(transcript, move_on),
     )
     try:
         return _check_next_question(result, context, transcript), usage
@@ -205,14 +204,18 @@ def next_question(context, transcript):
 def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
+    conflict, move_on = result["conflict"].strip(), context["next_step"]["move_on"]
+    if conflict and result["kind"] != "clarification":
+        raise ProviderFailure("The interviewer needs to clarify your latest answer first. Please retry.")
+    if move_on and (result["kind"] == "follow_up" or (result["kind"] == "clarification" and not conflict)):
+        raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
     if result["kind"] not in ("new_topic", "end_requested"):
         # A clarification probes the latest answer; a follow-up may return to any earlier answer.
         target = next((t for t in transcript if t["role"] == "user" and t["id"] == result["anchor_turn_id"]), None)
         if result["kind"] == "clarification" and target is not last:
             target = None
         span = find_quote(result["anchor_quote"], target["text"], max_length=240) if target else None
-        if (not last or target is None or not result["anchor_quote"].strip()
-                or span is None or context["next_step"]["move_on"]):
+        if not last or target is None or not result["anchor_quote"].strip() or span is None:
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
         result["anchor_quote"] = span
     else:
