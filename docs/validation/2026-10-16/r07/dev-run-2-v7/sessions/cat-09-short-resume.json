@@ -1,0 +1,415 @@
+{
+  "profile_id": "cat-09-short-resume",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "commerce graduate, fresher, brief résumé",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. Résumé is very short, so the interviewer should ask about details instead of assuming them. Must not assume internships, projects or leadership roles that are not on the résumé."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "vague",
+    "irrelevant",
+    "unknown"
+  ],
+  "resume_text": "Pooja Verma (synthetic), Lucknow\nB.Com, a university in Lucknow, 2025, 68%. Class XII, Commerce, 84%.\nFinal-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department.\nSkills: MS Word, Excel basics, Tally basics. Languages: Hindi, English.\nMember, college cultural club; volunteered at the annual day event with 200 guests.",
+  "context": {
+    "route": "cat",
+    "background": "BCom graduate from Lucknow with a short résumé. No work experience yet.",
+    "goal": "Join a bank or a financial services company in a customer-facing role and grow into management.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-09-short-resume",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Lucknow, 2025, 68%"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 84%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Final-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department"
+      },
+      {
+        "id": "fact-4",
+        "category": "skill",
+        "evidence_quote": "Skills: MS Word, Excel basics, Tally basics"
+      },
+      {
+        "id": "fact-5",
+        "category": "interest",
+        "evidence_quote": "Languages: Hindi, English"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Member, college cultural club"
+      },
+      {
+        "id": "fact-7",
+        "category": "experience",
+        "evidence_quote": "volunteered at the annual day event with 200 guests"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-09-short-resume",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did you decide which markets and shoppers to include in your survey?",
+      "Can you explain how you tabulated the survey data in Excel and any challenges you faced during this process?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Lucknow, 2025, 68%"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 84%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Final-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department"
+      },
+      {
+        "id": "fact-4",
+        "category": "skill",
+        "evidence_quote": "Skills: MS Word, Excel basics, Tally basics"
+      },
+      {
+        "id": "fact-5",
+        "category": "interest",
+        "evidence_quote": "Languages: Hindi, English"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Member, college cultural club"
+      },
+      {
+        "id": "fact-7",
+        "category": "experience",
+        "evidence_quote": "volunteered at the annual day event with 200 guests"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Could you tell me more about your final-year project involving a survey on the use of UPI among shoppers?",
+        "evidence_quote": "Final-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did you decide which markets and shoppers to include in your survey?",
+        "evidence_quote": "Final-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Can you explain how you tabulated the survey data in Excel and any challenges you faced during this process?",
+        "evidence_quote": "Final-year project: a survey of 40 shoppers in two Lucknow markets on use of UPI for small purchases; tabulated the answers in Excel and presented to the department",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What motivated you to volunteer at the college annual day event with 200 guests?",
+        "evidence_quote": "volunteered at the annual day event with 200 guests",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What specific roles or responsibilities did you have during the event?",
+        "evidence_quote": "volunteered at the annual day event with 200 guests",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did managing your volunteering responsibilities impact your teamwork or organizational skills?",
+        "evidence_quote": "volunteered at the annual day event with 200 guests",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you describe your involvement with the college cultural club?",
+        "evidence_quote": "Member, college cultural club",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What kinds of activities or events did you participate in as part of the cultural club?",
+        "evidence_quote": "Member, college cultural club",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How has your experience in the cultural club contributed to your personal or professional development?",
+        "evidence_quote": "Member, college cultural club",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Could you tell me more about your final-year project involving a survey on the use of UPI among shoppers?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I completed my BCom in Lucknow this year. My final project was a survey of 40 shoppers about how they use UPI for small purchases. Most said they use it for amounts below a few hundred rupees but still carry cash for vegetable vendors. I have no work experience yet. I want to do an MBA because I have studied accounts but have not learned how a financial company chooses its customers.",
+      "request_id": "8550ada3-b4c7-564b-bef8-1ade90fc9294"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "How did you decide which markets and shoppers to include in your survey?",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "My final project was a survey of 40 shoppers about how they use UPI for small purchases"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I am a quick learner and a good communicator. I believe in teamwork and hard work, and I am passionate about learning new things every day.",
+      "request_id": "1578672f-57d9-57d5-816b-bec81bcbbcd3"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Can you clarify how you conducted the survey, specifically how you selected those 40 shoppers and the two markets in Lucknow?",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "My final project was a survey of 40 shoppers about how they use UPI for small purchases"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "The survey results were very interesting and gave many insights about consumer behaviour in the digital era. I think it was a meaningful experience for me.",
+      "request_id": "88405361-ce05-5d65-b235-26058957de59"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned your survey gave many insights about consumer behaviour in the digital era. Could you share one or two specific insights that stood out to you and why you found them meaningful?",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "The survey results were very interesting and gave many insights about consumer behaviour in the digital era"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Do you know which is better for evening snacks, samosa or kachori? We always argue at home. I think kachori is better, especially from Lucknow's old market.",
+      "request_id": "b44949d6-a3f9-5529-a13b-2cf7f488ac12"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Let's focus on your education. Can you tell me about a subject or topic during your B.Com that you found particularly interesting or challenging, and why?",
+      "kind": "new_topic",
+      "topic": "education",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know how many of the 40 shoppers were women. I did not note down gender separately in my sheet.",
+      "request_id": "a1c5d015-702c-5f6b-b747-bf44a87a474f"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate provided basic descriptions of their final-year survey project and showed a general interest in learning. However, clarity is lacking in important details about their project methodology, personal contributions, and learning reflections. Some responses diverged from the interview focus, missing opportunities to demonstrate motivation for MBA and insight into their studies.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "My final project was a survey of 40 shoppers about how they use UPI for small purchases",
+        "observation": "Clearly described the scope of the final-year project and connected it to financial technology use, relevant to their MBA interest."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I am a quick learner and a good communicator. I believe in teamwork and hard work, and I am passionate about learning new things every day",
+        "observation": "Response did not address the specific question about market and shopper selection in the survey.",
+        "suggestion": "Practice answering methodology questions by stating how you selected markets and participants; for example, explain choosing two distinct markets in Lucknow and criteria for selecting 40 shoppers."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't know how many of the 40 shoppers were women. I did not note down gender separately in my sheet",
+        "observation": "Did not maintain or recall key demographic data which limits insight into survey analysis validity.",
+        "suggestion": "Prepare to discuss data collection details and limitations by reviewing your project record, and practice summarizing what data was collected and what was missed, reflecting on its impact."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "Do you know which is better for evening snacks, samosa or kachori? We always argue at home. I think kachori is better, especially from Lucknow's old market",
+        "observation": "Off-topic and informal answer that did not engage with the interview question about meaningful survey insights.",
+        "suggestion": "Focus on answering interview questions directly; practice summarizing one or two specific insights from your project and explaining why they mattered, linking to consumer behaviour or digital payments trends."
+      }
+    ],
+    "next_exercise": "Retell your final-year project in 60 seconds focusing on: how you chose the markets and shoppers, key survey data collected, one meaningful insight you gained, and what challenges you faced during data collection or analysis."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

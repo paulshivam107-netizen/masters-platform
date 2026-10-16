@@ -1,0 +1,421 @@
+{
+  "profile_id": "exp-08-doctor-healthcare-mgmt",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "doctor, MBBS, clinician moving into healthcare management",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "MBBS doctor working as a clinician for 5 years. No patient data may be used or invented; speak only about processes and teams in general. Has led a rota of junior staff informally, no formal management post."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "confidential",
+    "disagree",
+    "contradiction"
+  ],
+  "resume_text": "Dr. Ishaan Bhatt (synthetic)\nEXPERIENCE\nMedical Officer, a 120-bed private hospital, Ahmedabad (2022-present)\n- Cover the outpatient department and emergency shifts, about 40 consultations a shift\n- Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)\n- Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours\nResident Medical Officer, a district hospital (2020-2022)\nEDUCATION\nMBBS, a government medical college, Gujarat, 2019\nINTERNSHIP\nOne-year compulsory rotating internship (2019-2020)",
+  "context": {
+    "route": "experienced",
+    "background": "Five years as a clinician. Interested in the management of hospitals. I do not have a formal management role.",
+    "goal": "Move into hospital operations or healthcare management, and later manage a multi-specialty hospital.",
+    "school": "General MBA practice",
+    "programme": "PGPX (IIM Ahmedabad)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-08-doctor-healthcare-mgmt",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Medical Officer, a 120-bed private hospital, Ahmedabad (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Cover the outpatient department and emergency shifts, about 40 consultations a shift"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Resident Medical Officer, a district hospital (2020-2022)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "MBBS, a government medical college, Gujarat, 2019"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "One-year compulsory rotating internship (2019-2020)"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-08-doctor-healthcare-mgmt",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did you manage preparing the monthly duty rota for 8 junior doctors without a formal reporting line?",
+      "What challenges did you face coordinating duties informally, and how did you ensure smooth operations?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Medical Officer, a 120-bed private hospital, Ahmedabad (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Cover the outpatient department and emergency shifts, about 40 consultations a shift"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Resident Medical Officer, a district hospital (2020-2022)"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "MBBS, a government medical college, Gujarat, 2019"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "One-year compulsory rotating internship (2019-2020)"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your role and key responsibilities as a Medical Officer at the 120-bed private hospital in Ahmedabad?",
+        "evidence_quote": "Medical Officer, a 120-bed private hospital, Ahmedabad (2022-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did you manage preparing the monthly duty rota for 8 junior doctors without a formal reporting line?",
+        "evidence_quote": "Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "What challenges did you face coordinating duties informally, and how did you ensure smooth operations?",
+        "evidence_quote": "Prepared the monthly duty rota for 8 junior doctors (informal duty; no reporting line)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What strategies or actions did you contribute as part of the hospital committee that successfully reduced discharge-time delays?",
+        "evidence_quote": "Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "Can you explain your specific role in implementing those strategies to reduce delays?",
+        "evidence_quote": "Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "What metrics or feedback did you monitor afterwards to sustain the improved discharge process?",
+        "evidence_quote": "Part of a hospital committee that reduced the discharge-time delay from 4 hours to 2.5 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "How did your educational background and internship prepare you for your full-time medical roles?",
+        "evidence_quote": "MBBS, a government medical college, Gujarat, 2019",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "Were there specific learnings from your one-year rotating internship that influenced your approach in later work?",
+        "evidence_quote": "One-year compulsory rotating internship (2019-2020)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "Can you share an example from your internship where you handled a challenging situation successfully?",
+        "evidence_quote": "One-year compulsory rotating internship (2019-2020)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your role and key responsibilities as a Medical Officer at the 120-bed private hospital in Ahmedabad?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm an MBBS doctor and have worked for five years, the last three as a medical officer in a 120-bed private hospital in Ahmedabad. I cover outpatient and emergency shifts and make the monthly duty rota for eight junior doctors, though that is an informal duty. I was also part of a hospital committee that reduced the discharge delay from 4 hours to 2.5. That is when I realised how much patient experience depends on operations. I want an MBA to move into hospital management.",
+      "request_id": "d79085d8-e281-5b2d-b6f2-09748ea1fffa"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "How did you manage preparing the monthly duty rota for 8 junior doctors without a formal reporting line?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "and make the monthly duty rota for eight junior doctors, though that is an informal duty"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "Healthcare is a noble field, and I believe in patient-centric care. I would like to leverage my clinical background and transform healthcare delivery with a holistic approach.",
+      "request_id": "f328073f-32ca-55bd-80b9-6ddf12bc6327"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned preparing the monthly duty rota as an informal duty. Can you explain the process you followed to create that rota and how you coordinated with the junior doctors without formal authority?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "make the monthly duty rota for eight junior doctors, though that is an informal duty"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I can't give any case details or patient numbers beyond the general shift load. Patient information is protected, so I don't use even anonymised examples in interviews.",
+      "request_id": "9e8ab63d-f5fe-591a-945b-924128d30815"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Earlier, you mentioned being part of a hospital committee that reduced discharge-time delay from 4 hours to 2.5 hours. Could you describe your specific contributions to that committee and the changes implemented?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I was also part of a hospital committee that reduced the discharge delay from 4 hours to 2.5"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't agree that doctors are poor at management. We run emergencies, coordinate teams and decide under pressure. What we lack is financial training, and that is what I am asking the MBA for.",
+      "request_id": "734a5b3d-9e79-5a8b-a32f-a2c0cb6ee18b"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned being part of a hospital committee that reduced discharge-time delay from 4 hours to 2.5 hours. What specific role did you play in that initiative, and what were the key actions you contributed to?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I was also part of a hospital committee that reduced the discharge delay from 4 hours to 2.5"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I was appointed as the hospital's operations head last year, and I manage the nursing staff and administration. That is my formal role.",
+      "request_id": "bc009791-6d8b-508f-a661-e79d9007db33"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has clinical experience as a Medical Officer and involvement in hospital operations through informal duties and committee participation. However, there are inconsistencies in statements about formal roles and reluctance to share specific examples or outcomes, limiting insight into their personal ownership and impact in operations and management initiatives.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I cover outpatient and emergency shifts and make the monthly duty rota for eight junior doctors, though that is an informal duty",
+        "observation": "Demonstrates taking initiative beyond clinical duties by managing scheduling of junior doctors"
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I was also part of a hospital committee that reduced the discharge delay from 4 hours to 2.5",
+        "observation": "Shows experience contributing to operational improvements with measurable outcomes"
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a5",
+        "quote": "I was appointed as the hospital's operations head last year, and I manage the nursing staff and administration. That is my formal role",
+        "observation": "This contradicts earlier claim of no formal management role, raising questions on accuracy of background.",
+        "suggestion": "Clarify and consistently describe current formal roles with concrete examples of responsibilities and decision-making scope before next practice session."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I can't give any case details or patient numbers beyond the general shift load. Patient information is protected, so I don't use even anonymised examples in interviews",
+        "observation": "Avoids sharing operational examples or concrete details, limiting the ability to assess personal contribution and trade-offs.",
+        "suggestion": "Practice sharing detailed examples related to management activities (non-patient-specific) focusing on your role, decisions taken, challenges faced, and results achieved."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I don't agree that doctors are poor at management. We run emergencies, coordinate teams and decide under pressure. What we lack is financial training, and that is what I am asking the MBA for",
+        "observation": "Gives a general opinion about doctors' management skills but lacks personal reflection on own gaps or learning edges relevant to management.",
+        "suggestion": "When discussing motivation, also elaborate on specific personal skill gaps and learning goals relevant to healthcare management to strengthen career rationale."
+      }
+    ],
+    "next_exercise": "Describe a specific challenge you faced while preparing the duty rota or coordinating junior doctors without formal authority. Include the alternatives you considered, your decision-making process, any trade-offs involved, and the outcome achieved in about 60 seconds."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

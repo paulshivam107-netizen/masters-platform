@@ -1,0 +1,486 @@
+{
+  "profile_id": "exp-06-returnee-career-break",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "operations and finance professional returning after a career break",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 7,
+    "notes": "Seven years of work plus a two-year career break (reason not stated beyond what the applicant says). Currently not employed. Managed a small team before the break. Must not assume the reason for the break."
+  },
+  "answer_tags": [
+    "specific",
+    "specific",
+    "unknown",
+    "vague",
+    "disagree",
+    "irrelevant",
+    "contradiction",
+    "specific"
+  ],
+  "resume_text": "Pallavi Joshi (synthetic)\nEXPERIENCE\nOperations Lead, an e-commerce logistics company, Pune (2019-2023)\n- Managed a team of 12 at a fulfilment centre handling 8,000 orders a day\n- Reduced order-to-dispatch time from 26 hours to 19 hours\nOperations Executive, same company (2016-2019)\n- Planned shifts and tracked daily productivity for 40 pickers\nCareer break (2023-2025)\n- Completed an online course in supply-chain analytics, 2024\nEDUCATION\nB.E., Industrial Engineering, a college in Pune, 2016, 7.8 CGPA\nGMAT 710",
+  "context": {
+    "route": "experienced",
+    "background": "Seven years in e-commerce operations, followed by a two-year break from work. Now preparing to return with an MBA.",
+    "goal": "Return to work in supply-chain strategy or operations leadership for a retail or logistics company.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 8,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-06-returnee-career-break",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Operations Lead, an e-commerce logistics company, Pune (2019-2023)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Managed a team of 12 at a fulfilment centre handling 8,000 orders a day"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Reduced order-to-dispatch time from 26 hours to 19 hours"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Operations Executive, same company (2016-2019)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Planned shifts and tracked daily productivity for 40 pickers"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.E., Industrial Engineering, a college in Pune, 2016, 7.8 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "achievement",
+        "evidence_quote": "Completed an online course in supply-chain analytics, 2024"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "GMAT 710"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-06-returnee-career-break",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What strategies did you implement to ensure your team met the daily order volume goals?",
+      "How did you handle any operational bottlenecks or team conflicts that arose during peak order periods?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Operations Lead, an e-commerce logistics company, Pune (2019-2023)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Managed a team of 12 at a fulfilment centre handling 8,000 orders a day"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Reduced order-to-dispatch time from 26 hours to 19 hours"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Operations Executive, same company (2016-2019)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Planned shifts and tracked daily productivity for 40 pickers"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.E., Industrial Engineering, a college in Pune, 2016, 7.8 CGPA"
+      },
+      {
+        "id": "fact-7",
+        "category": "achievement",
+        "evidence_quote": "Completed an online course in supply-chain analytics, 2024"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "GMAT 710"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your key responsibilities and challenges when managing a team of 12 at the fulfilment centre handling 8,000 orders a day?",
+        "evidence_quote": "Managed a team of 12 at a fulfilment centre handling 8,000 orders a day",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What strategies did you implement to ensure your team met the daily order volume goals?",
+        "evidence_quote": "Managed a team of 12 at a fulfilment centre handling 8,000 orders a day",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did you handle any operational bottlenecks or team conflicts that arose during peak order periods?",
+        "evidence_quote": "Managed a team of 12 at a fulfilment centre handling 8,000 orders a day",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What approaches did you take to reduce the order-to-dispatch time from 26 hours to 19 hours?",
+        "evidence_quote": "Reduced order-to-dispatch time from 26 hours to 19 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "Can you explain how you measured the impact of these improvements on overall customer satisfaction or company performance?",
+        "evidence_quote": "Reduced order-to-dispatch time from 26 hours to 19 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Were there any unexpected challenges or learnings from this process optimization?",
+        "evidence_quote": "Reduced order-to-dispatch time from 26 hours to 19 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "How did your responsibilities differ between your roles as Operations Executive and Operations Lead?",
+        "evidence_quote": "Operations Executive, same company (2016-2019)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "Can you elaborate on the shift planning and daily productivity tracking you conducted for 40 pickers?",
+        "evidence_quote": "Planned shifts and tracked daily productivity for 40 pickers",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How did your early operational experience influence your leadership style when promoted to Operations Lead?",
+        "evidence_quote": "Operations Lead, an e-commerce logistics company, Pune (2019-2023)",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your key responsibilities and challenges when managing a team of 12 at the fulfilment centre handling 8,000 orders a day?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I worked for seven years in e-commerce logistics in Pune, finishing as operations lead managing a team of 12 at a fulfilment centre that handled 8,000 orders a day. I brought the order-to-dispatch time down from 26 hours to 19. Then I took a two-year break from work, and I completed a supply-chain analytics course in 2024 to keep learning. I'm applying now to return at a higher level, because I want to design the supply network and not only run one site.",
+      "request_id": "08854d7a-080b-58e7-8d59-0bb734db3e0d"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What strategies did you implement to ensure your team met the daily order volume goals?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "managing a team of 12 at a fulfilment centre that handled 8,000 orders a day"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "To cut the dispatch time I changed the pick-path in the warehouse. Fast-moving items were moved closer to the packing area. Packers were also asked to start the day with the oldest orders. That solved most of the delay in the afternoon batch.",
+      "request_id": "9b0dd747-ed8a-5bab-8792-14dea0ac4cea"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "How did you handle any operational bottlenecks or team conflicts that arose during peak order periods?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "To cut the dispatch time I changed the pick-path in the warehouse"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I don't know what the company's current dispatch time is. I left two years ago and I haven't been in contact with the team since.",
+      "request_id": "99eef39a-9c0c-5105-b266-f4ff9bf0a69e"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you describe a specific instance during your tenure when you faced a significant operational challenge and how you personally handled it?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "The break helped me reflect and recharge. I have emerged with a fresh perspective and I am more motivated than ever to create impact in the next phase of my journey.",
+      "request_id": "c3bed638-5a86-51e4-86a5-6052a8e18a52"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Can you share an example of a project or initiative during your operations leadership role that you led end-to-end? What was your specific role and the impact achieved?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I have emerged with a fresh perspective and I am more motivated than ever to create impact in the next phase of my journey"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't think a career break means my skills are outdated. I have kept learning and I still understand the operations systems. I would prefer to answer questions on what I can do now.",
+      "request_id": "9fc9489c-e991-59fb-86a3-a260b175a60f"
+    },
+    {
+      "id": "q6",
+      "role": "assistant",
+      "text": "Given your emphasis on current capabilities, can you describe a supply chain optimization idea or strategy you have developed recently based on your learning and experience?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a5",
+      "anchor_quote": "I would prefer to answer questions on what I can do now"
+    },
+    {
+      "id": "a6",
+      "role": "user",
+      "text": "Totally off topic, but could you recommend a good book on running? I have started jogging in the mornings and I'd like to improve my stamina.",
+      "request_id": "c6086712-2694-56fa-a0e2-e03d3bdd93b2"
+    },
+    {
+      "id": "q7",
+      "role": "assistant",
+      "text": "Let's redirect to something relevant to your application. Could you tell me about a time when you collaborated with your peers or other teams in your operations role? What was your contribution?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "contribution",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a7",
+      "role": "user",
+      "text": "I never actually managed a team. At the fulfilment centre I was an individual contributor and I worked on analysis only.",
+      "request_id": "ea616a05-a507-5456-91e9-18154bea3388"
+    },
+    {
+      "id": "q8",
+      "role": "assistant",
+      "text": "Could you clarify your role in the fulfilment centre—did you have management responsibilities for the team of 12, or were you focused on analysis as an individual contributor?",
+      "conflict": "The resume states you managed a team of 12, but you now say you never managed a team and were an individual contributor doing analysis.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a7",
+      "anchor_quote": "I never actually managed a team. At the fulfilment centre I was an individual contributor and I worked on analysis only"
+    },
+    {
+      "id": "a8",
+      "role": "user",
+      "text": "Looking ahead, my plan is to join a supply-chain strategy team. My thesis is that smaller warehouses closer to customers would lower delivery times in a city like Pune, and I want to learn the costing to test that.",
+      "request_id": "80e7f0cd-f65b-5b02-91c3-1cc7b817c70a"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate described relevant experience and learning during a substantial career break, showing motivation to return to supply chain strategy. However, there was a notable inconsistency around management responsibilities on the resume versus their own account as an individual contributor, which affected clarity about their role scope and ownership. The candidate gave some concrete examples of operational improvements but had limited detailed illustrations of handling challenges, collaboration, or outcomes tied to their personal actions. They also preferred focusing on future capabilities over past performance and missed opportunities to provide substantiated examples of contribution or learning from setbacks.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I worked for seven years in e-commerce logistics in Pune, finishing as operations lead managing a team of 12 at a fulfilment centre that handled 8,000 orders a day. I brought the order-to-dispatch time down from 26 hours to 19. Then I took a two-year break from work, and I completed a supply-chain analytics course in 2024 to keep learning. I'm applying now to return at a higher level, because I",
+        "observation": "Clearly summarized experience, career break activities, and motivation for an MBA and career advancement."
+      },
+      {
+        "turn_id": "a8",
+        "quote": "Looking ahead, my plan is to join a supply-chain strategy team. My thesis is that smaller warehouses closer to customers would lower delivery times in a city like Pune, and I want to learn the costing to test that",
+        "observation": "Demonstrated thoughtful career rationale and specific interest in supply chain strategy aligned with their goals."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a7",
+        "quote": "I never actually managed a team. At the fulfilment centre I was an individual contributor and I worked on analysis only",
+        "observation": "This statement contradicts earlier claims of managing a team of 12, creating confusion about role scope and personal ownership.",
+        "suggestion": "Practice delivering a clear explanation reconciling your exact role and responsibilities, for example: clarify that while the resume says management, your role was analytical support to that team, and explain your contributions distinctly."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I don't know what the company's current dispatch time is. I left two years ago and I haven't been in contact with the team since",
+        "observation": "Did not provide an example of how operational bottlenecks or team conflicts were handled during peak periods, missing an opportunity to demonstrate problem-solving and leadership under pressure.",
+        "suggestion": "Prepare and rehearse a specific example from your past experience where you identified and addressed an operational challenge or team conflict, including your actions and the impact."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't think a career break means my skills are outdated. I have kept learning and I still understand the operations systems. I would prefer to answer questions on what I can do now",
+        "observation": "The candidate avoided providing recent examples or past project details, reducing evidence of demonstrated outcomes and contribution.",
+        "suggestion": "Prepare concise examples of past projects or initiatives you led or contributed to, including your personal role, trade-offs you managed, and measurable results, to confidently share during interviews."
+      }
+    ],
+    "next_exercise": "Retell a recent or past project or operational challenge where you played a central role. Cover the context, your specific actions, alternatives you considered, the outcome, and what you learned, aiming to clarify your ownership and impact clearly."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}
