@@ -106,6 +106,23 @@ class PostgresRuntimeTest(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(self.status.is_current)
         self.assertEqual(schema_drift(self.owner_engine), [])
 
+    def test_runtime_role_has_no_elevated_attributes_and_reapply_strips_them(self):
+        import db_roles
+
+        flags = text("SELECT rolsuper, rolcreatedb, rolcreaterole, rolreplication, rolbypassrls "
+                     "FROM pg_roles WHERE rolname = :r")
+        with self.owner_engine.begin() as conn:
+            self.assertEqual(tuple(conn.execute(flags, {"r": RUNTIME_ROLE}).one()), (False,) * 5)
+            conn.execute(text(f'ALTER ROLE "{RUNTIME_ROLE}" CREATEDB'))
+        owner_url = self.owner_engine.url.render_as_string(hide_password=False)
+        conn = db_roles.connect(owner_url)
+        try:
+            db_roles.apply_runtime_role(conn, RUNTIME_ROLE, RUNTIME_PASSWORD)
+        finally:
+            conn.close()
+        with self.owner_engine.connect() as conn:
+            self.assertEqual(tuple(conn.execute(flags, {"r": RUNTIME_ROLE}).one()), (False,) * 5)
+
     def test_runtime_role_cannot_change_schema(self):
         forbidden = [
             "CREATE TABLE evil (id int)",
