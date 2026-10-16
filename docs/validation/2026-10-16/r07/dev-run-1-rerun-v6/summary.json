@@ -1,0 +1,225 @@
+{
+  "run": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "prompt_version": "mba-interview-v6",
+    "plan_version": "resume-led-v2",
+    "eval_version": "r07-eval-v1",
+    "git": {
+      "commit": "12889df652a6dde55579b7f2d7045a361ee962ae",
+      "dirty": false
+    },
+    "price": {
+      "source": "builtin",
+      "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+      "input_paise_per_million": 3600,
+      "output_paise_per_million": 14400
+    },
+    "stopped": null,
+    "max_attempts": 3,
+    "started_at": "2026-10-16T06:28:11.882040+00:00",
+    "finished_at": "2026-10-16T06:29:31.480156+00:00"
+  },
+  "sessions": {
+    "total": 4,
+    "completed": 3,
+    "resume_generation_failed": 1,
+    "stopped": {
+      "exp-12-short-resume-banker": "a4"
+    }
+  },
+  "reliability": {
+    "attempts": 31,
+    "failed_attempts": 7,
+    "steps": 26,
+    "recovered_steps": 1,
+    "exhausted_steps": 2,
+    "failures_by_code": {
+      "provider_error (charged)": 7
+    },
+    "failures_by_message": {
+      "The follow-up could not be matched to your answer. Your answer is still here; please retry.": 4,
+      "The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.": 3
+    }
+  },
+  "cost": {
+    "total_paise": 301,
+    "per_session_paise": {
+      "n": 3,
+      "mean": 73.7,
+      "p50": 67,
+      "p95": 92,
+      "max": 92
+    },
+    "per_call_paise": {
+      "resume_questions": {
+        "n": 6,
+        "mean": 12.0,
+        "p50": 12,
+        "p95": 12,
+        "max": 12
+      },
+      "interview_answer": {
+        "n": 22,
+        "mean": 8.2,
+        "p50": 8,
+        "p95": 10,
+        "max": 11
+      },
+      "interview_feedback": {
+        "n": 3,
+        "mean": 16.0,
+        "p50": 16,
+        "p95": 17,
+        "max": 17
+      }
+    },
+    "tokens": {
+      "resume_questions": {
+        "input": {
+          "n": 6,
+          "mean": 704.0,
+          "p50": 687,
+          "p95": 725,
+          "max": 725
+        },
+        "output": {
+          "n": 6,
+          "mean": 610.8,
+          "p50": 600,
+          "p95": 652,
+          "max": 652
+        }
+      },
+      "interview_answer": {
+        "input": {
+          "n": 22,
+          "mean": 1870.7,
+          "p50": 1817,
+          "p95": 2465,
+          "max": 2644
+        },
+        "output": {
+          "n": 22,
+          "mean": 68.1,
+          "p50": 67,
+          "p95": 85,
+          "max": 89
+        }
+      },
+      "interview_feedback": {
+        "input": {
+          "n": 3,
+          "mean": 2357.7,
+          "p50": 2204,
+          "p95": 2686,
+          "max": 2686
+        },
+        "output": {
+          "n": 3,
+          "mean": 491.3,
+          "p50": 488,
+          "p95": 507,
+          "max": 507
+        }
+      }
+    }
+  },
+  "latency_ms": {
+    "resume_questions": {
+      "n": 3,
+      "mean": 4963.3,
+      "p50": 4927,
+      "p95": 5342,
+      "max": 5342
+    },
+    "interview_answer": {
+      "n": 18,
+      "mean": 1644.3,
+      "p50": 1620,
+      "p95": 2018,
+      "max": 2018
+    },
+    "interview_feedback": {
+      "n": 3,
+      "mean": 4075.3,
+      "p50": 3935,
+      "p95": 4430,
+      "max": 4430
+    }
+  },
+  "reservations": {
+    "resume_questions": {
+      "max_input_ratio": 0.217,
+      "under_reserved_calls": 0
+    },
+    "interview_answer": {
+      "max_input_ratio": 0.362,
+      "under_reserved_calls": 0
+    },
+    "interview_feedback": {
+      "max_input_ratio": 0.351,
+      "under_reserved_calls": 0
+    }
+  },
+  "automatic_gates": {
+    "repetition": {
+      "count": 0,
+      "status": "pass"
+    },
+    "injection": {
+      "count": 0,
+      "status": "pass"
+    },
+    "reliability": {
+      "exhausted_steps": [
+        "exp-12-short-resume-banker/resume",
+        "exp-12-short-resume-banker/a4"
+      ],
+      "status": "fail"
+    }
+  },
+  "review_flags": {
+    "unexplained_number": 0,
+    "fresher_workplace": 0,
+    "assumes_management": 1,
+    "admission_prediction": 0
+  },
+  "human_gates": {
+    "grounded_follow_ups": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 14,
+      "status": "pending",
+      "rate": null
+    },
+    "invented_premises": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 18,
+      "status": "pending",
+      "failures": 0
+    },
+    "route_fit": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 18,
+      "status": "pending",
+      "failures": 0
+    },
+    "feedback_evidence": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 14,
+      "status": "pending",
+      "failures": 0
+    },
+    "usefulness": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 9,
+      "status": "pending",
+      "failures": 0
+    }
+  }
+}

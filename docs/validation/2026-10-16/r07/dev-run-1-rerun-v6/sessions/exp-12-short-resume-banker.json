@@ -1,0 +1,111 @@
+{
+  "profile_id": "exp-12-short-resume-banker",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "retail banking relationship manager, brief résumé",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 5,
+    "notes": "Relationship manager at a bank; does not manage a team. Portfolio sizes, targets and customer data are confidential. Résumé is brief, so ask for details instead of assuming them."
+  },
+  "answer_tags": [
+    "specific",
+    "confidential",
+    "vague",
+    "confidential",
+    "unknown"
+  ],
+  "resume_text": "Rhea D'Souza (synthetic)\nRelationship Manager, a private-sector bank, Mumbai (2021-present). Manage a portfolio of about 180 customers; reached 112% of my annual target in the last year.\nCustomer Service Officer, same bank (2020-2021).\nB.Com, a college in Mumbai, 2019, 75%. Completed the banking exam certification in 2020.\nSkills: Customer relationships, product knowledge in deposits, insurance and loans, MS Excel. Languages: English, Hindi, Konkani.",
+  "context": {
+    "route": "experienced",
+    "background": "Five years in retail banking, currently a relationship manager. I do not manage a team.",
+    "goal": "Move into a business or product role in wealth management, then lead a branch cluster.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    }
+  },
+  "question_graph": null,
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Walk me through your experience and why a management programme makes sense for you now."
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I've worked in retail banking for five years, the last four as a relationship manager at a private-sector bank in Mumbai. I manage a portfolio of about 180 customers and reached 112% of my annual target last year. I started in customer service, and I know how customers react when a product is mis-sold. I want an MBA to move from selling individual products to designing the products and the customer segments.",
+      "request_id": "9c1946e4-08b0-5351-a181-76a92b8a363c"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned managing a portfolio of about 180 customers and exceeding your target last year. Can you describe a specific challenge you faced with a customer or product mis-selling scenario, and how you handled it?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I manage a portfolio of about 180 customers and reached 112% of my annual target last year"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I can't share the portfolio size in rupees or any customer details. Banking secrecy rules and the bank's code of conduct forbid that. The 112% is the figure I am allowed to say.",
+      "request_id": "70ec9f5a-e958-586e-a3b3-8e7a55b1aacf"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned banking secrecy and not being able to share specifics about customers or portfolios. Given these constraints, could you describe the general approach or principles you follow when addressing customer concerns about product mis-selling?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "Banking secrecy rules and the bank's code of conduct forbid that"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I build strong customer relationships and I always put the customer at the centre. My approach is solutions-oriented and I constantly strive to exceed expectations.",
+      "request_id": "c92ac140-b584-5a4d-881f-952254b10dde"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned that your approach is solutions-oriented and customer-centric. Can you share an example of a time when you had to balance meeting a sales target with ensuring the customer's best interest was served?",
+      "kind": "new_topic",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I'm sorry, I also can't tell you the target I was given or the bank's market share. These are internal numbers and we aren't allowed to disclose them.",
+      "request_id": "42df5b89-3da3-533b-afcd-c2423ac6f1b0"
+    }
+  ],
+  "feedback": null,
+  "stopped_at": "a4",
+  "ended_by_request": false
+}

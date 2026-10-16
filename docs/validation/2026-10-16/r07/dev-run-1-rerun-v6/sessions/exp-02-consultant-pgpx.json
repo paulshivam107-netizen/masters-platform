@@ -1,0 +1,427 @@
+{
+  "profile_id": "exp-02-consultant-pgpx",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "management consulting, project team lead",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 9,
+    "notes": "Manages project teams of 4-6 consultants on engagements, not permanent line reports. Client names and fees are confidential. Must not assume P&L ownership."
+  },
+  "answer_tags": [
+    "specific",
+    "confidential",
+    "vague",
+    "contradiction",
+    "disagree"
+  ],
+  "resume_text": "Sanjana Rao (synthetic)\nEXPERIENCE\nEngagement Manager, a global consulting firm, Mumbai (2021-present)\n- Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements\n- Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend\nSenior Consultant, same firm (2018-2021)\n- Built market-entry models for 3 consumer clients\nConsultant, a Big 4 advisory practice, Delhi (2016-2018)\nEDUCATION\nB.Tech, Chemical Engineering, a state engineering college, 2016, 8.2 CGPA\nGMAT 730",
+  "context": {
+    "route": "experienced",
+    "background": "Nine years in consulting, the last five as an engagement manager leading project teams. I do not own a P&L.",
+    "goal": "Move from advising to running a business unit, ideally in industrials or consumer goods.",
+    "school": "General MBA practice",
+    "programme": "PGPX (IIM Ahmedabad)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-02-consultant-pgpx",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Engagement Manager, a global consulting firm, Mumbai (2021-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Senior Consultant, same firm (2018-2021)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Built market-entry models for 3 consumer clients"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Consultant, a Big 4 advisory practice, Delhi (2016-2018)"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.Tech, Chemical Engineering, a state engineering college, 2016, 8.2 CGPA"
+      },
+      {
+        "id": "fact-8",
+        "category": "achievement",
+        "evidence_quote": "GMAT 730"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-02-consultant-pgpx",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "How did you adjust your leadership approach to overcome that challenge during the engagement?",
+      "Looking back, what would you do differently in managing teams for similar projects?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Engagement Manager, a global consulting firm, Mumbai (2021-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Senior Consultant, same firm (2018-2021)"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Built market-entry models for 3 consumer clients"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Consultant, a Big 4 advisory practice, Delhi (2016-2018)"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "B.Tech, Chemical Engineering, a state engineering college, 2016, 8.2 CGPA"
+      },
+      {
+        "id": "fact-8",
+        "category": "achievement",
+        "evidence_quote": "GMAT 730"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "You mentioned leading teams of 4-6 consultants across 11 engagements as an Engagement Manager. Can you describe one key challenge you faced while managing these teams?",
+        "evidence_quote": "Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "How did you adjust your leadership approach to overcome that challenge during the engagement?",
+        "evidence_quote": "Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Looking back, what would you do differently in managing teams for similar projects?",
+        "evidence_quote": "Lead teams of 4-6 consultants on 9-12 week engagements; delivered 11 engagements",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Can you walk me through the cost-reduction programme for a manufacturing client where you identified savings of about 14%?",
+        "evidence_quote": "Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What methodologies or tools did you employ to identify these cost savings?",
+        "evidence_quote": "Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did you ensure the client could sustain these cost savings post engagement?",
+        "evidence_quote": "Cost-reduction programme for a manufacturing client: identified savings of about 14% of addressable spend",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "You developed market-entry models for three consumer clients during your Senior Consultant role. Could you describe how you structured one of these models?",
+        "evidence_quote": "Built market-entry models for 3 consumer clients",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What were the biggest challenges you encountered while building these models and how did you handle them?",
+        "evidence_quote": "Built market-entry models for 3 consumer clients",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How did the market-entry strategies you suggested impact the clients' business outcomes?",
+        "evidence_quote": "Built market-entry models for 3 consumer clients",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ]
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "You mentioned leading teams of 4-6 consultants across 11 engagements as an Engagement Manager. Can you describe one key challenge you faced while managing these teams?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I have nine years in consulting, the last five as an engagement manager at a global firm. I lead teams of four to six consultants on 9 to 12-week engagements, and I have delivered 11 of them. The one I'm proudest of was a cost-reduction programme for a manufacturing client, where we identified savings of about 14% of addressable spend. I'm applying now because I advise on decisions that someone else carries out, and I want to be the person who carries them out.",
+      "request_id": "cc23627c-b7e8-5b65-ba1e-70572b864138"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned the cost-reduction programme where you identified significant savings. What was your personal role and specific contributions in delivering those results?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "a cost-reduction programme for a manufacturing client, where we identified savings of about 14% of addressable spend"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I can't name the client or share the rupee value of the savings. Our engagement letters prohibit that. The 14% figure is already the most I can say about it.",
+      "request_id": "6fbbab93-36f3-59bf-85bf-425ae0909bf3"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Since the confidentiality limits specifics on your cost-reduction work, could you describe the key challenges you personally encountered in managing the team or project during that engagement?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "The 14% figure is already the most I can say about it"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "My leadership style is collaborative and empowering. I focus on creating a high-performance culture and aligning the team towards a common vision, while ensuring client delight.",
+      "request_id": "2b2d673e-d22d-5056-bc94-b486a5865f70"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you share an example of a situation during your engagement management where you had to make a difficult trade-off between client expectations and your team's capabilities?",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "On the cost programme I was a team member, not the lead. A partner designed the whole approach and I only built the spreadsheets.",
+      "request_id": "4d3fee38-eed5-57dd-914e-15ab47d31a85"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Could you describe a project where you had full ownership from start to finish, including decision-making and managing trade-offs?",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "On the cost programme I was a team member, not the lead"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I'm not sure it is fair to say a consultant has no accountability for results. We are measured on whether the client implements our recommendations. I would rather you ask how I follow through.",
+      "request_id": "c8a2029e-830e-590d-b5d1-04b544498741"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has substantial consulting experience with leadership exposure but limited personal ownership of project outcomes at a strategic level. Their responses suggest a collaborative leadership style and a clear motivation to shift from advisory roles to operational ownership. However, there was limited evidence of managing trade-offs or full ownership, and confidentiality restrictions limited the depth of examples shared. Further exploration of instances with direct decision-making responsibility and lessons learned could strengthen the narrative.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I have nine years in consulting, the last five as an engagement manager at a global firm. I lead teams of four to six consultants on 9 to 12-week engagements, and I have delivered 11 of them",
+        "observation": "Demonstrates significant leadership experience managing multiple engagements and teams over a prolonged period."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "My leadership style is collaborative and empowering. I focus on creating a high-performance culture and aligning the team towards a common vision, while ensuring client delight",
+        "observation": "Provides insight into leadership philosophy focused on collaboration and motivation."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I can't name the client or share the rupee value of the savings. Our engagement letters prohibit that. The 14% figure is already the most I can say about it",
+        "observation": "Unable to articulate own contributions due to confidentiality, limiting demonstration of personal impact.",
+        "suggestion": "Prepare anonymized or generalized examples that spotlight your role and decisions without breaching confidentiality."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "On the cost programme I was a team member, not the lead. A partner designed the whole approach and I only built the spreadsheets",
+        "observation": "Limited personal ownership and leadership on key projects despite managerial title.",
+        "suggestion": "Reflect on and articulate projects or parts of projects where you had end-to-end responsibility and describe your decision-making and trade-offs."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I'm not sure it is fair to say a consultant has no accountability for results. We are measured on whether the client implements our recommendations. I would rather you ask how I follow through",
+        "observation": "Focuses on accountability indirectly but does not provide clear examples of ownership or follow-through actions.",
+        "suggestion": "Provide specific instances showing how you ensure client implementation and your role in influencing outcomes."
+      }
+    ],
+    "next_exercise": "Describe a project where you had clear ownership from start to finish, focusing on your decisions, trade-offs made, team management, and how you ensured successful delivery."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}
