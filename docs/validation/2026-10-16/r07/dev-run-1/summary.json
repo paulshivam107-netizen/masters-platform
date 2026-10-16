@@ -1,0 +1,232 @@
+{
+  "run": {
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "prompt_version": "mba-interview-v5",
+    "plan_version": "resume-led-v1",
+    "eval_version": "r07-eval-v1",
+    "git": {
+      "commit": "ca3ae98484528b1ff0cf4be15b562e254049976a",
+      "dirty": false
+    },
+    "price": {
+      "source": "builtin",
+      "basis": "builtin-2026-10 (USD list price at Rs 90/USD)",
+      "input_paise_per_million": 3600,
+      "output_paise_per_million": 14400
+    },
+    "stopped": null,
+    "max_attempts": 3,
+    "started_at": "2026-10-16T06:01:59.340023+00:00",
+    "finished_at": "2026-10-16T06:09:16.983646+00:00"
+  },
+  "sessions": {
+    "total": 24,
+    "completed": 20,
+    "resume_generation_failed": 1,
+    "stopped": {
+      "cat-06-it-services-2yrs": "a5",
+      "exp-02-consultant-pgpx": "a2",
+      "exp-10-ngo-teacher": "a2",
+      "exp-12-short-resume-banker": "a4"
+    }
+  },
+  "reliability": {
+    "attempts": 174,
+    "failed_attempts": 30,
+    "steps": 149,
+    "recovered_steps": 10,
+    "exhausted_steps": 5,
+    "failures_by_code": {
+      "provider_error (charged)": 30
+    },
+    "failures_by_message": {
+      "The follow-up could not be matched to your answer. Your answer is still here; please retry.": 24,
+      "The profile could not be matched to your resume. Please retry.": 5,
+      "The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.": 1
+    }
+  },
+  "cost": {
+    "total_paise": 1705,
+    "per_session_paise": {
+      "n": 20,
+      "mean": 73.5,
+      "p50": 61,
+      "p95": 116,
+      "max": 127
+    },
+    "per_call_paise": {
+      "resume_questions": {
+        "n": 29,
+        "mean": 12.1,
+        "p50": 12,
+        "p95": 13,
+        "max": 13
+      },
+      "interview_answer": {
+        "n": 125,
+        "mean": 8.3,
+        "p50": 8,
+        "p95": 10,
+        "max": 11
+      },
+      "interview_feedback": {
+        "n": 20,
+        "mean": 15.7,
+        "p50": 15,
+        "p95": 19,
+        "max": 19
+      }
+    },
+    "tokens": {
+      "resume_questions": {
+        "input": {
+          "n": 29,
+          "mean": 713.3,
+          "p50": 716,
+          "p95": 730,
+          "max": 731
+        },
+        "output": {
+          "n": 29,
+          "mean": 629.6,
+          "p50": 631,
+          "p95": 679,
+          "max": 706
+        }
+      },
+      "interview_answer": {
+        "input": {
+          "n": 125,
+          "mean": 1912.2,
+          "p50": 1918,
+          "p95": 2474,
+          "max": 2651
+        },
+        "output": {
+          "n": 125,
+          "mean": 69.8,
+          "p50": 68,
+          "p95": 93,
+          "max": 104
+        }
+      },
+      "interview_feedback": {
+        "input": {
+          "n": 20,
+          "mean": 2268.4,
+          "p50": 2196,
+          "p95": 2732,
+          "max": 2751
+        },
+        "output": {
+          "n": 20,
+          "mean": 488.6,
+          "p50": 474,
+          "p95": 600,
+          "max": 631
+        }
+      }
+    }
+  },
+  "latency_ms": {
+    "resume_questions": {
+      "n": 23,
+      "mean": 5291.2,
+      "p50": 5358,
+      "p95": 5985,
+      "max": 6061
+    },
+    "interview_answer": {
+      "n": 101,
+      "mean": 1482.8,
+      "p50": 1393,
+      "p95": 1919,
+      "max": 4087
+    },
+    "interview_feedback": {
+      "n": 20,
+      "mean": 4522.8,
+      "p50": 4284,
+      "p95": 6485,
+      "max": 6567
+    }
+  },
+  "reservations": {
+    "resume_questions": {
+      "max_input_ratio": 0.22,
+      "under_reserved_calls": 0
+    },
+    "interview_answer": {
+      "max_input_ratio": 0.362,
+      "under_reserved_calls": 0
+    },
+    "interview_feedback": {
+      "max_input_ratio": 0.357,
+      "under_reserved_calls": 0
+    }
+  },
+  "automatic_gates": {
+    "repetition": {
+      "count": 0,
+      "status": "pass"
+    },
+    "injection": {
+      "count": 1,
+      "status": "fail"
+    },
+    "reliability": {
+      "exhausted_steps": [
+        "cat-03-arts-history/resume",
+        "cat-06-it-services-2yrs/a5",
+        "exp-02-consultant-pgpx/a2",
+        "exp-10-ngo-teacher/a2",
+        "exp-12-short-resume-banker/a4"
+      ],
+      "status": "fail"
+    }
+  },
+  "review_flags": {
+    "unexplained_number": 0,
+    "fresher_workplace": 0,
+    "assumes_management": 1,
+    "admission_prediction": 0
+  },
+  "human_gates": {
+    "grounded_follow_ups": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 69,
+      "status": "pending",
+      "rate": null
+    },
+    "invented_premises": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 101,
+      "status": "pending",
+      "failures": 0
+    },
+    "route_fit": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 101,
+      "status": "pending",
+      "failures": 0
+    },
+    "feedback_evidence": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 93,
+      "status": "pending",
+      "failures": 0
+    },
+    "usefulness": {
+      "passed": 0,
+      "reviewed": 0,
+      "eligible": 59,
+      "status": "pending",
+      "failures": 0
+    }
+  }
+}

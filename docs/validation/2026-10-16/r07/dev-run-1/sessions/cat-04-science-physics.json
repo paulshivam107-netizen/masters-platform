@@ -1,0 +1,406 @@
+{
+  "profile_id": "cat-04-science-physics",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "science, BSc Physics, research internship",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. One research internship in a university lab; was a trainee, not a supervisor. Must not assume work experience or direct reports."
+  },
+  "answer_tags": [
+    "specific",
+    "specific",
+    "contradiction",
+    "confidential",
+    "stop"
+  ],
+  "resume_text": "Siddharth Menon (synthetic)\nEDUCATION\nB.Sc. Physics (Hons), a state university in Kerala, 2023-2026, 8.4 CGPA (till semester 5)\nClass XII, Science, 93%\nRESEARCH INTERNSHIP\nEight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin\nPROJECTS\nSemester project: pendulum timing with a phone camera, error under 2%\nACTIVITIES\nPhysics Association secretary (2024-25); ran 6 weekly problem-solving sessions for juniors\nScholarship: state merit scholarship, 2023",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BSc Physics student with one summer research internship. No full-time job.",
+    "goal": "Join a technology or energy company in a business-analyst role and later move into operations strategy.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v1",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-04-science-physics",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Sc. Physics (Hons), a state university in Kerala, 2023-2026, 8.4 CGPA (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Science, 93%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Semester project: pendulum timing with a phone camera, error under 2%"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Eight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Scholarship: state merit scholarship, 2023"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Physics Association secretary (2024-25); ran 6 weekly problem-solving sessions for juniors"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-04-science-physics",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you encounter while plotting the data in Origin, and how did you ensure accuracy?",
+      "How has this experience influenced your approach to problem-solving in subsequent projects or academics?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Sc. Physics (Hons), a state university in Kerala, 2023-2026, 8.4 CGPA (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Science, 93%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Semester project: pendulum timing with a phone camera, error under 2%"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Eight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Scholarship: state merit scholarship, 2023"
+      },
+      {
+        "id": "fact-6",
+        "category": "interest",
+        "evidence_quote": "Physics Association secretary (2024-25); ran 6 weekly problem-solving sessions for juniors"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your role and key learnings during your eight-week summer internship at the national research institute?",
+        "evidence_quote": "Eight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you encounter while plotting the data in Origin, and how did you ensure accuracy?",
+        "evidence_quote": "recorded 120 readings and plotted them in Origin",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How has this experience influenced your approach to problem-solving in subsequent projects or academics?",
+        "evidence_quote": "Eight-week summer intern, a national research institute: assisted in a thin-film measurement experiment; recorded 120 readings and plotted them in Origin",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "As Physics Association secretary, how did you organize and conduct the weekly problem-solving sessions for juniors?",
+        "evidence_quote": "Physics Association secretary (2024-25); ran 6 weekly problem-solving sessions for juniors",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What feedback or impact did you receive from the juniors attending these sessions?",
+        "evidence_quote": "ran 6 weekly problem-solving sessions for juniors",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did this leadership experience shape your communication and organizational skills?",
+        "evidence_quote": "Physics Association secretary (2024-25)",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Tell me about your semester project involving pendulum timing with a phone camera and how you achieved an error under 2%.",
+        "evidence_quote": "Semester project: pendulum timing with a phone camera, error under 2%",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What methods did you use to minimize errors in the timing measurement?",
+        "evidence_quote": "error under 2%",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How would you apply the lessons from this project to manage accuracy and precision in business problems?",
+        "evidence_quote": "Semester project: pendulum timing with a phone camera, error under 2%",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ]
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your role and key learnings during your eight-week summer internship at the national research institute?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a final-year BSc Physics student. Last summer I spent eight weeks as an intern at a national research institute, helping with a thin-film measurement experiment. My job was to record readings, about 120 in all, and plot them. I enjoyed the work but realised that I like asking why a lab's equipment is bought and how projects are chosen more than the experiments. That is why I want an MBA.",
+      "request_id": "fa061692-f8f7-57bb-a80b-055fe9457ad3"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned you enjoyed asking why lab equipment is bought and how projects are chosen more than conducting experiments. Could you elaborate on what specific aspects of these decisions interest you and how they relate to your MBA goals?",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I enjoyed the work but realised that I like asking why a lab's equipment is bought and how projects are chosen more than the experiments"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "As secretary of the Physics Association I ran six weekly problem-solving sessions for juniors. Attendance was low at first, so I moved them to the evening after classes and it improved.",
+      "request_id": "9f07ba0c-ca73-5966-bed7-848e39f9fa85"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "How did you identify the need to change the timing of the problem-solving sessions, and what steps did you take to encourage attendance after moving them to the evening?",
+      "kind": "follow_up",
+      "topic": "contribution",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "As secretary of the Physics Association I ran six weekly problem-solving sessions for juniors. Attendance was low at first, so I moved them to the evening after classes and it improved"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "In the internship I supervised three other interns and set their daily targets. It was the first time I managed a small team.",
+      "request_id": "8563b8ed-3c87-56e7-b889-0f4406c94376"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you describe how you organized the work for those three interns and what challenges you faced in managing their daily targets?",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I can't share the details of the thin-film results. The lab asked interns not to discuss unpublished data, so I can only describe the method in general terms.",
+      "request_id": "4351b81a-09d2-537d-9d70-1d02802cea33"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "What general approach did you follow for supervising the three interns given the constraints on sharing specific experimental details?",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I can't share the details of the thin-film results. The lab asked interns not to discuss unpublished data, so I can only describe the method in general terms"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I think that's enough for today. Could we end the session here? I'd like to see my feedback now.",
+      "request_id": "24cdad6c-6ec2-5811-a8a8-8baaa0ff087f"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has demonstrated clear motivation for pursuing an MBA, linking their academic internship experience to a desire to understand project and equipment decision-making. They have shown initiative in leadership roles within their physics association and have some early experience managing peers in an internship setting. However, the answers had limited depth on problem-solving methods, personal contributions beyond supervision, and experiential reflections. The candidate was concise but sometimes reserved in elaboration, especially about leadership challenges and motivational specifics. Further development in articulating reasoning, reflections on learning, and detailed examples would strengthen future interviews.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I enjoyed the work but realised that I like asking why a lab's equipment is bought and how projects are chosen more than the experiments",
+        "observation": "Shows clear motivation for MBA tied to curiosity about business/management aspects rather than technical tasks."
+      },
+      {
+        "turn_id": "a2",
+        "quote": "As secretary of the Physics Association I ran six weekly problem-solving sessions for juniors. Attendance was low at first, so I moved them to the evening after classes and it improved",
+        "observation": "Demonstrates leadership and initiative in improving participation by adapting event timings."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a3",
+        "quote": "In the internship I supervised three other interns and set their daily targets. It was the first time I managed a small team",
+        "observation": "Mentioned managing interns but provided no details on challenges faced or how tasks were organized.",
+        "suggestion": "Provide specific examples of how you planned, delegated, and addressed challenges in managing a team during your internship."
+      },
+      {
+        "turn_id": "a2",
+        "quote": "As secretary of the Physics Association I ran six weekly problem-solving sessions for juniors. Attendance was low at first, so I moved them to the evening after classes and it improved",
+        "observation": "Did not elaborate on how attendance was encouraged or measured beyond changing timing.",
+        "suggestion": "Explain what feedback or indicators you used to identify the issue and how you further motivated or sustained attendance after changing the timing."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I enjoyed the work but realised that I like asking why a lab's equipment is bought and how projects are chosen more than the experiments",
+        "observation": "Motivation is stated but lacks depth on why these management decisions appeal and how that connects to future goals.",
+        "suggestion": "Reflect deeper on what aspects of decision-making excite you and how an MBA will help you develop the skills to contribute in those areas."
+      }
+    ],
+    "next_exercise": "Prepare a STAR (Situation, Task, Action, Result) response describing a leadership or teamwork experience from your association or internship, focusing on your specific contributions, challenges faced, and lessons learned."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

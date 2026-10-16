@@ -1,0 +1,155 @@
+{
+  "profile_id": "cat-03-arts-history",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "arts, BA History, no quantitative background",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment and no quantitative coursework. Must not assume spreadsheets, statistics or maths training; must not ask about a manager or employer."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "irrelevant",
+    "unknown"
+  ],
+  "resume_text": "Meera Iyer (synthetic)\nEDUCATION\nB.A. History (Hons), a women's college in Delhi University, 2023-2026, 74% (till semester 5)\nClass XII, Humanities, 89%\nPROJECTS\nDissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records\nOral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade\nACTIVITIES\nEditor, college history journal (2024-25); edited 12 student articles\nDebate society, inter-college finalist\nLANGUAGES\nEnglish, Tamil, Hindi",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BA History student. No work experience and no maths or statistics in my degree. Strong in writing and research.",
+    "goal": "Work in strategy or public policy consulting, where research and storytelling matter, and learn the numbers side properly.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v1",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    }
+  },
+  "question_graph": null,
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Tell me about yourself and why a two-year MBA is the next step you want to take."
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm finishing a BA in History at a women's college in Delhi University. My dissertation is on market guilds in 18th-century Madras. I'm working from about 40 archival records, and I learned how to compare conflicting sources. I also interviewed 15 elderly residents of a Chennai neighbourhood about how trade there has changed. I want an MBA because I can research and write, but I have no training in numbers, and I'd like to learn finance and statistics from scratch.",
+      "request_id": "4d9f5bed-eba3-5f0d-9d59-79a8244b5974"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned working with archival records and interviews in your dissertation. Can you describe a specific challenge you faced during this research and how you addressed it?",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I learned how to compare conflicting sources"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I don't think it's fair to say history students can't handle quantitative work. I'm weak in maths today, but historians read trade ledgers and census data all the time. I'd rather you ask what I'm doing to close the gap.",
+      "request_id": "61f679fb-bfdf-5b56-b793-826261b4d904"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You said you'd rather talk about what you're doing to close the gap in maths and quantitative skills. What specific steps have you taken so far to strengthen these areas?",
+      "kind": "follow_up",
+      "topic": "education",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I'd rather you ask what I'm doing to close the gap"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere, so I believe I can adapt to any business context.",
+      "request_id": "44ac3a19-82f7-5a21-b75c-15679e4632ce"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned that history teaches critical thinking and many transferable skills. Can you give an example of a situation where you applied critical thinking in your academic work, and how you analyzed a complex problem?",
+      "kind": "new_topic",
+      "topic": "education",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Sorry, unrelated, but I just saw a lovely film about the Cholas last weekend. Have you seen it? The costumes were wonderful and the music was also good.",
+      "request_id": "3aca29df-8858-516d-8abf-aecfd6242c6e"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned the Cholas and a film about them, which seems different from our discussion. Could you share how your interest in historical topics like the Cholas influences your approach to learning or problem-solving?",
+      "kind": "follow_up",
+      "topic": "interests",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I just saw a lovely film about the Cholas last weekend"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know how many of the 40 records are about textile guilds specifically. I haven't counted them yet and I don't want to guess.",
+      "request_id": "5d38fc7d-1914-55aa-bc10-5923e3a4bbf4"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrated thoughtful reflection on their academic work and motivation for pursuing an MBA focused on developing quantitative skills alongside their existing research strengths. However, the interview revealed some evasiveness and insufficient concrete examples when asked about specific challenges, efforts to close skill gaps, and application of critical thinking. Occasional unrelated responses limited the depth of insight achievable.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I'm finishing a BA in History at a women's college in Delhi University. My dissertation is on market guilds in 18th-century Madras. I'm working from about 40 archival records, and I learned how to compare conflicting sources",
+        "observation": "Shows solid academic engagement and ability to handle complex historical research with critical analysis."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I don't think it's fair to say history students can't handle quantitative work. I'm weak in maths today, but historians read trade ledgers and census data all the time. I'd rather you ask what I'm doing to close the gap",
+        "observation": "Avoided directly answering the question about a specific research challenge; deflected to a general point.",
+        "suggestion": "Provide concrete examples of challenges faced and strategies used to overcome them in research to demonstrate problem-solving skills."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere, so I believe I can adapt to any business context",
+        "observation": "Claimed transferable skills but did not provide evidence or specific examples of applying critical thinking.",
+        "suggestion": "Illustrate how critical thinking has been applied in academic or practical contexts with specific examples."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "Sorry, unrelated, but I just saw a lovely film about the Cholas last weekend. Have you seen it? The costumes were wonderful and the music was also good",
+        "observation": "Response was off-topic, which disrupted the flow and missed opportunity to discuss problem-solving or learning.",
+        "suggestion": "Maintain focus on the question and relate interests back to skills or qualities relevant to MBA and career goals."
+      }
+    ],
+    "next_exercise": "Describe a specific instance during your academic research when you faced conflicting evidence or data. Explain how you approached resolving the conflict, what your role was, and what the outcome taught you about problem-solving."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}
