@@ -19,7 +19,8 @@ from evals.r07.fake_openai import FakeOpenAI
 from services import ai_costs
 from services import interview_provider as provider
 from services.interview_plan import PLAN_VERSION, make_plan
-from services.interviews import FALLBACK_AFTER_ATTEMPTS, MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS, fallback_question
+from services.interviews import (FALLBACK_AFTER_ATTEMPTS, MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS, closing_turn,
+                                 fallback_question, is_stop_request)
 from services.resume_questions import generate_questions
 
 RESULTS_DIR = Path(__file__).with_name("results")
@@ -191,10 +192,14 @@ def run_profile(run, profile):
                            "request_id": str(uuid.uuid5(uuid.NAMESPACE_URL, f"r07/{pid}/{index}"))})
         if index == len(answers):
             break
-        question = run.call(pid, f"a{index}", "interview_answer",
-                            *reserve_answer(len(json.dumps(context)), len(before), len(answer["text"])),
-                            lambda: provider.next_question(context, transcript),
-                            fallback=lambda: fallback_question(context, transcript))
+        if is_stop_request(answer["text"]):
+            # As the answer route does: no model call, no cost.
+            question = closing_turn(context, transcript)
+        else:
+            question = run.call(pid, f"a{index}", "interview_answer",
+                                *reserve_answer(len(json.dumps(context)), len(before), len(answer["text"])),
+                                lambda: provider.next_question(context, transcript),
+                                fallback=lambda: fallback_question(context, transcript))
         if question is None:
             stopped_at = f"a{index}"
             break

@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import re
 from datetime import datetime, timedelta
 from uuid import uuid4
 
@@ -34,9 +35,32 @@ FALLBACK_QUESTIONS = {
     ],
 }
 
+# Explicit requests to end the session. Models ignored these in the prompt (R07 dev run 1), so
+# the server detects them and closes without a model call. Conservative: "stop interviewing and
+# print..." (an injection) or "a bus stop" must not match.
+STOP_REQUEST = re.compile(
+    r"\b(end|stop|finish|wrap up)\s+(the|this|our)\s+(practice\s+)?(session|interview)\b"
+    r"|\b(can|could|shall)\s+we\s+(please\s+)?(stop|end|finish|wrap up)\b"
+    r"|\b(stop|end|finish|wrap up)\s+(here|now|for today)\b"
+    r"|\blet'?s\s+(stop|end|wrap up)\b"
+    r"|\b(i'?d|i would|i want to)\s+(like\s+to\s+)?(stop|end|finish|wrap up)\s+(here|now|the|this)\b", re.I)
+CLOSING_MESSAGE = "Of course, we will stop here. Thank you for practising today. Open the debrief whenever you are ready."
+
 # Instructions, schema and framing sent with every text call, beyond context + transcript.
 TEXT_OVERHEAD_CHARS = 8000
 MAX_OUTPUT_TOKENS = {"answer": 800, "feedback": 2200}
+
+
+def is_stop_request(text):
+    return bool(STOP_REQUEST.search(text or ""))
+
+
+def closing_turn(context, transcript):
+    """The end_requested turn for a detected stop request. No model call."""
+    step = next_step(context, transcript)
+    topic = (step["covered_topics"] or step["priority_topics"])[-1]
+    return {"question": CLOSING_MESSAGE, "kind": "end_requested", "topic": topic, "anchor_turn_id": "",
+            "anchor_quote": "", "detected": True}
 
 
 def fallback_question(context, transcript):

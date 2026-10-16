@@ -18,8 +18,9 @@ from services import interview_provider as provider
 from services.interview_questions import question_bank, starting_question, follow_up_questions
 from services.resume_questions import owned_set
 from services.interview_plan import make_plan
-from services.interviews import (FALLBACK_AFTER_ATTEMPTS, claim, complete, fallback_question, fingerprint, owned,
-                                 require_live, reserve_quota, run_step, serialize)
+from services.interviews import (FALLBACK_AFTER_ATTEMPTS, claim, closing_turn, complete, fallback_question,
+                                 fingerprint, is_stop_request, owned, require_live, reserve_quota, run_step,
+                                 serialize)
 from services.rate_limit import enforce_rate_limit
 
 router = APIRouter(prefix="/interviews", tags=["interviews"])
@@ -182,6 +183,8 @@ def answer(session_id: UUID, payload: InterviewAnswer, user: User = Depends(inte
                 context = json.loads(session.context_json)
                 branch = context.get("resume_follow_ups") or follow_up_questions(context.get("question_id"), context["route"])
                 question = {"question": branch[count] if count < len(branch) else provider.demo_question(count + 1)}
+            elif is_stop_request(payload.text):
+                question, billing = closing_turn(json.loads(session.context_json), transcript), "none"
             elif op.attempts >= FALLBACK_AFTER_ATTEMPTS:
                 question, billing = fallback_question(json.loads(session.context_json), transcript), "none"
             else:

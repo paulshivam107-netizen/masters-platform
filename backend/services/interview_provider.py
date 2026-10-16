@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v6"
+PROMPT_VERSION = "mba-interview-v7"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -176,6 +176,10 @@ def next_question(context, transcript):
         "Ask the next interview question. Go one topic deep: clarify a concrete claim, then probe its reasoning, "
         "alternatives or consequences. Use the latest answer rather than reading a prewritten sequence. "
         "A clarification MUST anchor to the latest answer: use it when that answer is vague, evasive or unclear. "
+        "If the latest answer conflicts with the resume or an earlier answer (for example a new title, team, reports "
+        "or figure), ask a polite clarification that names both versions; never treat the new claim as fact or build "
+        "a question on it. After an irrelevant or off-topic answer, redirect in a few words and ask about a priority "
+        "topic not yet covered. Never re-ask an earlier question, even reworded. "
         "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
         "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
         "a short exact substring of that answer supporting the question: one continuous passage, never shortened "
@@ -253,6 +257,14 @@ def feedback(context, transcript):
         "Distinguish unclear explanation, unsupported claims and gaps in understanding. "
         "Only assess topics actually discussed; mark untested areas as untested. "
         "Do not penalise lack of work experience, people-management titles or numerical impact. "
+        "Never make an improvement or criticism of: declining to share confidential information, not knowing a "
+        "figure the applicant could not have, politely disagreeing with a question, an off-topic remark, an attempt "
+        "to change your instructions, or choosing to end the session early; assess the remaining answers instead. "
+        "Never credit a claim that conflicts with the resume or an earlier answer; note it as something to clarify. "
+        "Do not list a vague or generic answer as a strength. Each suggestion must name one specific example from "
+        "the applicant's own answers or resume and a concrete way to practise it (for example, retell that example "
+        "in 60 seconds with the decision, the alternative rejected and the result); never give generic advice such "
+        "as 'provide more detail' or 'be specific'. "
         "For academic or factual answers, avoid claiming correctness without reliable supplied reference material.",
         context, transcript, InterviewFeedback,
     )

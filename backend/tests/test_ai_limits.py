@@ -372,6 +372,17 @@ class BillableApiTest(unittest.IsolatedAsyncioTestCase):
         self.assertNotIn(question["text"].casefold(), [t["text"].casefold() for t in session["transcript"]])
         self.assertEqual([e[0] for e in self.entries()], ["settled", "settled", "released"])
 
+    async def test_explicit_stop_request_closes_without_a_model_call(self):
+        session = await self.session()
+        with patch.object(provider, "next_question") as called:
+            response = await self.answer(session, str(uuid4()), text="Can we stop here? I'd like to see my feedback now.")
+        self.assertEqual(response.status_code, 200, response.text)
+        ended = response.json()
+        self.assertEqual(called.call_count, 0)
+        self.assertEqual(ended["status"], "ready_for_feedback")
+        self.assertEqual((ended["transcript"][-1]["kind"], ended["transcript"][-1]["detected"]), ("end_requested", True))
+        self.assertEqual([e[0] for e in self.entries()], ["released"])
+
     async def test_price_versions_admin_api(self):
         created = await self.client.post("/admin/pilot/ai-prices", headers=self.admin, json={
             "model": "gpt-4.1-mini", "input_paise_per_million": 4_000, "output_paise_per_million": 16_000})
