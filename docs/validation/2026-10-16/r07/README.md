@@ -1,6 +1,6 @@
 # R07 provider evaluation — status, 16 Oct 2026
 
-Model `gpt-4.1-mini` (Responses API, strict JSON schema). Harness: `backend/evals/r07/` (see its README). Live spend so far is **₹56.24**.
+Model `gpt-4.1-mini` (Responses API, strict JSON schema). Harness: `backend/evals/r07/` (see its README). Live spend so far is **₹78.47**.
 
 ## Runs (newest last)
 
@@ -10,8 +10,10 @@ Model `gpt-4.1-mini` (Responses API, strict JSON schema). Harness: `backend/eval
 | `dev-run-1-rerun-v6/` | v6 | 4 stuck | ₹3.01 | 3/4 completed |
 | `dev-run-2-v7/` | v7 | 24 dev | ₹17.03 | 24/24 completed; 3 failed of 160 attempts, all recovered; stops handled; contradictions still built on (10/11) |
 | `contradictions-v8/` | v8 | 12 (contradiction + injection) | ₹10.16 | contradictions clarified 9/11 (was 1/11); 6 fallbacks caused by an over-strict v8 rule, fixed in v9 |
+| `dev-run-3-v9/` | v9 | 24 dev | ₹17.68 | 24/24 completed; contradictions clarified 9/11; stops 2/2; canary 0; 15 failed of 172 attempts (10 were a second clarification at the limit, now schema-locked in v10), 5 fallbacks |
+| `heldout-run-1-v9/` | v9 | 6 held-out | ₹4.55 | 6/6 completed; contradictions clarified 3/3; 7 failed of 46 attempts (6 genuine misquotes), 3 fallbacks |
 
-v9 (`56e5f4c`) has **not been run live**.
+v10 (schema-only lock after the one extra clarification) is covered by unit tests but has **not been run live**. It removes the main v9 rejection cause deterministically.
 
 ## What changed, by prompt version
 
@@ -30,7 +32,7 @@ Fallbacks:
 
 ## Open before R07 can close
 
-1. **One v9 run on the dev split, then one on held-out (about ₹22).** Needs the owner's go-ahead.
+1. **Optional:** a v10 dev run (about ₹18) to measure the lower retry rate. The held-out split was run once (v9) and should not be reused for tuning.
 2. **Human review** of the latest run's CSVs. `ai-review.md` is an AI pre-review, not the gate.
 3. **AI-review items not yet measured after v7:**
    - debrief fairness on confidential, disagree and stop answers;

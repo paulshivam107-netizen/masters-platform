@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v9"
+PROMPT_VERSION = "mba-interview-v10"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -146,7 +146,7 @@ def _structured(task, context, transcript, schema_class, max_tokens=None, instru
                               billing="charged", usage=usage) from None
 
 
-def _request_schema(transcript, move_on):
+def _request_schema(transcript, move_on, beyond_limit=False):
     """The strict output schema for one next-question call.
 
     ``conflict`` comes first so the model states any clash with the resume or earlier answers
@@ -158,6 +158,13 @@ def _request_schema(transcript, move_on):
     base = copy.deepcopy(NextQuestion.model_json_schema())
     properties = {"conflict": base["properties"].pop("conflict"), **base["properties"]}
     answers = [t["id"] for t in transcript if t["role"] == "user"]
+    if beyond_limit:
+        # The one clarification allowed at the limit is used up: only a new topic remains (v10;
+        # in v9 the model kept clarifying and every refusal was a billed retry).
+        properties["kind"] = {"type": "string", "enum": ["new_topic"]}
+        for field in ("anchor_turn_id", "anchor_quote"):
+            properties[field] = {"type": "string", "enum": [""]}
+        return {**base, "properties": properties, "required": list(properties)}
     properties["kind"] = {"type": "string", "enum": ["new_topic", "clarification"] if move_on
                           else ["follow_up", "clarification", "new_topic"]}
     properties["anchor_turn_id"] = {"type": "string", "enum": [""] + (answers[-1:] if move_on else answers)}
@@ -192,7 +199,7 @@ def next_question(context, transcript):
         + (" next_step.move_on is TRUE: this branch is finished. Ask a new_topic question about a different "
            "priority topic not yet covered, unless conflict is not empty or the latest answer is too vague to assess, "
            "in which case ask one clarification of it; do not otherwise continue the previous story." if move_on else ""),
-        context, transcript, NextQuestion, max_tokens=800, schema=_request_schema(transcript, move_on),
+        context, transcript, NextQuestion, max_tokens=800, schema=_request_schema(transcript, move_on, context["next_step"]["branch_depth"] > context["next_step"]["max_follow_ups"]),
     )
     try:
         return _check_next_question(result, context, transcript), usage

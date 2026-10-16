@@ -1,0 +1,444 @@
+{
+  "profile_id": "cat-15-ncc-engineering",
+  "split": "heldout",
+  "route": "cat",
+  "persona": {
+    "background_type": "mechanical engineering fresher, NCC 'C' certificate",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment. NCC cadet leadership and a plant-visit internship only; never a job. Must not assume a military career or a corporate employer."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "specific",
+    "irrelevant",
+    "confidential"
+  ],
+  "resume_text": "Rohan Chauhan (synthetic)\nEDUCATION\nB.Tech, Mechanical Engineering, a state engineering college in Dehradun, 2022-2026, 7.5 CGPA\nClass XII, PCM, 85%\nNCC\nNCC 'C' certificate, grade B (2024); Senior Under Officer in the college NCC unit; led a drill squad of 30 cadets\nAttended 1 national-level camp\nPROJECT\nFinal-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours\nINTERNSHIP\nThree-week intern, an auto-components plant: observed the machining line and quality checks\nACTIVITIES\nMechanical society treasurer",
+  "context": {
+    "route": "cat",
+    "background": "Final-year mechanical engineering student with an NCC 'C' certificate. No full-time job.",
+    "goal": "Join a manufacturing or operations role in an auto-components company and later move into plant operations leadership.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-15-ncc-engineering",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Tech, Mechanical Engineering, a state engineering college in Dehradun, 2022-2026, 7.5 CGPA"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, PCM, 85%"
+      },
+      {
+        "id": "fact-3",
+        "category": "skill",
+        "evidence_quote": "NCC 'C' certificate, grade B (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "Senior Under Officer in the college NCC unit"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "led a drill squad of 30 cadets"
+      },
+      {
+        "id": "fact-6",
+        "category": "achievement",
+        "evidence_quote": "Attended 1 national-level camp"
+      },
+      {
+        "id": "fact-7",
+        "category": "project",
+        "evidence_quote": "Final-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours"
+      },
+      {
+        "id": "fact-8",
+        "category": "experience",
+        "evidence_quote": "Three-week intern, an auto-components plant: observed the machining line and quality checks"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Mechanical society treasurer"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-15-ncc-engineering",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face managing the squad and how did you overcome them?",
+      "How has this leadership experience influenced your approach to teamwork in academic or professional settings?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Tech, Mechanical Engineering, a state engineering college in Dehradun, 2022-2026, 7.5 CGPA"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, PCM, 85%"
+      },
+      {
+        "id": "fact-3",
+        "category": "skill",
+        "evidence_quote": "NCC 'C' certificate, grade B (2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "achievement",
+        "evidence_quote": "Senior Under Officer in the college NCC unit"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "led a drill squad of 30 cadets"
+      },
+      {
+        "id": "fact-6",
+        "category": "achievement",
+        "evidence_quote": "Attended 1 national-level camp"
+      },
+      {
+        "id": "fact-7",
+        "category": "project",
+        "evidence_quote": "Final-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours"
+      },
+      {
+        "id": "fact-8",
+        "category": "experience",
+        "evidence_quote": "Three-week intern, an auto-components plant: observed the machining line and quality checks"
+      },
+      {
+        "id": "fact-9",
+        "category": "interest",
+        "evidence_quote": "Mechanical society treasurer"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your experience leading a drill squad of 30 cadets as Senior Under Officer?",
+        "evidence_quote": "led a drill squad of 30 cadets",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face managing the squad and how did you overcome them?",
+        "evidence_quote": "led a drill squad of 30 cadets",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How has this leadership experience influenced your approach to teamwork in academic or professional settings?",
+        "evidence_quote": "Senior Under Officer in the college NCC unit",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Tell me about your final-year project on the low-cost solar water heater prototype.",
+        "evidence_quote": "Final-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What were the key design decisions you made to achieve the temperature target within four hours?",
+        "evidence_quote": "Final-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did you test and validate the prototype's performance?",
+        "evidence_quote": "Final-year project: a low-cost solar water heater prototype; reached 55 degrees Celsius in 4 hours",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "What insights did you gain during your internship observing the machining line and quality checks at the auto-components plant?",
+        "evidence_quote": "Three-week intern, an auto-components plant: observed the machining line and quality checks",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "Can you explain any specific quality control processes that stood out to you?",
+        "evidence_quote": "Three-week intern, an auto-components plant: observed the machining line and quality checks",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How do you think these industry practices can be applied or improved upon in your future work?",
+        "evidence_quote": "Three-week intern, an auto-components plant: observed the machining line and quality checks",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your experience leading a drill squad of 30 cadets as Senior Under Officer?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a final-year mechanical engineering student in Dehradun. I hold the NCC 'C' certificate with grade B, and as Senior Under Officer I led a drill squad of 30 cadets. My final-year project is a low-cost solar water heater prototype that reached 55 degrees Celsius in four hours. I also spent three weeks at an auto-components plant. I want an MBA because I found that production decisions are as much about people and cost as machines.",
+      "request_id": "4a0e8c46-491d-5404-98d8-40a408b84e77"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What challenges did you face managing the squad and how did you overcome them?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "as Senior Under Officer I led a drill squad of 30 cadets"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "NCC has taught me discipline, leadership and national integration. I believe in leading from the front and I will bring the same spirit to my MBA and to my career.",
+      "request_id": "9cbf1345-d264-599a-ad93-7c5b24794092"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Can you share a specific example of a challenge you encountered while leading the drill squad, and how you applied your approach to overcome it?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I believe in leading from the front"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "The hardest thing as Senior Under Officer was that the 30 cadets were from very different years. Some of them arrived late for the 5:30 a.m. drill. I started a rule that late cadets did the opening drill, and the lateness stopped in a month.",
+      "request_id": "55fff7b4-562c-5e34-aaae-34758be75643"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned your final-year project was a low-cost solar water heater prototype reaching 55 degrees Celsius in four hours. Can you explain the key engineering principles you applied to achieve this performance?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Do you follow motorsport? I watched the last race with my friends, and I think the pit-stop strategy was the real story. It is quite similar to plant operations, in a way.",
+      "request_id": "08911fff-e81b-5e91-9041-84da5e087847"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You drew a parallel between pit-stop strategies in motorsport and plant operations. Can you elaborate on how this comparison shapes your approach to managing manufacturing processes?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I think the pit-stop strategy was the real story. It is quite similar to plant operations, in a way"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I can't describe the plant's rejection rates or the customer names from my internship. They told us not to share production data outside the plant.",
+      "request_id": "ead19b4a-0e3e-50be-8b3e-c816b8b9e1e3"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate shows leadership potential through NCC experience and an understanding of engineering projects and business operations. However, examples could be more specific and detailed, especially about challenges and technical principles. The connection between motivation and goals needs further development. Confidentiality constraints partly limit discussion of internship experience.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "as Senior Under Officer I led a drill squad of 30 cadets",
+        "observation": "Demonstrates leadership responsibility early on through NCC role"
+      },
+      {
+        "turn_id": "a3",
+        "quote": "The hardest thing as Senior Under Officer was that the 30 cadets were from very different years. Some of them arrived late for the 5:30 a.m. drill. I started a rule that late cadets did the opening drill, and the lateness stopped in a month",
+        "observation": "Shows specific problem-solving in managing a diverse team and effectively enforcing discipline"
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "NCC has taught me discipline, leadership and national integration. I believe in leading from the front and I will bring the same spirit to my MBA and to my career",
+        "observation": "General leadership statement without concrete example or reflection",
+        "suggestion": "Practice narrating a specific recent example demonstrating your leadership style, describing the context, your actions, and the outcome in 60 seconds"
+      },
+      {
+        "turn_id": "a4",
+        "quote": "Do you follow motorsport? I watched the last race with my friends, and I think the pit-stop strategy was the real story. It is quite similar to plant operations, in a way",
+        "observation": "Introduces an interesting analogy but does not elaborate on how it directly influences your approach to manufacturing process management",
+        "suggestion": "Develop a clear explanation of how you would apply specific insights from pit-stop strategy to plant operations, showing your reasoning and curiosity"
+      },
+      {
+        "turn_id": "a4",
+        "quote": "Do you follow motorsport? I watched the last race with my friends, and I think the pit-stop strategy was the real story. It is quite similar to plant operations, in a way",
+        "observation": "Does not clearly connect motivation for MBA with career goals through this analogy",
+        "suggestion": "Prepare a concise narrative linking your interests and internship learning to your desire for an MBA and future leadership role"
+      }
+    ],
+    "next_exercise": "Retell your leadership of the NCC drill squad in a 60-second structured story describing the challenge you faced, the specific actions you took, and the results achieved, emphasizing your personal contribution and reflection."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

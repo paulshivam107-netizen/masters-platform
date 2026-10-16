@@ -1,0 +1,449 @@
+{
+  "profile_id": "cat-14-ca-dropout-commerce",
+  "split": "heldout",
+  "route": "cat",
+  "persona": {
+    "background_type": "commerce, BCom graduate, cleared CA Inter and left CA Final",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 1,
+    "notes": "Cleared CA Inter, did not complete CA Final, and is now a BCom graduate. About one year of articleship-style work only; no direct reports. Must not describe the person as a qualified chartered accountant."
+  },
+  "answer_tags": [
+    "specific",
+    "contradiction",
+    "disagree",
+    "unknown",
+    "stop"
+  ],
+  "resume_text": "Arjun Malhotra (synthetic)\nEDUCATION\nB.Com, a university in Ludhiana, 2025, 74%\nCA Intermediate: cleared both groups in the first attempt, 2022\nCA Final: appeared for Group 1 in 2024, not cleared; discontinued\nClass XII, Commerce, 88%\nEXPERIENCE\nArticle assistant, a small chartered accountancy firm, Ludhiana (2022-2024, about 18 months, till I discontinued)\n- Prepared GST returns for 20 small clients\n- Assisted in a statutory audit of one trading company\nSKILLS\nTally, Excel, GST filings",
+  "context": {
+    "route": "cat",
+    "background": "BCom graduate. Cleared CA Inter but did not clear CA Final. Some work as an article assistant, no full-time employment now.",
+    "goal": "Move to corporate finance through an MBA, and use my accounting base to become a CFO in the long run.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-14-ca-dropout-commerce",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2025, 74%"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "CA Intermediate: cleared both groups in the first attempt, 2022"
+      },
+      {
+        "id": "fact-3",
+        "category": "education",
+        "evidence_quote": "CA Final: appeared for Group 1 in 2024, not cleared; discontinued"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 88%"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Article assistant, a small chartered accountancy firm, Ludhiana (2022-2024, about 18 months, till I discontinued)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Prepared GST returns for 20 small clients"
+      },
+      {
+        "id": "fact-7",
+        "category": "experience",
+        "evidence_quote": "Assisted in a statutory audit of one trading company"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-9",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-10",
+        "category": "skill",
+        "evidence_quote": "GST filings"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-14-ca-dropout-commerce",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face while managing GST filings for these clients, and how did you overcome them?",
+      "How did your use of software like Tally and Excel enhance the accuracy or efficiency of these GST returns?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Ludhiana, 2025, 74%"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "CA Intermediate: cleared both groups in the first attempt, 2022"
+      },
+      {
+        "id": "fact-3",
+        "category": "education",
+        "evidence_quote": "CA Final: appeared for Group 1 in 2024, not cleared; discontinued"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 88%"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Article assistant, a small chartered accountancy firm, Ludhiana (2022-2024, about 18 months, till I discontinued)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Prepared GST returns for 20 small clients"
+      },
+      {
+        "id": "fact-7",
+        "category": "experience",
+        "evidence_quote": "Assisted in a statutory audit of one trading company"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-9",
+        "category": "skill",
+        "evidence_quote": "Excel"
+      },
+      {
+        "id": "fact-10",
+        "category": "skill",
+        "evidence_quote": "GST filings"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your experience preparing GST returns for 20 small clients at the chartered accountancy firm?",
+        "evidence_quote": "Prepared GST returns for 20 small clients",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face while managing GST filings for these clients, and how did you overcome them?",
+        "evidence_quote": "Prepared GST returns for 20 small clients",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did your use of software like Tally and Excel enhance the accuracy or efficiency of these GST returns?",
+        "evidence_quote": "Tally, Excel",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What motivated your decision to discontinue after attempting CA Final Group 1 in 2024?",
+        "evidence_quote": "CA Final: appeared for Group 1 in 2024, not cleared; discontinued",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did discontinuing your CA final preparation impact your career plans or professional development?",
+        "evidence_quote": "CA Final: appeared for Group 1 in 2024, not cleared; discontinued",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Have you considered leveraging your CA Intermediate success and B.Com background for alternative finance or accounting roles?",
+        "evidence_quote": "CA Intermediate: cleared both groups in the first attempt, 2022",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you elaborate on your role assisting in a statutory audit of a trading company during your articleship?",
+        "evidence_quote": "Assisted in a statutory audit of one trading company",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What were the key learnings or insights you gained from participating in a statutory audit?",
+        "evidence_quote": "Assisted in a statutory audit of one trading company",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How do you see these audit experiences adding value to your future MBA coursework or career?",
+        "evidence_quote": "Assisted in a statutory audit of one trading company",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your experience preparing GST returns for 20 small clients at the chartered accountancy firm?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I cleared both groups of CA Intermediate in my first attempt, and I worked as an article assistant for about 18 months at a small firm in Ludhiana, preparing GST returns for 20 small clients. I then appeared for Group 1 of the CA Final in 2024 and did not clear it. I decided not to repeat it and finished my BCom instead. I'm applying for an MBA because I want to work in business decisions, not only compliance.",
+      "request_id": "13ded622-4721-5e47-acaa-60d0eb252ff7"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "You mentioned preparing GST returns for 20 small clients during your articleship. What challenges did you face while managing these GST filings, and how did you overcome them?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "preparing GST returns for 20 small clients"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I did clear CA Final in the end, in my second attempt, so I am a qualified chartered accountant now. I should have mentioned that.",
+      "request_id": "068357ce-5547-53c2-999e-5a264bd36baa"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "To clarify, have you completed the CA Final and are you a qualified chartered accountant now?",
+      "conflict": "You previously said you did not clear CA Final and decided not to repeat it, now you say you cleared CA Final on second attempt.",
+      "kind": "clarification",
+      "topic": "education",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I did clear CA Final in the end, in my second attempt, so I am a qualified chartered accountant now"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I don't think leaving CA Final should be treated as a failure. I looked at the other options and made a decision. I would like to be asked about what I learned in the articleship.",
+      "request_id": "01cccf6b-d792-5f65-b990-44c0504b63ef"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "During your articleship, what were some key learnings or skills you developed that you believe will be valuable in your future MBA and career goals?",
+      "conflict": "You previously said you did not clear CA Final and decided not to repeat it, now you say you cleared CA Final on second attempt.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I would like to be asked about what I learned in the articleship"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I do not remember exactly how many marks I missed in Group 1 by. I know it was close, but I did not keep the mark sheet.",
+      "request_id": "e507f98e-9b32-5156-977c-f94c918abe07"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "You mentioned that you do not remember how many marks you missed by in Group 1 of CA Final. Can you share what your reflections were on that attempt and how it influenced your decision to pursue an MBA instead?",
+      "conflict": "You previously said you did not clear CA Final and decided not to repeat it, now you say you cleared CA Final on second attempt.",
+      "kind": "clarification",
+      "topic": "motivation",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I do not remember exactly how many marks I missed in Group 1 by"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I'd rather not continue on this subject. Let us end the session here, please, and show me the feedback.",
+      "request_id": "af66ee01-99f0-5628-a041-a9b7d0ceba1f"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has a solid academic background in commerce and some relevant internship experience as an article assistant, showing initial clarity about career goals towards corporate finance and a C-level executive role. However, inconsistencies in details about CA qualification and reluctance to elaborate on key challenges or learnings limit the depth of insight into their motivation and reflections. Further practice focusing on articulating personal contributions and learning outcomes is recommended.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I cleared both groups of CA Intermediate in my first attempt, and I worked as an article assistant for about 18 months at a small firm in Ludhiana, preparing GST returns for 20 small clients",
+        "observation": "The candidate clearly summarized their relevant academic and work experience, showing awareness of their background and initial career steps."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I did clear CA Final in the end, in my second attempt, so I am a qualified chartered accountant now",
+        "observation": "The candidate provided contradictory information about CA Final completion during the interview, causing confusion.",
+        "suggestion": "Before interviews, prepare clear and consistent narratives of academic and professional milestones to avoid contradictory statements."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I do not remember exactly how many marks I missed in Group 1 by. I know it was close, but I did not keep the mark sheet",
+        "observation": "The candidate was unable or unwilling to reflect on significant academic setbacks and their impact on career choices.",
+        "suggestion": "Practice sharing reflections on setbacks with specific examples of lessons learned or how they informed career decisions, even if exact details are not recalled."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I'd rather not continue on this subject. Let us end the session here, please, and show me the feedback",
+        "observation": "The candidate chose to avoid probing questions about motivation and learning, limiting assessment of key MBA admission criteria.",
+        "suggestion": "Develop comfort with discussing difficult or personal topics by preparing thoughtful responses to common behavioral or motivation questions."
+      }
+    ],
+    "next_exercise": "Prepare and practice a 2-minute narrative about a challenging project or internship experience, clearly stating your role, the challenges faced, the actions you took, and what you learned that will help in your MBA and future career."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

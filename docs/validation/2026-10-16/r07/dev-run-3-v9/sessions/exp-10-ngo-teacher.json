@@ -1,0 +1,410 @@
+{
+  "profile_id": "exp-10-ngo-teacher",
+  "split": "dev",
+  "route": "experienced",
+  "persona": {
+    "background_type": "school teacher and NGO programme work, nontechnical",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Six years in teaching and NGO programme coordination. Managed a small team of 4 programme staff in the last two years. No tech or finance background. Must not assume corporate or technical experience."
+  },
+  "answer_tags": [
+    "specific",
+    "vague",
+    "unknown",
+    "contradiction",
+    "irrelevant"
+  ],
+  "resume_text": "Lakshmi Narayanan (synthetic)\nEXPERIENCE\nProgramme Coordinator, an education NGO, Hyderabad (2023-present)\n- Run a remedial-learning programme in 18 government schools; 4 field staff report to me\n- Raised the share of children reading at grade level from 31% to 48% in 2 years\n- Manage a programme budget of Rs 55 lakh from two donors\nTeacher (English and Social Science), a private school, Hyderabad (2019-2023)\n- Taught 150 students a year in classes 6 to 8\nEDUCATION\nB.A. English, a college in Hyderabad, 2018\nB.Ed., 2019",
+  "context": {
+    "route": "experienced",
+    "background": "Six years in teaching and an education NGO. I lead a small programme team. I have no technical or finance background.",
+    "goal": "Lead a larger education or social enterprise, and learn the finance and measurement skills needed.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-10-ngo-teacher",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Run a remedial-learning programme in 18 government schools; 4 field staff report to me"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.A. English, a college in Hyderabad, 2018"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Ed., 2019"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-10-ngo-teacher",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What strategies did you implement to raise the share of children reading at grade level from 31% to 48%?",
+      "How did you measure the impact of these strategies on students' reading abilities over time?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Run a remedial-learning programme in 18 government schools; 4 field staff report to me"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "B.A. English, a college in Hyderabad, 2018"
+      },
+      {
+        "id": "fact-6",
+        "category": "education",
+        "evidence_quote": "B.Ed., 2019"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you tell me more about your role running the remedial-learning programme in 18 government schools?",
+        "evidence_quote": "Run a remedial-learning programme in 18 government schools; 4 field staff report to me",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What strategies did you implement to raise the share of children reading at grade level from 31% to 48%?",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did you measure the impact of these strategies on students' reading abilities over time?",
+        "evidence_quote": "Raised the share of children reading at grade level from 31% to 48% in 2 years",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "How did managing a programme budget of Rs 55 lakh from two donors influence your decision-making process?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What challenges did you face in balancing donor expectations with programme needs?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you provide an example of a difficult financial decision and how you resolved it?",
+        "evidence_quote": "Manage a programme budget of Rs 55 lakh from two donors",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "What were some key teaching methods you used while teaching 150 students annually in classes 6 to 8?",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did you adapt your lessons to cater to different learning levels within the same classroom?",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "Could you describe a particularly challenging teaching experience and how you handled it?",
+        "evidence_quote": "Taught 150 students a year in classes 6 to 8",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you tell me more about your role running the remedial-learning programme in 18 government schools?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I taught for four years at a private school in Hyderabad and for the last two years I've coordinated a remedial-learning programme for an education NGO. It runs in 18 government schools, four field staff report to me, and we manage Rs 55 lakh from two donors. Over two years the share of children reading at grade level went from 31% to 48%. I'm applying for an MBA because I know how learning improves but I can't yet scale a programme or read a budget properly.",
+      "request_id": "a02cb4b5-bdfd-5e48-9a00-cbe1f32be8e6"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What strategies did you implement to raise the share of children reading at grade level from 31% to 48%?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "Over two years the share of children reading at grade level went from 31% to 48%"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact. I believe in holistic development and inclusive growth.",
+      "request_id": "8454d73f-23e7-596f-85bb-b346c81ee600"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "You mentioned holistic development and inclusive growth. Could you clarify the specific strategies or actions you and your team took to improve reading levels in these schools?",
+      "conflict": "",
+      "kind": "clarification",
+      "topic": "projects",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I don't know how the 48% figure compares with other NGOs working in the same districts. We compared ourselves only with our own baseline.",
+      "request_id": "3e7d0c5d-79a7-5950-a911-f3320abc7951"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "How did you measure the impact of these strategies on students' reading abilities over time?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them.",
+      "request_id": "3ae793f9-7361-565d-a22f-17a12349df42"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Could you clarify your role in managing the four field staff involved in the programme? How do you coordinate with them and what responsibilities do you hold regarding their work?",
+      "conflict": "In the resume you said four field staff report to you, but now you say they report to the director and you only share schedules with them.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a4",
+      "anchor_quote": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "By the way, have you heard about the new metro line in Hyderabad? My commute to the schools could be shorter. I'm thinking of moving closer to the station.",
+      "request_id": "06da9827-5e6c-51b1-a6b4-03fc0f90c373"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate has relevant experience in education NGOs and demonstrated awareness of social impact goals but provided inconsistent details on leadership responsibilities and lacked specifics on project strategies and measurement. They appear motivated to expand skills in finance and program scaling but need to clarify their personal ownership and substantiate outcomes more clearly.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I taught for four years at a private school in Hyderabad and for the last two years I've coordinated a remedial-learning programme for an education NGO. It runs in 18 government schools, four field staff report to me, and we manage Rs 55 lakh from two donors",
+        "observation": "Demonstrates experience coordinating a sizable education programme with multiple schools and a significant budget."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "Education is the foundation of society. Through my work I try to empower children and create sustainable impact. I believe in holistic development and inclusive growth",
+        "observation": "The response emphasized values and vision but did not answer the question regarding specific strategies used.",
+        "suggestion": "Practice articulating concrete actions taken to achieve goals, e.g. describe one or two specific interventions used in the remedial programme, including rationale and implementation steps."
+      },
+      {
+        "turn_id": "a4",
+        "quote": "I don't actually have anyone reporting to me. The four field staff report to the director, and I only share the schedule with them",
+        "observation": "Contradiction with resume claim about staff reporting, causing ambiguity about leadership scope and ownership.",
+        "suggestion": "Review and practice a clear explanation of your role and leadership responsibilities, ensuring consistent and transparent descriptions of management scope."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I don't know how the 48% figure compares with other NGOs working in the same districts. We compared ourselves only with our own baseline",
+        "observation": "Did not demonstrate awareness of benchmarking or impact evaluation rigor, limiting understanding of outcome measurement.",
+        "suggestion": "Prepare to discuss the methods and metrics used to measure improvement and consider how you could assess comparative impact or benchmarks."
+      }
+    ],
+    "next_exercise": "Describe in 60 seconds a specific challenge you faced running the remedial-learning programme, explaining what you decided to do, the options you considered, and the outcome. Focus on your personal role, trade-offs made, and what you learned from the experience."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

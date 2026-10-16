@@ -201,3 +201,17 @@ class ConflictTest(unittest.TestCase):
             "anchor_turn_id": "a2", "anchor_quote": "reviewed the evidence"})
         self.assertNotIn("end_requested", body["text"]["format"]["schema"]["properties"]["kind"]["enum"])
         self.assertNotIn("end_requested", body["instructions"])
+
+
+class BeyondLimitSchemaTest(unittest.TestCase):
+    def test_schema_allows_only_new_topic_once_the_extra_clarification_is_used(self):
+        body, _ = NextQuestionRequestTest.sent(self, exhausted_turns(follow_ups=3), {
+            "conflict": "", "question": "What do you hope to learn in the MBA?", "kind": "new_topic",
+            "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
+        properties = body["text"]["format"]["schema"]["properties"]
+        self.assertEqual(properties["kind"]["enum"], ["new_topic"])
+        self.assertEqual((properties["anchor_turn_id"]["enum"], properties["anchor_quote"]["enum"]), ([""], [""]))
+        at_limit, _ = NextQuestionRequestTest.sent(self, exhausted_turns(), {
+            "conflict": "", "question": "What do you hope to learn in the MBA?", "kind": "new_topic",
+            "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
+        self.assertEqual(at_limit["text"]["format"]["schema"]["properties"]["kind"]["enum"], ["new_topic", "clarification"])

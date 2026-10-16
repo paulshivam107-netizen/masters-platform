@@ -1,0 +1,486 @@
+{
+  "profile_id": "exp-14-big4-ca",
+  "split": "heldout",
+  "route": "experienced",
+  "persona": {
+    "background_type": "chartered accountant at a Big 4 firm, audit and assurance",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 6,
+    "notes": "Chartered accountant of 6 years at a Big 4 firm. Supervises audit associates on engagements (team of 3-4), not permanent reports. Client names and fees are confidential. Must not assume consulting or industry experience."
+  },
+  "answer_tags": [
+    "specific",
+    "confidential",
+    "specific",
+    "vague",
+    "contradiction",
+    "unknown",
+    "irrelevant",
+    "stop"
+  ],
+  "resume_text": "Mohit Saxena (synthetic)\nEXPERIENCE\nAudit Senior, a Big 4 firm, Gurugram (2022-present)\n- Supervise 3-4 audit associates per engagement; completed 9 statutory audits\n- Led the audit of a company with 14 locations; delivered 5 days before the deadline\n- Identified a revenue-recognition error that led to a restatement for one client\nAudit Associate, same firm (2019-2022)\n- Executed audit procedures on 6 manufacturing clients\nEDUCATION\nChartered Accountant, ICAI, 2019 (cleared both groups on the first attempt)\nB.Com (Hons), a college in Delhi University, 2016, 81%",
+  "context": {
+    "route": "experienced",
+    "background": "Six years in audit at a Big 4 firm. I supervise audit associates on engagements. CA by qualification.",
+    "goal": "Move into corporate finance and strategy at an operating company, as an interim step to a CFO role.",
+    "school": "General MBA practice",
+    "programme": "One-year PGP (ISB)",
+    "practice_focus": "balanced",
+    "question_limit": 8,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "experience",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "personal ownership and scope",
+        "judgment and trade-offs",
+        "substantiated outcomes",
+        "learning from setbacks",
+        "career rationale",
+        "contribution to peers"
+      ]
+    },
+    "profile_set_id": "eval-exp-14-big4-ca",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Audit Senior, a Big 4 firm, Gurugram (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Supervise 3-4 audit associates per engagement; completed 9 statutory audits"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Led the audit of a company with 14 locations; delivered 5 days before the deadline"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Identified a revenue-recognition error that led to a restatement for one client"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Audit Associate, same firm (2019-2022)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Executed audit procedures on 6 manufacturing clients"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Chartered Accountant, ICAI, 2019 (cleared both groups on the first attempt)"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "B.Com (Hons), a college in Delhi University, 2016, 81%"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-exp-14-big4-ca",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face while supervising 3-4 audit associates, and how did you manage team dynamics?",
+      "Can you provide an example of a difficult situation you resolved while leading these associates?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Audit Senior, a Big 4 firm, Gurugram (2022-present)"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Supervise 3-4 audit associates per engagement; completed 9 statutory audits"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Led the audit of a company with 14 locations; delivered 5 days before the deadline"
+      },
+      {
+        "id": "fact-4",
+        "category": "experience",
+        "evidence_quote": "Identified a revenue-recognition error that led to a restatement for one client"
+      },
+      {
+        "id": "fact-5",
+        "category": "experience",
+        "evidence_quote": "Audit Associate, same firm (2019-2022)"
+      },
+      {
+        "id": "fact-6",
+        "category": "experience",
+        "evidence_quote": "Executed audit procedures on 6 manufacturing clients"
+      },
+      {
+        "id": "fact-7",
+        "category": "education",
+        "evidence_quote": "Chartered Accountant, ICAI, 2019 (cleared both groups on the first attempt)"
+      },
+      {
+        "id": "fact-8",
+        "category": "education",
+        "evidence_quote": "B.Com (Hons), a college in Delhi University, 2016, 81%"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your responsibilities and key learnings as an Audit Senior at your firm?",
+        "evidence_quote": "Audit Senior, a Big 4 firm, Gurugram (2022-present)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face while supervising 3-4 audit associates, and how did you manage team dynamics?",
+        "evidence_quote": "Supervise 3-4 audit associates per engagement; completed 9 statutory audits",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "Can you provide an example of a difficult situation you resolved while leading these associates?",
+        "evidence_quote": "Supervise 3-4 audit associates per engagement; completed 9 statutory audits",
+        "topic": "Resume topic 1",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "Tell me about the audit where you led the process for a company with 14 locations and how you ensured early delivery.",
+        "evidence_quote": "Led the audit of a company with 14 locations; delivered 5 days before the deadline",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "What strategies did you implement to coordinate the audit across multiple locations effectively?",
+        "evidence_quote": "Led the audit of a company with 14 locations; delivered 5 days before the deadline",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "How did you handle any discrepancies or delays that arose during that multi-location audit?",
+        "evidence_quote": "Led the audit of a company with 14 locations; delivered 5 days before the deadline",
+        "topic": "Resume topic 2",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "Can you explain the revenue-recognition error you identified and its impact on the client?",
+        "evidence_quote": "Identified a revenue-recognition error that led to a restatement for one client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "What steps did you take to uncover this error during your audit procedures?",
+        "evidence_quote": "Identified a revenue-recognition error that led to a restatement for one client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "How did this finding affect your approach to future audit engagements?",
+        "evidence_quote": "Identified a revenue-recognition error that led to a restatement for one client",
+        "topic": "Resume topic 3",
+        "routes": [
+          "experienced"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 0,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your responsibilities and key learnings as an Audit Senior at your firm?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm a chartered accountant with six years in audit at a Big 4 firm in Gurugram. I've completed nine statutory audits and supervise three to four associates on each engagement. On one audit, of a company with 14 locations, I led the fieldwork and we delivered five days before the deadline. In another I found a revenue-recognition error that led to a restatement. I want an MBA because I've spent six years checking decisions, and I'd like to make some.",
+      "request_id": "bc5b6f8f-55d9-5bb4-ac2b-b15cd3685b11"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "Tell me about a decision where the trade-offs were not obvious. How did you decide?",
+      "kind": "new_topic",
+      "topic": "experience",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "fallback": true
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I can't name the clients or tell you the size of the restatement. The audit is confidential, and professional rules prevent me from disclosing it.",
+      "request_id": "cd3eedfa-8084-5796-b74c-f017e69a408d"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "Since confidentiality limits what you can share about specific clients, can you describe a generic example of a complex audit decision you faced, focusing on how you evaluated trade-offs and the factors influencing your judgment?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I can't name the clients or tell you the size of the restatement. The audit is confidential, and professional rules prevent me from disclosing it"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "On the 14-location audit, I split the locations into three groups by risk and sent the associates in rotation. I reviewed the high-risk group myself. That let us finish early without cutting any procedures.",
+      "request_id": "9d53f2a7-6253-5f77-8d24-7b6648efe3fc"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "How did you decide which locations were high risk, and what criteria did you use to prioritize them over others?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I split the locations into three groups by risk and sent the associates in rotation. I reviewed the high-risk group myself"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Audit is about integrity and attention to detail. I add value by ensuring compliance and by providing assurance to all stakeholders in the financial ecosystem.",
+      "request_id": "707e8c1c-f37d-573e-a574-3a77dc98f4b1"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Can you share an example of how you have contributed to developing or supporting your audit associates, beyond supervising their work?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "contribution",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I was the engagement partner for that restatement. I signed the audit report, and I decided how to handle the client's objections.",
+      "request_id": "6cfc8543-f83b-51df-b199-43fcde3cd699"
+    },
+    {
+      "id": "q6",
+      "role": "assistant",
+      "text": "Can you clarify your role in the engagement with the revenue recognition restatement? How did your responsibilities differ between supervising associates and acting as engagement partner?",
+      "conflict": "You mentioned supervising 3-4 associates, but now say you were the engagement partner, which is a different role.",
+      "kind": "clarification",
+      "topic": "experience",
+      "anchor_turn_id": "a5",
+      "anchor_quote": "I was the engagement partner for that restatement. I signed the audit report, and I decided how to handle the client's objections"
+    },
+    {
+      "id": "a6",
+      "role": "user",
+      "text": "I don't know whether the client's share price moved after the restatement. We don't track that, and I didn't follow the news.",
+      "request_id": "ae41b2f6-760a-5e61-9d80-064b0c1d5725"
+    },
+    {
+      "id": "q7",
+      "role": "assistant",
+      "text": "Describe a setback in your work. What did you learn from it?",
+      "kind": "new_topic",
+      "topic": "projects",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "fallback": true
+    },
+    {
+      "id": "a7",
+      "role": "user",
+      "text": "Sorry to change the topic, but do you know if ISB gives a laptop to the students? I had read something about it, but I couldn't find anything on the site.",
+      "request_id": "94722908-c9aa-58cf-b5c3-a2908fc440ee"
+    },
+    {
+      "id": "q8",
+      "role": "assistant",
+      "text": "How have you helped colleagues or peers do better work?",
+      "kind": "new_topic",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "fallback": true
+    },
+    {
+      "id": "a8",
+      "role": "user",
+      "text": "I'd like to stop the session now, please. I have a client call coming up. Could you end it and show me the summary?",
+      "request_id": "4b9e6215-3ee2-5daf-b27d-e9908f64e7b2"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrates solid experience in audit leadership including supervisory responsibilities and managing complex engagements with good timeliness. They show understanding of risk-based audit planning but provide limited detail on decision trade-offs, personal contributions beyond supervision, and learning from setbacks. Confidentiality constraints restrict examples of impact and specific outcomes. There is some inconsistency regarding their role in certain engagements, needing clarification. The candidate did not fully address questions on contributing to peers or reflecting on setbacks before ending the session.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I've completed nine statutory audits and supervise three to four associates on each engagement. On one audit, of a company with 14 locations, I led the fieldwork and we delivered five days before the deadline",
+        "observation": "Demonstrates leadership in managing multiple associates and meeting tight deadlines on complex multi-location audits."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I split the locations into three groups by risk and sent the associates in rotation. I reviewed the high-risk group myself",
+        "observation": "Shows application of risk-based audit planning and personal ownership of critical audit segments."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I can't name the clients or tell you the size of the restatement. The audit is confidential, and professional rules prevent me from disclosing it",
+        "observation": "Unable to provide examples on trade-offs due to confidentiality, resulting in limited insight into decision-making process.",
+        "suggestion": "Practice describing generic or anonymized audit dilemmas focusing on how you weighed trade-offs and made judgments, avoiding confidential details."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I was the engagement partner for that restatement. I signed the audit report, and I decided how to handle the client's objections",
+        "observation": "Conflicting information about role as engagement partner versus supervising associates, creating confusion about scope and seniority.",
+        "suggestion": "Clarify your exact roles and responsibilities clearly by preparing succinct summaries distinguishing supervisory duties from leadership roles on engagements."
+      },
+      {
+        "turn_id": "a7",
+        "quote": "Sorry to change the topic, but do you know if ISB gives a laptop to the students",
+        "observation": "Shifted focus away from behavioral questions and did not provide examples of setbacks or contributions to peers as asked.",
+        "suggestion": "Prepare STAR stories on setbacks faced and how you supported peers to demonstrate learning and collaboration skills."
+      }
+    ],
+    "next_exercise": "Prepare and practice a 60-second anonymized story describing a complex audit decision you made involving trade-offs and how you managed client and team expectations, ensuring compliance with confidentiality."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

@@ -1,0 +1,414 @@
+{
+  "profile_id": "cat-03-arts-history",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "arts, BA History, no quantitative background",
+    "employment": false,
+    "managed_people": false,
+    "work_years": 0,
+    "notes": "No employment and no quantitative coursework. Must not assume spreadsheets, statistics or maths training; must not ask about a manager or employer."
+  },
+  "answer_tags": [
+    "specific",
+    "disagree",
+    "vague",
+    "irrelevant",
+    "unknown"
+  ],
+  "resume_text": "Meera Iyer (synthetic)\nEDUCATION\nB.A. History (Hons), a women's college in Delhi University, 2023-2026, 74% (till semester 5)\nClass XII, Humanities, 89%\nPROJECTS\nDissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records\nOral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade\nACTIVITIES\nEditor, college history journal (2024-25); edited 12 student articles\nDebate society, inter-college finalist\nLANGUAGES\nEnglish, Tamil, Hindi",
+  "context": {
+    "route": "cat",
+    "background": "Final-year BA History student. No work experience and no maths or statistics in my degree. Strong in writing and research.",
+    "goal": "Work in strategy or public policy consulting, where research and storytelling matter, and learn the numbers side properly.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-03-arts-history",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. History (Hons), a women's college in Delhi University, 2023-2026, 74% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Humanities, 89%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Dissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records"
+      },
+      {
+        "id": "fact-4",
+        "category": "project",
+        "evidence_quote": "Oral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Editor, college history journal (2024-25); edited 12 student articles"
+      },
+      {
+        "id": "fact-6",
+        "category": "achievement",
+        "evidence_quote": "Debate society, inter-college finalist"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-03-arts-history",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What challenges did you face while working with archival records for your dissertation, and how did you address them?",
+      "How do you think your research on historical market guilds could inform contemporary business practices or economic policies?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "education",
+        "evidence_quote": "B.A. History (Hons), a women's college in Delhi University, 2023-2026, 74% (till semester 5)"
+      },
+      {
+        "id": "fact-2",
+        "category": "education",
+        "evidence_quote": "Class XII, Humanities, 89%"
+      },
+      {
+        "id": "fact-3",
+        "category": "project",
+        "evidence_quote": "Dissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records"
+      },
+      {
+        "id": "fact-4",
+        "category": "project",
+        "evidence_quote": "Oral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade"
+      },
+      {
+        "id": "fact-5",
+        "category": "achievement",
+        "evidence_quote": "Editor, college history journal (2024-25); edited 12 student articles"
+      },
+      {
+        "id": "fact-6",
+        "category": "achievement",
+        "evidence_quote": "Debate society, inter-college finalist"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1",
+      "resume-3-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe the main findings or hypothesis of your dissertation on market guilds in 18th-century Madras?",
+        "evidence_quote": "Dissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What challenges did you face while working with archival records for your dissertation, and how did you address them?",
+        "evidence_quote": "Dissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How do you think your research on historical market guilds could inform contemporary business practices or economic policies?",
+        "evidence_quote": "Dissertation (in progress): Market guilds in 18th-century Madras, based on 40 archival records",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "What insights did you gain from interviewing 15 elderly residents for your oral-history project on local trade changes?",
+        "evidence_quote": "Oral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did you select the residents you interviewed, and what was your approach to ensure unbiased data collection?",
+        "evidence_quote": "Oral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Can you share an example from your interviews that significantly changed or reinforced your understanding of local trade history?",
+        "evidence_quote": "Oral-history project: interviewed 15 elderly residents of a Chennai neighbourhood on changes in local trade",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-1",
+        "text": "What responsibilities did you have as editor of your college history journal, and how did you manage editing 12 student articles?",
+        "evidence_quote": "Editor, college history journal (2024-25); edited 12 student articles",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-2",
+        "text": "How did you handle differing opinions or conflicts among students while editing their articles?",
+        "evidence_quote": "Editor, college history journal (2024-25); edited 12 student articles",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-3-3",
+        "text": "What skills did you develop through your editorial role that you believe will help you in a management program?",
+        "evidence_quote": "Editor, college history journal (2024-25); edited 12 student articles",
+        "topic": "Resume topic 3",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-1",
+        "child": "resume-3-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-3-2",
+        "child": "resume-3-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 1,
+      "questions": 0
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe the main findings or hypothesis of your dissertation on market guilds in 18th-century Madras?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I'm finishing a BA in History at a women's college in Delhi University. My dissertation is on market guilds in 18th-century Madras. I'm working from about 40 archival records, and I learned how to compare conflicting sources. I also interviewed 15 elderly residents of a Chennai neighbourhood about how trade there has changed. I want an MBA because I can research and write, but I have no training in numbers, and I'd like to learn finance and statistics from scratch.",
+      "request_id": "4d9f5bed-eba3-5f0d-9d59-79a8244b5974"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What challenges did you face while working with archival records for your dissertation, and how did you address them?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "projects",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "I'm working from about 40 archival records, and I learned how to compare conflicting sources"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "I don't think it's fair to say history students can't handle quantitative work. I'm weak in maths today, but historians read trade ledgers and census data all the time. I'd rather you ask what I'm doing to close the gap.",
+      "request_id": "61f679fb-bfdf-5b56-b793-826261b4d904"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "What specific steps are you taking to improve your quantitative skills, and how do you plan to integrate those skills with your background in research and storytelling?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "motivation",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I'd rather you ask what I'm doing to close the gap"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere, so I believe I can adapt to any business context.",
+      "request_id": "44ac3a19-82f7-5a21-b75c-15679e4632ce"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "Can you give an example of a situation where your critical thinking helped you solve a problem or make a decision, either in your studies or elsewhere?",
+      "conflict": "",
+      "kind": "new_topic",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": ""
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "Sorry, unrelated, but I just saw a lovely film about the Cholas last weekend. Have you seen it? The costumes were wonderful and the music was also good.",
+      "request_id": "3aca29df-8858-516d-8abf-aecfd6242c6e"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Let's refocus on your experiences; can you share an example of when your critical thinking helped you solve a problem or make a decision in your academic or personal life?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "behaviour",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere"
+    },
+    {
+      "id": "a5",
+      "role": "user",
+      "text": "I don't know how many of the 40 records are about textile guilds specifically. I haven't counted them yet and I don't want to guess.",
+      "request_id": "5d38fc7d-1914-55aa-bc10-5923e3a4bbf4"
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate demonstrates clear motivation for an MBA to complement strong research and writing skills with quantitative abilities. They express confidence in the transferability of their critical thinking skills from history to business. However, they struggle to provide specific examples illustrating their problem-solving or critical thinking abilities and occasionally divert from the interview focus. There is limited evidence of deep reflection or detailed personal contributions to projects. Quantitative skill development plans could be more concrete and convincing.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I'm working from about 40 archival records, and I learned how to compare conflicting sources",
+        "observation": "Shows engagement with complex historical research and analytical skills through managing conflicting archival sources."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "I want an MBA because I can research and write, but I have no training in numbers, and I'd like to learn finance and statistics from scratch",
+        "observation": "Expresses clear motivation for the MBA with realistic self-awareness of skill gaps."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I don't think it's fair to say history students can't handle quantitative work. I'm weak in maths today, but historians read trade ledgers and census data all the time. I'd rather you ask what I'm doing to close the gap",
+        "observation": "Instead of naming specific challenges faced with archival data, the candidate deflects the question and generalizes about historians and quantitative skills.",
+        "suggestion": "Practice giving a brief description of a specific challenge encountered in handling archival quantitative data and how you addressed it, focusing on actions taken and lessons learned."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "I think my skills are very transferable. History teaches you critical thinking and a lot of things which are useful everywhere, so I believe I can adapt to any business context",
+        "observation": "Answer is generic and lacks a concrete example to prove the transferability claim.",
+        "suggestion": "Prepare and practice narrating a concise story highlighting a critical thinking challenge you faced, the actions you took, and the outcome, linking it explicitly to skills applicable in business contexts."
+      },
+      {
+        "turn_id": "a5",
+        "quote": "I don't know how many of the 40 records are about textile guilds specifically. I haven't counted them yet and I don't want to guess",
+        "observation": "Avoided answering a specific question on details of research content, which implies limited preparation or reflection on project details.",
+        "suggestion": "Review your research data more thoroughly and summarize key quantitative insights; practice explaining them accurately under time constraints without guessing."
+      }
+    ],
+    "next_exercise": "Describe a specific example from your dissertation research where you encountered conflicting archival evidence. Explain how you analyzed the discrepancies, the decision you made to resolve the conflict, and what you learned from the experience—all within 60 seconds."
+  },
+  "stopped_at": null,
+  "ended_by_request": false
+}

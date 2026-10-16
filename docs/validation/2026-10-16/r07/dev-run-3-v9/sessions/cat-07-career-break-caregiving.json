@@ -1,0 +1,369 @@
+{
+  "profile_id": "cat-07-career-break-caregiving",
+  "split": "dev",
+  "route": "cat",
+  "persona": {
+    "background_type": "BCom graduate, one-year career gap for caregiving",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 1,
+    "notes": "About one year of full-time work, then a gap of one year spent caregiving for a family member. Mention the gap only as the applicant describes it. Must not assume anything about the family member or reasons beyond caregiving."
+  },
+  "answer_tags": [
+    "specific",
+    "specific",
+    "vague",
+    "stop",
+    "unknown"
+  ],
+  "resume_text": "Neha Bansal (synthetic)\nEXPERIENCE\nAccounts Executive, a mid-sized logistics firm, Jaipur (Jul 2023 - Jun 2024)\n- Processed 300 vendor invoices a month; reconciled bank statements weekly\n- Reduced invoice backlog from 6 weeks to 2 weeks\nCareer break (Jul 2024 - Jun 2025): caregiving for a family member\n- During this period completed an online course on financial modelling\nEDUCATION\nB.Com, a university in Jaipur, 2023, 79%\nClass XII, Commerce, 90%\nSKILLS\nTally, Excel (pivot tables, VLOOKUP), GST basics",
+  "context": {
+    "route": "cat",
+    "background": "One year as an accounts executive, followed by a year out of work for caregiving. Now ready to return.",
+    "goal": "Return through an MBA into corporate finance, ideally in a manufacturing or logistics company.",
+    "school": "General MBA practice",
+    "programme": "Two-year PGP",
+    "practice_focus": "balanced",
+    "question_limit": 5,
+    "interview_plan": {
+      "version": "resume-led-v2",
+      "focus": "balanced",
+      "priority_topics": [
+        "education",
+        "projects",
+        "behaviour",
+        "motivation",
+        "contribution"
+      ],
+      "max_follow_ups": 2,
+      "criteria": [
+        "understanding of studies/projects",
+        "personal contribution",
+        "reasoning and curiosity",
+        "reflection",
+        "MBA motivation"
+      ]
+    },
+    "profile_set_id": "eval-cat-07-career-break-caregiving",
+    "resume_profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Processed 300 vendor invoices a month; reconciled bank statements weekly"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Reduced invoice backlog from 6 weeks to 2 weeks"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Accounts Executive, a mid-sized logistics firm, Jaipur (Jul 2023 - Jun 2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Jaipur, 2023, 79%"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 90%"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel (pivot tables, VLOOKUP)"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "GST basics"
+      }
+    ],
+    "profile_version": "resume-v2",
+    "question_set_id": "eval-cat-07-career-break-caregiving",
+    "question_bank_version": "resume-v2",
+    "question_id": "resume-1-1",
+    "resume_follow_ups": [
+      "What specific actions did you take to reduce the invoice backlog from 6 weeks to 2 weeks?",
+      "How did you track and measure the improvements made during the backlog reduction process?"
+    ]
+  },
+  "question_graph": {
+    "version": "resume-v2",
+    "profile": [
+      {
+        "id": "fact-1",
+        "category": "experience",
+        "evidence_quote": "Processed 300 vendor invoices a month; reconciled bank statements weekly"
+      },
+      {
+        "id": "fact-2",
+        "category": "experience",
+        "evidence_quote": "Reduced invoice backlog from 6 weeks to 2 weeks"
+      },
+      {
+        "id": "fact-3",
+        "category": "experience",
+        "evidence_quote": "Accounts Executive, a mid-sized logistics firm, Jaipur (Jul 2023 - Jun 2024)"
+      },
+      {
+        "id": "fact-4",
+        "category": "education",
+        "evidence_quote": "B.Com, a university in Jaipur, 2023, 79%"
+      },
+      {
+        "id": "fact-5",
+        "category": "education",
+        "evidence_quote": "Class XII, Commerce, 90%"
+      },
+      {
+        "id": "fact-6",
+        "category": "skill",
+        "evidence_quote": "Tally"
+      },
+      {
+        "id": "fact-7",
+        "category": "skill",
+        "evidence_quote": "Excel (pivot tables, VLOOKUP)"
+      },
+      {
+        "id": "fact-8",
+        "category": "skill",
+        "evidence_quote": "GST basics"
+      }
+    ],
+    "roots": [
+      "resume-1-1",
+      "resume-2-1"
+    ],
+    "nodes": [
+      {
+        "id": "resume-1-1",
+        "text": "Can you describe your role and key responsibilities as an Accounts Executive at the logistics firm?",
+        "evidence_quote": "Accounts Executive, a mid-sized logistics firm, Jaipur (Jul 2023 - Jun 2024)",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-2",
+        "text": "What specific actions did you take to reduce the invoice backlog from 6 weeks to 2 weeks?",
+        "evidence_quote": "Reduced invoice backlog from 6 weeks to 2 weeks",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-1-3",
+        "text": "How did you track and measure the improvements made during the backlog reduction process?",
+        "evidence_quote": "Reduced invoice backlog from 6 weeks to 2 weeks",
+        "topic": "Resume topic 1",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-1",
+        "text": "You mentioned processing 300 vendor invoices a month and reconciling bank statements weekly— what challenges did you face in these tasks?",
+        "evidence_quote": "Processed 300 vendor invoices a month; reconciled bank statements weekly",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-2",
+        "text": "How did you prioritize or organize your workflow to handle such a volume effectively?",
+        "evidence_quote": "Processed 300 vendor invoices a month; reconciled bank statements weekly",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "id": "resume-2-3",
+        "text": "Could you elaborate on any tools or software you used to assist with these processes?",
+        "evidence_quote": "Tally",
+        "topic": "Resume topic 2",
+        "routes": [
+          "cat"
+        ],
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "parent": "resume-1-1",
+        "child": "resume-1-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-1-2",
+        "child": "resume-1-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-1",
+        "child": "resume-2-2",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      },
+      {
+        "parent": "resume-2-2",
+        "child": "resume-2-3",
+        "basis": "ai_connection",
+        "sources": [
+          "resume"
+        ]
+      }
+    ],
+    "sources": [
+      {
+        "id": "resume",
+        "label": "Your reviewed resume"
+      }
+    ],
+    "dropped": {
+      "facts": 1,
+      "questions": 3
+    }
+  },
+  "transcript": [
+    {
+      "id": "q1",
+      "role": "assistant",
+      "text": "Can you describe your role and key responsibilities as an Accounts Executive at the logistics firm?"
+    },
+    {
+      "id": "a1",
+      "role": "user",
+      "text": "I worked for a year as an accounts executive at a logistics firm in Jaipur. I processed about 300 vendor invoices a month, and cut the invoice backlog from six weeks to two. After that I took a year off to look after a family member. It was my choice and I don't regret it. In that time I did an online course on financial modelling to stay current. I now want an MBA to move from processing accounts to making financial decisions.",
+      "request_id": "71bec2d0-5f75-5ad3-9d77-2d740796931d"
+    },
+    {
+      "id": "q2",
+      "role": "assistant",
+      "text": "What specific actions did you take to reduce the invoice backlog from 6 weeks to 2 weeks?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a1",
+      "anchor_quote": "cut the invoice backlog from six weeks to two"
+    },
+    {
+      "id": "a2",
+      "role": "user",
+      "text": "The backlog fell because I grouped invoices by vendor and cleared the oldest vendors first. I also asked the warehouse to send delivery proof on the same day, which stopped many queries. I did that in my second quarter.",
+      "request_id": "416cb26c-675a-512c-a100-94b34fdbbcdc"
+    },
+    {
+      "id": "q3",
+      "role": "assistant",
+      "text": "How did you measure the impact of these actions on your workflow and the overall finance team?",
+      "conflict": "",
+      "kind": "follow_up",
+      "topic": "experience",
+      "anchor_turn_id": "a2",
+      "anchor_quote": "I grouped invoices by vendor and cleared the oldest vendors first"
+    },
+    {
+      "id": "a3",
+      "role": "user",
+      "text": "The break gave me many life lessons. I learned patience, resilience and time management, and I think it made me a more well-rounded person and ready for all challenges.",
+      "request_id": "306b5ea6-fdee-5c4d-bee4-5ac07b6015b4"
+    },
+    {
+      "id": "q4",
+      "role": "assistant",
+      "text": "You mentioned the break taught you patience, resilience, and time management. Can you give an example from your caregiving experience where these qualities helped you handle a difficult situation?",
+      "conflict": "",
+      "kind": "clarification",
+      "topic": "behaviour",
+      "anchor_turn_id": "a3",
+      "anchor_quote": "I learned patience, resilience and time management"
+    },
+    {
+      "id": "a4",
+      "role": "user",
+      "text": "I would like to end the session here, please. I need to attend to something at home now. Could I see the feedback?",
+      "request_id": "3dfefdfd-de4f-5240-a061-6c8722e9034a"
+    },
+    {
+      "id": "q5",
+      "role": "assistant",
+      "text": "Of course, we will stop here. Thank you for practising today. Open the debrief whenever you are ready.",
+      "kind": "end_requested",
+      "topic": "behaviour",
+      "anchor_turn_id": "",
+      "anchor_quote": "",
+      "detected": true
+    }
+  ],
+  "feedback": {
+    "summary": "The candidate effectively summarized their role and impact as an Accounts Executive, showing initiative in backlog reduction and continuous learning via financial modeling courses. They reflected positively on personal growth during their caregiving break and expressed clear motivation for pursuing an MBA to shift toward financial decision-making. However, depth on measuring impact and concrete examples from their caregiving experience were limited due to session ending early.",
+    "strengths": [
+      {
+        "turn_id": "a1",
+        "quote": "I processed about 300 vendor invoices a month, and cut the invoice backlog from six weeks to two",
+        "observation": "Demonstrated concrete achievements and basic understanding of their role's impact."
+      },
+      {
+        "turn_id": "a1",
+        "quote": "In that time I did an online course on financial modelling to stay current",
+        "observation": "Proactive in updating skills during a career gap, showing eagerness to learn."
+      }
+    ],
+    "improvements": [
+      {
+        "turn_id": "a2",
+        "quote": "I grouped invoices by vendor and cleared the oldest vendors first. I also asked the warehouse to send delivery proof on the same day, which stopped many queries",
+        "observation": "Good description of actions taken to reduce backlog but lacked quantified impact or outcomes.",
+        "suggestion": "Practice summarizing results by quantifying improvements and describing how these actions benefited the team or company, e.g., reduced processing time or enhanced vendor relationships."
+      },
+      {
+        "turn_id": "a3",
+        "quote": "The break gave me many life lessons. I learned patience, resilience and time management, and I think it made me a more well-rounded person and ready for all challenges",
+        "observation": "Provided general personal reflections but no specific examples illustrating these qualities.",
+        "suggestion": "Try preparing a concise story from your caregiving experience that demonstrates patience or resilience, highlighting a concrete challenge, your actions, and the outcome."
+      }
+    ],
+    "next_exercise": "Retell the example of reducing the invoice backlog, focusing on the challenge faced, the decisions you made, the measurable results achieved, and how this experience prepares you for financial decision-making roles."
+  },
+  "stopped_at": null,
+  "ended_by_request": true
+}
