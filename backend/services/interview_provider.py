@@ -12,7 +12,7 @@ from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 
-PROMPT_VERSION = "mba-interview-v5"
+PROMPT_VERSION = "mba-interview-v6"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -156,6 +156,14 @@ def _new_topic_schema():
     return schema
 
 
+def _anchor_schema(transcript):
+    # Only answers that exist may be anchored; the quote is still checked server-side.
+    schema = copy.deepcopy(NextQuestion.model_json_schema())
+    schema["properties"]["anchor_turn_id"] = {"type": "string",
+                                              "enum": [""] + [t["id"] for t in transcript if t["role"] == "user"]}
+    return schema
+
+
 def next_question(context, transcript):
     context = dict(context)
     context["next_step"] = next_step(context, transcript)
@@ -167,8 +175,10 @@ def next_question(context, transcript):
     result, usage = _structured(
         "Ask the next interview question. Go one topic deep: clarify a concrete claim, then probe its reasoning, "
         "alternatives or consequences. Use the latest answer rather than reading a prewritten sequence. "
-        "For a follow_up or clarification, anchor_turn_id MUST identify the latest user answer and anchor_quote "
-        "MUST be a short exact substring of that answer supporting the question: one continuous passage, never shortened "
+        "A clarification MUST anchor to the latest answer: use it when that answer is vague, evasive or unclear. "
+        "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
+        "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
+        "a short exact substring of that answer supporting the question: one continuous passage, never shortened "
         "with an ellipsis. For new_topic use empty anchors. "
         "Use new_topic when next_step.move_on is true, the branch is exhausted, or the applicant cannot elaborate. "
         "Follow the chosen focus; in balanced practice cover other priority topics when moving on. "
@@ -179,7 +189,7 @@ def next_question(context, transcript):
         "Return only a question, without feedback or an example answer."
         + (" next_step.move_on is TRUE: this branch is finished. Ask about a different priority topic not yet "
            "covered; do not continue or refer back to the previous story." if move_on else ""),
-        context, transcript, NextQuestion, max_tokens=800, schema=_new_topic_schema() if move_on else None,
+        context, transcript, NextQuestion, max_tokens=800, schema=_new_topic_schema() if move_on else _anchor_schema(transcript),
     )
     try:
         return _check_next_question(result, context, transcript), usage
@@ -192,8 +202,12 @@ def _check_next_question(result, context, transcript):
     result = NextQuestion.model_validate(result).model_dump()
     last = next((t for t in reversed(transcript) if t["role"] == "user"), None)
     if result["kind"] not in ("new_topic", "end_requested"):
-        span = find_quote(result["anchor_quote"], last["text"], max_length=240) if last else None
-        if (not last or result["anchor_turn_id"] != last["id"] or not result["anchor_quote"].strip()
+        # A clarification probes the latest answer; a follow-up may return to any earlier answer.
+        target = next((t for t in transcript if t["role"] == "user" and t["id"] == result["anchor_turn_id"]), None)
+        if result["kind"] == "clarification" and target is not last:
+            target = None
+        span = find_quote(result["anchor_quote"], target["text"], max_length=240) if target else None
+        if (not last or target is None or not result["anchor_quote"].strip()
                 or span is None or context["next_step"]["move_on"]):
             raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
         result["anchor_quote"] = span

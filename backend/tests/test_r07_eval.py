@@ -34,7 +34,7 @@ class RunnerTest(unittest.TestCase):
         self.assertEqual(session["context"]["route"], "cat")
         self.assertTrue(session["context"]["resume_profile"])
         self.assertTrue(session["context"]["resume_follow_ups"])
-        self.assertEqual(session["context"]["interview_plan"]["version"], "resume-led-v1")
+        self.assertEqual(session["context"]["interview_plan"]["version"], "resume-led-v2")
         self.assertEqual(transcript[0]["text"], session["question_graph"]["nodes"][0]["text"])
         self.assertIsNotNone(session["feedback"])
         calls = [json.loads(line) for line in (run_dir / "calls.jsonl").read_text().splitlines()]
@@ -48,7 +48,7 @@ class RunnerTest(unittest.TestCase):
             self.assertGreaterEqual(call["latency_ms"], 0)
         meta = json.loads((run_dir / "run.json").read_text())
         self.assertEqual(meta["model"], "gpt-4.1-mini")
-        self.assertEqual(meta["prompt_version"], "mba-interview-v5")
+        self.assertEqual(meta["prompt_version"], "mba-interview-v6")
         self.assertEqual(meta["eval_version"], profiles.EVAL_VERSION)
         self.assertEqual(meta["provider"], "fake")
 

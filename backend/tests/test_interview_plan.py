@@ -104,3 +104,58 @@ class NextQuestionRequestTest(unittest.TestCase):
                                       "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
         from interview_schemas import NextQuestion
         self.assertEqual(len(NextQuestion.model_json_schema()["properties"]["kind"]["enum"]), 4)
+
+
+def answered(*answers):
+    turns = [{"role": "assistant", "id": "q1", "text": "Opening"}]
+    for index, text in enumerate(answers, 1):
+        turns.append({"role": "user", "id": f"a{index}", "text": text})
+        if index < len(answers):
+            turns.append({"role": "assistant", "id": f"q{index+1}", "text": f"Question {index}", "kind": "new_topic", "topic": "projects"})
+    return turns
+
+
+class AnchorRulesTest(unittest.TestCase):
+    """v6: a clarification probes the latest answer; a follow-up may return to any earlier answer."""
+    TURNS = answered("I led the vendor migration across three plants.", "I can't share the volumes; they're confidential.")
+
+    def check(self, **change):
+        result = {"question": "How did you sequence the migration across the plants?", "kind": "follow_up",
+                  "topic": "projects", "anchor_turn_id": "a1", "anchor_quote": "led the vendor migration", **change}
+        return provider._check_next_question(result, {"next_step": next_step({"route": "cat"}, self.TURNS)}, self.TURNS)
+
+    def test_follow_up_may_anchor_to_an_earlier_answer(self):
+        self.assertEqual(self.check()["anchor_turn_id"], "a1")
+        self.assertEqual(self.check(anchor_quote="LED the vendor migration.")["anchor_quote"], "led the vendor migration")
+
+    def test_clarification_must_anchor_to_the_latest_answer(self):
+        with self.assertRaises(provider.ProviderFailure):
+            self.check(kind="clarification")
+        self.assertEqual(self.check(kind="clarification", anchor_turn_id="a2", anchor_quote="can't share the volumes")["kind"],
+                         "clarification")
+
+    def test_quote_must_come_from_the_named_answer(self):
+        for change in ({"anchor_quote": "can't share the volumes"}, {"anchor_turn_id": "a3"}, {"anchor_quote": "led the supplier migration"}):
+            with self.assertRaises(provider.ProviderFailure):
+                self.check(**change)
+
+    def test_schema_lists_only_existing_answers(self):
+        response = Mock()
+        response.json.return_value = {"status": "completed", "usage": {}, "output": [{"type": "message", "content": [
+            {"type": "output_text", "text": json.dumps({"question": "How did you sequence the migration?", "kind": "follow_up",
+                                                        "topic": "projects", "anchor_turn_id": "a1",
+                                                        "anchor_quote": "led the vendor migration"})}]}]}
+        with patch.object(provider, "_post", return_value=response) as post:
+            provider.next_question({"route": "cat"}, self.TURNS)
+        body = post.call_args.kwargs["json"]
+        self.assertEqual(body["text"]["format"]["schema"]["properties"]["anchor_turn_id"]["enum"], ["", "a1", "a2"])
+        self.assertIn("clarification MUST anchor to the latest answer", body["instructions"])
+
+    def test_returning_to_an_earlier_answer_starts_a_new_branch(self):
+        turns = answered("I compared two vendors.", "We chose the cheaper one.", "It saved time.")
+        turns[2].update(kind="follow_up", anchor_turn_id="a1")   # q2 follows up a1
+        turns[4].update(kind="follow_up", anchor_turn_id="a2")   # q3 follows up a2: depth 2, exhausted
+        self.assertTrue(next_step({"route": "cat"}, turns)["move_on"])
+        turns[4].update(anchor_turn_id="a1")                     # q3 jumps back past a2: a new branch
+        self.assertEqual(next_step({"route": "cat"}, turns)["branch_depth"], 1)
+        self.assertFalse(next_step({"route": "cat"}, turns)["move_on"])
