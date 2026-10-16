@@ -68,7 +68,7 @@ Variables (Railway → Variables; secrets never go in the frontend):
 | `MIGRATION_DATABASE_URL` | owner role, **direct** endpoint (used only by the pre-deploy command) |
 | `PUBLIC_APP_URL` | `https://www.<domain>` (email links) |
 | `CORS_ORIGINS` | `https://www.<domain>` |
-| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM` | from the email provider; `SMTP_FROM=no-reply@mail.<domain>` |
+| `SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM` | from the email provider; `SMTP_FROM=no-reply@mail.<domain>`. Resend: `smtp.resend.com`, user `resend`, port **2587** (Railway timed out on 587, 16 Oct 2026) |
 | `ADMIN_EMAILS` | your login email |
 | `MOCK_MODE`, `OPENAI_API_KEY` / `GEMINI_API_KEY` | keep `MOCK_MODE=true` until R05/R07 (spend caps, live evaluation) are done |
 | `GOOGLE_CLIENT_ID` | optional |

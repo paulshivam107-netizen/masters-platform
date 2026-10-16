@@ -8,8 +8,12 @@ Work through this list **immediately before inviting the first real users**. Eac
 - [x] Resend: `mail.mockmba.com` verified; SPF, DKIM and DMARC (`p=none`) published
 - [x] Neon `mockmba-prod` (Singapore, Postgres 16): schema at head, restricted `app_runtime` role
 - [x] R07 interview fixes merged to main (PR #22)
+- [x] API live on Railway Free at `masters-platform-production.up.railway.app` (US West, temporary). Smoke test passed: signup, a typed interview on gpt-4.1-mini, the debrief, account deletion, and a verification email delivered via Resend on port 2587
 
 ## Before inviting anyone
+
+- [ ] **Rebrand the email copy:** subjects and bodies still say "Master's Application Platform".
+- [ ] After upgrading to Hobby: move the service to Singapore (next to Neon), attach `api.mockmba.com` with a DNS-only CNAME so `TRUSTED_PROXY_HOPS=1` stays correct, and move it out of the shared `thorough-contentment` project.
 
 - [ ] **Upgrade Railway from Free to Hobby (about $5/month).** Free has only $1 of monthly credit, so it pauses the API partway through the month. The setup and smoke test run on Free; real users need Hobby.
 - [ ] Set spend alerts and caps on Railway, Neon and OpenAI. Check the app's own caps: `AI_GLOBAL_DAILY_CAP_PAISE` and `AI_USER_DAILY_CAP_PAISE`.
