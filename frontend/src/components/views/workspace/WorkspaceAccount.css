@@ -407,9 +407,6 @@
   overflow-wrap: anywhere;
 }
 .wac-savebar {
-  position: sticky;
-  bottom: 0;
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;

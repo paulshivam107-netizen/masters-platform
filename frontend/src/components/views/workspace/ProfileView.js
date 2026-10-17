@@ -248,7 +248,7 @@ function ProfileView({
             data-testid="profile-save-button"
             disabled={profileSaving}
           >
-            {profileSaving ? "Saving..." : "Save Profile"}
+            {profileSaving ? "Saving..." : "Save profile"}
           </button>
         </div>
       </form>
