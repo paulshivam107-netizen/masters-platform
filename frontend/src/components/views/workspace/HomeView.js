@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
 import ApplicationDetail from "./ApplicationDetail";
 import {
@@ -57,19 +58,19 @@ export default function HomeView({
     .sort((a, b) => parseDate(a.deadline) - parseDate(b.deadline))
     .slice(0, 3);
   const essayList = (items) => (
-    <div className="recent-essay-list">
+    <div className="wi-list">
       {items.map((essay) => (
         <button
           key={essay.id}
           type="button"
-          className="recent-work-row"
+          className="wi-row"
           data-testid="home-recent-essay-item"
           onClick={() => openEssay(essay)}
         >
-          <span className="list-icon">
+          <span className="wi-row__icon">
             <EssaysIcon />
           </span>
-          <span className="list-copy">
+          <span className="wi-row__copy">
             <strong>{essay.school_name}</strong>
             <span>{essay.essay_prompt || "Untitled essay"}</span>
             <small>
@@ -106,10 +107,13 @@ export default function HomeView({
   const isFirstVisit = !applications.length && !essays.length;
   if (isFirstVisit)
     return (
-      <section className="first-visit" data-testid="home-first-visit">
-        <div className="home-hero-card">
-          <div className="hero-copy">
-            <span className="hero-kicker">LET’S GET STARTED</span>
+      <section className="wi-home ws-stack" data-testid="home-first-visit">
+        <div className="wi-welcome">
+          <div className="wi-welcome__copy">
+            <span className="ws-eyebrow">
+              <span aria-hidden="true" />
+              LET’S GET STARTED
+            </span>
             <h2>
               Welcome, <span>{firstName}.</span>
             </h2>
@@ -117,22 +121,22 @@ export default function HomeView({
               Start with one programme you’re considering. Add its deadline,
               then build your plan at your own pace.
             </p>
-            <div className="home-hero-actions">
+            <div className="ws-row">
               <button
-                className="hero-primary"
+                className="ws-btn ws-btn--primary"
                 data-testid="home-dashboard-start-application"
                 onClick={() => handleOpenApplicationForm()}
               >
                 Add your first application <ArrowIcon />
               </button>
             </div>
-            <p className="first-visit-hint">
+            <p className="ws-muted ws-small">
               CAT, GMAT or another route: start with the programme and its
               official deadline.
             </p>
           </div>
-          <div className="home-start-interview">
-            <span className="metric-icon">
+          <div className="ws-card wi-welcome__side">
+            <span className="wi-row__icon">
               <InterviewIcon />
             </span>
             <h3>Start a mock interview</h3>
@@ -141,17 +145,17 @@ export default function HomeView({
               debrief when you finish.
             </p>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => handleNavChange("interviews")}
             >
               Open Interview Studio <ArrowIcon />
             </button>
           </div>
         </div>
-        <Link className="text-button" to="/help">
+        <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
           New here? See the two-minute setup guide <ArrowIcon />
         </Link>
-        <div className="first-visit-next">
+        <div className="wi-steps">
           <h3>One step at a time</h3>
           <ol>
             <li>
@@ -170,7 +174,7 @@ export default function HomeView({
             </li>
           </ol>
           <button
-            className="text-button"
+            className="ws-btn ws-btn--ghost ws-btn--sm"
             onClick={() => handleNavChange("interviews")}
           >
             Just here to practise? Try a question <ArrowIcon />
@@ -180,7 +184,7 @@ export default function HomeView({
     );
 
   return (
-    <div className="home-dashboard" data-testid="home-dashboard">
+    <div className="wi-home ws-stack" data-testid="home-dashboard">
       {!onboardingDismissed && (
         <SetupGuide
           applications={applications}
@@ -192,10 +196,11 @@ export default function HomeView({
           onDismiss={() => setOnboardingDismissed(true)}
         />
       )}
-      <section className="home-next-step" data-testid="home-dashboard-hero">
+      <section className="ws-card wi-next" data-testid="home-dashboard-hero">
         <div>
-          <span className="eyebrow">
-            {upcoming.length ? "YOUR NEXT DEADLINE" : "YOUR NEXT STEP"}
+          <span className="ws-eyebrow">
+            <span aria-hidden="true" />
+            {upcoming.length ? "Your next deadline" : "Your next step"}
           </span>
           <h2>
             {upcoming.length
@@ -209,7 +214,7 @@ export default function HomeView({
           </p>
         </div>
         <button
-          className="hero-primary"
+          className="ws-btn ws-btn--primary"
           data-testid="home-dashboard-start-application"
           onClick={() =>
             upcoming.length
@@ -221,7 +226,7 @@ export default function HomeView({
           <ArrowIcon />
         </button>
       </section>
-      <div className="home-summary-line" data-testid="home-dashboard-metrics">
+      <div className="wi-summary" data-testid="home-dashboard-metrics">
         <span>
           <ApplicationsIcon />
           <strong>{applications.length}</strong> applications
@@ -235,12 +240,12 @@ export default function HomeView({
           <strong>{applicationSummary.dueSoon}</strong> due within 21 days
         </span>
       </div>
-      <div className="dashboard-columns">
-        <section className="dashboard-card">
-          <div className="section-heading">
+      <div className="ws-grid ws-grid--2">
+        <section className="ws-card">
+          <div className="ws-card__head">
             <h3>Continue writing</h3>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => handleNavChange("essays")}
             >
               All essays <ArrowIcon />
@@ -249,12 +254,12 @@ export default function HomeView({
           {recent.length ? (
             essayList(recent)
           ) : (
-            <div className="quiet-empty">
+            <div className="ws-empty">
               <EssaysIcon />
               <h4>Start with a rough draft.</h4>
               <p>Your first version doesn’t need to be perfect.</p>
               <button
-                className="secondary-action-btn"
+                className="ws-btn"
                 data-testid="home-dashboard-start-essay"
                 onClick={() => handleOpenNewEssayForm()}
               >
@@ -263,33 +268,33 @@ export default function HomeView({
             </div>
           )}
         </section>
-        <section className="dashboard-card">
-          <div className="section-heading">
+        <section className="ws-card">
+          <div className="ws-card__head">
             <h3>Upcoming deadlines</h3>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => handleNavChange("deadlines")}
             >
               Calendar <ArrowIcon />
             </button>
           </div>
           {upcoming.length ? (
-            <div className="upcoming-list">
+            <div className="wi-list">
               {upcoming.map((app) => {
                 const date = parseDate(app.deadline);
                 return (
                   <button
-                    className="deadline-row"
+                    className="wi-row"
                     key={app.id}
                     onClick={() => setSelectedApplicationId(app.id)}
                   >
-                    <span className="date-tile">
+                    <span className="wi-date">
                       <small>
                         {date.toLocaleDateString(undefined, { month: "short" })}
                       </small>
                       <strong>{date.getDate()}</strong>
                     </span>
-                    <span className="list-copy">
+                    <span className="wi-row__copy">
                       <strong>{app.school_name}</strong>
                       <span>
                         {app.program_name} ·{" "}
@@ -302,12 +307,12 @@ export default function HomeView({
               })}
             </div>
           ) : (
-            <div className="quiet-empty">
+            <div className="ws-empty">
               <DeadlinesIcon />
               <h4>No upcoming deadlines.</h4>
               <p>Check your applications to keep your dates current.</p>
               <button
-                className="text-button"
+                className="ws-btn ws-btn--ghost ws-btn--sm"
                 onClick={() => handleNavChange("tracker")}
               >
                 View applications <ArrowIcon />
@@ -317,8 +322,8 @@ export default function HomeView({
         </section>
       </div>
       {showHomeChecklist && (
-        <section className="practice-banner practice-banner-compact">
-          <span className="practice-banner-icon">
+        <section className="ws-card ws-card--soft wi-banner">
+          <span className="wi-row__icon">
             <InterviewIcon />
           </span>
           <div>
@@ -326,7 +331,7 @@ export default function HomeView({
             <p>Practise one interview answer, out loud.</p>
           </div>
           <button
-            className="secondary-action-btn"
+            className="ws-btn"
             onClick={() => handleNavChange("interviews")}
           >
             Start practising <ArrowIcon />

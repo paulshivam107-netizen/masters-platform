@@ -68,7 +68,7 @@ export default function InterviewQuestionBank({
     return (
       <div role="alert">
         <p>{error}</p>
-        <button className="text-button" onClick={() => setReload(reload + 1)}>
+        <button className="ws-btn ws-btn--ghost ws-btn--sm" onClick={() => setReload(reload + 1)}>
           Reload question bank
         </button>
       </div>
@@ -112,7 +112,7 @@ export default function InterviewQuestionBank({
         </p>
       </header>
       <div className="bank-filters">
-        <div className="form-group">
+        <div className="ws-field">
           <label htmlFor={`${id}-search`}>Search all questions</label>
           <input
             id={`${id}-search`}
@@ -123,7 +123,7 @@ export default function InterviewQuestionBank({
             onChange={(e) => resetFilters(setSearch, e.target.value)}
           />
         </div>
-        <div className="form-group">
+        <div className="ws-field">
           <label htmlFor={`${id}-topic`}>Topic</label>
           <select
             id={`${id}-topic`}
@@ -153,7 +153,7 @@ export default function InterviewQuestionBank({
       )}
       {current ? (
         <div className="bank-branch">
-          <button className="text-button" onClick={() => setPath([])}>
+          <button className="ws-btn ws-btn--ghost ws-btn--sm" onClick={() => setPath([])}>
             ← Back to {query ? "search results" : "starting questions"}
           </button>
           <ol className="bank-path" aria-label="Question path">
@@ -231,7 +231,7 @@ export default function InterviewQuestionBank({
             </p>
           </details>
           <button
-            className="secondary-action-btn"
+            className="ws-btn"
             disabled={disabled}
             onClick={() => onChoose(nodes.get(path[0]))}
           >
@@ -251,7 +251,7 @@ export default function InterviewQuestionBank({
                 <button
                   onClick={() => setPath(questionPath(bank, node.id, route))}
                 >
-                  <span className="eyebrow">{node.topic}</span>
+                  <span className="wi-topic">{node.topic}</span>
                   <strong>{node.text}</strong>
                   <span className="bank-explore">
                     {bank.roots.includes(node.id)
@@ -270,7 +270,7 @@ export default function InterviewQuestionBank({
             </p>
           )}
           {candidates.length > limit && (
-            <button className="text-button" onClick={() => setLimit(limit + 8)}>
+            <button className="ws-btn ws-btn--ghost ws-btn--sm" onClick={() => setLimit(limit + 8)}>
               Show more questions
             </button>
           )}
