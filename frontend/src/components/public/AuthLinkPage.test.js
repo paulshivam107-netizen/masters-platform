@@ -15,8 +15,7 @@ jest.mock("../../api", () => ({
   forgotPasswordApi: jest.fn(),
 }));
 jest.mock("../../app/telemetry", () => ({ trackEvent: jest.fn() }));
-jest.mock("../common/ThemeToggle", () => () => null);
-jest.mock("../common/Brand", () => () => null);
+jest.mock("./SiteHeader", () => () => null);
 
 let container;
 let root;

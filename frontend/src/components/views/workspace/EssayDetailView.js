@@ -1,4 +1,5 @@
 import React from "react";
+import "./WorkspaceAccount.css";
 
 function EssayDetailView({
   selectedEssay,
@@ -30,94 +31,105 @@ function EssayDetailView({
   const sortedVersions = [...versions].sort(
     (a, b) => (b.version || 0) - (a.version || 0),
   );
+  const wordCount = (selectedEssay.essay_content || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean).length;
   return (
-    <div className="essay-detail">
-      <div className="essay-header" data-testid="essay-detail-header">
-        <div className="essay-header-top essay-header-layout">
-          <div className="essay-title-section essay-title-block">
-            <div className="essay-title-line">
-              <h2 data-testid="essay-detail-title">
-                {selectedEssay.school_name}
-              </h2>
-              <span className="version-badge">
-                {selectedEssay.program_type}
-              </span>
-            </div>
-          </div>
-          <div className="essay-actions essay-action-group">
-            <button
-              className="new-essay-btn"
-              data-testid="essay-continue-writing"
-              onClick={() => handleCreateNewVersion(selectedEssay)}
-            >
-              Continue writing
-            </button>
-            <button
-              data-testid="essay-review-button"
-              className="review-btn"
-              onClick={() => handleReview(selectedEssay.id)}
-              disabled={loading}
-            >
-              {loading ? "Reviewing..." : "Get AI Review"}
-            </button>
-            <button
-              data-testid="essay-versions-toggle"
-              className="history-btn"
-              onClick={() =>
-                showVersions
-                  ? setShowVersions(false)
-                  : fetchVersions(selectedEssay.id)
-              }
-            >
-              {showVersions ? "Hide Versions" : "Versions"}
-            </button>
-          </div>
+    <div className="wac-page wac-detail ws-stack">
+      <div className="wac-detail__head" data-testid="essay-detail-header">
+        <div className="wac-detail__title">
+          <h2 className="ws-h2" data-testid="essay-detail-title">
+            {selectedEssay.school_name}
+          </h2>
+          <span className="ws-chip">{selectedEssay.program_type}</span>
+        </div>
+        <div className="ws-row wac-detail__actions">
+          <button
+            type="button"
+            className="ws-btn ws-btn--primary"
+            data-testid="essay-continue-writing"
+            onClick={() => handleCreateNewVersion(selectedEssay)}
+          >
+            Continue writing
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            data-testid="essay-review-button"
+            onClick={() => handleReview(selectedEssay.id)}
+            disabled={loading}
+          >
+            {loading ? "Reviewing..." : "Get AI Review"}
+          </button>
+          <button
+            type="button"
+            className="ws-btn"
+            data-testid="essay-versions-toggle"
+            aria-expanded={showVersions}
+            onClick={() =>
+              showVersions
+                ? setShowVersions(false)
+                : fetchVersions(selectedEssay.id)
+            }
+          >
+            {showVersions ? "Hide Versions" : "Versions"}
+          </button>
         </div>
       </div>
-      <p className="field-help">
+      <p className="ws-help">
         Continue writing opens this version as a new draft. Your saved version
         is kept.
       </p>
+
       {showVersions && (
-        <div className="versions-panel" data-testid="essay-versions-panel">
-          <h3>Version History</h3>
+        <section
+          className="ws-card ws-stack ws-stack--sm"
+          data-testid="essay-versions-panel"
+        >
+          <h3 className="ws-h3">Version History</h3>
           {versions.length > 0 ? (
-            <div className="versions-list">
+            <ol className="wac-versions">
               {sortedVersions.map((version, idx) => (
-                <button
-                  type="button"
-                  key={version.id || `${version.created_at}-${idx}`}
-                  data-testid="essay-version-item"
-                  className={`version-item ${selectedEssay?.id === version.id ? "current" : ""}`}
-                  onClick={() => handleSelectVersion(version)}
-                >
-                  <div className="version-header">
-                    <strong>
-                      {version.school_name || selectedEssay.school_name}
-                    </strong>
-                    {idx === 0 && <span className="latest-badge">Latest</span>}
-                  </div>
-                  <div className="version-meta">
-                    <span>
-                      {new Date(version.created_at).toLocaleDateString()}
+                <li key={version.id || `${version.created_at}-${idx}`}>
+                  <button
+                    type="button"
+                    data-testid="essay-version-item"
+                    className={`wac-version ${selectedEssay?.id === version.id ? "is-current" : ""}`}
+                    aria-current={
+                      selectedEssay?.id === version.id ? "true" : undefined
+                    }
+                    onClick={() => handleSelectVersion(version)}
+                  >
+                    <span className="wac-version__dot" aria-hidden="true" />
+                    <span className="wac-version__main">
+                      <strong>
+                        {version.school_name || selectedEssay.school_name}
+                      </strong>
+                      <span className="ws-small ws-muted">
+                        {new Date(version.created_at).toLocaleDateString()}
+                      </span>
                     </span>
                     {version.review_score && (
-                      <span className="version-score">
-                        ⭐ {version.review_score}
+                      <span className="ws-chip ws-chip--ok">
+                        Score {version.review_score}
                       </span>
                     )}
-                  </div>
-                </button>
+                    {idx === 0 && (
+                      <span className="ws-chip ws-chip--accent">Latest</span>
+                    )}
+                  </button>
+                </li>
               ))}
-            </div>
+            </ol>
           ) : (
-            <div className="empty-state-main">
-              <h2>No previous versions yet</h2>
+            <div className="ws-empty">
+              <h4 className="ws-empty__title">No previous versions yet</h4>
               <p>Create a new draft to start version history for this essay.</p>
-              <div className="empty-state-actions">
+              <div className="ws-row">
                 <button
                   type="button"
-                  className="history-btn"
+                  className="ws-btn"
                   onClick={() => handleCreateNewVersion(selectedEssay)}
                 >
                   Create New Draft
@@ -125,15 +137,15 @@ function EssayDetailView({
               </div>
             </div>
           )}
-          <div className="versions-footer">
-            <p className="versions-helper-text">
+          <div className="ws-row ws-row--between wac-versions-foot">
+            <p className="ws-help">
               Opens the latest saved version in the editor as a new draft,
               without overwriting history.
             </p>
             <button
               type="button"
+              className="ws-btn"
               data-testid="essay-version-create-new"
-              className="version-btn"
               onClick={() =>
                 handleCreateNewVersion(sortedVersions[0] || selectedEssay)
               }
@@ -142,18 +154,23 @@ function EssayDetailView({
             </button>
           </div>
           {versionOptionRows.length > 0 && (
-            <div className="version-diff-panel">
-              <div className="version-diff-header">
-                <h4>Version Diff</h4>
-                <span>
-                  +{versionDiffSummary.added} / -{versionDiffSummary.removed} /
-                  ~{versionDiffSummary.changed}
+            <div className="wac-diff">
+              <div className="ws-row ws-row--between">
+                <h4 className="ws-h3">Version diff</h4>
+                <span className="ws-small ws-num wac-diff__sum">
+                  <span className="wac-add">+{versionDiffSummary.added}</span>
+                  <span className="wac-del">-{versionDiffSummary.removed}</span>
+                  <span className="wac-chg">~{versionDiffSummary.changed}</span>
                 </span>
               </div>
-              <div className="version-diff-controls">
-                <label>
-                  Base
+              <div className="ws-grid ws-grid--2">
+                <div className="ws-field">
+                  <label className="ws-label" htmlFor="wac-diff-base">
+                    Base
+                  </label>
                   <select
+                    id="wac-diff-base"
+                    className="ws-select"
                     data-testid="essay-version-base-select"
                     value={selectedDiffBaseId}
                     onChange={(e) =>
@@ -173,10 +190,14 @@ function EssayDetailView({
                       </option>
                     ))}
                   </select>
-                </label>
-                <label>
-                  Compare
+                </div>
+                <div className="ws-field">
+                  <label className="ws-label" htmlFor="wac-diff-compare">
+                    Compare
+                  </label>
                   <select
+                    id="wac-diff-compare"
+                    className="ws-select"
                     data-testid="essay-version-compare-select"
                     value={selectedDiffCompareId}
                     onChange={(e) =>
@@ -196,11 +217,11 @@ function EssayDetailView({
                       </option>
                     ))}
                   </select>
-                </label>
+                </div>
               </div>
-              <div className="version-diff-list">
+              <div className="wac-diff__list">
                 {versionDiffRows.slice(0, 120).map((row) => (
-                  <div key={row.id} className={`version-diff-row ${row.type}`}>
+                  <div key={row.id} className={`wac-diff__row ${row.type}`}>
                     <pre>{row.before || " "}</pre>
                     <pre>{row.after || " "}</pre>
                   </div>
@@ -208,34 +229,53 @@ function EssayDetailView({
               </div>
             </div>
           )}
-        </div>
+        </section>
       )}
-      <div className="essay-section">
-        <h3>Essay Prompt</h3>
-        <p>{selectedEssay.essay_prompt}</p>
-      </div>
-      <div className="essay-section">
-        <h3>Your Essay</h3>
-        <p className="essay-text">{selectedEssay.essay_content}</p>
-      </div>
+
+      <section className="ws-card ws-card--soft ws-stack ws-stack--sm">
+        <h3 className="ws-eyebrow">Essay prompt</h3>
+        <p className="wac-prompt">{selectedEssay.essay_prompt}</p>
+      </section>
+
+      <section className="ws-card wac-reader">
+        <div className="ws-row ws-row--between">
+          <h3 className="ws-eyebrow">Your essay</h3>
+          <span className="ws-small ws-muted ws-num">
+            {wordCount} {wordCount === 1 ? "word" : "words"}
+          </span>
+        </div>
+        <div className="wac-essay-text">{selectedEssay.essay_content}</div>
+      </section>
+
       {displayedReview && (
-        <div className="review-section">
-          <h3>AI Review</h3>
-          {displayedReview.score != null && (
-            <div className="score">Score: {displayedReview.score}</div>
-          )}
-          <div className="review-content">{displayedReview.review_content}</div>
-        </div>
+        <section className="ws-card ws-stack ws-stack--sm wac-review">
+          <div className="ws-row ws-row--between">
+            <h3 className="ws-h3">AI review</h3>
+            {displayedReview.score != null && (
+              <span className="ws-chip ws-chip--ok ws-num">
+                Score: {displayedReview.score}
+              </span>
+            )}
+          </div>
+          <div className="wac-review__body">{displayedReview.review_content}</div>
+        </section>
       )}
-      <details className="progressive-section">
-        <summary>Manage this version</summary>{" "}
-        <button
-          data-testid="essay-delete-button"
-          className="delete-btn"
-          onClick={() => handleDelete(selectedEssay.id)}
-        >
-          Delete
-        </button>
+
+      <details className="wac-manage">
+        <summary>Manage this version</summary>
+        <div className="wac-manage__body">
+          <p className="ws-help">
+            Remove this version of the essay from your workspace.
+          </p>
+          <button
+            type="button"
+            className="ws-btn ws-btn--danger"
+            data-testid="essay-delete-button"
+            onClick={() => handleDelete(selectedEssay.id)}
+          >
+            Delete
+          </button>
+        </div>
       </details>
     </div>
   );

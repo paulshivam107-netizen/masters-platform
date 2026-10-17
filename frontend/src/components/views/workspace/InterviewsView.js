@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import InterviewStudio from "./InterviewStudio";
+import "./WorkspaceInterview.css";
 import { CheckIcon, PlusIcon, InterviewIcon } from "../../../app/icons";
 
 export default function InterviewsView({
@@ -22,7 +23,7 @@ export default function InterviewsView({
   };
 
   return (
-    <div className="interview-panel">
+    <div className="wi-page ws-stack">
       <h2 className="sr-only" data-testid="interviews-heading">
         Interviews
       </h2>
@@ -30,8 +31,8 @@ export default function InterviewsView({
         applications={applications}
         selectedApplicationId={selectedApplicationId}
       />
-      <div className="interview-summary">
-        <span>
+      <div className="wi-summary">
+        <span className="ws-chip">
           <strong>
             {
               applications.filter(
@@ -41,24 +42,30 @@ export default function InterviewsView({
           </strong>{" "}
           interviews to prepare for
         </span>
-        <span>
+        <span className="ws-chip">
           <strong>
             {applications.filter((item) => item.interview_completed).length}
           </strong>{" "}
           completed
         </span>
       </div>
-      <section className="dashboard-card interview-prep-card">
-        <div className="section-heading">
+      <section className="ws-card wi-notebook">
+        <div className="wi-notebook__head">
           <div>
-            <span className="eyebrow">MAKE IT PERSONAL</span>
+            <span className="ws-eyebrow">
+              <span aria-hidden="true" />
+              Make it personal
+            </span>
             <h3>Your preparation notebook</h3>
             <p>Stories, questions and reflections for each programme.</p>
           </div>
           {application && (
-            <div className="school-picker">
-              <label htmlFor="interview-school">Programme</label>
+            <div className="ws-field wi-picker">
+              <label className="ws-label" htmlFor="interview-school">
+                Programme
+              </label>
               <select
+                className="ws-select"
                 id="interview-school"
                 value={application.id}
                 onChange={(event) => setSelectedId(event.target.value)}
@@ -73,37 +80,40 @@ export default function InterviewsView({
           )}
         </div>
         {!application ? (
-          <div className="quiet-empty">
+          <div className="ws-empty">
             <InterviewIcon />
-            <h4>Give your preparation a home.</h4>
+            <h4 className="ws-empty__title">Give your preparation a home.</h4>
             <p>
               Add an application to start a preparation notebook for that
               programme.
             </p>
             <button
-              className="secondary-action-btn"
+              className="ws-btn"
               onClick={() => handleOpenApplicationForm()}
             >
               <PlusIcon /> Add application
             </button>
           </div>
         ) : (
-          <article className="interview-card" data-testid="interview-card">
-            <div className="interview-card-header">
+          <article className="wi-card" data-testid="interview-card">
+            <div className="wi-card__head">
               <div>
                 <strong>{application.school_name}</strong>
                 <span>{application.program_name}</span>
               </div>
               <span
-                className={`urgency-chip ${application.interview_completed ? "done" : "upcoming"}`}
+                className={`ws-chip ${application.interview_completed ? "ws-chip--ok" : "ws-chip--info"}`}
               >
                 {application.interview_completed ? "Completed" : "Preparing"}
               </span>
             </div>
-            <div className="tracker-form-grid">
-              <div className="form-group">
-                <label htmlFor="interview-date">Interview date & time</label>
+            <div className="wi-form">
+              <div className="ws-field">
+                <label className="ws-label" htmlFor="interview-date">
+                  Interview date & time
+                </label>
                 <input
+                  className="ws-input"
                   id="interview-date"
                   data-testid="interview-scheduled-input"
                   type="datetime-local"
@@ -117,7 +127,7 @@ export default function InterviewsView({
                   }
                 />
               </div>
-              <div className="notebook-note">
+              <div className="wi-note">
                 <CheckIcon />
                 <span>Notes are saved in this browser as you type.</span>
               </div>
@@ -142,11 +152,14 @@ export default function InterviewsView({
                 ],
               ].map(([key, label, placeholder, test]) => (
                 <div
-                  className={`form-group ${key === "stories_bank" ? "full-width" : ""}`}
+                  className={`ws-field ${key === "stories_bank" ? "wi-wide" : ""}`}
                   key={key}
                 >
-                  <label htmlFor={`interview-${key}`}>{label}</label>
+                  <label className="ws-label" htmlFor={`interview-${key}`}>
+                    {label}
+                  </label>
                   <textarea
+                    className="ws-textarea"
                     id={`interview-${key}`}
                     data-testid={`interview-${test}-input`}
                     value={prep[key]}

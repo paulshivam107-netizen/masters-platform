@@ -1,12 +1,12 @@
 import React from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import Login from "../Login";
 import Signup from "../Signup";
 import "./PublicPages.css";
-import Brand from "../common/Brand";
-import ThemeToggle from "../common/ThemeToggle";
-import JourneyArtwork from "../common/JourneyArtwork";
+import "./AuthPages.css";
+import SiteHeader from "./SiteHeader";
+import AuthPanel from "./AuthPanel";
 
 function parseMode(value) {
   return value === "signup" ? "signup" : "login";
@@ -51,42 +51,19 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="public-auth-layout">
-      <header className="public-auth-topbar">
-        <Brand />
-        <div className="public-nav">
-          <Link className="public-nav-link" to="/">
-            Back to home
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
-      <div className="auth-split-layout">
-        <aside className="auth-story">
-          <span className="eyebrow">MAKE SPACE FOR YOUR AMBITION</span>
-          <h1>
-            Your next chapter.
-            <br />
-            All in one place.
-          </h1>
-          <p>
-            A calmer way to organise your applications, shape your story and
-            prepare for what comes next.
-          </p>
-          <JourneyArtwork />
-          <span className="auth-story-foot">
-            Small steps. Meaningful progress.
-          </span>
-        </aside>
-        <div className="public-auth-shell">
+    <div className="ap-page">
+      <SiteHeader current="signin" />
+      <main className="ap-layout">
+        <div className="ap-formcol">
           {mode === "login" ? (
             <Login onSwitchToSignup={() => setMode("signup")} />
           ) : (
             <Signup onSwitchToLogin={() => setMode("login")} />
           )}
-          <p className="auth-next-hint">{nextHint}</p>
+          <p className="ap-next-hint">{nextHint}</p>
         </div>
-      </div>
+        <AuthPanel />
+      </main>
     </div>
   );
 }

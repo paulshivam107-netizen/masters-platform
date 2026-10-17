@@ -4,34 +4,52 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ArrowIcon, CheckIcon } from "../../app/icons";
 import { guides, faqs } from "../../content/guides";
 import { practice } from "../../content/practice";
-import PublicHeader from "./PublicHeader";
-import Brand from "../common/Brand";
+import SiteHeader from "./SiteHeader";
+import SiteFooter from "./SiteFooter";
+import { LandingPhoto } from "./LandingPanels";
 import "./PublicPages.css";
+import "./ResourcePages.css";
 
-export function ResourceFooter() {
+function Eyebrow({ children }) {
   return (
-    <footer className="landing-footer">
-      <Brand />
-      <p>Your MBA applications, in one place.</p>
-      <nav aria-label="Footer">
-        <Link to="/mba-interview-practice">MBA interview practice</Link>
-        <Link to="/guides">Guides</Link>
-        <Link to="/help">Getting started & help</Link>
-      </nav>
-    </footer>
+    <p className="rp-eyebrow">
+      <span aria-hidden="true" />
+      {children}
+    </p>
   );
 }
+
+const CATEGORIES = {
+  "mba-application-checklist-india": "Planning",
+  "mba-interview-story-bank": "Interview preparation",
+  "mba-interview-from-resume": "Interview preparation",
+  "mba-interview-for-freshers": "Two-year MBA route",
+  "mba-interview-work-experience": "Experienced route",
+};
+const categoryOf = (slug) => CATEGORIES[slug] || "Practical guide";
+
 export function PublicFaq() {
   return (
-    <section className="public-faq" aria-labelledby="faq-heading">
-      <span className="eyebrow">BEFORE YOU START</span>
-      <h2 id="faq-heading">A few useful answers</h2>
-      {faqs.map(([question, answer]) => (
-        <details key={question}>
-          <summary>{question}</summary>
-          <p>{answer}</p>
-        </details>
-      ))}
+    <section className="rp-faq" aria-labelledby="faq-heading">
+      <div className="rp-frame rp-faq-grid">
+        <div>
+          <Eyebrow>Before you start</Eyebrow>
+        </div>
+        <div>
+          <h2 id="faq-heading">A few useful answers</h2>
+          <div className="rp-faq-list">
+            {faqs.map(([question, answer]) => (
+              <details key={question}>
+                <summary>
+                  {question}
+                  <span className="rp-faq-icon" aria-hidden="true" />
+                </summary>
+                <p>{answer}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   );
 }
@@ -42,30 +60,12 @@ export function ResourceCta({
   const { user } = useAuth();
   return (
     <Link
-      className="public-btn primary"
+      className="rp-btn"
       to={user ? next : `/auth?mode=signup&next=${encodeURIComponent(next)}`}
     >
       {children}
       <ArrowIcon />
     </Link>
-  );
-}
-export function GuideCards() {
-  return (
-    <div className="guide-grid">
-      {guides.map((guide) => (
-        <article className="public-card guide-card" key={guide.slug}>
-          <span className="eyebrow">{guide.readingTime} · PRACTICAL GUIDE</span>
-          <h2>
-            <Link to={`/guides/${guide.slug}`}>{guide.title}</Link>
-          </h2>
-          <p>{guide.description}</p>
-          <Link className="text-button" to={`/guides/${guide.slug}`}>
-            Read the guide <ArrowIcon />
-          </Link>
-        </article>
-      ))}
-    </div>
   );
 }
 const months = [
@@ -87,15 +87,60 @@ export function formatDate(iso) {
   const [year, month, day] = iso.split("-").map(Number);
   return `${day} ${months[month - 1]} ${year}`;
 }
+function GuideCard({ guide, featured = false }) {
+  return (
+    <article className={`rp-card${featured ? " rp-card--featured" : ""}`}>
+      <div className="rp-card-text">
+        <p className="rp-category">
+          <span aria-hidden="true" /> {categoryOf(guide.slug)}
+        </p>
+        <h2>
+          <Link to={`/guides/${guide.slug}`}>{guide.title}</Link>
+        </h2>
+        <p className="rp-meta">
+          {guide.readingTime} read · Updated {formatDate(guide.updated)}
+        </p>
+        <p className="rp-card-summary">{guide.description}</p>
+        <Link className="rp-link" to={`/guides/${guide.slug}`}>
+          Read the guide <ArrowIcon />
+        </Link>
+      </div>
+      {featured && (
+        <div className="rp-card-photo">
+          <LandingPhoto
+            id="photo_resume_printout"
+            alt="A laptop and printed résumé on a wooden desk"
+            width={1600}
+            height={900}
+          />
+        </div>
+      )}
+    </article>
+  );
+}
+export function GuideCards() {
+  const featured = guides.find((g) => g.slug === "mba-interview-from-resume");
+  const rest = guides.filter((g) => g !== featured);
+  return (
+    <div className="rp-guide-grid">
+      {featured && <GuideCard guide={featured} featured />}
+      {rest.map((guide) => (
+        <GuideCard guide={guide} key={guide.slug} />
+      ))}
+    </div>
+  );
+}
 export function RelatedLinks({ links, heading = "Related reading" }) {
   if (!links?.length) return null;
   return (
-    <nav className="guide-related" aria-label={heading}>
+    <nav className="rp-related" aria-label={heading}>
       <h2>{heading}</h2>
       <ul>
         {links.map(([href, label]) => (
           <li key={href}>
-            <Link to={href}>{label}</Link>
+            <Link to={href}>
+              {label} <ArrowIcon />
+            </Link>
           </li>
         ))}
       </ul>
@@ -104,7 +149,7 @@ export function RelatedLinks({ links, heading = "Related reading" }) {
 }
 export function ExampleBlock({ example }) {
   return (
-    <figure className="guide-example">
+    <figure className="rp-example">
       <figcaption>{example.label}</figcaption>
       <dl>
         {example.lines.map(([who, text], index) => (
@@ -114,7 +159,7 @@ export function ExampleBlock({ example }) {
           </div>
         ))}
       </dl>
-      {example.note && <p className="guide-example-note">{example.note}</p>}
+      {example.note && <p className="rp-example-note">{example.note}</p>}
     </figure>
   );
 }
@@ -131,11 +176,11 @@ function GuideSection({ section }) {
         <p key={p}>{p}</p>
       ))}
       {section.ladder && (
-        <ol className="guide-ladder">
+        <ol className="rp-ladder">
           {section.ladder.map((step) => (
             <li key={step.level}>
               <h3>{step.level}</h3>
-              <p className="guide-ladder-purpose">{step.purpose}</p>
+              <p className="rp-ladder-purpose">{step.purpose}</p>
               <ul>
                 {step.questions.map((q) => (
                   <li key={q}>“{q}”</li>
@@ -158,164 +203,242 @@ function GuideSection({ section }) {
     </section>
   );
 }
-export function ResourceShell({ children }) {
+export function ResourceShell({ children, current = "" }) {
   return (
-    <div className="public-page">
-      <div className="public-shell">
-        <PublicHeader />
-        <main id="public-main">{children}</main>
-        <ResourceFooter />
-      </div>
+    <div className="rp-page">
+      <SiteHeader current={current} />
+      <main id="public-main" className="rp">
+        {children}
+      </main>
+      <SiteFooter />
     </div>
   );
 }
 export function GuidesPage() {
   return (
-    <ResourceShell>
-      <section className="resource-intro">
-        <span className="eyebrow">INDIAN MBA APPLICATIONS</span>
-        <h1>
-          A little structure.
-          <br />A clearer next step.
-        </h1>
-        <p>
-          Practical guides and free templates for CAT-route, GMAT-route and
-          executive MBA applications. Start with the part you need today.
-        </p>
-        <Link className="text-button" to="/mba-interview-practice">
-          See how résumé-based interview practice works <ArrowIcon />
-        </Link>
+    <ResourceShell current="guides">
+      <section className="rp-hero">
+        <div className="rp-frame rp-hero-grid">
+          <div className="rp-hero-copy">
+            <Eyebrow>Indian MBA applications</Eyebrow>
+            <h1>
+              A little structure.
+              <br />A clearer next step.
+            </h1>
+            <p className="rp-lead">
+              Practical guides and free templates for CAT-route, GMAT-route and
+              executive MBA applications. Start with the part you need today.
+            </p>
+            <Link className="rp-link" to="/mba-interview-practice">
+              See how résumé-based interview practice works <ArrowIcon />
+            </Link>
+          </div>
+          <div className="rp-hero-photo">
+            <LandingPhoto
+              id="photo_practice_at_laptop"
+              alt="A young woman practising on a laptop outdoors"
+              width={1920}
+              height={1280}
+              eager
+            />
+          </div>
+        </div>
       </section>
-      <GuideCards />
+      <section className="rp-library" aria-label="All guides">
+        <div className="rp-frame">
+          <GuideCards />
+        </div>
+      </section>
     </ResourceShell>
   );
 }
+
+function ArticleLayout({ eyebrow, title, summary, toc, children, header }) {
+  return (
+    <article className="rp-article">
+      <header className="rp-article-head">
+        <div className="rp-frame">
+          {header}
+          <p className="rp-eyebrow">
+            <span aria-hidden="true" />
+            <span>{eyebrow}</span>
+          </p>
+          <h1>{title}</h1>
+          <p className="rp-lead rp-summary">{summary}</p>
+        </div>
+      </header>
+      <div className="rp-frame rp-article-grid">
+        <nav className="rp-toc" aria-label="On this page">
+          <strong>In this guide</strong>
+          <ol>
+            {toc.map(([id, label]) => (
+              <li key={id}>
+                <a href={`#${id}`}>{label}</a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+        <div className="rp-prose">{children}</div>
+      </div>
+    </article>
+  );
+}
+
+function ClosingCta({ heading, next, cta, note }) {
+  return (
+    <section className="rp-closing">
+      <div className="rp-frame rp-closing-inner">
+        <h2>{heading}</h2>
+        <p>{note}</p>
+        <ResourceCta next={next}>{cta}</ResourceCta>
+      </div>
+    </section>
+  );
+}
+
 export function GuidePage() {
   const { slug } = useParams();
   const guide = guides.find((item) => item.slug === slug);
   if (!guide) return <NotFoundPage />;
   return (
-    <ResourceShell>
-      <article className="guide-article">
-        <nav aria-label="Breadcrumb">
-          <Link to="/guides">Guides</Link>
-          <span aria-hidden="true"> / </span>
-          <span>{guide.title}</span>
-        </nav>
-        <header>
-          <span className="eyebrow">
-            {guide.readingTime} · UPDATED{" "}
+    <ResourceShell current="guides">
+      <ArticleLayout
+        header={
+          <nav className="rp-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/guides">Guides</Link>
+            <span aria-hidden="true"> / </span>
+            <span>{guide.title}</span>
+          </nav>
+        }
+        eyebrow={
+          <>
+            {categoryOf(guide.slug)} · {guide.readingTime} · Updated{" "}
             <time dateTime={guide.updated}>{formatDate(guide.updated)}</time>
-          </span>
-          <h1>{guide.title}</h1>
-          <p className="guide-summary">{guide.summary}</p>
-        </header>
-        <nav className="guide-contents" aria-label="On this page">
-          <strong>In this guide</strong>
-          {guide.sections.map((section) => (
-            <a key={section.id} href={`#${section.id}`}>
-              {section.title}
-            </a>
-          ))}
-        </nav>
+          </>
+        }
+        title={guide.title}
+        summary={guide.summary}
+        toc={guide.sections.map((s) => [s.id, s.title])}
+      >
         {guide.sections.map((section) => (
           <GuideSection section={section} key={section.id} />
         ))}
         {guide.template && (
-          <aside className="guide-download">
+          <aside className="rp-callout">
             <CheckIcon />
             <div>
               <h2>Make it your own</h2>
               <p>A blank template, with no email required.</p>
-              <a className="text-button" download href={guide.template.href}>
+              <a className="rp-link" download href={guide.template.href}>
                 {guide.template.label} ↓
               </a>
             </div>
           </aside>
         )}
-        <section className="guide-next">
-          <h2>Put one step into practice</h2>
-          <ResourceCta next={guide.next}>{guide.cta}</ResourceCta>
-          <p>
-            Free during the pilot. Check programme-specific instructions with
-            your school.
-          </p>
-        </section>
         <RelatedLinks links={guide.related} />
-        <Link className="text-button" to="/guides">
+        <Link className="rp-link" to="/guides">
           Browse all guides <ArrowIcon />
         </Link>
-      </article>
+      </ArticleLayout>
+      <ClosingCta
+        heading="Put one step into practice"
+        next={guide.next}
+        cta={guide.cta}
+        note="Free during the pilot. Check programme-specific instructions with your school."
+      />
     </ResourceShell>
   );
 }
+
+const HELP_STEPS = [
+  [
+    "01",
+    "Add your first application",
+    "Open Applications and add the school, exact programme and official application deadline. Keep the year and source URL in your notes. CAT registration and a school application may be separate steps.",
+    "/app/tracker",
+    "Add an application",
+  ],
+  [
+    "02",
+    "Save a draft, if your programme needs one",
+    "Write a first paragraph in Essays and choose Save draft. You can return to it and save new versions. If you do not need an essay yet, move to interview notes instead. Unfinished forms can be recovered in this browser.",
+    "/app/compose",
+    "Start an essay",
+  ],
+  [
+    "03",
+    "Prepare one interview example",
+    "Open Interviews to explore linked questions or try a short mock session. AI chat and turn-based voice are available when connected; otherwise, a labelled demo shows how the session works.",
+    "/app/interviews",
+    "Try interview practice",
+  ],
+  [
+    "04",
+    "Make your next visit easier",
+    "Check Today for the next deadline and your latest drafts. Use Resources → Exports to download your application list or calendar file.",
+    "/app/today",
+    "Open Today",
+  ],
+];
 export function HelpPage() {
   return (
     <ResourceShell>
-      <section className="resource-intro">
-        <span className="eyebrow">GETTING STARTED</span>
-        <h1>
-          Your first useful
-          <br />
-          five minutes.
-        </h1>
-        <p>Start with one programme. Build the rest of your plan as you go.</p>
+      <section className="rp-hero rp-hero--text">
+        <div className="rp-frame">
+          <div className="rp-hero-copy">
+            <Eyebrow>Getting started</Eyebrow>
+            <h1>
+              Your first useful
+              <br />
+              five minutes.
+            </h1>
+            <p className="rp-lead">
+              Start with one programme. Build the rest of your plan as you go.
+            </p>
+          </div>
+        </div>
       </section>
-      <div className="help-steps">
-        {[
-          [
-            "01",
-            "Add your first application",
-            "Open Applications and add the school, exact programme and official application deadline. Keep the year and source URL in your notes. CAT registration and a school application may be separate steps.",
-            "/app/tracker",
-            "Add an application",
-          ],
-          [
-            "02",
-            "Save a draft, if your programme needs one",
-            "Write a first paragraph in Essays and choose Save draft. You can return to it and save new versions. If you do not need an essay yet, move to interview notes instead. Unfinished forms can be recovered in this browser.",
-            "/app/compose",
-            "Start an essay",
-          ],
-          [
-            "03",
-            "Prepare one interview example",
-            "Open Interviews to explore linked questions or try a short mock session. AI chat and turn-based voice are available when connected; otherwise, a labelled demo shows how the session works.",
-            "/app/interviews",
-            "Try interview practice",
-          ],
-          [
-            "04",
-            "Make your next visit easier",
-            "Check Today for the next deadline and your latest drafts. Use Resources → Exports to download your application list or calendar file.",
-            "/app/today",
-            "Open Today",
-          ],
-        ].map(([number, title, detail, next, cta]) => (
-          <article className="public-card" key={number}>
-            <span className="eyebrow">STEP {number}</span>
-            <h2>{title}</h2>
-            <p>{detail}</p>
-            <ResourceCta next={next}>{cta}</ResourceCta>
-          </article>
-        ))}
-      </div>
+      <section className="rp-steps" aria-label="Getting started steps">
+        <div className="rp-frame">
+          <ol className="rp-step-list">
+            {HELP_STEPS.map(([number, title, detail, next, cta]) => (
+              <li className="rp-step" key={number}>
+                <span className="rp-step-num" aria-hidden="true">
+                  {number}
+                </span>
+                <div>
+                  <p className="rp-category">
+                    <span aria-hidden="true" /> Step {number}
+                  </p>
+                  <h2>{title}</h2>
+                  <p>{detail}</p>
+                  <ResourceCta next={next}>{cta}</ResourceCta>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
       <PublicFaq />
-      <section className="help-support public-card">
-        <h2>Something feels confusing?</h2>
-        <p>
-          Open Settings → Help shape this space to send feedback. Include the
-          page and what you expected to happen; leave passwords and private
-          application documents out. Keep your own copies of important work
-          during the pilot.
-        </p>
-        <p>
-          Masters is an independent planning tool, not affiliated with an
-          admissions office, exam provider or school.
-        </p>
-        <Link className="text-button" to="/app/settings">
-          Open settings and feedback <ArrowIcon />
-        </Link>
+      <section className="rp-support" aria-labelledby="support-heading">
+        <div className="rp-frame rp-support-inner">
+          <h2 id="support-heading">Something feels confusing?</h2>
+          <div>
+            <p>
+              Open Settings → Help shape this space to send feedback. Include
+              the page and what you expected to happen; leave passwords and
+              private application documents out. Keep your own copies of
+              important work during the pilot.
+            </p>
+            <p>
+              Masters is an independent planning tool, not affiliated with an
+              admissions office, exam provider or school.
+            </p>
+            <Link className="rp-link" to="/app/settings">
+              Open settings and feedback <ArrowIcon />
+            </Link>
+          </div>
+        </div>
       </section>
     </ResourceShell>
   );
@@ -323,20 +446,34 @@ export function HelpPage() {
 export function NotFoundPage() {
   return (
     <ResourceShell>
-      <section className="resource-intro">
-        <span className="eyebrow">PAGE NOT FOUND</span>
-        <h1>
-          Let’s get you
-          <br />
-          back on track.
-        </h1>
-        <p>This address doesn’t point to a page here.</p>
-        <Link className="public-btn primary" to="/">
-          Go to home <ArrowIcon />
-        </Link>
-        <Link className="text-button" to="/guides">
-          Browse guides
-        </Link>
+      <section className="rp-notfound">
+        <div className="rp-frame rp-notfound-inner">
+          {/* Drawn via CSS so the faint decorative numeral isn't text for contrast checks. */}
+          <p className="rp-notfound-code" aria-hidden="true" data-code="404" />
+          <Eyebrow>Page not found</Eyebrow>
+          <h1>
+            Let’s get you
+            <br />
+            back on track.
+          </h1>
+          <p className="rp-lead">This address doesn’t point to a page here.</p>
+          <div className="rp-actions">
+            <Link className="rp-btn" to="/">
+              Go to home <ArrowIcon />
+            </Link>
+            <Link className="rp-btn rp-btn--ghost" to="/guides">
+              Browse guides
+            </Link>
+          </div>
+          <ul className="rp-notfound-links">
+            <li>
+              <Link to="/mba-interview-practice">Interview practice</Link>
+            </li>
+            <li>
+              <Link to="/help">Help</Link>
+            </li>
+          </ul>
+        </div>
       </section>
     </ResourceShell>
   );
@@ -346,18 +483,26 @@ export function PracticePage() {
   const { how, example, routes, limits, privacy } = practice;
   return (
     <ResourceShell>
-      <article className="guide-article practice-page">
-        <header>
-          <span className="eyebrow">
-            INTERVIEW PRACTICE · UPDATED{" "}
+      <ArticleLayout
+        eyebrow={
+          <>
+            Interview practice · Updated{" "}
             <time dateTime={practice.updated}>
               {formatDate(practice.updated)}
             </time>
-          </span>
-          <h1>Practise MBA interviews that follow your résumé</h1>
-          <p className="guide-summary">{practice.answer}</p>
-          <ResourceCta next={practice.next}>{practice.cta}</ResourceCta>
-        </header>
+          </>
+        }
+        title="Practise MBA interviews that follow your résumé"
+        summary={practice.answer}
+        header={null}
+        toc={[
+          ["how-it-works", how.title],
+          ["example", "A short example"],
+          ["routes", routes.title],
+          ["limits", limits.title],
+          ["privacy", privacy.title],
+        ]}
+      >
         <section id="how-it-works">
           <h2>{how.title}</h2>
           <ol>
@@ -374,12 +519,12 @@ export function PracticePage() {
         </section>
         <section id="routes">
           <h2>{routes.title}</h2>
-          <div className="practice-routes">
+          <div className="rp-routes">
             {routes.items.map(([name, text, href, label]) => (
-              <div className="public-card" key={name}>
+              <div className="rp-route" key={name}>
                 <h3>{name}</h3>
                 <p>{text}</p>
-                <Link className="text-button" to={href}>
+                <Link className="rp-link" to={href}>
                   {label} <ArrowIcon />
                 </Link>
               </div>
@@ -404,16 +549,14 @@ export function PracticePage() {
           </ul>
           <p>{privacy.note}</p>
         </section>
-        <section className="guide-next">
-          <h2>Try it on your own résumé</h2>
-          <ResourceCta next={practice.next}>{practice.cta}</ResourceCta>
-          <p>
-            Questions are drafted by AI during a pilot. They are practice
-            material, not a prediction of any admission outcome.
-          </p>
-        </section>
         <RelatedLinks links={practice.related} />
-      </article>
+      </ArticleLayout>
+      <ClosingCta
+        heading="Try it on your own résumé"
+        next={practice.next}
+        cta={practice.cta}
+        note="Questions are drafted by AI during a pilot. They are practice material, not a prediction of any admission outcome."
+      />
     </ResourceShell>
   );
 }

@@ -1,30 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
-import JourneyArtwork from "../../common/JourneyArtwork";
+import ApplicationDetail from "./ApplicationDetail";
 import {
   ApplicationsIcon,
   ArrowIcon,
-  CheckIcon,
   DeadlinesIcon,
-  DocsIcon,
   EssaysIcon,
   InterviewIcon,
   PlusIcon,
 } from "../../../app/icons";
-
-function Stat({ icon, value, label, note }) {
-  return (
-    <div className="home-metric-card">
-      <div className="metric-top">
-        <span className="metric-icon">{icon}</span>
-        <span>{label}</span>
-      </div>
-      <p className="metric-value">{value}</p>
-      {note && <small>{note}</small>}
-    </div>
-  );
-}
 
 export default function HomeView({
   interviewPrepByApplication,
@@ -72,19 +58,19 @@ export default function HomeView({
     .sort((a, b) => parseDate(a.deadline) - parseDate(b.deadline))
     .slice(0, 3);
   const essayList = (items) => (
-    <div className="recent-essay-list">
+    <div className="wi-list">
       {items.map((essay) => (
         <button
           key={essay.id}
           type="button"
-          className="recent-work-row"
+          className="wi-row"
           data-testid="home-recent-essay-item"
           onClick={() => openEssay(essay)}
         >
-          <span className="list-icon">
+          <span className="wi-row__icon">
             <EssaysIcon />
           </span>
-          <span className="list-copy">
+          <span className="wi-row__copy">
             <strong>{essay.school_name}</strong>
             <span>{essay.essay_prompt || "Untitled essay"}</span>
             <small>
@@ -105,140 +91,67 @@ export default function HomeView({
 
   if (selectedApplication)
     return (
-      <div
-        className="application-home-panel"
-        data-testid="home-application-panel"
-      >
-        <button
-          className="text-button"
-          onClick={() => setSelectedApplicationId(null)}
-        >
-          ← Back to your overview
-        </button>
-        <section
-          className="application-focus-card"
-          data-testid="home-application-hero"
-        >
-          <span className="eyebrow">YOUR APPLICATION</span>
-          <h2 data-testid="home-application-title">
-            {selectedApplication.school_name}
-          </h2>
-          <p>
-            {selectedApplication.program_name} ·{" "}
-            {selectedApplication.application_round || "Round not set"}
-          </p>
-          <div className="home-hero-actions">
-            <button
-              className="new-essay-btn"
-              data-testid="home-application-new-essay"
-              onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
-            >
-              <PlusIcon /> Write an essay
-            </button>
-            <button
-              className="secondary-action-btn"
-              onClick={() => handleOpenApplicationForm(selectedApplication)}
-            >
-              Edit application
-            </button>
-          </div>
-        </section>
-        <div className="home-metrics-grid">
-          <Stat
-            icon={<EssaysIcon />}
-            value={essaysForSelectedApplication.length}
-            label="Essay drafts"
-          />
-          <Stat
-            icon={<DeadlinesIcon />}
-            value={
-              parseDate(selectedApplication.deadline)?.toLocaleDateString(
-                undefined,
-                { month: "short", day: "numeric" },
-              ) || "Not set"
-            }
-            label="Deadline"
-          />
-          <Stat
-            icon={<CheckIcon />}
-            value={`${getApplicationReadiness(selectedApplication).readiness}%`}
-            label="Checklist completion"
-          />
-        </div>
-        <div className="application-quick-links">
-          {[
-            ["requirements", "Requirements", <CheckIcon />],
-            ["docs", "Documents", <DocsIcon />],
-            ["interviews", "Interview preparation", <InterviewIcon />],
-            ["research", "School research", <ApplicationsIcon />],
-          ].map(([id, label, icon]) => (
-            <button
-              className="secondary-action-btn"
-              key={id}
-              onClick={() => handleNavChange(id)}
-            >
-              {icon}
-              {label}
-              <ArrowIcon />
-            </button>
-          ))}
-        </div>
-        <section className="dashboard-card">
-          <div className="section-heading">
-            <h3>Your essays for this application</h3>
-          </div>
-          {essaysForSelectedApplication.length ? (
-            essayList(essaysForSelectedApplication)
-          ) : (
-            <div className="quiet-empty">
-              <EssaysIcon />
-              <p>A strong application starts with your story.</p>
-              <button
-                className="text-button"
-                onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
-              >
-                Start your first draft <ArrowIcon />
-              </button>
-            </div>
-          )}
-        </section>
-      </div>
+      <ApplicationDetail
+        application={selectedApplication}
+        essays={essaysForSelectedApplication}
+        essayList={essayList}
+        parseDate={parseDate}
+        getApplicationReadiness={getApplicationReadiness}
+        setSelectedApplicationId={setSelectedApplicationId}
+        handleOpenNewEssayForm={handleOpenNewEssayForm}
+        handleOpenApplicationForm={handleOpenApplicationForm}
+        handleNavChange={handleNavChange}
+      />
     );
 
   const isFirstVisit = !applications.length && !essays.length;
   if (isFirstVisit)
     return (
-      <section className="first-visit" data-testid="home-first-visit">
-        <div className="home-hero-card">
-          <div className="hero-copy">
-            <span className="hero-kicker">LET’S GET STARTED</span>
+      <section className="wi-home ws-stack" data-testid="home-first-visit">
+        <div className="wi-welcome">
+          <div className="wi-welcome__copy">
+            <span className="ws-eyebrow">
+              <span aria-hidden="true" />
+              Let’s get started
+            </span>
             <h2>
               Welcome, <span>{firstName}.</span>
             </h2>
             <p>
-              Start with one programme you’re considering. Add its deadline,
-              then build your plan at your own pace.
+              Start with a mock interview: questions from your résumé,
+              follow-ups on your answers and a debrief when you finish.
             </p>
-            <div className="home-hero-actions">
+            <div className="ws-row">
               <button
-                className="hero-primary"
-                data-testid="home-dashboard-start-application"
-                onClick={() => handleOpenApplicationForm()}
+                className="ws-btn ws-btn--primary"
+                onClick={() => handleNavChange("interviews")}
               >
-                Add your first application <ArrowIcon />
+                Start a mock interview <ArrowIcon />
               </button>
             </div>
-            <p className="first-visit-hint">
-              CAT, GMAT or another route: start with the programme and its
-              official deadline.
-            </p>
           </div>
-          <JourneyArtwork />
+          <div className="ws-card wi-welcome__side">
+            <span className="wi-row__icon">
+              <ApplicationsIcon />
+            </span>
+            <h3>Track your applications</h3>
+            <p>
+              Add a programme you’re considering, CAT, GMAT or another route,
+              with its official deadline. Build your plan at your own pace.
+            </p>
+            <button
+              className="ws-btn ws-btn--ghost ws-btn--sm"
+              data-testid="home-dashboard-start-application"
+              onClick={() => handleOpenApplicationForm()}
+            >
+              Add your first application <ArrowIcon />
+            </button>
+          </div>
         </div>
-        <Link className="text-button" to="/help">
+        <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
           New here? See the two-minute setup guide <ArrowIcon />
         </Link>
-        <div className="first-visit-next">
+        <div className="wi-steps">
           <h3>One step at a time</h3>
           <ol>
             <li>
@@ -256,18 +169,12 @@ export default function HomeView({
               <span>Prepare a few clear answers for your interview.</span>
             </li>
           </ol>
-          <button
-            className="text-button"
-            onClick={() => handleNavChange("interviews")}
-          >
-            Just here to practise? Try a question <ArrowIcon />
-          </button>
         </div>
       </section>
     );
 
   return (
-    <div className="home-dashboard" data-testid="home-dashboard">
+    <div className="wi-home ws-stack" data-testid="home-dashboard">
       {!onboardingDismissed && (
         <SetupGuide
           applications={applications}
@@ -279,10 +186,11 @@ export default function HomeView({
           onDismiss={() => setOnboardingDismissed(true)}
         />
       )}
-      <section className="home-next-step" data-testid="home-dashboard-hero">
+      <section className="ws-card wi-next" data-testid="home-dashboard-hero">
         <div>
-          <span className="eyebrow">
-            {upcoming.length ? "YOUR NEXT DEADLINE" : "YOUR NEXT STEP"}
+          <span className="ws-eyebrow">
+            <span aria-hidden="true" />
+            {upcoming.length ? "Your next deadline" : "Your next step"}
           </span>
           <h2>
             {upcoming.length
@@ -296,7 +204,7 @@ export default function HomeView({
           </p>
         </div>
         <button
-          className="hero-primary"
+          className="ws-btn ws-btn--primary"
           data-testid="home-dashboard-start-application"
           onClick={() =>
             upcoming.length
@@ -308,7 +216,7 @@ export default function HomeView({
           <ArrowIcon />
         </button>
       </section>
-      <div className="home-summary-line" data-testid="home-dashboard-metrics">
+      <div className="wi-summary" data-testid="home-dashboard-metrics">
         <span>
           <ApplicationsIcon />
           <strong>{applications.length}</strong> applications
@@ -322,12 +230,12 @@ export default function HomeView({
           <strong>{applicationSummary.dueSoon}</strong> due within 21 days
         </span>
       </div>
-      <div className="dashboard-columns">
-        <section className="dashboard-card">
-          <div className="section-heading">
+      <div className="ws-grid ws-grid--2">
+        <section className="ws-card">
+          <div className="ws-card__head">
             <h3>Continue writing</h3>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => handleNavChange("essays")}
             >
               All essays <ArrowIcon />
@@ -336,12 +244,12 @@ export default function HomeView({
           {recent.length ? (
             essayList(recent)
           ) : (
-            <div className="quiet-empty">
+            <div className="ws-empty">
               <EssaysIcon />
               <h4>Start with a rough draft.</h4>
               <p>Your first version doesn’t need to be perfect.</p>
               <button
-                className="secondary-action-btn"
+                className="ws-btn"
                 data-testid="home-dashboard-start-essay"
                 onClick={() => handleOpenNewEssayForm()}
               >
@@ -350,33 +258,33 @@ export default function HomeView({
             </div>
           )}
         </section>
-        <section className="dashboard-card">
-          <div className="section-heading">
+        <section className="ws-card">
+          <div className="ws-card__head">
             <h3>Upcoming deadlines</h3>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => handleNavChange("deadlines")}
             >
               Calendar <ArrowIcon />
             </button>
           </div>
           {upcoming.length ? (
-            <div className="upcoming-list">
+            <div className="wi-list">
               {upcoming.map((app) => {
                 const date = parseDate(app.deadline);
                 return (
                   <button
-                    className="deadline-row"
+                    className="wi-row"
                     key={app.id}
                     onClick={() => setSelectedApplicationId(app.id)}
                   >
-                    <span className="date-tile">
+                    <span className="wi-date">
                       <small>
                         {date.toLocaleDateString(undefined, { month: "short" })}
                       </small>
                       <strong>{date.getDate()}</strong>
                     </span>
-                    <span className="list-copy">
+                    <span className="wi-row__copy">
                       <strong>{app.school_name}</strong>
                       <span>
                         {app.program_name} ·{" "}
@@ -389,12 +297,12 @@ export default function HomeView({
               })}
             </div>
           ) : (
-            <div className="quiet-empty">
+            <div className="ws-empty">
               <DeadlinesIcon />
               <h4>No upcoming deadlines.</h4>
               <p>Check your applications to keep your dates current.</p>
               <button
-                className="text-button"
+                className="ws-btn ws-btn--ghost ws-btn--sm"
                 onClick={() => handleNavChange("tracker")}
               >
                 View applications <ArrowIcon />
@@ -404,8 +312,8 @@ export default function HomeView({
         </section>
       </div>
       {showHomeChecklist && (
-        <section className="practice-banner practice-banner-compact">
-          <span className="practice-banner-icon">
+        <section className="ws-card ws-card--soft wi-banner">
+          <span className="wi-row__icon">
             <InterviewIcon />
           </span>
           <div>
@@ -413,7 +321,7 @@ export default function HomeView({
             <p>Practise one interview answer, out loud.</p>
           </div>
           <button
-            className="secondary-action-btn"
+            className="ws-btn"
             onClick={() => handleNavChange("interviews")}
           >
             Start practising <ArrowIcon />

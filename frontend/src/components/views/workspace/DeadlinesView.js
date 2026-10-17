@@ -1,4 +1,5 @@
 import React from "react";
+import "./WorkspacePlanning.css";
 
 function DeadlinesView({
   handleOpenApplicationForm,
@@ -16,94 +17,101 @@ function DeadlinesView({
 }) {
   if (!applicationsByDeadline.length)
     return (
-      <div className="empty-state-main">
-        <h2>Your calendar starts with a deadline</h2>
-        <p>Add a programme to see its application date here.</p>
-        <button
-          className="history-btn"
-          onClick={() => handleOpenApplicationForm()}
-        >
-          Add application
-        </button>
+      <div className="wpl wpl-empty-wrap">
+        <div className="ws-empty wpl-empty">
+          <h2 className="ws-empty__title">Your calendar starts with a deadline</h2>
+          <p>Add a programme to see its application date here.</p>
+          <button
+            type="button"
+            className="ws-btn ws-btn--primary"
+            onClick={() => handleOpenApplicationForm()}
+          >
+            Add application
+          </button>
+        </div>
       </div>
     );
   return (
-    <div className="deadlines-panel">
+    <div className="wpl wpl-deadlines">
       <h2 className="sr-only" data-testid="deadlines-heading">
         Deadlines
       </h2>
-      <div className="insights-grid">
-        <div className="insight-card">
+      <div className="wpl-stats">
+        <div className="wpl-stat wpl-stat--late">
+          <span className="wpl-stat__n ws-num">
+            {deadlineBuckets.overdue.length}
+          </span>
           <h3>Overdue</h3>
-          <p>{deadlineBuckets.overdue.length}</p>
         </div>
-        <div className="insight-card">
-          <h3>Due in 14 Days</h3>
-          <p>{deadlineBuckets.critical.length}</p>
+        <div className="wpl-stat wpl-stat--soon">
+          <span className="wpl-stat__n ws-num">
+            {deadlineBuckets.critical.length}
+          </span>
+          <h3>Due in 14 days</h3>
         </div>
-        <div className="insight-card">
+        <div className="wpl-stat">
+          <span className="wpl-stat__n ws-num">
+            {deadlineBuckets.upcoming.length}
+          </span>
           <h3>Upcoming</h3>
-          <p>{deadlineBuckets.upcoming.length}</p>
         </div>
-      </div>
-      <div className="deadlines-actions-row">
         <button
           type="button"
           data-testid="deadlines-export-ics"
-          className="history-btn"
+          className="ws-btn wpl-stats__export"
           onClick={handleExportDeadlinesICS}
         >
           Download calendar (.ics)
         </button>
       </div>
 
-      <div className="detail-list-card timeline-card">
-        <div className="timeline-header">
-          <h3>Application Timeline</h3>
-          <div className="timeline-controls">
+      <section className="ws-card wpl-month" aria-label="Month view">
+        <div className="wpl-month__head">
+          <h3 className="ws-h3">Month view</h3>
+          <div className="wpl-month__nav">
             <button
               type="button"
               data-testid="deadlines-timeline-prev"
-              className="secondary-action-btn timeline-nav-btn"
+              className="ws-btn ws-btn--sm"
               onClick={() => setTimelineMonthOffset((prev) => prev - 1)}
             >
               Previous
             </button>
-            <span>{timelineMonthLabel}</span>
+            <span className="wpl-month__label">{timelineMonthLabel}</span>
             <button
               type="button"
               data-testid="deadlines-timeline-next"
-              className="secondary-action-btn timeline-nav-btn"
+              className="ws-btn ws-btn--sm"
               onClick={() => setTimelineMonthOffset((prev) => prev + 1)}
             >
               Next
             </button>
           </div>
         </div>
-        <div className="timeline-grid timeline-grid-head">
+        <div className="wpl-grid wpl-grid--head">
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((weekday) => (
-            <div key={weekday} className="timeline-weekday">
+            <div key={weekday} className="wpl-weekday">
               {weekday}
             </div>
           ))}
         </div>
-        <div className="timeline-grid timeline-grid-days">
+        <div className="wpl-grid">
           {timelineCells.map((cell) =>
             cell.kind === "empty" ? (
-              <div key={cell.key} className="timeline-day-cell empty" />
+              <div key={cell.key} className="wpl-day wpl-day--empty" />
             ) : (
               <div
                 key={cell.key}
-                className={`timeline-day-cell ${cell.applications.length ? "has-deadline" : ""}`}
+                className={`wpl-day ${cell.applications.length ? "has-deadline" : ""}`}
               >
-                <div className="timeline-day-number">{cell.day}</div>
-                <div className="timeline-day-events">
+                <div className="wpl-day__n">{cell.day}</div>
+                <div className="wpl-day__events">
                   {cell.applications.slice(0, 2).map((application) => (
                     <button
                       type="button"
                       data-testid="deadlines-timeline-event"
                       key={`timeline-${application.id}-${cell.key}`}
-                      className="timeline-event-chip"
+                      className="wpl-day__event"
                       onClick={() => {
                         setSelectedApplicationId(application.id);
                         setDocsApplicationId(application.id);
@@ -114,7 +122,7 @@ function DeadlinesView({
                     </button>
                   ))}
                   {cell.applications.length > 2 && (
-                    <span className="timeline-more">
+                    <span className="wpl-day__more">
                       +{cell.applications.length - 2} more
                     </span>
                   )}
@@ -123,26 +131,12 @@ function DeadlinesView({
             ),
           )}
         </div>
-      </div>
+      </section>
 
-      <div className="detail-list-card">
-        <h3>Timeline</h3>
-        {applicationsByDeadline.length === 0 ? (
-          <div className="empty-state-main">
-            <h2>No deadlines yet</h2>
-            <p>Add applications and set deadlines to see your timeline.</p>
-            <div className="empty-state-actions">
-              <button
-                type="button"
-                className="history-btn"
-                onClick={() => setActiveNav("tracker")}
-              >
-                Go to Applications
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="detail-list">
+      <section className="ws-card wpl-agenda" aria-label="Deadline agenda">
+        <h3 className="ws-h3">Agenda</h3>
+        {applicationsByDeadline.length === 0 ? null : (
+          <div className="wpl-agenda__list">
             {applicationsByDeadline.map((application) => {
               const days = getDaysUntilDeadline(application.deadline);
               const urgencyClass =
@@ -159,10 +153,11 @@ function DeadlinesView({
                     : days === 0
                       ? "Due today"
                       : `${days} day${days === 1 ? "" : "s"} left`;
+              const date = parseDate(application.deadline);
               return (
                 <article
                   key={`deadline-${application.id}`}
-                  className="detail-item"
+                  className={`wpl-agenda__item is-${urgencyClass}`}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(event) => {
@@ -177,25 +172,42 @@ function DeadlinesView({
                     setActiveNav("home");
                   }}
                 >
-                  <div className="detail-item-main">
-                    <strong>{application.school_name}</strong>
-                    <span>{application.program_name}</span>
-                  </div>
-                  <div className="detail-item-meta">
+                  <div className="wpl-agenda__date" aria-hidden="true">
                     <span>
-                      {parseDate(application.deadline)?.toLocaleDateString() ||
-                        "No date"}
+                      {date?.toLocaleDateString(undefined, { month: "short" }) ||
+                        "–"}
                     </span>
-                    <span className={`urgency-chip ${urgencyClass}`}>
-                      {urgencyLabel}
+                    <strong>{date?.getDate() || ""}</strong>
+                  </div>
+                  <div className="wpl-agenda__main">
+                    <strong>{application.school_name}</strong>
+                    <span className="ws-muted">{application.program_name}</span>
+                    <span className="ws-small ws-muted">
+                      {date?.toLocaleDateString(undefined, {
+                        weekday: "short",
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }) || "No date"}
                     </span>
                   </div>
+                  <span
+                    className={`ws-chip ${
+                      urgencyClass === "late"
+                        ? "ws-chip--danger"
+                        : urgencyClass === "critical"
+                          ? "ws-chip--warn"
+                          : ""
+                    }`}
+                  >
+                    {urgencyLabel}
+                  </span>
                 </article>
               );
             })}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

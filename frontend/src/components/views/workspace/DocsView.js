@@ -1,4 +1,5 @@
 import React from "react";
+import "./WorkspacePlanning.css";
 
 function DocsView({
   applications,
@@ -16,19 +17,21 @@ function DocsView({
   handleNavChange,
 }) {
   return (
-    <div className="docs-panel">
-      <div className="docs-header-row">
+    <div className="wpl wpl-docs">
+      <div className="wpl-docs__head">
         <div>
           <h2 className="sr-only" data-testid="docs-heading">
             Application documents
           </h2>
-          <p>Track each document’s status. Files are not uploaded here.</p>
+          <p className="ws-muted">
+            Track each document’s status. Files are not uploaded here.
+          </p>
         </div>
         {applications.length > 0 ? (
           <select
             aria-label="Application for document checklist"
             data-testid="docs-application-select"
-            className="docs-application-select"
+            className="ws-select wpl-docs__select"
             value={activeDocsApplicationId || ""}
             onChange={(e) => {
               setDocsApplicationId(Number(e.target.value));
@@ -45,13 +48,13 @@ function DocsView({
       </div>
 
       {applications.length > 1 ? (
-        <details className="progressive-section">
+        <details className="wpl-disclosure">
           <summary>Copy an existing checklist</summary>
-          <div className="docs-copy-row">
+          <div className="wpl-docs__copy">
             <select
               aria-label="Copy checklist from application"
               data-testid="docs-copy-source-select"
-              className="docs-application-select"
+              className="ws-select wpl-docs__select"
               value={docsCopySourceId}
               onChange={(e) => setDocsCopySourceId(e.target.value)}
             >
@@ -69,7 +72,7 @@ function DocsView({
             <button
               type="button"
               data-testid="docs-copy-checklist-button"
-              className="history-btn docs-copy-btn"
+              className="ws-btn"
               onClick={copyDocsFromApplication}
               disabled={!docsCopySourceId || !activeDocsApplicationId}
             >
@@ -80,9 +83,9 @@ function DocsView({
       ) : null}
 
       {applications.length > 0 && (
-        <div className="document-summary">
+        <div className="wpl-summary">
           <span>
-            <strong>
+            <strong className="ws-num">
               {docProgress.ready}/{DOC_TEMPLATES.length}
             </strong>{" "}
             documents ready
@@ -91,23 +94,23 @@ function DocsView({
         </div>
       )}
 
-      <div className="detail-list-card">
-        <h3>Core Documents</h3>
+      <section className="ws-card wpl-docs__card">
+        <h3 className="ws-h3">Core documents</h3>
         {!applications.length ? (
-          <div className="empty-state-main">
-            <h2>No applications yet</h2>
+          <div className="ws-empty wpl-empty">
+            <h2 className="ws-empty__title">No applications yet</h2>
             <p>Add your first school to track document readiness by program.</p>
-            <div className="empty-state-actions">
+            <div className="ws-row">
               <button
                 type="button"
-                className="history-btn"
+                className="ws-btn ws-btn--primary"
                 onClick={() => handleOpenApplicationForm()}
               >
                 Add Application
               </button>
               <button
                 type="button"
-                className="secondary-action-btn"
+                className="ws-btn"
                 onClick={() => handleNavChange("tracker")}
               >
                 Go to Applications
@@ -115,18 +118,19 @@ function DocsView({
             </div>
           </div>
         ) : (
-          <div className="detail-list">
+          <div className="wpl-doc-list">
             {DOC_TEMPLATES.map((doc) => {
               const status = activeDocsMap[doc.id]?.status || "missing";
               const notes = activeDocsMap[doc.id]?.notes || "";
               return (
                 <article
                   key={`${activeDocsScopeKey}-${doc.id}`}
-                  className="doc-item"
+                  className="wpl-doc"
                 >
-                  <div className="doc-item-header">
+                  <div className="wpl-doc__head">
                     <strong>{doc.label}</strong>
                     <select
+                      className={`ws-select wpl-doc__status is-${status}`}
                       aria-label={`${doc.label} status`}
                       data-testid="docs-item-status-select"
                       value={status}
@@ -143,11 +147,12 @@ function DocsView({
                       <option value="ready">Ready</option>
                     </select>
                   </div>
-                  <details className="document-notes">
+                  <details className="wpl-doc__notes">
                     <summary>
                       {notes ? "View or edit note" : "Add a note"}
                     </summary>
                     <textarea
+                      className="ws-textarea"
                       aria-label={`${doc.label} notes`}
                       data-testid="docs-item-notes-input"
                       value={notes}
@@ -166,7 +171,7 @@ function DocsView({
             })}
           </div>
         )}
-      </div>
+      </section>
     </div>
   );
 }

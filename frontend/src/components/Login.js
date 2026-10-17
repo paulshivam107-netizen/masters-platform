@@ -4,6 +4,7 @@ import { forgotPasswordApi, resetPasswordApi } from "../api";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { trackEvent } from "../app/telemetry";
 import "./Auth.css";
+import "./public/AuthPages.css";
 import { authError } from "../api/authErrors";
 
 function Login({ onSwitchToSignup }) {
@@ -120,9 +121,14 @@ function Login({ onSwitchToSignup }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 data-testid="auth-login-heading">Welcome back.</h2>
+        <p className="ap-eyebrow">
+          <span aria-hidden="true" />
+          Sign in
+        </p>
+        <h1 data-testid="auth-login-heading">Welcome back.</h1>
         <p className="auth-subtitle">
-          Your applications and your next step are right here.
+          Pick up where you left off: your applications, your résumé and your
+          next practice interview.
         </p>
 
         {error && (
@@ -178,6 +184,9 @@ function Login({ onSwitchToSignup }) {
           >
             {loading ? "Logging in..." : "Login"}
           </button>
+          <div className="ap-divider" aria-hidden="true">
+            <span>or</span>
+          </div>
           <GoogleSignInButton
             onCredential={handleGoogleLogin}
             onError={(err) => setError(err.message)}
@@ -199,6 +208,11 @@ function Login({ onSwitchToSignup }) {
 
         {showResetPanel && (
           <div className="auth-reset-panel">
+            <h2 className="ap-subhead">Reset your password</h2>
+            <p className="ap-help">
+              Enter your email and we will send a reset link. Then paste the
+              token from that email below, with your new password.
+            </p>
             <div className="form-group">
               <label htmlFor="login-field-3">Reset Email</label>
               <input

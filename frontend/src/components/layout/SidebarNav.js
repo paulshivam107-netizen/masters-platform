@@ -3,12 +3,22 @@ import Brand from "../common/Brand";
 import ThemeToggle from "../common/ThemeToggle";
 import { BellIcon, CloseIcon, SettingsIcon } from "../../app/icons";
 
+function initialsOf(name) {
+  return (name || "You")
+    .split(/\s+/)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+}
+
 export default function SidebarNav({
   navGroups,
   activeNav,
   expandedNavGroups,
   onToggleGroup,
   onNavigate,
+  user,
 }) {
   const [isMobileMoreOpen, setIsMobileMoreOpen] = useState(false);
   const dialogRef = useRef(null);
@@ -35,7 +45,7 @@ export default function SidebarNav({
     <button
       key={item.id}
       type="button"
-      className={`${mobile ? "mobile-nav-more-item" : "nav-drawer-item"} ${activeNav === item.id ? "active" : ""}`}
+      className={`${mobile ? "ws-sheet-item" : "ws-nav-item"} ${activeNav === item.id ? "is-active" : ""}`}
       data-testid={`${mobile ? "mobile-nav-overflow" : "nav-item"}-${item.id}`}
       aria-current={activeNav === item.id ? "page" : undefined}
       onClick={() => {
@@ -43,7 +53,7 @@ export default function SidebarNav({
         onNavigate(item.id);
       }}
     >
-      <span className="nav-icon-glyph" aria-hidden="true">
+      <span className="ws-nav-icon" aria-hidden="true">
         {item.icon}
       </span>
       <span>{item.label}</span>
@@ -51,16 +61,16 @@ export default function SidebarNav({
   );
   return (
     <>
-      <aside className="nav-sidebar" data-testid="sidebar-nav">
+      <aside className="ws-sidebar" data-testid="sidebar-nav">
         <Brand to="/app/today" onClick={() => onNavigate("home")} />
-        <nav className="soft-nav-list" aria-label="Workspace navigation">
+        <nav className="ws-nav" aria-label="Workspace navigation">
           {navGroups.map((group) => (
-            <div className="nav-group" key={group.id}>
+            <div className="ws-nav-group" key={group.id}>
               {group.id === "core" ? (
-                <p className="nav-group-label">Your workspace</p>
+                <p className="ws-nav-label">Your workspace</p>
               ) : (
                 <button
-                  className="nav-group-toggle"
+                  className="ws-nav-label ws-nav-toggle"
                   type="button"
                   aria-expanded={Boolean(expandedNavGroups[group.id])}
                   aria-controls={`nav-${group.id}`}
@@ -68,85 +78,107 @@ export default function SidebarNav({
                   data-testid={`nav-group-${group.id}`}
                 >
                   <span>{group.label}</span>
-                  <span aria-hidden="true">
+                  <span className="ws-nav-toggle__mark" aria-hidden="true">
                     {expandedNavGroups[group.id] ? "−" : "+"}
                   </span>
                 </button>
               )}
               {(group.id === "core" || expandedNavGroups[group.id]) && (
-                <div className="nav-group-items" id={`nav-${group.id}`}>
+                <div className="ws-nav-items" id={`nav-${group.id}`}>
                   {group.items.map((item) => navButton(item))}
                 </div>
               )}
             </div>
           ))}
         </nav>
-        <div className="sidebar-footer">
+        <div className="ws-sidebar-foot">
           <button
             type="button"
-            className={`nav-drawer-item ${activeNav === "settings" ? "active" : ""}`}
+            className={`ws-nav-item ${activeNav === "settings" ? "is-active" : ""}`}
+            aria-current={activeNav === "settings" ? "page" : undefined}
             onClick={() => onNavigate("settings")}
           >
-            <SettingsIcon />
+            <span className="ws-nav-icon" aria-hidden="true">
+              <SettingsIcon />
+            </span>
             <span>Settings</span>
           </button>
           <ThemeToggle showLabel />
+          {user && (
+            <button
+              type="button"
+              className={`ws-account ${activeNav === "profile" ? "is-active" : ""}`}
+              data-testid="sidebar-account"
+              aria-label={`Your profile, ${user.name || user.email}`}
+              onClick={() => onNavigate("profile")}
+            >
+              <span className="ws-avatar" aria-hidden="true">
+                {initialsOf(user.name)}
+              </span>
+              <span className="ws-account__text">
+                <strong>{user.name || "Your profile"}</strong>
+                <small>{user.email}</small>
+              </span>
+            </button>
+          )}
         </div>
       </aside>
       <nav
-        className="mobile-bottom-nav"
+        className="ws-tabbar"
         aria-label="Mobile navigation"
         data-testid="mobile-bottom-nav"
       >
         {primary.map((item) => (
           <button
             key={item.id}
-            className={`mobile-bottom-nav-item ${activeNav === item.id ? "active" : ""}`}
+            className={`ws-tab ${activeNav === item.id ? "is-active" : ""}`}
             data-testid={`mobile-nav-item-${item.id}`}
             aria-current={activeNav === item.id ? "page" : undefined}
             onClick={() => onNavigate(item.id)}
           >
-            <span aria-hidden="true">{item.icon}</span>
+            <span className="ws-tab__icon" aria-hidden="true">
+              {item.icon}
+            </span>
             <span>
-              {item.id === "tracker"
-                ? "Applications"
-                : item.id === "interviews"
-                  ? "Interviews"
+              {item.id === "home"
+                ? "Today"
+                : item.id === "tracker"
+                  ? "Applications"
                   : item.label}
             </span>
           </button>
         ))}
         <button
           type="button"
-          className={`mobile-bottom-nav-item ${!primary.some((item) => item.id === activeNav) ? "active" : ""}`}
+          className={`ws-tab ${!primary.some((item) => item.id === activeNav) ? "is-active" : ""}`}
           data-testid="mobile-nav-item-more"
           aria-haspopup="dialog"
           aria-expanded={isMobileMoreOpen}
           onClick={() => setIsMobileMoreOpen(true)}
         >
-          <span className="more-icon" aria-hidden="true">
-            ···
+          <span className="ws-tab__icon ws-tab__more" aria-hidden="true">
+            <i />
+            <i />
+            <i />
           </span>
           <span>More</span>
         </button>
       </nav>
       <dialog
         ref={dialogRef}
-        className="mobile-nav-more-dialog"
+        className="ws-sheet"
         aria-labelledby="more-nav-title"
         onClose={() => setIsMobileMoreOpen(false)}
         onClick={(event) => {
           if (event.target === event.currentTarget) setIsMobileMoreOpen(false);
         }}
       >
-        <div
-          className="mobile-nav-more-sheet"
-          data-testid="mobile-nav-more-overlay"
-        >
-          <header>
+        <div className="ws-sheet__body" data-testid="mobile-nav-more-overlay">
+          <header className="ws-sheet__head">
             <h2 id="more-nav-title">Your workspace</h2>
             <button
-              className="icon-button"
+              type="button"
+              className="ws-btn ws-btn--icon"
               aria-label="Close navigation menu"
               onClick={() => setIsMobileMoreOpen(false)}
             >
@@ -155,15 +187,16 @@ export default function SidebarNav({
           </header>
           {overflow.map((group) => (
             <div key={group.id}>
-              <p className="nav-group-label">{group.label}</p>
-              <div className="mobile-nav-more-items">
+              <p className="ws-nav-label">{group.label}</p>
+              <div className="ws-sheet__items">
                 {group.items.map((item) => navButton(item, true))}
               </div>
             </div>
           ))}
-          <div className="mobile-sheet-footer">
+          <div className="ws-sheet__foot">
             <button
-              className="secondary-action-btn"
+              type="button"
+              className="ws-btn"
               onClick={() => {
                 setIsMobileMoreOpen(false);
                 onNavigate("notifications");
@@ -172,7 +205,8 @@ export default function SidebarNav({
               <BellIcon /> Updates
             </button>
             <button
-              className="secondary-action-btn"
+              type="button"
+              className="ws-btn"
               onClick={() => {
                 setIsMobileMoreOpen(false);
                 onNavigate("settings");

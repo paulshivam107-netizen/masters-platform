@@ -1,5 +1,6 @@
 import React from "react";
 import { catalogStatusLabel } from "../../../app/catalogAutofill";
+import "./WorkspacePlanning.css";
 
 function TrackerView({
   onOpenApplication,
@@ -50,9 +51,9 @@ function TrackerView({
   const update = (key, value) =>
     setApplicationFormData((prev) => ({ ...prev, [key]: value }));
   const field = (key, label, type = "text", options = {}) => (
-    <div className="form-group" key={key}>
-      <label htmlFor={`application-${key}`}>{label}</label>
-      <input
+    <div className="ws-field" key={key}>
+      <label className="ws-label" htmlFor={`application-${key}`}>{label}</label>
+      <input className="ws-input"
         id={`application-${key}`}
         type={type}
         value={applicationFormData[key] ?? ""}
@@ -62,9 +63,9 @@ function TrackerView({
     </div>
   );
   const select = (key, label, values) => (
-    <div className="form-group">
-      <label htmlFor={`application-${key}`}>{label}</label>
-      <select
+    <div className="ws-field">
+      <label className="ws-label" htmlFor={`application-${key}`}>{label}</label>
+      <select className="ws-select"
         id={`application-${key}`}
         value={applicationFormData[key]}
         onChange={(e) => update(key, e.target.value)}
@@ -82,89 +83,101 @@ function TrackerView({
     resetApplicationForm();
   };
   return (
-    <div className="tracker-panel">
+    <div className="wpl wpl-tracker">
       {!showApplicationForm && (
         <>
-          <div className="tracker-top-row">
-            <div>
-              <h2
-                ref={listRef}
-                tabIndex={-1}
-                data-testid="tracker-heading"
-                className="sr-only"
-              >
-                Application shortlist
-              </h2>
-              <p>Keep each programme and its deadline together.</p>
-            </div>
+          <div className="wpl-toolbar">
+            <h2
+              ref={listRef}
+              tabIndex={-1}
+              data-testid="tracker-heading"
+              className="sr-only"
+            >
+              Application shortlist
+            </h2>
+            {(filteredApplications.length > 0 || applicationSearch) && (
+              <div className="wpl-search">
+                <input
+                  className="ws-input"
+                  data-testid="tracker-search-input"
+                  type="search"
+                  value={applicationSearch}
+                  onChange={(e) => setApplicationSearch(e.target.value)}
+                  placeholder="Filter by school, programme or status…"
+                  aria-label="Filter applications"
+                />
+                {applicationSearch && (
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn--ghost"
+                    onClick={() => setApplicationSearch("")}
+                  >
+                    Clear filter
+                  </button>
+                )}
+              </div>
+            )}
             <button
               type="button"
               data-testid="tracker-add-application"
-              className="new-essay-btn tracker-add-btn"
+              className="ws-btn ws-btn--primary wpl-add"
               onClick={() => handleOpenApplicationForm()}
             >
               + Add application
             </button>
           </div>
-          {applicationSummary.upcoming > 0 && (
-            <p className="compact-summary">
-              <strong>{applicationSummary.dueSoon}</strong> due within 21 days ·{" "}
-              <strong>{applicationSummary.upcoming}</strong> upcoming deadlines
-            </p>
-          )}
-          {(filteredApplications.length > 0 || applicationSearch) && (
-            <div className="tracker-search-row">
-              <input
-                data-testid="tracker-search-input"
-                type="search"
-                value={applicationSearch}
-                onChange={(e) => setApplicationSearch(e.target.value)}
-                placeholder="Filter by school, programme or status…"
-                aria-label="Filter applications"
-              />
-              {applicationSearch && (
-                <button
-                  className="text-button"
-                  onClick={() => setApplicationSearch("")}
-                >
-                  Clear filter
-                </button>
-              )}
-            </div>
-          )}
+          <p className="ws-muted wpl-lede">
+            Keep each programme and its deadline together.
+            {applicationSummary.upcoming > 0 && (
+              <>
+                {" "}
+                <strong>{applicationSummary.dueSoon}</strong> due within 21
+                days · <strong>{applicationSummary.upcoming}</strong> upcoming
+                deadlines.
+              </>
+            )}
+          </p>
         </>
       )}
       {showApplicationForm && (
         <section
           ref={formRef}
-          className="tracker-form-card"
+          className="ws-card wpl-form-card"
           data-testid="tracker-form-card"
         >
-          <div className="section-heading">
+          <div className="wpl-form-head">
             <div>
               <h2 tabIndex={-1}>
                 {editingApplicationId
                   ? "Edit application"
                   : "Add an application"}
               </h2>
-              <p className="muted">
+              <p className="ws-muted">
                 Start with the essentials. You can add everything else later.
               </p>
             </div>
-            <button className="text-button" type="button" onClick={cancel}>
+            <button
+              className="ws-btn ws-btn--ghost"
+              type="button"
+              onClick={cancel}
+            >
               Cancel
             </button>
           </div>
           {applicationDraftRecovered && !editingApplicationId && (
-            <div className="draft-recovered-banner">
+            <div className="ws-alert ws-alert--warn wpl-banner">
               <p>Recovered an unsaved draft from this browser.</p>
-              <button type="button" onClick={handleDiscardApplicationDraft}>
+              <button
+                type="button"
+                className="ws-btn ws-btn--sm"
+                onClick={handleDiscardApplicationDraft}
+              >
                 Discard local draft
               </button>
             </div>
           )}
-          <form className="tracker-form" onSubmit={handleApplicationSubmit}>
-            <div className="tracker-form-grid">
+          <form className="wpl-form" onSubmit={handleApplicationSubmit}>
+            <div className="wpl-form-grid">
               {field("school_name", "School", "text", {
                 required: true,
                 minLength: 2,
@@ -178,9 +191,9 @@ function TrackerView({
                   <option key={school} value={school} />
                 ))}
               </datalist>
-              <div className="form-group">
-                <label htmlFor="application-program">Programme</label>
-                <input
+              <div className="ws-field">
+                <label className="ws-label" htmlFor="application-program">Programme</label>
+                <input className="ws-input"
                   id="application-program"
                   data-testid="tracker-program-input"
                   required
@@ -212,13 +225,13 @@ function TrackerView({
                 "data-testid": "tracker-deadline-input",
               })}
             </div>
-            <details className="progressive-section">
+            <details className="wpl-disclosure">
               <summary>
                 Use a catalogue template <span>Optional</span>
               </summary>
-              <div className="form-group">
-                <label htmlFor="application-catalog">Choose a programme</label>
-                <select
+              <div className="ws-field">
+                <label className="ws-label" htmlFor="application-catalog">Choose a programme</label>
+                <select className="ws-select"
                   id="application-catalog"
                   data-testid="tracker-program-catalog-select"
                   value={catalogSelectionId}
@@ -240,7 +253,7 @@ function TrackerView({
                 </select>
                 {selectedCatalogItem && (
                   <p
-                    className="tracker-catalog-meta"
+                    className="ws-small ws-muted"
                     data-testid="tracker-catalog-status"
                   >
                     {catalogStatusLabel(selectedCatalogItem)}
@@ -258,7 +271,7 @@ function TrackerView({
                     )}
                   </p>
                 )}
-                <small>
+                <small className="ws-help">
                   {programCatalogLoading
                     ? "Loading templates…"
                     : "Templates cover a small set of programmes. Check dates and requirements on the school’s website."}
@@ -266,13 +279,13 @@ function TrackerView({
               </div>
             </details>
             <details
-              className="progressive-section"
+              className="wpl-disclosure"
               open={editingApplicationId ? true : undefined}
             >
               <summary>
                 Progress & requirements <span>Optional</span>
               </summary>
-              <div className="tracker-form-grid">
+              <div className="wpl-form-grid">
                 {field("application_round", "Application round")}
                 {select("status", "Application status", [
                   "Planning",
@@ -304,7 +317,7 @@ function TrackerView({
                   "Accepted",
                   "Interview",
                 ])}
-                <label className="check-option">
+                <label className="ws-check">
                   <input
                     type="checkbox"
                     checked={applicationFormData.interview_required}
@@ -320,7 +333,7 @@ function TrackerView({
                   />
                   Interview required
                 </label>
-                <label className="check-option">
+                <label className="ws-check">
                   <input
                     type="checkbox"
                     checked={applicationFormData.interview_completed}
@@ -332,16 +345,16 @@ function TrackerView({
                   Interview completed
                 </label>
               </div>
-              <p className="field-help">
+              <p className="ws-help">
                 Check the requirements for your programme; the initial counts
                 are placeholders.
               </p>
             </details>
-            <details className="progressive-section">
+            <details className="wpl-disclosure">
               <summary>
                 Fees & notes <span>Optional</span>
               </summary>
-              <div className="tracker-form-grid">
+              <div className="wpl-form-grid">
                 {field("application_fee", "Application fee", "number", {
                   min: 0,
                   step: 0.01,
@@ -356,9 +369,9 @@ function TrackerView({
                   "GBP",
                   "INR",
                 ])}
-                <div className="form-group full-width">
-                  <label htmlFor="application-notes">Notes</label>
-                  <textarea
+                <div className="ws-field wpl-span">
+                  <label className="ws-label" htmlFor="application-notes">Notes</label>
+                  <textarea className="ws-textarea"
                     id="application-notes"
                     maxLength={4000}
                     value={applicationFormData.requirements_notes}
@@ -370,10 +383,10 @@ function TrackerView({
                 </div>
               </div>
             </details>
-            <div className="form-actions">
+            <div className="wpl-form-actions">
               <button
                 type="submit"
-                className="submit-btn"
+                className="ws-btn ws-btn--primary"
                 disabled={applicationLoading}
               >
                 {applicationLoading
@@ -387,10 +400,10 @@ function TrackerView({
         </section>
       )}
       {!showApplicationForm && (
-        <div className="tracker-list-grid">
+        <div className="wpl-app-list">
           {!filteredApplications.length ? (
-            <div className="empty-state-main">
-              <h2>
+            <div className="ws-empty wpl-empty">
+              <h2 className="ws-empty__title">
                 {applicationSearch
                   ? "No matching applications"
                   : "Your shortlist starts here"}
@@ -402,7 +415,8 @@ function TrackerView({
               </p>
               {applicationSearch && (
                 <button
-                  className="secondary-action-btn"
+                  type="button"
+                  className="ws-btn"
                   onClick={() => setApplicationSearch("")}
                 >
                   Show all applications
@@ -413,6 +427,7 @@ function TrackerView({
             filteredApplications.map((application) => {
               const daysUntil = getDaysUntilDeadline(application.deadline);
               const readiness = getApplicationReadiness(application);
+              const deadlineDate = parseDate(application.deadline);
               const deadlineText =
                 daysUntil === null
                   ? "No deadline"
@@ -421,61 +436,73 @@ function TrackerView({
                     : daysUntil === 0
                       ? "Due today"
                       : `${daysUntil} days left`;
+              const tone =
+                daysUntil === null
+                  ? ""
+                  : daysUntil < 0
+                    ? "ws-chip--danger"
+                    : daysUntil <= 21
+                      ? "ws-chip--warn"
+                      : "";
               return (
                 <article
                   key={application.id}
-                  className="application-card"
+                  className="ws-card wpl-app"
                   data-testid="tracker-application-card"
                 >
-                  <div className="application-card-top">
-                    <div>
+                  <div className="wpl-app__deadline">
+                    <span className="wpl-app__label">Deadline</span>
+                    <strong className="wpl-app__date">
+                      {deadlineDate?.toLocaleDateString(undefined, {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }) || "Not set"}
+                    </strong>
+                    <span className={`ws-chip ${tone}`}>{deadlineText}</span>
+                  </div>
+                  <div className="wpl-app__main">
+                    <div className="wpl-app__titles">
                       <h3>{application.school_name}</h3>
-                      <p className="application-program">
-                        {application.program_name}
-                      </p>
+                      <p className="ws-muted">{application.program_name}</p>
                     </div>
-                    <span className="application-status">
+                    <span className="ws-chip ws-chip--info wpl-app__status">
                       {application.status}
                     </span>
-                  </div>
-                  <div className="application-card-summary">
-                    <span>
-                      <strong>Deadline</strong>{" "}
-                      {parseDate(application.deadline)?.toLocaleDateString(
-                        undefined,
-                        { month: "short", day: "numeric", year: "numeric" },
-                      ) || "Not set"}
-                    </span>
-                    <span
-                      className={`deadline-chip ${daysUntil < 0 ? "late" : ""}`}
+                    <div
+                      className="wpl-progress"
+                      role="img"
+                      aria-label={`Checklist ${readiness.readiness}% complete`}
                     >
-                      {deadlineText}
-                    </span>
-                  </div>
-                  <div className="application-card-footer">
-                    <span className="compact-summary">
-                      Checklist {readiness.readiness}%
-                    </span>
-                    <div className="application-actions">
-                      <button
-                        className="history-btn"
-                        aria-label={`Open ${application.school_name} application`}
-                        onClick={() => onOpenApplication(application.id)}
-                      >
-                        Open application
-                      </button>
-                      <button
-                        className="text-button"
-                        aria-label={`Edit ${application.school_name} application`}
-                        onClick={() => handleOpenApplicationForm(application)}
-                      >
-                        Edit
-                      </button>
+                      <span className="wpl-progress__label">
+                        Checklist {readiness.readiness}%
+                      </span>
+                      <span className="wpl-progress__bar">
+                        <span style={{ width: `${readiness.readiness}%` }} />
+                      </span>
                     </div>
                   </div>
-                  <details className="application-extra">
+                  <div className="wpl-app__actions">
+                    <button
+                      type="button"
+                      className="ws-btn ws-btn--solid"
+                      aria-label={`Open ${application.school_name} application`}
+                      onClick={() => onOpenApplication(application.id)}
+                    >
+                      Open application
+                    </button>
+                    <button
+                      type="button"
+                      className="ws-btn"
+                      aria-label={`Edit ${application.school_name} application`}
+                      onClick={() => handleOpenApplicationForm(application)}
+                    >
+                      Edit
+                    </button>
+                  </div>
+                  <details className="wpl-disclosure wpl-app__more">
                     <summary>More details</summary>
-                    <dl className="application-meta-grid">
+                    <dl className="wpl-dl">
                       <div>
                         <dt>Round</dt>
                         <dd>{application.application_round || "Not set"}</dd>
@@ -523,12 +550,13 @@ function TrackerView({
                       </div>
                     </dl>
                     {application.requirements_notes && (
-                      <p className="application-notes">
+                      <p className="wpl-notes">
                         {application.requirements_notes}
                       </p>
                     )}
                     <button
-                      className="delete-btn"
+                      type="button"
+                      className="ws-btn ws-btn--danger ws-btn--sm"
                       aria-label={`Delete ${application.school_name} application`}
                       onClick={() => handleDeleteApplication(application.id)}
                     >

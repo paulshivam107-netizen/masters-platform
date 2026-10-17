@@ -1,0 +1,1268 @@
+/* ==========================================================================
+   Interviews + Today (wi-). Loaded after InterviewStudio.css, so rules here
+   win over the legacy studio-/bank-/resume- selectors, which are restyled
+   below with the workspace kit tokens (Workspace.css).
+   The live interview screen is deliberately quiet: one question, one answer
+   box, one primary action. No scores, no gauges.
+   ========================================================================== */
+
+/* ---------- Shared ---------- */
+.wi-page,
+.wi-home {
+  gap: 20px;
+}
+.wi-kicker svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+}
+.wi-kicker {
+  margin-bottom: 10px;
+}
+.wi-topic {
+  color: var(--muted);
+  font: 600 13px/1.3 var(--font-body);
+}
+.wi-danger {
+  color: var(--danger);
+}
+.wi-loading {
+  color: var(--muted);
+}
+
+/* ---------- Studio shell ---------- */
+.wi-studio {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(20px, 3vw, 36px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--ink);
+}
+.wi-studio .studio-heading {
+  align-items: flex-start;
+  gap: 16px;
+}
+.wi-studio .studio-heading h2 {
+  margin: 0 0 4px;
+  font: 700 clamp(22px, 2.2vw, 28px) / 1.2 var(--font-heading);
+  letter-spacing: -0.02em;
+}
+.wi-studio .studio-intro,
+.wi-studio .studio-programme {
+  margin: 8px 0 20px;
+  color: var(--muted);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+.wi-studio .studio-heading-actions {
+  gap: 4px;
+}
+.wi-studio svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* form controls inside the studio, resume builder, bank and practice */
+.wi-studio label {
+  color: var(--ink);
+  font: 650 14px var(--font-body);
+}
+.wi-studio .ws-field {
+  gap: 6px;
+}
+.wi-studio
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+    select,
+    textarea
+  ) {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--ws-ctrl);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 450 15px var(--font-body);
+}
+.wi-studio textarea {
+  padding: 12px 14px;
+  line-height: 1.55;
+  min-height: 120px;
+}
+.wi-studio
+  :where(
+    input:not([type="checkbox"]):not([type="radio"]),
+    select,
+    textarea
+  ):focus {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 1px;
+}
+.wi-studio ::placeholder {
+  color: var(--muted);
+}
+.wi-studio input[type="checkbox"],
+.wi-studio input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--primary);
+}
+.wi-studio summary {
+  border-radius: 8px;
+}
+.wi-studio summary:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+
+/* messages */
+.wi-studio .studio-message {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.5;
+}
+.wi-studio .studio-message.error {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.wi-studio .studio-fine-print {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.wi-studio .studio-progress {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* ---------- Setup steps ---------- */
+.wi-studio .studio-journey,
+.wi-studio .studio-setup,
+.wi-studio .studio-resume-step {
+  margin: 14px 0 0;
+  padding: clamp(16px, 2.2vw, 24px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--canvas);
+}
+:root[data-theme="dark"] .wi-studio .studio-journey,
+:root[data-theme="dark"] .wi-studio .studio-setup,
+:root[data-theme="dark"] .wi-studio .studio-resume-step {
+  background: color-mix(in srgb, var(--canvas) 55%, var(--surface));
+}
+.wi-studio .studio-journey h3,
+.wi-studio .studio-setup > h3,
+.wi-studio .studio-resume-step > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font: 700 17px/1.3 var(--font-heading);
+  letter-spacing: -0.01em;
+}
+.wi-studio .studio-resume-step > summary {
+  min-height: 44px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+.wi-studio .studio-resume-step > summary > span:not(.studio-step) {
+  color: var(--muted);
+  font: 450 14px var(--font-body);
+}
+.wi-studio .studio-step {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  margin: 0;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--ink);
+  font: 700 13px var(--font-heading);
+}
+.wi-studio .studio-fields {
+  gap: 16px 20px;
+}
+.wi-studio .studio-journey,
+.wi-studio .studio-form-fields {
+  gap: 16px;
+}
+.wi-studio .studio-setup {
+  display: grid;
+  gap: 18px;
+}
+.wi-studio .studio-mode legend {
+  margin-bottom: 8px;
+  font: 650 14px var(--font-body);
+}
+.wi-studio .studio-mode {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+}
+.wi-studio .studio-mode legend,
+.wi-studio .studio-mode small {
+  flex-basis: 100%;
+}
+.wi-studio .studio-mode > label {
+  margin: 0;
+  min-height: 44px;
+  padding: 0 14px;
+  gap: 10px;
+  border: 1px solid var(--ws-ctrl);
+  border-radius: 10px;
+  background: var(--surface);
+  font-weight: 550;
+}
+.wi-studio .studio-mode small {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.wi-studio .studio-consent {
+  font-size: 13px;
+  line-height: 1.6;
+  font-weight: 450;
+}
+.wi-studio .studio-demo-option {
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.wi-studio .studio-actions {
+  gap: 12px 18px;
+}
+.wi-studio .studio-selected-question {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--primary);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+.wi-studio .studio-selected-question p {
+  margin: 4px 0 8px;
+  font-size: 16px;
+  line-height: 1.5;
+}
+.wi-studio .studio-selected-question .ws-eyebrow {
+  margin: 0 0 6px;
+}
+
+/* disclosures: question bank, focused practice */
+.wi-studio .studio-bank-disclosure {
+  margin-top: 14px;
+  padding: 4px clamp(16px, 2.2vw, 24px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.wi-studio .studio-bank-disclosure:not(.studio-resume-step) > summary {
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px 0;
+  font: 700 16px/1.3 var(--font-heading);
+}
+.wi-studio .studio-bank-disclosure > summary > span {
+  display: block;
+  margin-top: 2px;
+  color: var(--muted);
+  font: 450 13.5px var(--font-body);
+}
+.wi-studio .studio-bank-disclosure[open] {
+  padding-bottom: 20px;
+}
+.wi-studio .studio-bank-disclosure.studio-resume-step {
+  padding-block: 8px;
+}
+
+/* history */
+.wi-studio .studio-history {
+  margin-top: 28px;
+  padding-top: 0;
+  border-top: 0;
+}
+.wi-studio .studio-history h3 {
+  margin: 0 0 8px;
+  font: 700 17px var(--font-heading);
+}
+.wi-studio .studio-history-row {
+  min-height: 64px;
+  padding: 12px 8px;
+  margin-inline: -8px;
+  width: calc(100% + 16px);
+  border-radius: 12px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.wi-studio .studio-history-row:hover {
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+.wi-studio .studio-history-row:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 0;
+}
+.wi-studio .studio-history-row strong {
+  font: 650 15px var(--font-body);
+}
+.wi-studio .studio-history-row small {
+  font-size: 13px;
+}
+
+/* ---------- The interview room ---------- */
+.wi-studio .studio-session-meta {
+  margin: 20px 0 6px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  gap: 10px 16px;
+  font-size: 13px;
+}
+.wi-progress {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+.wi-progress__dots {
+  display: inline-flex;
+  gap: 5px;
+}
+.wi-progress__dots i {
+  width: 18px;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line-strong);
+  opacity: 0.55;
+}
+.wi-progress__dots i.is-done {
+  background: var(--primary);
+  opacity: 1;
+}
+.wi-progress__dots i.is-now {
+  background: var(--primary);
+  opacity: 0.55;
+}
+.wi-studio .studio-conversation {
+  width: 100%;
+  max-width: 760px;
+  margin: 28px auto 8px;
+  display: grid;
+  gap: 18px;
+}
+
+/* what the applicant said last: the follow-up builds on it */
+.wi-said {
+  margin: 0;
+  padding: 0 0 0 16px;
+  border-left: 3px solid var(--primary);
+}
+.wi-said figcaption {
+  margin-bottom: 4px;
+  color: var(--muted);
+  font: 600 13px var(--font-body);
+}
+.wi-said blockquote {
+  margin: 0;
+  color: var(--ink);
+  font: 450 16px/1.6 var(--font-body);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.wi-studio .studio-question {
+  margin: 0;
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+.wi-studio .studio-question:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.wi-studio .studio-question .ws-eyebrow {
+  margin-bottom: 14px;
+}
+.wi-studio .studio-question h3 {
+  margin: 0;
+  font: 650 clamp(21px, 2.3vw, 27px) / 1.4 var(--font-heading);
+  letter-spacing: -0.015em;
+}
+.wi-demo-note {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.wi-studio .studio-conversation form {
+  gap: 16px;
+}
+.wi-studio .studio-conversation textarea {
+  min-height: 180px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+.wi-studio .studio-char-count {
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* microphone states: idle, requesting, recording, unsupported */
+.wi-mic {
+  gap: 10px 14px;
+}
+.wi-mic__btn {
+  position: relative;
+  padding-left: 40px;
+}
+.wi-mic__btn::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.wi-mic.is-requesting .wi-mic__btn::before {
+  background: var(--warning);
+}
+.wi-mic.is-recording .wi-mic__btn {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.wi-mic.is-recording .wi-mic__btn::before {
+  background: var(--danger);
+  animation: wi-pulse 1.4s ease-in-out infinite;
+}
+.wi-mic.is-unsupported .wi-mic__btn {
+  opacity: 0.6;
+}
+@keyframes wi-pulse {
+  50% {
+    transform: scale(1.5);
+    opacity: 0.55;
+  }
+}
+.wi-studio .studio-recording small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-studio .recording-status {
+  color: var(--danger);
+  font-weight: 650;
+}
+
+/* ---------- Ready + debrief ---------- */
+.wi-studio .studio-ready {
+  max-width: 560px;
+  margin: 28px auto;
+  padding: 28px 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface-soft);
+}
+.wi-studio .studio-ready h3 {
+  margin: 10px 0 6px;
+  font: 700 20px var(--font-heading);
+}
+.wi-studio .studio-ready > svg {
+  width: 28px;
+  height: 28px;
+}
+.wi-debrief {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+.wi-debrief > h3 {
+  margin: 0 0 8px;
+  font: 700 clamp(22px, 2.4vw, 28px) / 1.2 var(--font-heading);
+  letter-spacing: -0.02em;
+}
+.wi-debrief > p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.wi-debrief > h4 {
+  margin: 32px 0 10px;
+  font: 700 17px var(--font-heading);
+}
+.wi-studio .studio-feedback-point {
+  margin: 10px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--canvas);
+}
+.wi-studio .studio-feedback-point blockquote {
+  margin: 0 0 10px;
+  padding-left: 14px;
+  border-left: 3px solid var(--primary);
+  color: var(--ink);
+  font-size: 15.5px;
+  line-height: 1.55;
+}
+.wi-studio .studio-feedback-point cite {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-studio .studio-feedback-point p {
+  margin: 6px 0 0;
+  line-height: 1.55;
+}
+.wi-studio .studio-exercise {
+  margin-top: 24px;
+  padding: 18px 20px;
+  border-radius: 14px;
+  background: var(--tint);
+}
+.wi-studio .studio-exercise .ws-eyebrow {
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.wi-studio .studio-exercise p {
+  margin: 0;
+  line-height: 1.55;
+}
+.wi-debrief > .ws-btn {
+  margin-top: 8px;
+}
+
+/* saved conversation + session actions */
+.wi-studio .studio-transcript {
+  max-width: 760px;
+  margin: 24px auto 0;
+  padding: 8px 0;
+}
+.wi-studio .studio-transcript summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.wi-studio .studio-transcript article {
+  padding: 12px 0;
+}
+.wi-studio .studio-transcript strong {
+  color: var(--muted);
+  font: 600 13px var(--font-body);
+}
+.wi-studio .studio-transcript p {
+  margin: 4px 0 0;
+  line-height: 1.55;
+}
+.wi-studio .studio-session-actions {
+  max-width: 760px;
+  margin: 12px auto 0;
+  gap: 4px;
+}
+
+/* ---------- Focused practice ---------- */
+.wi-studio .focused-question {
+  margin: 16px 0;
+  font: 650 clamp(19px, 2vw, 23px) / 1.4 var(--font-heading);
+}
+.wi-studio .practice-attempt {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface-soft);
+}
+.wi-studio .practice-attempt textarea {
+  min-height: 84px;
+}
+.wi-studio .practice-attempt-heading span {
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-studio .practice-previous > summary,
+.wi-studio .resume-mapped-questions > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.wi-studio .practice-attempt a.ws-btn {
+  text-decoration: none;
+}
+
+/* ---------- Question bank ---------- */
+.wi-studio .question-bank {
+  padding-top: 8px;
+}
+.wi-studio .question-bank p {
+  color: var(--muted);
+}
+.wi-studio .bank-roots,
+.wi-studio .bank-next ul {
+  gap: 10px;
+}
+.wi-studio .bank-roots button,
+.wi-studio .bank-next button {
+  min-height: 44px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--canvas);
+  font: 450 15px/1.5 var(--font-body);
+}
+.wi-studio .bank-roots button:hover,
+.wi-studio .bank-next button:hover {
+  border-color: var(--primary);
+  background: var(--surface-soft);
+}
+.wi-studio .bank-roots strong {
+  font-weight: 600;
+}
+.wi-studio .bank-explore,
+.wi-studio .bank-next small,
+.wi-studio .bank-result-count {
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-studio .bank-path button {
+  min-height: 44px;
+  font-size: 15.5px;
+}
+.wi-studio .bank-path .is-current button {
+  font-size: 18px;
+}
+.wi-studio .bank-provenance {
+  font-size: 13.5px;
+}
+.wi-studio .bank-provenance summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+
+/* ---------- Résumé builder ---------- */
+.wi-studio .resume-upload {
+  padding: 16px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 12px;
+  background: var(--canvas);
+}
+.wi-studio .resume-upload input[type="file"] {
+  color: var(--ink);
+  font: 450 14px var(--font-body);
+}
+.wi-studio .resume-upload input::file-selector-button {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--ws-ctrl);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 650 14px var(--font-body);
+  cursor: pointer;
+}
+.wi-studio .resume-builder small,
+.wi-studio .resume-intro {
+  color: var(--muted);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.wi-studio .resume-fact {
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--canvas);
+}
+.wi-studio .resume-fact small {
+  text-transform: none;
+}
+.wi-studio .resume-results {
+  margin-top: 24px;
+  padding-top: 20px;
+}
+.wi-studio .resume-set-heading h3 {
+  margin: 4px 0;
+  font: 700 17px var(--font-heading);
+}
+
+/* ---------- Interviews page: summary + notebook ---------- */
+.wi-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.wi-summary .ws-chip {
+  padding: 5px 12px;
+  gap: 6px;
+  font-weight: 500;
+}
+.wi-summary strong {
+  color: var(--ink);
+}
+.wi-home > .wi-summary {
+  gap: 8px 22px;
+  padding-inline: 4px;
+}
+.wi-home > .wi-summary > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.wi-home > .wi-summary svg {
+  width: 16px;
+  height: 16px;
+}
+.wi-notebook__head,
+.wi-card__head,
+.ws-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+}
+.wi-notebook__head {
+  margin-bottom: 18px;
+}
+.wi-notebook__head h3,
+.ws-card__head h3 {
+  margin: 0;
+  font: 700 18px/1.3 var(--font-heading);
+  letter-spacing: -0.01em;
+}
+.wi-notebook__head p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+.wi-picker {
+  min-width: min(100%, 280px);
+}
+.wi-card {
+  display: grid;
+  gap: 18px;
+}
+.wi-card__head {
+  align-items: center;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.wi-card__head strong {
+  display: block;
+  font: 700 16px var(--font-heading);
+}
+.wi-card__head span:not(.ws-chip) {
+  color: var(--muted);
+  font-size: 14px;
+}
+.wi-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 20px;
+}
+.wi-form .wi-wide {
+  grid-column: 1 / -1;
+}
+.wi-form .ws-textarea {
+  min-height: 140px;
+}
+.wi-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  align-self: end;
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.wi-note svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+  flex: none;
+}
+
+/* ---------- Today ---------- */
+.wi-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px 24px;
+  padding: clamp(20px, 2.6vw, 30px);
+}
+.wi-next h2,
+.wi-hero h2 {
+  margin: 0;
+  font: 700 clamp(24px, 2.6vw, 32px) / 1.15 var(--font-heading);
+  letter-spacing: -0.025em;
+}
+.wi-next p,
+.wi-hero p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15.5px;
+}
+.wi-hero {
+  padding: clamp(22px, 3vw, 34px);
+}
+.wi-hero p {
+  color: inherit;
+  opacity: 0.85;
+}
+.wi-hero .ws-eyebrow {
+  color: inherit;
+}
+.wi-hero .ws-eyebrow span {
+  background: currentColor;
+}
+.wi-hero .ws-row {
+  margin-top: 20px;
+}
+.wi-hero .ws-btn:not(.ws-btn--primary) {
+  background: transparent;
+  border-color: currentColor;
+  color: inherit;
+}
+.wi-stat__top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 14px;
+}
+.wi-stat__value {
+  margin: 10px 0 2px;
+  font: 700 28px/1.1 var(--font-heading);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+.wi-stat small {
+  color: var(--muted);
+}
+.wi-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 10px;
+}
+.wi-links .ws-btn {
+  justify-content: flex-start;
+}
+.wi-links .ws-btn svg:last-child {
+  margin-left: auto;
+}
+
+/* rows: essays and deadlines */
+.wi-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 14px;
+}
+.wi-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 10px;
+  margin-inline: -10px;
+  width: calc(100% + 20px);
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.wi-row:last-child {
+  border-bottom-color: transparent;
+}
+.wi-row:hover {
+  background: var(--surface-soft);
+}
+.wi-row:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+.wi-row > svg:last-child {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  margin-left: auto;
+  color: var(--muted);
+}
+.wi-row__icon {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--primary);
+}
+.wi-row__icon svg,
+.wi-stat__top svg {
+  width: 18px;
+  height: 18px;
+}
+.wi-row__copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+.wi-row__copy strong {
+  font: 650 15px/1.35 var(--font-body);
+}
+.wi-row__copy > span {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wi-row__copy small {
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 48px;
+  height: 52px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  line-height: 1.1;
+}
+.wi-date small {
+  color: var(--muted);
+  font: 600 11px var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.wi-date strong {
+  font: 700 18px var(--font-heading);
+}
+.wi-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px 18px;
+}
+.wi-banner > div:not(.wi-row__icon) {
+  flex: 1;
+  min-width: 200px;
+}
+.wi-banner h3 {
+  margin: 0;
+  font: 700 17px var(--font-heading);
+}
+.wi-banner p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 14.5px;
+}
+.wi-banner .wi-row__icon {
+  background: var(--surface);
+}
+.wi-home .ws-empty h4 {
+  margin: 0;
+  font: 700 16px var(--font-heading);
+}
+.wi-home .ws-empty > svg {
+  width: 28px;
+  height: 28px;
+  color: var(--primary);
+}
+
+/* first visit */
+.wi-welcome {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+.wi-welcome__copy {
+  padding: clamp(24px, 3.4vw, 40px);
+  border-radius: 18px;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+}
+.wi-welcome__copy .ws-eyebrow {
+  color: var(--hero-kicker);
+}
+.wi-welcome__copy .ws-eyebrow span {
+  background: var(--hero-kicker);
+}
+.wi-welcome__copy h2 {
+  margin: 0 0 12px;
+  font: 700 clamp(28px, 3.2vw, 40px) / 1.1 var(--font-heading);
+  letter-spacing: -0.03em;
+}
+.wi-welcome__copy h2 span {
+  color: var(--hero-kicker);
+}
+.wi-welcome__copy p {
+  max-width: 52ch;
+  color: var(--hero-muted);
+  font-size: 16px;
+  line-height: 1.55;
+}
+.wi-welcome__copy .ws-row {
+  margin: 22px 0 14px;
+}
+.wi-welcome__copy .ws-muted {
+  color: var(--hero-muted);
+}
+.wi-welcome__side {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+.wi-welcome__side h3 {
+  margin: 8px 0 0;
+  font: 700 18px var(--font-heading);
+}
+.wi-welcome__side p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+.wi-steps h3 {
+  margin: 0 0 12px;
+  font: 700 17px var(--font-heading);
+}
+.wi-steps ol {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0 0 12px;
+  padding: 0;
+  list-style: none;
+  counter-reset: wi-step;
+}
+.wi-steps li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 16px 16px 52px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  counter-increment: wi-step;
+}
+.wi-steps li::before {
+  content: counter(wi-step);
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--tint);
+  font: 700 13px var(--font-heading);
+}
+.wi-steps li span {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* setup guide */
+.wi-guide {
+  display: grid;
+  gap: 14px;
+}
+.wi-guide__head,
+.wi-guide__next {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 20px;
+}
+.wi-guide__head .ws-eyebrow {
+  margin: 0;
+}
+.wi-guide__next h2 {
+  margin: 0;
+  font: 700 19px/1.3 var(--font-heading);
+}
+.wi-guide__next p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  max-width: 58ch;
+}
+.wi-guide progress {
+  width: 100%;
+  height: 6px;
+  accent-color: var(--primary);
+}
+.wi-guide summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 14px;
+}
+.wi-guide ol {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.wi-guide li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.wi-guide li small {
+  margin-left: auto;
+  color: var(--muted);
+}
+.wi-guide li > span:first-child {
+  display: inline-grid;
+  place-items: center;
+  width: 20px;
+}
+.wi-guide li svg {
+  width: 16px;
+  height: 16px;
+  color: var(--primary);
+}
+.setup-open-dot {
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--line-strong);
+  border-radius: 50%;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px) {
+  .wi-welcome {
+    grid-template-columns: 1fr;
+  }
+  .wi-steps ol {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 640px) {
+  .wi-studio {
+    padding: 16px;
+    border-radius: 14px;
+  }
+  .wi-studio .studio-heading {
+    flex-direction: column;
+  }
+  .wi-studio .studio-fields,
+  .wi-form {
+    grid-template-columns: 1fr;
+  }
+  .wi-studio .studio-actions > .ws-btn--primary {
+    width: 100%;
+  }
+  .wi-studio .studio-heading-actions {
+    flex-direction: row;
+  }
+  .wi-studio .studio-session-actions .ws-btn,
+  .wi-studio .studio-heading-actions .ws-btn,
+  .wi-studio .studio-actions .ws-btn--ghost,
+  .wi-studio .ws-btn--sm {
+    min-height: 44px;
+  }
+  .wi-studio :where(input, select, textarea) {
+    font-size: 16px;
+  }
+  .wi-row__copy > span {
+    white-space: normal;
+  }
+  .wi-next .ws-btn {
+    width: 100%;
+  }
+  .wi-studio .studio-mode > label {
+    flex: 1 1 120px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wi-mic.is-recording .wi-mic__btn::before {
+    animation: none;
+  }
+}
+.reduced-motion .wi-mic.is-recording .wi-mic__btn::before {
+  animation: none;
+}
+
+/* ---------- Disclosures and small fixes ---------- */
+.wi-studio .studio-bank-disclosure > summary > .studio-step {
+  display: inline-grid;
+  margin: 0;
+  color: var(--ink);
+  font: 700 13px var(--font-heading);
+}
+.wi-studio .studio-bank-disclosure > summary {
+  list-style: none;
+  position: relative;
+  padding-right: 28px;
+}
+.wi-studio .studio-bank-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.wi-studio .studio-bank-disclosure > summary::after {
+  content: "";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -6px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+}
+.wi-studio .studio-bank-disclosure[open] > summary::after {
+  margin-top: -2px;
+  transform: rotate(-135deg);
+}
+.wi-studio .resume-builder .studio-form-fields > .ws-btn--ghost {
+  justify-self: start;
+}
+
+/* Each new question and the quoted answer arrive gently, so the turn feels like a reply. */
+.wi-studio .studio-question,
+.wi-studio .wi-said {
+  animation: ws-enter var(--motion-slow) var(--ease-out) both;
+}
+.wi-studio .studio-question {
+  animation-delay: 90ms;
+}
+.wi-progress__dots i {
+  transition: background-color var(--motion-base) var(--ease-out), opacity var(--motion-base) var(--ease-out);
+}

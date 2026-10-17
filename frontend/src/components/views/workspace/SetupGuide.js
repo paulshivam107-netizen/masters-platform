@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowIcon, CheckIcon } from "../../../app/icons";
 import { trackEvent } from "../../../app/telemetry";
+import "./WorkspaceAccount.css";
 
 export default function SetupGuide({
   applications,
@@ -43,26 +44,29 @@ export default function SetupGuide({
   };
   return (
     <section
-      className="activation-guide"
+      className="ws-card ws-card--soft wi-guide"
       aria-labelledby="setup-guide-title"
       data-testid="setup-guide"
     >
-      <div className="activation-guide-head">
-        <span className="eyebrow">YOUR FIRST FEW STEPS</span>
+      <div className="wi-guide__head">
+        <span className="ws-eyebrow">
+          <span aria-hidden="true" />
+          Your first few steps
+        </span>
         <button
-          className="text-button"
+          className="ws-btn ws-btn--ghost ws-btn--sm"
           onClick={onDismiss}
           aria-label="Hide setup guide"
         >
           Hide for now
         </button>
       </div>
-      <div className="activation-guide-next">
+      <div className="wi-guide__next">
         <div>
-          <h2 id="setup-guide-title">{next.title}</h2>
+          <h2 className="ws-h3" id="setup-guide-title">{next.title}</h2>
           <p>{next.detail}</p>
         </div>
-        <button className="secondary-action-btn" onClick={() => openStep(next)}>
+        <button className="ws-btn" onClick={() => openStep(next)}>
           {next.id === "preparation"
             ? "Open interview preparation"
             : "Add a programme"}{" "}
@@ -71,7 +75,7 @@ export default function SetupGuide({
       </div>
       {next.id === "preparation" && (
         <button
-          className="text-button"
+          className="ws-btn ws-btn--ghost ws-btn--sm"
           onClick={() => {
             trackEvent("onboarding_step_opened", { step: "essay" });
             onEssay();
@@ -81,11 +85,12 @@ export default function SetupGuide({
         </button>
       )}
       <progress
+        className="wac-progress"
         value={completed}
         max={steps.length}
         aria-label={`${completed} of ${steps.length} setup steps complete`}
       />
-      <details>
+      <details className="wac-guide__steps">
         <summary>
           {completed} of {steps.length} complete · See all steps
         </summary>
@@ -96,10 +101,13 @@ export default function SetupGuide({
                 {step.done ? (
                   <CheckIcon />
                 ) : (
-                  <span className="setup-open-dot" />
+                  <span className="wac-dot" />
                 )}
               </span>
-              <button className="text-button" onClick={() => openStep(step)}>
+              <button
+                className="ws-btn ws-btn--ghost ws-btn--sm"
+                onClick={() => openStep(step)}
+              >
                 {step.title}
               </button>
               <small>{step.done ? "Done" : "To do"}</small>
@@ -107,7 +115,7 @@ export default function SetupGuide({
           ))}
         </ol>
       </details>
-      <Link className="text-button" to="/help">
+      <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
         How this workspace works <ArrowIcon />
       </Link>
     </section>
