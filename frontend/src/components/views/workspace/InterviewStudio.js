@@ -8,9 +8,12 @@ import InterviewQuestionBank from "./InterviewQuestionBank";
 import ResumeQuestionBuilder from "./ResumeQuestionBuilder";
 import FocusedPractice from "./FocusedPractice";
 import "./InterviewStudio.css";
+import "./WorkspaceInterview.css";
 
 const requestId = () => crypto.randomUUID();
 const draftKey = (id) => `interview_answer:${id}`;
+const excerpt = (text) =>
+  text.length > 240 ? `${text.slice(0, 237).trimEnd()}…` : text;
 const sessionLabel = (session) =>
   `${session.context.school} · ${session.provider === "demo" ? "Demo" : "AI practice"}`;
 
@@ -320,6 +323,9 @@ export default function InterviewStudio({
   const question = session?.transcript
     .filter((turn) => turn.role === "assistant")
     .slice(-1)[0];
+  const lastAnswer = session?.transcript
+    .filter((turn) => turn.role === "user")
+    .slice(-1)[0];
   const closing = question?.kind === "end_requested" ? question : null;
   const hearQuestion = () => {
     if (audio.playing) {
@@ -360,20 +366,20 @@ export default function InterviewStudio({
   const live = capabilities?.chat && !demo;
   return (
     <section
-      className="dashboard-card interview-studio"
+      className="interview-studio wi-studio"
       aria-labelledby="interview-studio-title"
       data-testid="interview-studio"
     >
       <header className="studio-heading">
         <div>
-          <span className="eyebrow">
-            <InterviewIcon /> INTERVIEW STUDIO
+          <span className="ws-eyebrow wi-kicker">
+            <InterviewIcon /> Interview Studio
           </span>
           <h2 id="interview-studio-title">A conversation worth practising.</h2>
         </div>
         {session && (
           <button
-            className="text-button"
+            className="ws-btn ws-btn--ghost ws-btn--sm"
             disabled={disabled}
             onClick={leaveSession}
           >
@@ -383,7 +389,7 @@ export default function InterviewStudio({
         {!session && capabilities && (
           <div className="studio-heading-actions">
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={disabled}
               onClick={() => {
                 if (practiceDisclosure.current) {
@@ -395,7 +401,7 @@ export default function InterviewStudio({
               Record & review
             </button>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={disabled}
               onClick={() => {
                 if (resumeDisclosure.current) {
@@ -413,7 +419,7 @@ export default function InterviewStudio({
         <div className="studio-message error" role="alert">
           <p>{error}</p>
           <button
-            className="text-button"
+            className="ws-btn ws-btn--ghost ws-btn--sm"
             disabled={disabled}
             onClick={() =>
               session
@@ -433,9 +439,13 @@ export default function InterviewStudio({
         </p>
       )}
       {loading ? (
-        <p role="status">Opening your interview workspace…</p>
+        <p role="status" className="wi-loading">
+          Opening your interview workspace…
+        </p>
       ) : !capabilities ? (
-        <p>Interview practice is unavailable while we reconnect.</p>
+        <p className="studio-message">
+          Interview practice is unavailable while we reconnect.
+        </p>
       ) : !session ? (
         <>
           <p className="studio-intro">
@@ -457,7 +467,7 @@ export default function InterviewStudio({
               <span className="studio-step">1</span> Your programme
             </h3>
             <div className="studio-fields">
-              <div className="form-group">
+              <div className="ws-field">
                 <label htmlFor="studio-route">Programme type</label>
                 <select
                   id="studio-route"
@@ -474,7 +484,7 @@ export default function InterviewStudio({
                   </option>
                 </select>
               </div>
-              <div className="form-group">
+              <div className="ws-field">
                 <label htmlFor="studio-application">Target programme</label>
                 <select
                   id="studio-application"
@@ -496,7 +506,7 @@ export default function InterviewStudio({
               </div>
             </div>
             {!setup.application_id && (
-              <div className="form-group">
+              <div className="ws-field">
                 <label htmlFor="studio-programme-name">
                   School and programme{" "}
                   <span className="studio-fine-print">
@@ -588,11 +598,14 @@ export default function InterviewStudio({
             <fieldset className="studio-form-fields" disabled={disabled}>
               {chosenQuestion && (
                 <div className="studio-selected-question">
-                  <span className="eyebrow">YOUR STARTING QUESTION</span>
+                  <span className="ws-eyebrow">
+                    <span aria-hidden="true" />
+                    Your starting question
+                  </span>
                   <p>{chosenQuestion.text}</p>
                   <button
                     type="button"
-                    className="text-button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
                     onClick={() => setChosenQuestion(null)}
                   >
                     Use the default opening
@@ -600,7 +613,7 @@ export default function InterviewStudio({
                 </div>
               )}
               <div className="studio-fields">
-                <div className="form-group">
+                <div className="ws-field">
                   <label htmlFor="studio-focus">Practice focus</label>
                   <select
                     id="studio-focus"
@@ -624,7 +637,7 @@ export default function InterviewStudio({
                     </option>
                   </select>
                 </div>
-                <div className="form-group">
+                <div className="ws-field">
                   <label htmlFor="studio-length">Session length</label>
                   <select
                     id="studio-length"
@@ -705,7 +718,7 @@ export default function InterviewStudio({
                 <button
                   ref={startButton}
                   type="submit"
-                  className="new-essay-btn"
+                  className="ws-btn ws-btn--primary"
                   disabled={disabled || !setup.route}
                 >
                   {busy || (live ? "Start interview" : "Start demo")}{" "}
@@ -775,7 +788,7 @@ export default function InterviewStudio({
               ))}
               {hasMore && (
                 <button
-                  className="text-button"
+                  className="ws-btn ws-btn--ghost ws-btn--sm"
                   disabled={disabled}
                   onClick={() =>
                     run("Loading history…", async (signal) => {
@@ -808,14 +821,31 @@ export default function InterviewStudio({
       ) : (
         <>
           <div className="studio-session-meta">
-            <span className="pill">
+            <span
+              className={`ws-chip ${session.provider === "demo" ? "ws-chip--warn" : "ws-chip--accent"}`}
+            >
               {session.provider === "demo"
-                ? "DEMO · FIXED EXAMPLES"
+                ? "Demo · fixed examples, not connected to AI"
                 : session.mode === "voice"
-                  ? "AI VOICE PRACTICE"
-                  : "AI CHAT PRACTICE"}
+                  ? "AI voice practice"
+                  : "AI chat practice"}
             </span>
-            <span>
+            <span className="wi-progress">
+              <span className="wi-progress__dots" aria-hidden="true">
+                {Array.from({ length: session.question_limit }, (_, i) => (
+                  <i
+                    key={i}
+                    className={
+                      i < session.answer_count
+                        ? "is-done"
+                        : i === session.answer_count &&
+                            session.status === "active"
+                          ? "is-now"
+                          : ""
+                    }
+                  />
+                ))}
+              </span>
               {session.answer_count} of {session.question_limit} answers saved
             </span>
           </div>
@@ -835,18 +865,39 @@ export default function InterviewStudio({
           )}
           {session.status === "active" && (
             <div className="studio-conversation">
+              {lastAnswer && (
+                <figure className="wi-said">
+                  <figcaption>
+                    {session.provider === "demo"
+                      ? "Your last answer"
+                      : "You said"}
+                  </figcaption>
+                  <blockquote>“{excerpt(lastAnswer.text)}”</blockquote>
+                </figure>
+              )}
               <div
                 className="studio-question"
                 tabIndex={-1}
                 ref={transcriptEnd}
               >
-                <span className="eyebrow">
-                  QUESTION {session.answer_count + 1}
+                <span className="ws-eyebrow">
+                  <span aria-hidden="true" />
+                  {session.answer_count > 0
+                    ? "Follow-up"
+                    : "Opening question"}{" "}
+                  · Question {session.answer_count + 1} of{" "}
+                  {session.question_limit}
                 </span>
                 <h3>{question.text}</h3>
+                {session.provider === "demo" && session.answer_count > 0 && (
+                  <p className="wi-demo-note">
+                    Demo questions are fixed. A live interviewer would build
+                    this follow-up on your words above.
+                  </p>
+                )}
                 {session.mode === "voice" && (
                   <button
-                    className="text-button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
                     disabled={disabled}
                     onClick={hearQuestion}
                   >
@@ -856,10 +907,12 @@ export default function InterviewStudio({
               </div>
               <form onSubmit={submitAnswer}>
                 {session.mode === "voice" && (
-                  <div className="studio-recording">
+                  <div
+                    className={`studio-recording wi-mic ${audio.recording ? "is-recording" : ""} ${audio.requesting ? "is-requesting" : ""} ${!audio.supported ? "is-unsupported" : ""}`}
+                  >
                     <button
                       type="button"
-                      className="secondary-action-btn"
+                      className="ws-btn wi-mic__btn"
                       disabled={
                         Boolean(busy) ||
                         audio.requesting ||
@@ -880,7 +933,7 @@ export default function InterviewStudio({
                     {(audio.recording || audio.requesting) && (
                       <button
                         type="button"
-                        className="text-button"
+                        className="ws-btn ws-btn--ghost ws-btn--sm"
                         onClick={audio.cancelRecording}
                       >
                         {audio.requesting
@@ -895,7 +948,7 @@ export default function InterviewStudio({
                     </small>
                   </div>
                 )}
-                <div className="form-group">
+                <div className="ws-field">
                   <label htmlFor="studio-answer">
                     {session.mode === "voice"
                       ? "Review your transcript or type an answer"
@@ -918,7 +971,7 @@ export default function InterviewStudio({
                 </div>
                 <div className="studio-actions">
                   <button
-                    className="new-essay-btn"
+                    className="ws-btn ws-btn--primary"
                     type="submit"
                     disabled={disabled || !answer.trim()}
                   >
@@ -927,7 +980,7 @@ export default function InterviewStudio({
                   {session.answer_count > 0 && !answer.trim() && (
                     <button
                       type="button"
-                      className="text-button"
+                      className="ws-btn ws-btn--ghost ws-btn--sm"
                       disabled={disabled}
                       onClick={finish}
                     >
@@ -939,13 +992,13 @@ export default function InterviewStudio({
             </div>
           )}
           {session.status === "ready_for_feedback" && (
-            <div className="studio-ready">
+            <div className="studio-ready wi-ready">
               <CheckIcon />
               <h3>Your answers are saved.</h3>
               {closing && <p>{closing.text}</p>}
               <p>Get a short debrief and one exercise to try next.</p>
               <button
-                className="new-essay-btn"
+                className="ws-btn ws-btn--primary"
                 disabled={disabled}
                 onClick={finish}
               >
@@ -954,7 +1007,7 @@ export default function InterviewStudio({
             </div>
           )}
           {session.feedback && (
-            <div className="studio-debrief">
+            <div className="studio-debrief wi-debrief">
               <h3>
                 {session.provider === "demo"
                   ? "Example debrief"
@@ -989,14 +1042,17 @@ export default function InterviewStudio({
                 </article>
               ))}
               <div className="studio-exercise">
-                <span className="eyebrow">YOUR NEXT PRACTICE</span>
+                <span className="ws-eyebrow">
+                  <span aria-hidden="true" />
+                  Your next practice
+                </span>
                 <p>{session.feedback.next_exercise}</p>
               </div>
               <p className="studio-fine-print">
                 Practice guidance based on these answers. It does not predict
                 admission or assess accent, personality or spoken delivery.
               </p>
-              <button className="secondary-action-btn" onClick={leaveSession}>
+              <button className="ws-btn" onClick={leaveSession}>
                 Practise again <ArrowIcon />
               </button>
             </div>
@@ -1018,14 +1074,14 @@ export default function InterviewStudio({
           </details>
           <div className="studio-session-actions">
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={disabled}
               onClick={download}
             >
               Export session
             </button>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={disabled}
               onClick={() =>
                 run("Reloading…", async (signal) =>
@@ -1036,7 +1092,7 @@ export default function InterviewStudio({
               Reload session
             </button>
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={disabled}
               onClick={() => setConfirmDelete(true)}
             >
@@ -1048,7 +1104,7 @@ export default function InterviewStudio({
               <p>Delete this session, transcript and debrief permanently?</p>
               <div className="studio-actions">
                 <button
-                  className="secondary-action-btn"
+                  className="ws-btn"
                   disabled={disabled}
                   onClick={() =>
                     run("Deleting…", async (signal) => {
@@ -1066,7 +1122,7 @@ export default function InterviewStudio({
                   Delete permanently
                 </button>
                 <button
-                  className="text-button"
+                  className="ws-btn ws-btn--ghost ws-btn--sm"
                   disabled={disabled}
                   onClick={() => setConfirmDelete(false)}
                 >

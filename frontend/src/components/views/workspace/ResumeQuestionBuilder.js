@@ -160,7 +160,7 @@ export default function ResumeQuestionBuilder({
         <div className="studio-message error" role="alert">
           <p>{error}</p>
           <button
-            className="text-button"
+            className="ws-btn ws-btn--ghost ws-btn--sm"
             disabled={locked}
             onClick={() => {
               setError("");
@@ -201,7 +201,7 @@ export default function ResumeQuestionBuilder({
           {!text && !showText && (
             <button
               type="button"
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => {
                 focusTarget.current = review;
                 setShowText(true);
@@ -211,7 +211,7 @@ export default function ResumeQuestionBuilder({
             </button>
           )}
           {(text || showText) && (
-            <div className="form-group">
+            <div className="ws-field">
               <label htmlFor="resume-text">
                 Review or paste résumé text{" "}
                 {filename && (
@@ -239,7 +239,7 @@ export default function ResumeQuestionBuilder({
             </div>
           )}
           {!route && showRoutePicker && (
-            <div className="form-group">
+            <div className="ws-field">
               <label htmlFor="resume-route">Programme type</label>
               <select
                 id="resume-route"
@@ -274,7 +274,7 @@ export default function ResumeQuestionBuilder({
           <div className="studio-actions">
             <button
               type="submit"
-              className="new-essay-btn"
+              className="ws-btn ws-btn--primary"
               disabled={
                 locked ||
                 !capabilities?.chat ||
@@ -288,7 +288,7 @@ export default function ResumeQuestionBuilder({
             {text && (
               <button
                 type="button"
-                className="text-button"
+                className="ws-btn ws-btn--ghost ws-btn--sm"
                 onClick={() => {
                   setText("");
                   setFilename("");
@@ -307,7 +307,7 @@ export default function ResumeQuestionBuilder({
           <>
             <div className="resume-set-heading">
               <div>
-                <span className="eyebrow">YOUR RÉSUMÉ PROFILE</span>
+                <span className="wi-topic">Your résumé profile</span>
                 <h3>{selected.context.school}</h3>
                 <p>
                   {selected.context.route === "cat"
@@ -318,7 +318,7 @@ export default function ResumeQuestionBuilder({
               </div>
               <div className="studio-actions">
                 <button
-                  className="text-button"
+                  className="ws-btn ws-btn--ghost ws-btn--sm"
                   disabled={locked}
                   onClick={() => {
                     const url = URL.createObjectURL(
@@ -336,7 +336,7 @@ export default function ResumeQuestionBuilder({
                   Export questions
                 </button>
                 <button
-                  className="text-button danger"
+                  className="ws-btn ws-btn--ghost ws-btn--sm wi-danger"
                   disabled={locked}
                   onClick={() => setConfirmDelete(true)}
                 >
@@ -354,7 +354,7 @@ export default function ResumeQuestionBuilder({
                 </p>
                 <div className="studio-actions">
                   <button
-                    className="secondary-action-btn"
+                    className="ws-btn"
                     disabled={locked}
                     onClick={() =>
                       run("Deleting question set…", async (signal) => {
@@ -374,7 +374,7 @@ export default function ResumeQuestionBuilder({
                     Delete permanently
                   </button>
                   <button
-                    className="text-button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
                     disabled={locked}
                     onClick={() => setConfirmDelete(false)}
                   >
@@ -416,7 +416,7 @@ export default function ResumeQuestionBuilder({
                 </fieldset>
                 <button
                   type="button"
-                  className="new-essay-btn"
+                  className="ws-btn ws-btn--primary"
                   disabled={locked || !factIds.length}
                   onClick={() =>
                     onUseProfile?.({
@@ -479,7 +479,7 @@ export default function ResumeQuestionBuilder({
           ))}
           {hasMore && (
             <button
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={locked}
               onClick={() =>
                 run("Loading saved sets…", async (signal) => {

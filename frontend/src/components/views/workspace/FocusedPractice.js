@@ -142,7 +142,7 @@ export default function FocusedPractice({
       />
       <div className="studio-actions">
         <a
-          className="text-button"
+          className="ws-btn ws-btn--ghost ws-btn--sm"
           href={item.url}
           download={`practice-answer-${index + 1}.${item.type.includes("mp4") ? "m4a" : "webm"}`}
           onClick={() =>
@@ -157,7 +157,7 @@ export default function FocusedPractice({
         </a>
         <button
           type="button"
-          className="text-button"
+          className="ws-btn ws-btn--ghost ws-btn--sm"
           onClick={() => {
             const url = URL.createObjectURL(
               new Blob(
@@ -178,7 +178,7 @@ export default function FocusedPractice({
         </button>
         <button
           type="button"
-          className="text-button danger"
+          className="ws-btn ws-btn--ghost ws-btn--sm wi-danger"
           disabled={locked}
           onClick={() => setRemoveId(item.id)}
         >
@@ -194,7 +194,7 @@ export default function FocusedPractice({
           <div className="studio-actions">
             <button
               type="button"
-              className="secondary-action-btn"
+              className="ws-btn"
               onClick={() => {
                 players.current.get(item.id)?.pause();
                 URL.revokeObjectURL(item.url);
@@ -209,7 +209,7 @@ export default function FocusedPractice({
             </button>
             <button
               type="button"
-              className="text-button"
+              className="ws-btn ws-btn--ghost ws-btn--sm"
               onClick={() => setRemoveId(null)}
             >
               Keep attempt
@@ -234,7 +234,7 @@ export default function FocusedPractice({
         answer, 6 attempts. Download anything you want to keep before leaving
         Interviews or reloading.
       </p>
-      <div className="form-group">
+      <div className="ws-field">
         <label htmlFor="focused-question">Question</label>
         <select
           id="focused-question"
@@ -262,7 +262,7 @@ export default function FocusedPractice({
       <div className="studio-actions">
         <button
           type="button"
-          className="new-essay-btn"
+          className="ws-btn ws-btn--primary"
           disabled={
             audio.requesting ||
             audio.processing ||
@@ -284,7 +284,7 @@ export default function FocusedPractice({
         {locked && (
           <button
             type="button"
-            className="text-button"
+            className="ws-btn ws-btn--ghost ws-btn--sm"
             onClick={audio.cancelRecording}
           >
             {audio.requesting
@@ -294,7 +294,7 @@ export default function FocusedPractice({
         )}
         <button
           type="button"
-          className="text-button"
+          className="ws-btn ws-btn--ghost ws-btn--sm"
           disabled={locked}
           onClick={() =>
             setSelected(
