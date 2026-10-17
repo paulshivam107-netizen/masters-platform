@@ -46,3 +46,7 @@ frontend/test-results/
 
 # R07 evaluation run outputs (evidence is copied to docs/validation)
 backend/evals/r07/results/
+
+# Local design-plan files and node_modules symlinks
+.taste/
+frontend/node_modules
