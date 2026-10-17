@@ -18,6 +18,16 @@ const excerpt = (text) =>
 const sessionLabel = (session) =>
   `${session.context.kind === "taster" ? "Why MBA interview" : session.context.school} · ${session.provider === "demo" ? "Demo" : "AI practice"}`;
 const GENERIC_SCHOOL = "General MBA practice";
+// ?programme=… prefills the programme field only. Untrusted text: trimmed and capped, never auto-starts.
+export const programmeFromLocation = () => {
+  try {
+    return (new URLSearchParams(window.location.search).get("programme") || "")
+      .trim()
+      .slice(0, 160);
+  } catch {
+    return "";
+  }
+};
 
 export default function InterviewStudio({
   applications,
@@ -39,18 +49,21 @@ export default function InterviewStudio({
   const [chosenQuestion, setChosenQuestion] = useState(null);
   const [reviewedProfile, setReviewedProfile] = useState(null);
   const preference = readUserValue(user.id, "interview_preferences", {});
+  const [linkedProgramme] = useState(programmeFromLocation);
   const [setup, setSetup] = useState({
-    application_id:
-      selectedApplicationId ||
-      (applications.some(
-        (app) => String(app.id) === String(preference.application_id),
-      )
-        ? preference.application_id
-        : ""),
+    application_id: linkedProgramme
+      ? ""
+      : selectedApplicationId ||
+        (applications.some(
+          (app) => String(app.id) === String(preference.application_id),
+        )
+          ? preference.application_id
+          : ""),
     programme_name:
-      typeof preference.programme_name === "string"
+      linkedProgramme ||
+      (typeof preference.programme_name === "string"
         ? preference.programme_name
-        : "",
+        : ""),
     practice_focus: "balanced",
     background: "",
     goal: "",

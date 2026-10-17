@@ -354,3 +354,26 @@ test("an old session with a stored route still reads sensibly", async () => {
     container.querySelector('[data-testid="interview-header"]').textContent,
   ).toBe("Candidate: Asha Rao");
 });
+
+test("?programme= prefills the programme field only, trimmed and capped, and never starts", async () => {
+  window.history.pushState({}, "", "/app/interviews?programme=%20ISB%20PGP%20");
+  await render({
+    applications: [{ id: 42, school_name: "X", program_name: "Y" }],
+    selectedApplicationId: 42,
+  });
+  expect(container.querySelector("#studio-programme-name").value).toBe(
+    "ISB PGP",
+  );
+  expect(api.createInterview).not.toHaveBeenCalled();
+  await act(async () => root.render(null));
+  window.history.pushState(
+    {},
+    "",
+    "/app/interviews?programme=" + "p".repeat(300),
+  );
+  await render();
+  expect(container.querySelector("#studio-programme-name").value).toHaveLength(
+    160,
+  );
+  window.history.pushState({}, "", "/");
+});
