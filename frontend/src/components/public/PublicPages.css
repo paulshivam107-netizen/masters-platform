@@ -257,7 +257,7 @@
   font-weight: 800;
   letter-spacing: -0.035em;
   line-height: 1.04;
-  animation: lp-rise 0.68s var(--lp-ease) both;
+  animation: lp-rise 0.9s var(--lp-ease) both;
 }
 .lp-hero-lead {
   max-width: 52ch;
@@ -265,7 +265,7 @@
   font-size: 17px;
   line-height: 1.6;
   color: var(--muted);
-  animation: lp-rise 0.68s var(--lp-ease) 0.16s both;
+  animation: lp-rise 0.9s var(--lp-ease) 0.16s both;
 }
 .lp-cta-row {
   display: flex;
@@ -273,7 +273,7 @@
   align-items: center;
   gap: 12px 28px;
   margin-top: 24px;
-  animation: lp-rise 0.68s var(--lp-ease) 0.24s both;
+  animation: lp-rise 0.9s var(--lp-ease) 0.24s both;
 }
 .lp-strip {
   --lp-tile-h: clamp(380px, 52vh, 640px);
@@ -288,7 +288,7 @@
   min-width: 0;
   overflow: hidden;
   container-type: inline-size;
-  animation: lp-rise 0.68s var(--lp-ease) both;
+  animation: lp-rise 0.9s var(--lp-ease) both;
 }
 .lp-tile:nth-child(1) {
   animation-delay: 0.32s;
@@ -1610,8 +1610,18 @@
 @keyframes lp-rise {
   from {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(36px);
   }
+}
+/* Home only: the header drops in on first load; other pages keep the quiet shared fade. */
+@keyframes lp-header {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+.lp .site-header-row {
+  animation: lp-header 0.8s var(--lp-ease) both;
 }
 @keyframes lp-fade {
   from {
@@ -1625,14 +1635,14 @@
 }
 .lp .is-pending {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(44px);
 }
 .lp .is-pending.is-revealed {
   opacity: 1;
   transform: none;
   transition:
-    opacity 0.62s var(--lp-ease),
-    transform 0.62s var(--lp-ease);
+    opacity 0.9s var(--lp-ease),
+    transform 0.9s var(--lp-ease);
 }
 @media (prefers-reduced-motion: reduce) {
   .lp .is-pending {
