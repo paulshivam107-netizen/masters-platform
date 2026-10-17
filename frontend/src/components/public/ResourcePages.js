@@ -7,6 +7,7 @@ import { practice } from "../../content/practice";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
+import { schools } from "../../content/schools";
 import "./PublicPages.css";
 import "./ResourcePages.css";
 
@@ -214,6 +215,24 @@ export function ResourceShell({ children, current = "" }) {
     </div>
   );
 }
+export function SchoolList({ heading = "Schools" }) {
+  return (
+    <ul className="sp-list" aria-label={heading}>
+      {schools.map((s) => (
+        <li key={s.slug}>
+          <Link to={`/schools/${s.slug}`}>
+            <strong>{s.shortName}</strong>
+            <span>
+              {s.programmes.map((p) => p.name).join(", ")} · {s.city}
+            </span>
+            <ArrowIcon />
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 export function GuidesPage() {
   return (
     <ResourceShell current="guides">
@@ -249,11 +268,17 @@ export function GuidesPage() {
           <GuideCards />
         </div>
       </section>
+      <section className="rp-library" aria-label="School interview pages">
+        <div className="rp-frame">
+          <h2 className="rp-section-title">Schools</h2>
+          <SchoolList />
+        </div>
+      </section>
     </ResourceShell>
   );
 }
 
-function ArticleLayout({ eyebrow, title, summary, toc, children, header }) {
+export function ArticleLayout({ eyebrow, title, summary, toc, children, header }) {
   return (
     <article className="rp-article">
       <header className="rp-article-head">
