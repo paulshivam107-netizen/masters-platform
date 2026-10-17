@@ -28,8 +28,9 @@ export default function MatrixView({
   return (
     <div className="wpl wpl-matrix" data-testid="matrix-panel">
       <p className="ws-muted wpl-lede">
-        This is a planning score based on your saved checklist, deadlines and
-        fees. It does not measure programme quality or admission chances.
+        Your applications in the order to focus on, based on your saved
+        checklist, deadlines and fees. It does not measure programme quality
+        or admission chances.
       </p>
       {currencies.size > 1 && (
         <p className="ws-alert ws-alert--warn" role="status">
@@ -54,7 +55,7 @@ export default function MatrixView({
             <thead>
               <tr>
                 <th scope="col">Programme</th>
-                <th scope="col">Planning score</th>
+                <th scope="col">Focus order</th>
                 <th scope="col">Checklist</th>
                 <th scope="col">Deadline</th>
                 <th scope="col">Relative fees</th>
@@ -63,19 +64,15 @@ export default function MatrixView({
               </tr>
             </thead>
             <tbody>
-              {applicationDecisionMatrixRows.map((row) => (
+              {applicationDecisionMatrixRows.map((row, index) => (
                 <tr key={row.application.id} data-testid="matrix-row">
                   <th scope="row">
                     <strong>{row.application.school_name}</strong>
                     <span>{row.application.program_name}</span>
                   </th>
                   <td>
-                    <span className="wpl-score">
-                      <strong className="ws-num">{row.weightedScore}</strong>
-                      <span className="ws-small ws-muted">/100</span>
-                    </span>
-                    <span className="wpl-progress__bar" aria-hidden="true">
-                      <span style={{ width: `${row.weightedScore}%` }} />
+                    <span className="ws-chip">
+                      {index === 0 ? "Focus first" : `#${index + 1}`}
                     </span>
                   </td>
                   <td className="ws-num">{row.readinessScore}</td>

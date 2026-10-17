@@ -627,18 +627,6 @@
   color: var(--muted);
   font-size: 13px;
 }
-.wpl-score {
-  display: flex;
-  align-items: baseline;
-  gap: 3px;
-  margin-bottom: 6px;
-}
-.wpl-score strong {
-  font: 700 20px/1 var(--font-heading);
-}
-.wpl-table td .wpl-progress__bar {
-  min-width: 90px;
-}
 
 .wpl-weights {
   padding: 4px 20px;
