@@ -26,6 +26,7 @@ from services.rate_limit import enforce_rate_limit
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
+# shortcut: no unique constraint, so two simultaneous first tasters can both start (a few paise); add one if abuse appears.
 def taster_used(db, user_id):
     # Once per account, whatever became of the first one. No migration: kind lives in context_json.
     # Quotes inside a free-text field are escaped in the JSON, so only a real "kind" key matches.

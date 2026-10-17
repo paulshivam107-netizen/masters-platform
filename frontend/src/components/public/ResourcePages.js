@@ -506,7 +506,8 @@ export function PrivacyPage() {
               <strong>Your practice:</strong> each mock interview's setup, the
               questions, your answers as text, and the debrief. For résumé-based
               practice we keep the questions and the short résumé excerpts they
-              are based on.
+              are based on. Any optional extra context you add, such as SOP or
+              essay excerpts, is saved with that interview.
             </li>
             <li>
               <strong>Feedback you send</strong> from Settings.
@@ -544,10 +545,11 @@ export function PrivacyPage() {
           <h2>How AI is used</h2>
           <p>
             When you run an AI interview or generate résumé questions, the text
-            needed for that step (the programme you chose, your answers, and
-            the résumé text you reviewed and agreed to send) goes to OpenAI to
+            needed for that step (the programme you chose, your answers, any
+            extra context you added, and the résumé text you reviewed and
+            agreed to send) goes to OpenAI to
             draft questions, follow-ups and the debrief. Voice answers are
-            transcribed by OpenAI. We send these requests with OpenAI's storage
+            transcribed by OpenAI, including answers you dictate. We send these requests with OpenAI's storage
             option turned off.
           </p>
           <p>
