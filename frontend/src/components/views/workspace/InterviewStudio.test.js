@@ -377,3 +377,55 @@ test("?programme= prefills the programme field only, trimmed and capped, and nev
   );
   window.history.pushState({}, "", "/");
 });
+
+const debrief = (readiness) => ({
+  id: "r-one",
+  provider: "openai",
+  mode: "chat",
+  status: "completed",
+  version: 4,
+  answer_count: 3,
+  question_limit: 3,
+  created_at: "2026-02-01T00:00:00Z",
+  context: { school: "Test School", programme: "MBA", route: "experienced" },
+  transcript: [{ id: "q1", role: "assistant", text: "Hi." }],
+  readiness,
+  feedback: {
+    summary: "Fine.",
+    strengths: [{ turn_id: "a1", quote: "q", observation: "o" }],
+    improvements: [
+      { turn_id: "a1", quote: "q", observation: "o", suggestion: "s" },
+    ],
+    next_exercise: "Retell it.",
+    dimensions: [
+      { dimension: "motivation", turn_id: "a2", quote: "I want to lead", level: "strong" },
+    ],
+  },
+});
+const openDebrief = async (readiness) => {
+  api.createInterview.mockResolvedValue(debrief(readiness));
+  await render();
+  await agree();
+  await tick(() => button("Try a 3-question Why MBA interview").click());
+};
+
+test("a full debrief shows the score and how it is calculated", async () => {
+  await openDebrief({ status: "full", score: 83, assessed: 3, levels: {} });
+  const text = container.textContent;
+  expect(text).toContain("83/100");
+  expect(text).toContain("Based on 3 of 5 areas");
+  expect(text).toContain("How this is calculated");
+  expect(text).toContain("I want to lead");
+});
+
+test("a partial debrief shows no number", async () => {
+  await openDebrief({ status: "partial", score: null, assessed: 2, levels: {} });
+  expect(container.textContent).toContain("Partial readiness");
+  expect(container.textContent).not.toContain("/100");
+});
+
+test("a debrief without readiness shows neither", async () => {
+  await openDebrief(null);
+  expect(container.textContent).not.toContain("Partial readiness");
+  expect(container.textContent).not.toContain("How this is calculated");
+});

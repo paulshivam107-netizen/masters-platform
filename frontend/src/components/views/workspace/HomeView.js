@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import * as interviewsApi from "../../../api/interviewsApi";
 import { Link } from "react-router-dom";
 import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
@@ -36,6 +37,19 @@ export default function HomeView({
   onboardingDismissed,
   setOnboardingDismissed,
 }) {
+  const [practice, setPractice] = useState(null);
+  useEffect(() => {
+    const controller = new AbortController();
+    interviewsApi
+      .listInterviews(0, controller.signal)
+      .then((page) => {
+        if (controller.signal.aborted || !page.completed_count) return;
+        const latest = page.items.find((i) => i.readiness?.status === "full");
+        setPractice({ count: page.completed_count, score: latest?.readiness.score });
+      })
+      .catch(() => {}); // the existing start card stays
+    return () => controller.abort();
+  }, []);
   const firstName = (user?.name || "there").trim().split(/\s+/)[0];
   const openEssay = (essay) => {
     handleNavChange("essays");
@@ -105,6 +119,24 @@ export default function HomeView({
       />
     );
 
+  const practiceCard = practice && (
+    <section className="ws-card ws-card--soft wi-banner" data-testid="home-practice">
+      <span className="wi-row__icon">
+        <InterviewIcon />
+      </span>
+      <div>
+        <h3>
+          You’ve done {practice.count}{" "}
+          {practice.count === 1 ? "interview" : "interviews"}
+        </h3>
+        {practice.score != null && <p>Latest readiness {practice.score}/100</p>}
+      </div>
+      <button className="ws-btn" onClick={() => handleNavChange("interviews")}>
+        Practise again <ArrowIcon />
+      </button>
+    </section>
+  );
+
   const isFirstVisit = !applications.length && !essays.length;
   if (isFirstVisit)
     return (
@@ -118,25 +150,29 @@ export default function HomeView({
             <h2>
               Welcome, <span>{firstName}.</span>
             </h2>
-            <p>
-              Start with a short Why MBA interview: follow-ups on your own
-              answers and a debrief when you finish.
-            </p>
-            <div className="ws-row">
-              <button
-                className="ws-btn ws-btn--primary"
-                onClick={() => {
-                  setInterviewIntent("taster");
-                  handleNavChange("interviews");
-                }}
-              >
-                Start your Why MBA interview <ArrowIcon />
-              </button>
-            </div>
-            <p className="ws-muted ws-small" data-testid="home-taster-note">
-              3 questions, about 5 minutes. Add your résumé after for a full
-              interview.
-            </p>
+            {practiceCard || (
+              <>
+                <p>
+                  Start with a short Why MBA interview: follow-ups on your own
+                  answers and a debrief when you finish.
+                </p>
+                <div className="ws-row">
+                  <button
+                    className="ws-btn ws-btn--primary"
+                    onClick={() => {
+                      setInterviewIntent("taster");
+                      handleNavChange("interviews");
+                    }}
+                  >
+                    Start your Why MBA interview <ArrowIcon />
+                  </button>
+                </div>
+                <p className="ws-muted ws-small" data-testid="home-taster-note">
+                  3 questions, about 5 minutes. Add your résumé after for a full
+                  interview.
+                </p>
+              </>
+            )}
           </div>
           <div className="ws-card wi-welcome__side">
             <span className="wi-row__icon">
@@ -319,7 +355,8 @@ export default function HomeView({
           )}
         </section>
       </div>
-      {showHomeChecklist && (
+      {practiceCard}
+      {showHomeChecklist && !practice && (
         <section className="ws-card ws-card--soft wi-banner">
           <span className="wi-row__icon">
             <InterviewIcon />

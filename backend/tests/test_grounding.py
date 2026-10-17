@@ -5,6 +5,9 @@ from unittest.mock import patch
 from services import interview_provider as provider
 from services import resume_questions
 from services.grounding import find_quote
+from services.readiness import DIMENSIONS
+
+UNASSESSED = [{"dimension": d, "turn_id": "", "quote": "", "level": "not_assessed"} for d in DIMENSIONS]
 
 SOURCE = "I led the team’s migration – it cut costs by 30%.\nWe shipped it  in\tMarch, “ahead of plan”."
 
@@ -108,7 +111,7 @@ class CallSiteTest(unittest.TestCase):
                       {"role": "user", "id": "a1", "text": "I owned the client’s\nrollout end to end."}]
         point = {"turn_id": "a1", "quote": "client's rollout end to end.", "observation": "Ownership."}
         result = {"summary": "Fine.", "strengths": [dict(point)], "improvements": [{**point, "suggestion": "Add numbers."}],
-                  "next_exercise": "Retry."}
+                  "next_exercise": "Retry.", "dimensions": UNASSESSED}
         checked = provider.validate_feedback(result, transcript)
         for item in checked["strengths"] + checked["improvements"]:
             self.assertEqual(item["quote"], "client’s\nrollout end to end")
@@ -220,7 +223,7 @@ class PartialFeedbackTest(unittest.TestCase):
         point = lambda q: {"turn_id": "a1", "quote": q, "observation": "Obs."}
         return {"summary": "Fine.", "strengths": [point(q) for q in strengths],
                 "improvements": [{**point(q), "suggestion": "Add numbers."} for q in improvements],
-                "next_exercise": "Retry."}
+                "next_exercise": "Retry.", "dimensions": UNASSESSED}
 
     def test_bad_improvement_dropped_rest_verbatim(self):
         checked = provider.validate_feedback(

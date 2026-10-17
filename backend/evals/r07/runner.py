@@ -21,6 +21,7 @@ from services import interview_provider as provider
 from services.interview_plan import PLAN_VERSION, make_plan
 from services.interviews import (FALLBACK_AFTER_ATTEMPTS, MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS, closing_turn,
                                  fallback_question, is_stop_request)
+from services.readiness import readiness
 from services.resume_questions import generate_questions
 
 RESULTS_DIR = Path(__file__).with_name("results")
@@ -318,3 +319,62 @@ def live_key_configured():
 
 def provider_prompt_version():
     return provider.PROMPT_VERSION
+
+
+def rescore_suite(source_dir, *, provider="fake", model=DEFAULT_MODEL, repeats=2, out_root=RESULTS_DIR,
+                  max_attempts=3, max_spend_paise=2_000, confirm_spend=False):
+    """Debrief-only: score each saved transcript ``repeats`` times to measure evidence-level stability."""
+    if provider == "openai":
+        if not confirm_spend:
+            raise SpendNotConfirmed("A live run spends money: pass --confirm-spend.")
+        if not live_key_configured():
+            raise SpendNotConfirmed("OPENAI_API_KEY is not configured in backend/.env.")
+    sessions = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(Path(source_dir, "sessions").glob("*.json"))]
+    sessions = [s for s in sessions if s.get("stopped_at") is None]
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    out_dir = Path(out_root) / f"{stamp}-rescore-{provider}-{model}"
+    run = Run(out_dir, provider, model, max_attempts, max_spend_paise)
+    rows, stopped = [], None
+    try:
+        with _model(model), _capture_outputs(run), (FakeOpenAI().installed() if provider == "fake" else contextlib.nullcontext()):
+            for session in sessions:
+                context, transcript = session["context"], session["transcript"]
+                reserve = reserve_feedback(len(json.dumps(context)), len(json.dumps(transcript)))
+                results = [run.call(session["profile_id"], f"rescore{i + 1}", "interview_feedback", *reserve,
+                                    lambda: provider_feedback(context, transcript)) for i in range(repeats)]
+                rows.append({"profile_id": session["profile_id"],
+                             "runs": [None if r is None else {"dimensions": r["dimensions"], "dropped_levels": r.get("dropped_levels", 0),
+                                                              "readiness": readiness(r)} for r in results]})
+    except BudgetExceeded:
+        stopped = "budget"
+    finally:
+        run.close()
+    summary = rescore_summary(rows)
+    summary.update(source=str(source_dir), prompt_version=provider_prompt_version(), model=model, provider=provider,
+                   repeats=repeats, stopped=stopped, spent_paise_worst_case=run.spent_paise, git=git_state())
+    (out_dir / "rescore.json").write_text(json.dumps({"summary": summary, "rows": rows}, indent=2, ensure_ascii=False), encoding="utf-8")
+    return out_dir, summary
+
+
+def provider_feedback(context, transcript):  # rescore_suite's "provider" argument shadows the module.
+    return provider.feedback(context, transcript)
+
+
+def rescore_summary(rows):
+    """Agreement between repeated scorings of the same transcript."""
+    pairs = [r["runs"] for r in rows if len(r["runs"]) >= 2 and all(r["runs"])]
+    level_pairs = [(a["level"], b["level"]) for first, second in pairs
+                   for a, b in zip(first["dimensions"], second["dimensions"])]
+    gaps = [abs(first["readiness"]["score"] - second["readiness"]["score"]) for first, second in pairs
+            if first["readiness"] and second["readiness"] and first["readiness"]["status"] == second["readiness"]["status"] == "full"]
+    levels = [d["level"] for r in rows for run in r["runs"] if run for d in run["dimensions"]]
+    return {
+        "transcripts": len(rows), "complete_pairs": len(pairs),
+        "level_agreement": round(sum(a == b for a, b in level_pairs) / len(level_pairs), 3) if level_pairs else None,
+        "status_agreement": round(sum((f["readiness"] or {}).get("status") == (s["readiness"] or {}).get("status")
+                                      for f, s in pairs) / len(pairs), 3) if pairs else None,
+        "score_gaps": sorted(gaps), "max_score_gap": max(gaps) if gaps else None,
+        "level_counts": {name: levels.count(name) for name in ("not_assessed", "missing", "partial", "strong")},
+        "dropped_levels": sum(run["dropped_levels"] for r in rows for run in r["runs"] if run),
+        "failed_debriefs": sum(run is None for r in rows for run in r["runs"]),
+    }
