@@ -10,6 +10,7 @@ import {
   GuidePage,
   PracticePage,
   HelpPage,
+  PrivacyPage,
   NotFoundPage,
 } from "../components/public/ResourcePages";
 import { SchoolsPage, SchoolPage } from "../components/public/SchoolPages";
@@ -27,6 +28,7 @@ export default function StaticSite({ path }) {
             <Route path="/schools/:slug" element={<SchoolPage />} />
             <Route path="/mba-interview-practice" element={<PracticePage />} />
             <Route path="/help" element={<HelpPage />} />
+            <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

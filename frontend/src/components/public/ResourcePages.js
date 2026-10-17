@@ -278,7 +278,7 @@ export function GuidesPage() {
   );
 }
 
-export function ArticleLayout({ eyebrow, title, summary, toc, children, header }) {
+export function ArticleLayout({ eyebrow, title, summary, toc, children, header, tocLabel = "In this guide" }) {
   return (
     <article className="rp-article">
       <header className="rp-article-head">
@@ -294,7 +294,7 @@ export function ArticleLayout({ eyebrow, title, summary, toc, children, header }
       </header>
       <div className="rp-frame rp-article-grid">
         <nav className="rp-toc" aria-label="On this page">
-          <strong>In this guide</strong>
+          <strong>{tocLabel}</strong>
           <ol>
             {toc.map(([id, label]) => (
               <li key={id}>
@@ -468,6 +468,167 @@ export function HelpPage() {
     </ResourceShell>
   );
 }
+const PRIVACY_UPDATED = "2026-10-17";
+const PRIVACY_TOC = [
+  ["what-we-store", "What we store"],
+  ["what-we-dont", "What we don't store"],
+  ["ai", "How AI is used"],
+  ["providers", "Who helps us run Masters"],
+  ["browser", "Cookies and browser storage"],
+  ["your-choices", "Export, edit or delete"],
+  ["contact", "Questions and changes"],
+];
+
+export function PrivacyPage() {
+  return (
+    <ResourceShell>
+      <ArticleLayout
+        eyebrow={`Privacy · Updated ${formatDate(PRIVACY_UPDATED)}`}
+        title="Your data on Masters"
+        summary="What Masters stores, why, who processes it and how to take it with you or delete it. Written for the pilot in plain language."
+        toc={PRIVACY_TOC}
+        tocLabel="On this page"
+      >
+        <section id="what-we-store">
+          <h2>What we store</h2>
+          <ul>
+            <li>
+              <strong>Your account:</strong> email address, name, and either a
+              securely hashed password or your Google sign-in. Profile details
+              you choose to add, such as target intake, countries, currency,
+              timezone, a short bio and a notification email.
+            </li>
+            <li>
+              <strong>Your work:</strong> the applications, deadlines,
+              checklists and essays (with their versions) you save.
+            </li>
+            <li>
+              <strong>Your practice:</strong> each mock interview's setup, the
+              questions, your answers as text, and the debrief. For résumé-based
+              practice we keep the questions and the short résumé excerpts they
+              are based on.
+            </li>
+            <li>
+              <strong>Feedback you send</strong> from Settings.
+            </li>
+            <li>
+              <strong>Product events</strong> linked to your account, such as
+              "interview started", so we can see which parts of the pilot help.
+            </li>
+            <li>
+              <strong>Security and cost records:</strong> sign-in sessions,
+              one-time email links, short-lived rate-limit counters that use
+              your IP address, and the cost of each AI request.
+            </li>
+          </ul>
+        </section>
+        <section id="what-we-dont">
+          <h2>What we don't store</h2>
+          <ul>
+            <li>
+              Your original résumé file and its full text. You review the text
+              before anything is sent, and only the questions and short
+              excerpts are kept.
+            </li>
+            <li>
+              Voice recordings. Audio is sent for transcription and then
+              discarded; only the text of your answer is saved.
+            </li>
+            <li>
+              No advertising, no third-party analytics or tracking cookies, and
+              we don't sell your data.
+            </li>
+          </ul>
+        </section>
+        <section id="ai">
+          <h2>How AI is used</h2>
+          <p>
+            When you run an AI interview or generate résumé questions, the text
+            needed for that step (the programme you chose, your answers, and
+            the résumé text you reviewed and agreed to send) goes to OpenAI to
+            draft questions, follow-ups and the debrief. Voice answers are
+            transcribed by OpenAI. We send these requests with OpenAI's storage
+            option turned off.
+          </p>
+          <p>
+            AI output can be wrong. It is practice material, not an admissions
+            assessment, and it does not predict any outcome.
+          </p>
+        </section>
+        <section id="providers">
+          <h2>Who helps us run Masters</h2>
+          <p>These services process data on our behalf, only to run Masters:</p>
+          <ul>
+            <li>
+              <strong>Neon:</strong> the database, hosted in Singapore.
+            </li>
+            <li>
+              <strong>Railway:</strong> the application server, currently in
+              the United States.
+            </li>
+            <li>
+              <strong>Cloudflare:</strong> the website and the mockmba.com
+              domain.
+            </li>
+            <li>
+              <strong>Resend:</strong> account and reminder emails.
+            </li>
+            <li>
+              <strong>OpenAI:</strong> AI interviews, résumé questions and
+              transcription.
+            </li>
+            <li>
+              <strong>Google:</strong> only if you choose to sign in with
+              Google.
+            </li>
+          </ul>
+        </section>
+        <section id="browser">
+          <h2>Cookies and browser storage</h2>
+          <p>
+            Masters sets one cookie that keeps you signed in. Your browser also
+            stores your theme and motion settings, unsent drafts, and the
+            interview preparation notes marked "saved in this browser". Those
+            notes stay on your device; clearing your browser data removes them.
+          </p>
+        </section>
+        <section id="your-choices">
+          <h2>Export, edit or delete</h2>
+          <ul>
+            <li>
+              <strong>Export:</strong> Settings → Your data → Download my data
+              gives you a JSON file of what we hold for your account.
+            </li>
+            <li>
+              <strong>Edit:</strong> change your profile, applications and
+              essays at any time.
+            </li>
+            <li>
+              <strong>Delete:</strong> Settings → Your data → Delete my account
+              permanently removes your account and your work. We keep only
+              records with no link to you: a count of deleted items and AI cost
+              totals. Database backups that already contain your data expire
+              on their normal schedule.
+            </li>
+          </ul>
+        </section>
+        <section id="contact">
+          <h2>Questions and changes</h2>
+          <p>
+            Masters is an independent pilot, not affiliated with any business
+            school, exam body or admissions office. For a privacy question or
+            request, use Settings → Help shape this space while signed in.
+          </p>
+          <p>
+            We will update this page when anything changes, and the date at
+            the top shows the latest version.
+          </p>
+        </section>
+      </ArticleLayout>
+    </ResourceShell>
+  );
+}
+
 export function NotFoundPage() {
   return (
     <ResourceShell>

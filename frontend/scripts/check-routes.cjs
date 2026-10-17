@@ -20,6 +20,7 @@ const checks = [
   ["/guides", 200, null, "index"],
   [guide, 200, null, "index"],
   ["/help", 200, null, "index"],
+  ["/privacy", 200, null, "index"],
   ["/schools", 200, null, "index"],
   ["/schools/isb", 200, null, "index"],
   ["/schools/iima", 200, null, "index"],

@@ -42,6 +42,7 @@ import {
   GuidePage,
   PracticePage,
   HelpPage,
+  PrivacyPage,
   NotFoundPage,
 } from "./components/public/ResourcePages";
 import { SchoolsPage, SchoolPage } from "./components/public/SchoolPages";
@@ -743,6 +744,7 @@ function AppRoutes() {
         <Route path="/schools/:slug" element={<SchoolPage />} />
         <Route path="/mba-interview-practice" element={<PracticePage />} />
         <Route path="/help" element={<HelpPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/auth/verify-email" element={<VerifyEmailPage />} />
         <Route path="/auth/reset-password" element={<ResetPasswordPage />} />

@@ -372,9 +372,9 @@ const ROUTES = [
     label: "Executive programmes",
     title: "Experienced applicants",
     text: "EMBA and one-year executive programmes, from INSEAD and LBS to ISB PGP and IIMA PGPX.",
-    chip: "Programmes",
-    to: "/programs",
-    action: "Browse programmes",
+    chip: "Executive",
+    to: "/schools",
+    action: "Read the school interview guides",
   },
 ];
 

@@ -15,6 +15,12 @@ const publicPages = {
       "Interview story templates, résumé follow-up practice and application checklists, including a checklist for Indian MBA routes. Read and download without an account.",
     kind: "website",
   },
+  "/privacy": {
+    title: "Privacy: your data on Masters",
+    description:
+      "What Masters stores, how AI is used, who processes your data and how to export or delete your account.",
+    kind: "website",
+  },
   "/help": {
     title: "Getting started and help",
     description:

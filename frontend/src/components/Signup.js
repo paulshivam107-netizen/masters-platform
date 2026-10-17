@@ -198,6 +198,10 @@ function Signup({ onSwitchToLogin }) {
             text="signup_with"
           />
         </form>
+        <p className="ap-help ap-legal">
+          By creating an account you agree to how we handle your data in the{" "}
+          <a href="/privacy">privacy notice</a>.
+        </p>
 
         <p className="auth-switch">
           Already have an account?{" "}

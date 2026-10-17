@@ -26,9 +26,8 @@ export default function SiteFooter({ home = false }) {
           </div>
           <div>
             <h3>Product</h3>
-            <Link to="/programs">Programmes</Link>
             <Link to="/auth?mode=login&next=%2Fapp">Sign in</Link>
-            <Link to="/help">Privacy</Link>
+            <Link to="/privacy">Privacy</Link>
           </div>
           <div>
             <h3>Resources</h3>
