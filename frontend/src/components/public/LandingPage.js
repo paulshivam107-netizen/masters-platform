@@ -120,7 +120,7 @@ function useReveal(rootRef) {
           observer.unobserve(entry.target);
         });
       },
-      { threshold: 0, rootMargin: "0px 0px 15% 0px" },
+      { threshold: 0, rootMargin: "0px 0px -10% 0px" },
     );
     root.querySelectorAll("[data-reveal]").forEach((element) => {
       if (element.getBoundingClientRect().top < window.innerHeight) return;
