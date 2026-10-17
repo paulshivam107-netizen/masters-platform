@@ -825,6 +825,7 @@
   text-transform: uppercase;
   cursor: pointer;
   text-align: left;
+  white-space: nowrap;
 }
 .lp-theme .is-active {
   color: var(--ink);
@@ -1489,43 +1490,27 @@
   line-height: 1.5;
 }
 .lp-card-c {
-  align-items: center;
   justify-content: center;
-  text-align: center;
-  gap: 10px;
+  gap: 4px;
 }
-.lp-ring {
-  display: grid;
-  place-items: center;
-  width: 150px;
-  height: 150px;
-  margin-bottom: 8px;
-  border: 14px solid var(--line);
-  border-radius: 50%;
-  font: 800 36px var(--font-heading);
-}
-.lp-card-c h3 {
-  font-size: 18px;
-  font-weight: 700;
-}
-.lp-card-c p {
-  margin: 0;
-  max-width: 24ch;
-  font-size: 14px;
-  color: var(--muted);
+.lp-exercise {
+  margin: 12px 0 0;
+  font: 650 clamp(20px, 1.8vw, 24px) / 1.3 var(--font-heading);
+  letter-spacing: -0.01em;
 }
 .lp-card-d {
   gap: 10px;
 }
-.lp-card-big {
+.lp-card-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
-  margin: 0;
-  font: 800 clamp(40px, 4vw, 56px) / 1 var(--font-heading);
-  letter-spacing: -0.03em;
+  gap: 12px;
+  margin: 0 0 16px;
+  font: 700 clamp(22px, 2vw, 28px) / 1.15 var(--font-heading);
+  letter-spacing: -0.02em;
 }
-.lp-card-big .lp-chip {
+.lp-card-heading .lp-chip {
   font: 500 14px var(--font-body);
   letter-spacing: 0;
 }
@@ -2288,25 +2273,15 @@
 }
 .lp-footer-contact {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 56px;
-  border-bottom: 1px solid var(--hero-ink);
-  color: var(--hero-ink);
-  text-decoration: none;
 }
-.lp-footer-contact span {
+.lp-footer-contact p {
+  margin: 0;
+  font-size: 18px;
   color: var(--hero-muted);
-}
-.lp-footer-contact strong {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-.lp-footer-contact svg {
-  width: 16px;
-  height: 16px;
 }
 .lp-footer-cols {
   display: grid;
@@ -2550,15 +2525,24 @@ html[data-reduced-motion="true"] .lp .is-pending {
   .lp {
     --lp-y: 64px;
   }
-  .lp-meta-nav a {
-    line-height: 46px;
-  }
   .lp-hero-top {
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: "brand nav theme";
+    align-items: center;
     gap: 8px 16px;
-    row-gap: 12px;
   }
+  .lp-meta-section,
   .lp-meta-pilot {
-    font-size: 12px;
+    display: none !important;
+  }
+  .lp-theme {
+    letter-spacing: 0.06em;
+  }
+  .lp-meta-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    line-height: 1;
   }
   .lp-hero-copy {
     margin-top: 40px;

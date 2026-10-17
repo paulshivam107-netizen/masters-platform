@@ -332,15 +332,19 @@ function Closeup() {
             </div>
           </article>
           <article className="lp-card lp-card-c">
-            <span className="lp-ring" aria-hidden="true">1</span>
-            <h3>One exercise to practise</h3>
-            <p>Each debrief ends with a single drill for your next attempt.</p>
+            <h3 className="lp-label">One exercise to practise</h3>
+            <p className="lp-exercise">
+              Retell the backlog story in 60 seconds: the decision, the
+              alternative you rejected, the result.
+            </p>
+            <p className="lp-illustrative">
+              Each debrief ends with a single drill. Illustrative example.
+            </p>
           </article>
           <article className="lp-card lp-card-d">
-            <p className="lp-card-big">
-              3 parts <span className="lp-chip">Debrief</span>
-            </p>
-            <h3 className="lp-label">Your debrief, in three parts</h3>
+            <h3 className="lp-card-heading">
+              Your debrief <span className="lp-chip">Three parts</span>
+            </h3>
             <ol className="lp-bars">
               <li>What worked</li>
               <li>What to tighten</li>
@@ -800,12 +804,12 @@ function Footer() {
       <div className="lp-frame">
         <div className="lp-footer-top">
           <h2>Tell us what to fix in the pilot.</h2>
-          <Link className="lp-footer-contact" to="/help">
-            <span>Questions, bugs or ideas</span>
-            <strong>
+          <div className="lp-footer-contact">
+            <p>Questions, bugs or ideas?</p>
+            <Link className="lp-btn lp-btn--pill" to="/help">
               Write to us <ArrowIcon />
-            </strong>
-          </Link>
+            </Link>
+          </div>
         </div>
         <nav className="lp-footer-cols" aria-label="Footer">
           <div>
@@ -830,7 +834,6 @@ function Footer() {
             <h3>Say hello</h3>
             <Link to="/help">Contact and help</Link>
             <p>Made for Indian MBA applicants</p>
-            <p>Not affiliated with any business school</p>
           </div>
         </nav>
         <div className="lp-footer-bottom">
@@ -861,9 +864,9 @@ export default function LandingPage() {
       <header className="lp-hero">
         <div className="lp-frame lp-hero-top">
           <nav className="lp-meta-nav" aria-label="Main navigation">
-            <a href="#how_it_works">How it works</a>
-            <a href="#routes">Routes</a>
-            <Link to="/guides">Guides</Link>
+            <a className="lp-meta-section" href="#how_it_works">How it works</a>
+            <a className="lp-meta-section" href="#routes">Routes</a>
+            <Link className="lp-meta-section" to="/guides">Guides</Link>
             {user ? (
               <Link to="/app/today">Open workspace</Link>
             ) : (

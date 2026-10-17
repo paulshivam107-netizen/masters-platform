@@ -3,9 +3,9 @@ import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
   "/": {
-    title: "Indian MBA application tracker and interview preparation",
+    title: "Practise Indian MBA interviews with résumé-based questions",
     description:
-      "Organise CAT-route, GMAT-route and executive MBA applications, deadlines, essay drafts and interview preparation. Free during the Masters pilot.",
+      "Mock MBA interviews for Indian applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
     kind: "website",
   },
   "/guides": {
