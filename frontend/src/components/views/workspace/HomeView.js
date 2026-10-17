@@ -112,43 +112,39 @@ export default function HomeView({
           <div className="wi-welcome__copy">
             <span className="ws-eyebrow">
               <span aria-hidden="true" />
-              LET’S GET STARTED
+              Let’s get started
             </span>
             <h2>
               Welcome, <span>{firstName}.</span>
             </h2>
             <p>
-              Start with one programme you’re considering. Add its deadline,
-              then build your plan at your own pace.
+              Start with a mock interview: questions from your résumé,
+              follow-ups on your answers and a debrief when you finish.
             </p>
             <div className="ws-row">
               <button
                 className="ws-btn ws-btn--primary"
-                data-testid="home-dashboard-start-application"
-                onClick={() => handleOpenApplicationForm()}
+                onClick={() => handleNavChange("interviews")}
               >
-                Add your first application <ArrowIcon />
+                Start a mock interview <ArrowIcon />
               </button>
             </div>
-            <p className="ws-muted ws-small">
-              CAT, GMAT or another route: start with the programme and its
-              official deadline.
-            </p>
           </div>
           <div className="ws-card wi-welcome__side">
             <span className="wi-row__icon">
-              <InterviewIcon />
+              <ApplicationsIcon />
             </span>
-            <h3>Start a mock interview</h3>
+            <h3>Track your applications</h3>
             <p>
-              Questions from your résumé, follow-ups on your answers and a
-              debrief when you finish.
+              Add a programme you’re considering, CAT, GMAT or another route,
+              with its official deadline. Build your plan at your own pace.
             </p>
             <button
               className="ws-btn ws-btn--ghost ws-btn--sm"
-              onClick={() => handleNavChange("interviews")}
+              data-testid="home-dashboard-start-application"
+              onClick={() => handleOpenApplicationForm()}
             >
-              Open Interview Studio <ArrowIcon />
+              Add your first application <ArrowIcon />
             </button>
           </div>
         </div>
@@ -173,12 +169,6 @@ export default function HomeView({
               <span>Prepare a few clear answers for your interview.</span>
             </li>
           </ol>
-          <button
-            className="ws-btn ws-btn--ghost ws-btn--sm"
-            onClick={() => handleNavChange("interviews")}
-          >
-            Just here to practise? Try a question <ArrowIcon />
-          </button>
         </div>
       </section>
     );
