@@ -69,9 +69,19 @@ class Improvement(FeedbackPoint):
     suggestion: str = Field(min_length=1, max_length=600)
 
 
+class DimensionEvidence(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    dimension: Literal["motivation", "work_experience", "academics", "projects", "communication"]
+    # Evidence comes before the level so the model commits to a quote first; empty when not assessed.
+    turn_id: str = Field(pattern=r"^(a[1-8])?$")
+    quote: str = Field(max_length=400)
+    level: Literal["not_assessed", "missing", "partial", "strong"]
+
+
 class InterviewFeedback(BaseModel):
     model_config = ConfigDict(extra="forbid")
     summary: str = Field(min_length=1, max_length=800)
     strengths: list[FeedbackPoint] = Field(min_length=1, max_length=2)
     improvements: list[Improvement] = Field(min_length=1, max_length=3)
     next_exercise: str = Field(min_length=1, max_length=700)
+    dimensions: list[DimensionEvidence] = Field(min_length=5, max_length=5)

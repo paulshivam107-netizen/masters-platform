@@ -11,11 +11,85 @@ import { clearInterviewIntent, getInterviewIntent } from "./interviewIntent";
 import DictationButton, { appendTranscript } from "./DictationButton";
 import "./InterviewStudio.css";
 import "./WorkspaceInterview.css";
+import {
+  AREA_LABELS,
+  LEVEL_LABELS,
+  changes,
+  chipLabel,
+  previousFull,
+  trend,
+} from "../../../app/readiness";
 
 const requestId = () => crypto.randomUUID();
 const draftKey = (id) => `interview_answer:${id}`;
 const excerpt = (text) =>
   text.length > 240 ? `${text.slice(0, 237).trimEnd()}…` : text;
+function Readiness({ session, history }) {
+  const r = session.readiness;
+  if (!r) return null;
+  const isFull = r.status === "full";
+  const prev = isFull ? previousFull(history, session) : null;
+  const diff = prev ? r.score - prev.readiness.score : null;
+  const scores = trend([
+    ...history.filter((item) => item.id !== session.id),
+    ...(isFull ? [session] : []),
+  ]);
+  const moved = prev ? changes(prev.readiness.levels, r.levels) : [];
+  return (
+    <div className="studio-readiness" data-testid="readiness">
+      {isFull ? (
+        <p className="studio-readiness__score">
+          Interview readiness <strong>{r.score}/100</strong>
+        </p>
+      ) : (
+        <p className="studio-readiness__score">
+          <strong>Partial readiness</strong>
+        </p>
+      )}
+      <p>
+        Based on {r.assessed} of 5 areas.{" "}
+        {isFull
+          ? "Practice signal, not an admission prediction."
+          : "A full interview covers enough for a score."}
+      </p>
+      {prev && (
+        <p>
+          {diff === 0
+            ? "Same as your last interview"
+            : `${diff > 0 ? "+" : "−"}${Math.abs(diff)} since your last interview`}
+          {moved.length > 0 && (
+            <>
+              {" · "}
+              {moved.map((m) => `${m.area}: ${m.from} → ${m.to}`).join(" · ")}
+            </>
+          )}
+        </p>
+      )}
+      {scores.length >= 2 && <p>Your last scores: {scores.join(" → ")}</p>}
+      <details>
+        <summary>How this is calculated</summary>
+        <p>
+          Each area is rated from your own words as strong, partial or missing.
+          Areas the interview didn’t cover don’t count.
+        </p>
+        {(session.feedback?.dimensions || []).map((d) => (
+          <article className="studio-feedback-point" key={d.dimension}>
+            <strong>
+              {AREA_LABELS[d.dimension] || d.dimension}:{" "}
+              {LEVEL_LABELS[d.level] || d.level}
+            </strong>
+            {d.quote && (
+              <blockquote>
+                “{d.quote}” <cite>Answer {d.turn_id.slice(1)}</cite>
+              </blockquote>
+            )}
+          </article>
+        ))}
+      </details>
+    </div>
+  );
+}
+
 const sessionLabel = (session) =>
   `${session.context.kind === "taster" ? "Why MBA interview" : session.context.school} · ${session.provider === "demo" ? "Demo" : "AI practice"}`;
 const GENERIC_SCHOOL = "General MBA practice";
@@ -920,6 +994,11 @@ export default function InterviewStudio({
                         : "Continue"}
                     </small>
                   </span>
+                  {item.readiness && (
+                    <span className="studio-chip">
+                      {chipLabel(item.readiness)}
+                    </span>
+                  )}
                   <ArrowIcon />
                 </button>
               ))}
@@ -1169,6 +1248,7 @@ export default function InterviewStudio({
                   ? "Example debrief"
                   : "Your debrief"}
               </h3>
+              <Readiness session={session} history={history} />
               <p>{session.feedback.summary}</p>
               <h4>What to build on</h4>
               {session.feedback.strengths.map((point, index) => (

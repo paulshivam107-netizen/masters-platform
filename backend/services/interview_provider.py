@@ -11,8 +11,9 @@ from interview_schemas import InterviewFeedback, NextQuestion
 from services.grounding import find_quote
 from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
+from services.readiness import DIMENSIONS
 
-PROMPT_VERSION = "mba-interview-v11"
+PROMPT_VERSION = "mba-interview-v12"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -244,6 +245,10 @@ def _check_next_question(result, context, transcript):
     return result
 
 
+def _unassessed(name):
+    return {"dimension": name, "turn_id": "", "quote": "", "level": "not_assessed"}
+
+
 def validate_feedback(result, transcript):
     result = InterviewFeedback.model_validate(result).model_dump()
     answers = {turn["id"]: turn["text"] for turn in transcript if turn["role"] == "user"}
@@ -262,6 +267,21 @@ def validate_feedback(result, transcript):
         result[key] = kept
     if dropped:
         result["dropped_points"] = dropped
+    levels, dropped = {}, 0
+    for item in result["dimensions"]:
+        if item["dimension"] in levels:
+            continue
+        span = None
+        if item["level"] != "not_assessed" and item["turn_id"] in answers:
+            span = find_quote(item["quote"], answers[item["turn_id"]], max_length=400)
+        if item["level"] != "not_assessed" and span is None:
+            dropped += 1  # An unbacked level is excluded from readiness rather than failing the whole debrief.
+        levels[item["dimension"]] = ({**item, "quote": span} if span else
+                                     _unassessed(item["dimension"]))
+    result["dimensions"] = [levels.get(name) or _unassessed(name)
+                            for name in DIMENSIONS]
+    if dropped:
+        result["dropped_levels"] = dropped
     return result
 
 
@@ -286,7 +306,16 @@ def feedback(context, transcript):
         "the applicant's own answers or resume and a concrete way to practise it (for example, retell that example "
         "in 60 seconds with the decision, the alternative rejected and the result); never give generic advice such "
         "as 'provide more detail' or 'be specific'. "
-        "For academic or factual answers, avoid claiming correctness without reliable supplied reference material.",
+        "For academic or factual answers, avoid claiming correctness without reliable supplied reference material. "
+        "Finally rate each dimension exactly once, in this order: motivation (why this degree, why now, goals, "
+        "why this school), work_experience, academics, projects, communication (clarity and structure of the "
+        "answers). For each, first choose the single quote that best shows the level (same quote rules as above), "
+        "then the level: strong = a specific example in the applicant's own words with their decision, reasoning "
+        "or result; partial = relevant but generic, vague or missing the applicant's own decision or result; "
+        "missing = the interviewer asked about it but the answer did not address it. Use not_assessed, with an "
+        "empty turn_id and quote, when the interview did not cover it. Communication is assessed whenever there is "
+        "at least one substantive answer. Judge only what was said in the answers, never the resume, and apply the "
+        "same standard regardless of background or work experience.",
         context, transcript, InterviewFeedback,
     )
     try:
@@ -347,4 +376,6 @@ def demo_feedback(transcript):
         "strengths": [{**evidence, "observation": "Your answer is saved and can be revisited. Live feedback would assess the evidence in it."}],
         "improvements": [{**evidence, "observation": "Example review prompt: can a listener identify your personal decision?", "suggestion": "Revisit your answer and check that the context, your action and the outcome are clear."}],
         "next_exercise": "Repeat one answer in 90 seconds using a truthful example. This exercise is a fixed demo suggestion.",
+        # The demo never assesses, so it never produces a readiness score.
+        "dimensions": [_unassessed(name) for name in DIMENSIONS],
     }

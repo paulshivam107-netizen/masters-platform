@@ -340,6 +340,10 @@ function AdminView({
         <div className="settings-card"><h3>Error events (last 7 days)</h3><p>{adminOverview?.api_error_events_7d ?? 0}</p></div>
         <div className="settings-card"><h3>New applications (last 7 days)</h3><p>{adminOverview?.applications_created_7d ?? 0}</p></div>
         <div className="settings-card"><h3>New essays (last 7 days)</h3><p>{adminOverview?.essays_created_7d ?? 0}</p></div>
+        <div className="settings-card"><h3>Interviews completed</h3><p>{adminOverview?.interviews_completed ?? 0}</p></div>
+        <div className="settings-card"><h3>Interviews per user</h3><p>{adminOverview?.interviews_per_user ?? 0}</p></div>
+        <div className="settings-card"><h3>Users with 3+ interviews</h3><p>{adminOverview?.users_3plus_interviews ?? 0}</p></div>
+        <div className="settings-card"><h3>7-day return</h3><p>{adminOverview?.return_7d_rate ?? 0}% of {adminOverview?.return_7d_eligible_users ?? 0}</p></div>
       </div>
 
       <div className="settings-grid">

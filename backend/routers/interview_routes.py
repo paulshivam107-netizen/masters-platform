@@ -69,7 +69,8 @@ def list_sessions(user: User = Depends(interview_user), db: Session = Depends(ge
     if offset < 0 or offset > 10000:
         raise HTTPException(422, "Invalid history offset")
     rows = db.query(InterviewSession).filter_by(user_id=user.id).order_by(InterviewSession.created_at.desc()).offset(offset).limit(21).all()
-    return {"items": [serialize(row, False) for row in rows[:20]], "has_more": len(rows) > 20}
+    completed = db.query(InterviewSession.id).filter_by(user_id=user.id, status="completed").count()
+    return {"items": [serialize(row, False) for row in rows[:20]], "has_more": len(rows) > 20, "completed_count": completed}
 
 
 @router.post("/sessions", status_code=201)
