@@ -115,6 +115,7 @@
   position: relative;
   display: block;
   width: fit-content;
+  white-space: nowrap;
   line-height: 24px;
   color: var(--ink);
   text-decoration: none;
