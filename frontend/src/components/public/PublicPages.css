@@ -1038,3 +1038,21 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Dark theme: the light note colours are too bright on the dark panel; keep bubbles quiet. */
+:root[data-theme="dark"] .interview-preview {
+  background: color-mix(in srgb, var(--hero-ink) 4%, transparent);
+  border-color: color-mix(in srgb, var(--hero-ink) 10%, transparent);
+}
+:root[data-theme="dark"] .ip-interviewer {
+  background: color-mix(in srgb, var(--hero-ink) 9%, transparent);
+  color: var(--hero-ink);
+}
+:root[data-theme="dark"] .ip-applicant {
+  background: color-mix(in srgb, var(--art-core-start) 20%, transparent);
+  color: var(--hero-ink);
+}
+:root[data-theme="dark"] .ip-quote {
+  color: var(--hero-muted);
+  border-left-color: var(--art-core-start);
+}
