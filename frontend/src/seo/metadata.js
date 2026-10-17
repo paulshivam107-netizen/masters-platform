@@ -16,7 +16,7 @@ const publicPages = {
     kind: "website",
   },
   "/privacy": {
-    title: "Privacy: your data on MockMBA",
+    title: "Privacy: how your data is handled",
     description:
       "What MockMBA stores, how AI is used, who processes your data and how to export or delete your account.",
     kind: "website",
@@ -92,7 +92,10 @@ function metadata(pathname, config = defaults) {
           : path === "/programs"
             ? "Explore programmes"
             : "Page not found";
-  const title = `${page?.title || fallbackTitle} | ${config.siteName || "MockMBA"}`;
+  const brand = config.siteName || "MockMBA";
+  const pageTitle = page?.title || fallbackTitle;
+  // Append the brand once; a title that already names it stays as written.
+  const title = pageTitle.includes(brand) ? pageTitle : `${pageTitle} | ${brand}`;
   const description =
     page?.description ||
     "Manage your MBA applications, essay drafts and interview preparation.";
