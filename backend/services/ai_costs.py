@@ -68,10 +68,11 @@ def env_int(name: str, default: int, low: int = 0, high: int = 10**9) -> int:
 
 
 def caps() -> dict:
-    global_cap = env_int("AI_GLOBAL_DAILY_CAP_PAISE", 50_000)
+    # Pilot defaults: ₹50/day across everyone, ₹5/day per person. Raise via env once revenue exists.
+    global_cap = env_int("AI_GLOBAL_DAILY_CAP_PAISE", 5_000)
     return {
         "global_daily_cap_paise": global_cap,
-        "user_daily_cap_paise": env_int("AI_USER_DAILY_CAP_PAISE", 5_000),
+        "user_daily_cap_paise": env_int("AI_USER_DAILY_CAP_PAISE", 500),
         "global_max_in_flight": env_int("AI_GLOBAL_MAX_IN_FLIGHT", 20, 1, 10_000),
         "user_max_in_flight": env_int("AI_USER_MAX_IN_FLIGHT", 2, 1, 100),
         # Alert only: reported to the admin view, never enforced.

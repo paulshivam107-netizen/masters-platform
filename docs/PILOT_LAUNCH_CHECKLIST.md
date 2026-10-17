@@ -16,7 +16,7 @@ Work through this list **immediately before inviting the first real users**. Eac
 - [ ] After upgrading to Hobby: move the service to Singapore (next to Neon), attach `api.mockmba.com` with a DNS-only CNAME so `TRUSTED_PROXY_HOPS=1` stays correct, and move it out of the shared `thorough-contentment` project.
 
 - [ ] **Upgrade Railway from Free to Hobby (about $5/month).** Free has only $1 of monthly credit, so it pauses the API partway through the month. The setup and smoke test run on Free; real users need Hobby.
-- [ ] Set spend alerts and caps on Railway, Neon and OpenAI. Check the app's own caps: `AI_GLOBAL_DAILY_CAP_PAISE` and `AI_USER_DAILY_CAP_PAISE`.
+- [ ] Set spend alerts and caps on Railway, Neon and OpenAI. The app now defaults to `AI_GLOBAL_DAILY_CAP_PAISE=5000` (₹50/day) and `AI_USER_DAILY_CAP_PAISE=500` (₹5/day); set the same in Railway, plus a hard monthly limit in the OpenAI dashboard (about $15).
 - [ ] Use a scoped Resend production key (`mockmba-prod`, sending only, `mail.mockmba.com`) in Railway. Delete the old "Onboarding" key.
 - [ ] Google sign-in: OAuth client for `https://www.mockmba.com`, with the consent screen **published** (it needs the privacy policy URL). Set `GOOGLE_CLIENT_ID` in Railway and `REACT_APP_GOOGLE_CLIENT_ID` in Cloudflare Pages.
 - [ ] Privacy notice published and linked from sign-up. It should cover what is stored, that answers are processed by OpenAI, and how to export or delete an account.
