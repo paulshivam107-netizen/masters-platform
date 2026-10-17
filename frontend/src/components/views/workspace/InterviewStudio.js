@@ -7,6 +7,7 @@ import useInterviewAudio from "./useInterviewAudio";
 import InterviewQuestionBank from "./InterviewQuestionBank";
 import ResumeQuestionBuilder from "./ResumeQuestionBuilder";
 import FocusedPractice from "./FocusedPractice";
+import { clearInterviewIntent, getInterviewIntent } from "./interviewIntent";
 import "./InterviewStudio.css";
 import "./WorkspaceInterview.css";
 
@@ -15,7 +16,8 @@ const draftKey = (id) => `interview_answer:${id}`;
 const excerpt = (text) =>
   text.length > 240 ? `${text.slice(0, 237).trimEnd()}…` : text;
 const sessionLabel = (session) =>
-  `${session.context.school} · ${session.provider === "demo" ? "Demo" : "AI practice"}`;
+  `${session.context.kind === "taster" ? "Why MBA interview" : session.context.school} · ${session.provider === "demo" ? "Demo" : "AI practice"}`;
+const GENERIC_SCHOOL = "General MBA practice";
 
 export default function InterviewStudio({
   applications,
@@ -45,9 +47,6 @@ export default function InterviewStudio({
       )
         ? preference.application_id
         : ""),
-    route: ["cat", "experienced"].includes(preference.route)
-      ? preference.route
-      : "",
     programme_name:
       typeof preference.programme_name === "string"
         ? preference.programme_name
@@ -59,7 +58,11 @@ export default function InterviewStudio({
     question_limit: 5,
     consent: false,
   });
-  const [demo, setDemo] = useState(false);
+  // "full" needs a reviewed résumé; "taster" is the 3-question Why MBA interview.
+  const [plan, setPlan] = useState("full");
+  const [tasterUsed, setTasterUsed] = useState(false);
+  const [focusResume, setFocusResume] = useState(false);
+  const startKind = useRef("");
   const active = useRef(true);
   const inFlight = useRef(false);
   const controllers = useRef(new Set());
@@ -77,16 +80,10 @@ export default function InterviewStudio({
   }, [session?.id, session?.status]);
   useEffect(() => {
     writeUserValue(user.id, "interview_preferences", {
-      route: setup.route,
       programme_name: setup.programme_name,
       application_id: setup.application_id,
     });
-  }, [user.id, setup.route, setup.programme_name, setup.application_id]);
-  const changeRoute = (route) => {
-    setSetup((old) => ({ ...old, route, practice_focus: "balanced" }));
-    setReviewedProfile(null);
-    setChosenQuestion(null);
-  };
+  }, [user.id, setup.programme_name, setup.application_id]);
 
   useEffect(() => {
     active.current = true;
@@ -143,6 +140,13 @@ export default function InterviewStudio({
       .then(async ([caps, previous]) => {
         if (controller.signal.aborted) return;
         setCapabilities(caps);
+        setTasterUsed(
+          Boolean(caps.taster_used) ||
+            previous.items.some((item) => item.context?.kind === "taster"),
+        );
+        if (caps.chat && !caps.taster_used && getInterviewIntent() === "taster")
+          setPlan("taster");
+        clearInterviewIntent();
         setHistory(previous.items);
         setHasMore(previous.has_more);
         setHistoryOffset(previous.items.length);
@@ -246,33 +250,73 @@ export default function InterviewStudio({
     setConfirmDelete(false);
     writeUserValue(user.id, "interview_active_id", null);
   };
+  const wantFullInterview = () => {
+    setPlan("full");
+    setFocusResume(true);
+  };
+  useEffect(() => {
+    if (!focusResume || session || loading) return;
+    setFocusResume(false);
+    const details = resumeDisclosure.current;
+    if (!details) return;
+    details.open = true;
+    details.scrollIntoView?.({ block: "start", behavior: "smooth" });
+    details.querySelector("input")?.focus({ preventScroll: true });
+  }, [focusResume, session, loading, plan]);
+  const goFullInterview = () => {
+    leaveSession();
+    wantFullInterview();
+  };
   const start = (event) => {
     event.preventDefault();
-    const provider = capabilities.chat && !demo ? "openai" : "demo";
+    const kind = startKind.current || (plan === "taster" ? "taster" : "full");
+    startKind.current = "";
+    const taster = kind === "taster";
+    const provider = capabilities.chat ? "openai" : "demo";
     const payload = {
       ...setup,
+      route: "auto",
+      kind: taster ? "taster" : "full",
       provider,
-      mode: provider === "demo" ? "chat" : setup.mode,
+      mode: provider === "demo" || taster ? "chat" : setup.mode,
       application_id: setup.application_id
         ? Number(setup.application_id)
         : null,
-      question_limit: Number(setup.question_limit),
-      question_id: chosenQuestion?.id || null,
-      question_set_id: chosenQuestion?.question_set_id || null,
-      profile_set_id: reviewedProfile?.id || null,
-      profile_fact_ids: reviewedProfile
-        ? reviewedProfile.facts.map((fact) => fact.id)
-        : null,
+      question_limit: taster ? 3 : Number(setup.question_limit),
+      practice_focus: taster ? "motivation" : setup.practice_focus,
+      question_id: taster ? null : chosenQuestion?.id || null,
+      question_set_id: taster ? null : chosenQuestion?.question_set_id || null,
+      profile_set_id: taster ? null : reviewedProfile?.id || null,
+      profile_fact_ids:
+        reviewedProfile && !taster
+          ? reviewedProfile.facts.map((fact) => fact.id)
+          : null,
     };
     const signature = JSON.stringify(payload);
     if (createRequest.current?.signature !== signature)
       createRequest.current = { signature, id: requestId() };
     run("Starting your interview…", async (signal) => {
-      const next = await api.createInterview(
-        { ...payload, request_id: createRequest.current.id },
-        signal,
-      );
+      let next;
+      try {
+        next = await api.createInterview(
+          { ...payload, request_id: createRequest.current.id },
+          signal,
+        );
+      } catch (err) {
+        if (
+          err.response?.status === 409 &&
+          /taster/i.test(String(err.response?.data?.detail))
+        ) {
+          setTasterUsed(true);
+          setPlan("full");
+        }
+        throw err;
+      }
       if (!active.current) return;
+      if (taster) {
+        setTasterUsed(true);
+        setPlan("full");
+      }
       openSession(next);
       updateSession(next);
       createRequest.current = null;
@@ -363,7 +407,17 @@ export default function InterviewStudio({
   const disabled = Boolean(
     busy || audio.recording || audio.requesting || audio.processing,
   );
-  const live = capabilities?.chat && !demo;
+  const live = Boolean(capabilities?.chat);
+  const hasResume = Boolean(reviewedProfile || chosenQuestion?.question_set_id);
+  const tasterOpen = live && !tasterUsed;
+  const tasterPlan = tasterOpen && plan === "taster";
+  const isTaster = session?.context?.kind === "taster";
+  const programmeShown =
+    session?.context?.school && session.context.school !== GENERIC_SCHOOL
+      ? `${session.context.school} · ${session.context.programme}`
+      : session?.context?.programme && session.context.programme !== "MBA"
+        ? session.context.programme
+        : "";
   return (
     <section
       className="interview-studio wi-studio"
@@ -400,18 +454,15 @@ export default function InterviewStudio({
             >
               Record & review
             </button>
-            <button
-              className="ws-btn ws-btn--ghost ws-btn--sm"
-              disabled={disabled}
-              onClick={() => {
-                if (resumeDisclosure.current) {
-                  resumeDisclosure.current.open = true;
-                  resumeDisclosure.current.querySelector("input")?.focus();
-                }
-              }}
-            >
-              From your résumé
-            </button>
+            {capabilities.chat && (
+              <button
+                className="ws-btn ws-btn--ghost ws-btn--sm"
+                disabled={disabled}
+                onClick={wantFullInterview}
+              >
+                From your résumé
+              </button>
+            )}
           </div>
         )}
       </header>
@@ -449,14 +500,15 @@ export default function InterviewStudio({
       ) : !session ? (
         <>
           <p className="studio-intro">
-            Practise for your MBA interview, one question at a time. Return to
-            your answers and debrief whenever you need. Start with your
-            programme and résumé; the interviewer follows what you say.
+            {live
+              ? "Practise for your MBA, executive MBA or Master in Management interview, one question at a time. Add your résumé and the interviewer follows what you say, with a debrief at the end."
+              : "Practise one question at a time and return to your answers whenever you need."}
           </p>
           {!capabilities.chat && (
-            <p className="studio-message">
-              {capabilities.message} Demo questions and feedback are fixed
-              examples, not an assessment.
+            <p className="studio-message" data-testid="demo-notice">
+              <strong>Demo only.</strong> {capabilities.message} The demo uses
+              fixed questions and an example debrief, not an assessment of your
+              answers.
             </p>
           )}
           <section
@@ -464,28 +516,12 @@ export default function InterviewStudio({
             aria-labelledby="studio-programme-heading"
           >
             <h3 id="studio-programme-heading">
-              <span className="studio-step">1</span> Your programme
+              <span className="studio-step">1</span> Programme you’re preparing
+              for
             </h3>
-            <div className="studio-fields">
+            {applications.length > 0 && (
               <div className="ws-field">
-                <label htmlFor="studio-route">Programme type</label>
-                <select
-                  id="studio-route"
-                  form="studio-start-form"
-                  required
-                  disabled={disabled}
-                  value={setup.route}
-                  onChange={(event) => changeRoute(event.target.value)}
-                >
-                  <option value="">Choose your programme type</option>
-                  <option value="cat">Two-year MBA</option>
-                  <option value="experienced">
-                    One-year MBA · Experienced professionals
-                  </option>
-                </select>
-              </div>
-              <div className="ws-field">
-                <label htmlFor="studio-application">Target programme</label>
+                <label htmlFor="studio-application">Tracked programme</label>
                 <select
                   id="studio-application"
                   disabled={disabled}
@@ -494,9 +530,7 @@ export default function InterviewStudio({
                     setSetup({ ...setup, application_id: event.target.value })
                   }
                 >
-                  <option value="">
-                    Enter a programme or practise generally
-                  </option>
+                  <option value="">Type a programme instead</option>
                   {applications.map((app) => (
                     <option value={app.id} key={app.id}>
                       {app.school_name} · {app.program_name}
@@ -504,13 +538,13 @@ export default function InterviewStudio({
                   ))}
                 </select>
               </div>
-            </div>
+            )}
             {!setup.application_id && (
               <div className="ws-field">
                 <label htmlFor="studio-programme-name">
-                  School and programme{" "}
+                  Programme you’re preparing for{" "}
                   <span className="studio-fine-print">
-                    Optional for general practice
+                    Optional, but it helps the panel
                   </span>
                 </label>
                 <input
@@ -518,11 +552,7 @@ export default function InterviewStudio({
                   value={setup.programme_name}
                   disabled={disabled}
                   maxLength={160}
-                  placeholder={
-                    setup.route === "experienced"
-                      ? "For example: IIM Ahmedabad PGPX"
-                      : "For example: IIM Bangalore PGP"
-                  }
+                  placeholder="For example: INSEAD MBA, HEC Paris MiM or ISB PGP"
                   onChange={(event) =>
                     setSetup({ ...setup, programme_name: event.target.value })
                   }
@@ -530,62 +560,96 @@ export default function InterviewStudio({
               </div>
             )}
           </section>
-          <details
-            className="studio-bank-disclosure studio-resume-step"
-            ref={resumeDisclosure}
-            open={!reviewedProfile || undefined}
-          >
+          {live && (
+            <details
+              className="studio-bank-disclosure studio-resume-step"
+              ref={resumeDisclosure}
+              open={(plan === "full" && !hasResume) || undefined}
+            >
+              <summary>
+                <span className="studio-step">2</span> Your résumé{" "}
+                <span>
+                  {reviewedProfile
+                    ? `${reviewedProfile.facts.length} reviewed ${reviewedProfile.facts.length === 1 ? "fact" : "facts"} ready`
+                    : plan === "taster"
+                      ? "Not needed for the Why MBA interview"
+                      : "Upload once, review your profile"}
+                </span>
+              </summary>
+              {reviewedProfile && (
+                <p className="studio-message">
+                  Your reviewed profile is selected. The interviewer can ask
+                  about these facts and follow your answers.
+                </p>
+              )}
+              <ResumeQuestionBuilder
+                capabilities={capabilities}
+                programmeName={setup.programme_name}
+                applicationId={setup.application_id}
+                disabled={disabled}
+                onRemoveProfile={(id) => {
+                  if (reviewedProfile?.id === id) setReviewedProfile(null);
+                  if (chosenQuestion?.question_set_id === id)
+                    setChosenQuestion(null);
+                }}
+                onUseProfile={(profile) => {
+                  setReviewedProfile(profile);
+                  setChosenQuestion(null);
+                  setPlan("full");
+                  if (resumeDisclosure.current)
+                    resumeDisclosure.current.open = false;
+                  startButton.current?.focus();
+                  setNotice(
+                    "Résumé profile selected. Start your interview when ready.",
+                  );
+                }}
+                onChoose={(node) => {
+                  setChosenQuestion(node);
+                  setPlan("full");
+                  if (reviewedProfile?.id !== node.question_set_id)
+                    setReviewedProfile(null);
+                  if (resumeDisclosure.current)
+                    resumeDisclosure.current.open = false;
+                  startButton.current?.focus();
+                  setNotice(
+                    "Starting question selected. Live follow-ups will adapt to your answers.",
+                  );
+                }}
+              />
+            </details>
+          )}
+          <details className="studio-bank-disclosure studio-sop">
             <summary>
-              <span className="studio-step">2</span> Your résumé{" "}
+              Add your SOP or notes (optional)
               <span>
-                {reviewedProfile
-                  ? `${reviewedProfile.facts.length} reviewed ${reviewedProfile.facts.length === 1 ? "fact" : "facts"} ready`
-                  : "Upload once, review your profile"}
+                {setup.background
+                  ? `${setup.background.length.toLocaleString()} characters added`
+                  : "Anything else the panel should know"}
               </span>
             </summary>
-            {reviewedProfile && (
-              <p className="studio-message">
-                Your reviewed profile is selected. The interviewer can ask about
-                these facts and follow your answers.
-              </p>
-            )}
-            <ResumeQuestionBuilder
-              capabilities={capabilities}
-              route={setup.route}
-              showRoutePicker={false}
-              programmeName={setup.programme_name}
-              applicationId={setup.application_id}
-              disabled={disabled}
-              onRouteChange={changeRoute}
-              onRemoveProfile={(id) => {
-                if (reviewedProfile?.id === id) setReviewedProfile(null);
-                if (chosenQuestion?.question_set_id === id)
-                  setChosenQuestion(null);
-              }}
-              onUseProfile={(profile) => {
-                setReviewedProfile(profile);
-                setChosenQuestion(null);
-                setSetup((old) => ({ ...old, route: profile.route }));
-                if (resumeDisclosure.current)
-                  resumeDisclosure.current.open = false;
-                startButton.current?.focus();
-                setNotice(
-                  "Profile selected. Choose your practice focus below and start when ready.",
-                );
-              }}
-              onChoose={(node) => {
-                setChosenQuestion(node);
-                if (reviewedProfile?.id !== node.question_set_id)
-                  setReviewedProfile(null);
-                setSetup((old) => ({ ...old, route: node.routes[0] }));
-                if (resumeDisclosure.current)
-                  resumeDisclosure.current.open = false;
-                startButton.current?.focus();
-                setNotice(
-                  "Starting question selected. Live follow-ups will adapt to your answers.",
-                );
-              }}
-            />
+            <div className="ws-field">
+              <label htmlFor="studio-background">
+                Anything else the panel should know (SOP, essay excerpts, notes)
+              </label>
+              <textarea
+                id="studio-background"
+                data-testid="studio-background"
+                rows={5}
+                maxLength={4000}
+                disabled={disabled}
+                value={setup.background}
+                placeholder="Paste a few paragraphs of your statement of purpose, an essay excerpt or notes about your goals."
+                onChange={(event) =>
+                  setSetup({ ...setup, background: event.target.value })
+                }
+              />
+              <small className="studio-char-count">
+                {setup.background.length.toLocaleString()}/4,000 characters
+                {live
+                  ? " · Saved with this interview and sent to OpenAI with your answers"
+                  : " · Saved with this demo; the demo makes no AI calls"}
+              </small>
+            </div>
           </details>
           <form
             id="studio-start-form"
@@ -593,9 +657,32 @@ export default function InterviewStudio({
             onSubmit={start}
           >
             <h3>
-              <span className="studio-step">3</span> Your practice
+              <span className="studio-step">{live ? 3 : 2}</span>{" "}
+              {tasterPlan ? "Why MBA interview" : "Start"}
             </h3>
             <fieldset className="studio-form-fields" disabled={disabled}>
+              {tasterPlan && (
+                <div
+                  className="studio-selected-question"
+                  data-testid="taster-intro"
+                >
+                  <span className="ws-eyebrow">
+                    <span aria-hidden="true" />
+                    Why MBA interview
+                  </span>
+                  <p>
+                    3 questions, about 5 minutes. No résumé needed: why an MBA,
+                    why now, why this programme and your goals.
+                  </p>
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
+                    onClick={wantFullInterview}
+                  >
+                    Add your résumé for a full interview instead
+                  </button>
+                </div>
+              )}
               {chosenQuestion && (
                 <div className="studio-selected-question">
                   <span className="ws-eyebrow">
@@ -612,77 +699,85 @@ export default function InterviewStudio({
                   </button>
                 </div>
               )}
-              <div className="studio-fields">
-                <div className="ws-field">
-                  <label htmlFor="studio-focus">Practice focus</label>
-                  <select
-                    id="studio-focus"
-                    value={setup.practice_focus}
-                    onChange={(event) =>
-                      setSetup({ ...setup, practice_focus: event.target.value })
-                    }
-                  >
-                    <option value="balanced">Balanced interview</option>
-                    <option value="resume">Résumé deep dive</option>
-                    <option value="behavioural">Behavioural questions</option>
-                    <option value="motivation">Why MBA & programme fit</option>
-                    <option
-                      value={
-                        setup.route === "experienced" ? "work" : "academics"
-                      }
-                    >
-                      {setup.route === "experienced"
-                        ? "Work, decisions & impact"
-                        : "Academics & projects"}
-                    </option>
-                  </select>
-                </div>
-                <div className="ws-field">
-                  <label htmlFor="studio-length">Session length</label>
-                  <select
-                    id="studio-length"
-                    value={setup.question_limit}
-                    onChange={(event) =>
-                      setSetup({ ...setup, question_limit: event.target.value })
-                    }
-                  >
-                    <option value={3}>3 questions · Quick practice</option>
-                    <option value={5}>5 questions · Focused session</option>
-                    <option value={8}>8 questions · Longer session</option>
-                  </select>
-                </div>
-              </div>
-              <fieldset className="studio-mode">
-                <legend>How would you like to answer?</legend>
-                <label>
-                  <input
-                    type="radio"
-                    name="interview-mode"
-                    value="chat"
-                    checked={!live || setup.mode === "chat"}
-                    onChange={() => setSetup({ ...setup, mode: "chat" })}
-                  />
-                  Chat
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="interview-mode"
-                    value="voice"
-                    checked={live && setup.mode === "voice"}
-                    disabled={!capabilities.voice || demo}
-                    onChange={() => setSetup({ ...setup, mode: "voice" })}
-                  />
-                  Voice
-                </label>
-                <small>
-                  {live && setup.mode === "voice"
-                    ? "Record one answer, review its transcript, then send. The interviewer’s voice is AI-generated."
-                    : !capabilities.voice
-                      ? "AI voice interviews need an API connection. Recording and playback below work without AI."
-                      : "Type one answer at a time. Follow-ups respond to what you say."}
-                </small>
-              </fieldset>
+              {!tasterPlan && (
+                <details className="studio-options">
+                  <summary>Practice options</summary>
+                  <div className="studio-fields">
+                    <div className="ws-field">
+                      <label htmlFor="studio-focus">Practice focus</label>
+                      <select
+                        id="studio-focus"
+                        value={setup.practice_focus}
+                        onChange={(event) =>
+                          setSetup({
+                            ...setup,
+                            practice_focus: event.target.value,
+                          })
+                        }
+                      >
+                        <option value="balanced">Balanced interview</option>
+                        <option value="resume">Résumé deep dive</option>
+                        <option value="behavioural">
+                          Behavioural questions
+                        </option>
+                        <option value="motivation">
+                          Why MBA & programme fit
+                        </option>
+                        <option value="work">Work, decisions & impact</option>
+                        <option value="academics">Academics & projects</option>
+                      </select>
+                    </div>
+                    <div className="ws-field">
+                      <label htmlFor="studio-length">Session length</label>
+                      <select
+                        id="studio-length"
+                        value={setup.question_limit}
+                        onChange={(event) =>
+                          setSetup({
+                            ...setup,
+                            question_limit: event.target.value,
+                          })
+                        }
+                      >
+                        <option value={3}>3 questions · Quick practice</option>
+                        <option value={5}>5 questions · Focused session</option>
+                        <option value={8}>8 questions · Longer session</option>
+                      </select>
+                    </div>
+                  </div>
+                  <fieldset className="studio-mode">
+                    <legend>How would you like to answer?</legend>
+                    <label>
+                      <input
+                        type="radio"
+                        name="interview-mode"
+                        value="chat"
+                        checked={!live || setup.mode === "chat"}
+                        onChange={() => setSetup({ ...setup, mode: "chat" })}
+                      />
+                      Chat
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="interview-mode"
+                        value="voice"
+                        checked={live && setup.mode === "voice"}
+                        disabled={!capabilities.voice}
+                        onChange={() => setSetup({ ...setup, mode: "voice" })}
+                      />
+                      Voice
+                    </label>
+                    <small>
+                      {live && setup.mode === "voice"
+                        ? "Record one answer, review its transcript, then send. The interviewer’s voice is AI-generated."
+                        : !capabilities.voice
+                          ? "AI voice interviews need an API connection. Recording and playback below work without AI."
+                          : "Type one answer at a time. Follow-ups respond to what you say."}
+                    </small>
+                  </fieldset>
+                </details>
+              )}
               {live && (
                 <label className="studio-consent">
                   <input
@@ -694,11 +789,12 @@ export default function InterviewStudio({
                     }
                   />
                   <span>
-                    I agree to send my selected profile facts and answers to
-                    OpenAI for this practice. Voice recordings are sent for
-                    transcription; this app does not retain audio. My
-                    transcript, copied profile facts and feedback are saved to
-                    my account until I delete the session.
+                    I agree to send my selected profile facts, anything I add as
+                    extra context and my answers to OpenAI for this practice.
+                    Voice recordings are sent for transcription; this app does
+                    not retain audio. My transcript, copied profile facts, extra
+                    context and feedback are saved to my account until I delete
+                    the session.
                   </span>
                 </label>
               )}
@@ -708,33 +804,62 @@ export default function InterviewStudio({
                   AI calls and uses fixed follow-ups.
                 </p>
               )}
-              {live && !reviewedProfile && (
-                <p className="studio-fine-print">
-                  No résumé profile selected. You can still practise; the
-                  interviewer will use only your answers and chosen programme.
-                </p>
+              {live && !tasterPlan && !hasResume && (
+                <div className="studio-cta" data-testid="resume-cta">
+                  <strong>Add your résumé to start a full interview</strong>
+                  <p>
+                    The panel builds its questions from your reviewed résumé
+                    facts. Upload it once, check the facts, then start.
+                  </p>
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn--primary"
+                    onClick={wantFullInterview}
+                  >
+                    Add your résumé <ArrowIcon />
+                  </button>
+                </div>
               )}
               <div className="studio-actions">
-                <button
-                  ref={startButton}
-                  type="submit"
-                  className="ws-btn ws-btn--primary"
-                  disabled={disabled || !setup.route}
-                >
-                  {busy || (live ? "Start interview" : "Start demo")}{" "}
-                  <ArrowIcon />
-                </button>
-                {capabilities.chat && (
-                  <label className="studio-demo-option">
-                    <input
-                      type="checkbox"
-                      checked={demo}
-                      onChange={(event) => setDemo(event.target.checked)}
-                    />
-                    Use the free demo
-                  </label>
+                {(!live || tasterPlan || hasResume) && (
+                  <button
+                    ref={startButton}
+                    type="submit"
+                    className="ws-btn ws-btn--primary"
+                    disabled={disabled}
+                    onClick={() => {
+                      startKind.current = tasterPlan ? "taster" : "full";
+                    }}
+                  >
+                    {busy ||
+                      (!live
+                        ? "Start demo"
+                        : tasterPlan
+                          ? "Start your Why MBA interview"
+                          : "Start interview")}{" "}
+                    <ArrowIcon />
+                  </button>
+                )}
+                {live && !tasterPlan && !hasResume && tasterOpen && (
+                  <button
+                    type="submit"
+                    className="ws-btn"
+                    data-testid="start-taster"
+                    disabled={disabled}
+                    onClick={() => {
+                      startKind.current = "taster";
+                    }}
+                  >
+                    Try a 3-question Why MBA interview
+                  </button>
                 )}
               </div>
+              {live && !tasterOpen && !hasResume && (
+                <p className="studio-fine-print" data-testid="taster-used">
+                  You’ve used your Why MBA taster. Add your résumé for a full
+                  interview.
+                </p>
+              )}
             </fieldset>
           </form>
           <details className="studio-bank-disclosure" ref={bankDisclosure}>
@@ -742,11 +867,8 @@ export default function InterviewStudio({
               Explore the question bank <span>Optional starting points</span>
             </summary>
             <InterviewQuestionBank
-              route={setup.route}
               disabled={disabled}
               onChoose={(node) => {
-                if (!setup.route && node.routes.length === 1)
-                  changeRoute(node.routes[0]);
                 setChosenQuestion(node);
                 if (bankDisclosure.current) bankDisclosure.current.open = false;
                 startButton.current?.focus();
@@ -826,9 +948,11 @@ export default function InterviewStudio({
             >
               {session.provider === "demo"
                 ? "Demo · fixed examples, not connected to AI"
-                : session.mode === "voice"
-                  ? "AI voice practice"
-                  : "AI chat practice"}
+                : isTaster
+                  ? "Why MBA interview · 3 questions"
+                  : session.mode === "voice"
+                    ? "AI voice practice"
+                    : "AI chat practice"}
             </span>
             <span className="wi-progress">
               <span className="wi-progress__dots" aria-hidden="true">
@@ -849,8 +973,9 @@ export default function InterviewStudio({
               {session.answer_count} of {session.question_limit} answers saved
             </span>
           </div>
-          <p className="studio-programme">
-            {session.context.school} · {session.context.programme}
+          <p className="studio-programme" data-testid="interview-header">
+            {user?.name ? `Candidate: ${user.name}` : "Candidate"}
+            {programmeShown ? ` · preparing for ${programmeShown}` : ""}
           </p>
           {session.provider === "demo" && (
             <p className="studio-fine-print">
@@ -1053,8 +1178,28 @@ export default function InterviewStudio({
                 Practice guidance based on these answers. It does not predict
                 admission or assess accent, personality or spoken delivery.
               </p>
-              <button className="ws-btn" onClick={leaveSession}>
-                Practise again <ArrowIcon />
+              {isTaster && (
+                <div className="studio-cta" data-testid="taster-resume-cta">
+                  <strong>Add your résumé for a full interview</strong>
+                  <p>
+                    This was a short taster. With your résumé the panel asks
+                    about your own experience and goes deeper.
+                  </p>
+                  <button
+                    className="ws-btn ws-btn--primary"
+                    disabled={disabled}
+                    onClick={goFullInterview}
+                  >
+                    Add your résumé for a full interview <ArrowIcon />
+                  </button>
+                </div>
+              )}
+              <button
+                className={isTaster ? "ws-btn ws-btn--ghost" : "ws-btn"}
+                onClick={leaveSession}
+              >
+                {isTaster ? "Back to all sessions" : "Practise again"}{" "}
+                <ArrowIcon />
               </button>
             </div>
           )}
@@ -1140,7 +1285,6 @@ export default function InterviewStudio({
         </p>
       )}
       <FocusedPractice
-        route={setup.route}
         opening={chosenQuestion?.text || ""}
         active={!session && !loading}
         disclosureRef={practiceDisclosure}

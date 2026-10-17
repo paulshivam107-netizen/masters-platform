@@ -8,6 +8,10 @@ const shared = [
   "What experience would you bring to your classmates, and what would you like to learn from them?",
 ];
 const specific = {
+  auto: [
+    "Walk me through a project or responsibility you owned. What was your own contribution?",
+    "Describe a decision where the trade-offs were not obvious. How did you choose?",
+  ],
   cat: [
     "Choose a subject you enjoyed. Explain a concept from it and where it could be useful.",
     "Walk me through a college project or activity. What was your own contribution?",
@@ -21,7 +25,7 @@ const time = (seconds) =>
   `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, "0")}`;
 
 export default function FocusedPractice({
-  route = "",
+  route = "auto",
   opening = "",
   active = true,
   disclosureRef,
