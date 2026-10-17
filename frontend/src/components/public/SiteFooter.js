@@ -39,7 +39,7 @@ export default function SiteFooter({ home = false }) {
           <div>
             <h3>Say hello</h3>
             <Link to="/help">Contact and help</Link>
-            <p>Made for Indian MBA applicants</p>
+            <p>Made for MBA, EMBA and MiM applicants</p>
           </div>
         </nav>
         <div className="site-footer-bottom">

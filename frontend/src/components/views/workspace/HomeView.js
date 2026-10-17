@@ -136,7 +136,7 @@ export default function HomeView({
             </span>
             <h3>Track your applications</h3>
             <p>
-              Add a programme you’re considering, CAT, GMAT or another route,
+              Add a programme you’re considering, on any route,
               with its official deadline. Build your plan at your own pace.
             </p>
             <button

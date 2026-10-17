@@ -3,15 +3,15 @@ import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
   "/": {
-    title: "Practise Indian MBA interviews with résumé-based questions",
+    title: "Practise MBA interviews with résumé-based questions",
     description:
-      "Mock MBA interviews for Indian applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
+      "Mock interviews for MBA, EMBA and MiM applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
     kind: "website",
   },
   "/guides": {
-    title: "Indian MBA application guides and free templates",
+    title: "MBA interview and application guides, with free templates",
     description:
-      "Practical application checklists and interview story templates for Indian MBA applicants. Read and download without an account.",
+      "Interview story templates, résumé follow-up practice and application checklists, including a checklist for Indian MBA routes. Read and download without an account.",
     kind: "website",
   },
   "/help": {

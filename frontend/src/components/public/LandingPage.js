@@ -347,10 +347,10 @@ const ROUTES = [
     photo: "photo_route_fresher",
     size: [1600, 1065],
     alt: "A student studying at a library table with a laptop and notes",
-    label: "Two-year, after CAT",
+    label: "Pre-experience MBA and MiM",
     title: "Freshers and early career",
     text: "Coursework, your final-year project, internships and why an MBA now.",
-    chip: "CAT route",
+    chip: "Early career",
     to: "/guides/mba-interview-for-freshers",
     action: "Read the guide for freshers",
   },
@@ -358,7 +358,7 @@ const ROUTES = [
     photo: "photo_route_working_professional",
     size: [1600, 1067],
     alt: "A working professional reviewing a document at a desk",
-    label: "One-year, with experience",
+    label: "MBA with work experience",
     title: "Working professionals",
     text: "What you owned, the alternatives you weighed and why this format.",
     chip: "Work experience",
@@ -371,7 +371,7 @@ const ROUTES = [
     alt: "A senior professional in a meeting room, seen from across the table",
     label: "Executive programmes",
     title: "Experienced applicants",
-    text: "ISB PGP, IIMA PGPX, IIMB EPGP, IIML IPMX, IIMC EXEC and similar.",
+    text: "EMBA and one-year executive programmes, from INSEAD and LBS to ISB PGP and IIMA PGPX.",
     chip: "Programmes",
     to: "/programs",
     action: "Browse programmes",
@@ -426,8 +426,8 @@ function Routes() {
             <h2 id="routes-heading">Find your route</h2>
           </div>
           <p>
-            Two-year programmes after CAT, or one-year programmes after work
-            experience. The questions follow your résumé either way.
+            A pre-experience MBA or MiM, an MBA after a few years of work, or an
+            executive programme. The questions follow your résumé either way.
           </p>
           <div className="lp-carousel-controls" hidden={!overflow}>
             <button

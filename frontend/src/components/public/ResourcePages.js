@@ -20,10 +20,10 @@ function Eyebrow({ children }) {
 }
 
 const CATEGORIES = {
-  "mba-application-checklist-india": "Planning",
+  "mba-application-checklist-india": "Indian MBA routes",
   "mba-interview-story-bank": "Interview preparation",
   "mba-interview-from-resume": "Interview preparation",
-  "mba-interview-for-freshers": "Two-year MBA route",
+  "mba-interview-for-freshers": "Early-career route",
   "mba-interview-work-experience": "Experienced route",
 };
 const categoryOf = (slug) => CATEGORIES[slug] || "Practical guide";
@@ -220,14 +220,14 @@ export function GuidesPage() {
       <section className="rp-hero">
         <div className="rp-frame rp-hero-grid">
           <div className="rp-hero-copy">
-            <Eyebrow>Indian MBA applications</Eyebrow>
+            <Eyebrow>Guides and templates</Eyebrow>
             <h1>
               A little structure.
               <br />A clearer next step.
             </h1>
             <p className="rp-lead">
-              Practical guides and free templates for CAT-route, GMAT-route and
-              executive MBA applications. Start with the part you need today.
+              Practical guides and free templates for MBA, EMBA and MiM
+              interviews and applications. Start with the part you need today.
             </p>
             <Link className="rp-link" to="/mba-interview-practice">
               See how résumé-based interview practice works <ArrowIcon />
@@ -354,7 +354,7 @@ const HELP_STEPS = [
   [
     "01",
     "Add your first application",
-    "Open Applications and add the school, exact programme and official application deadline. Keep the year and source URL in your notes. CAT registration and a school application may be separate steps.",
+    "Open Applications and add the school, exact programme and official application deadline. Keep the year and source URL in your notes. An entrance test registration and a school application are often separate steps.",
     "/app/tracker",
     "Add an application",
   ],
