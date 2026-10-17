@@ -170,7 +170,7 @@ def serialize(session, detail=True):
         result.update(transcript=transcript, feedback=json.loads(session.feedback_json) if session.feedback_json else None)
     else:
         # Background and goals are unnecessary in the history list.
-        result["context"] = {k: v for k, v in result["context"].items() if k in ("school", "programme", "route")}
+        result["context"] = {k: v for k, v in result["context"].items() if k in ("school", "programme", "route", "kind")}
     return result
 
 

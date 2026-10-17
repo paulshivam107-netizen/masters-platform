@@ -26,6 +26,13 @@ from services.rate_limit import enforce_rate_limit
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
+def taster_used(db, user_id):
+    # Once per account, whatever became of the first one. No migration: kind lives in context_json.
+    # Quotes inside a free-text field are escaped in the JSON, so only a real "kind" key matches.
+    return db.query(InterviewSession.id).filter(
+        InterviewSession.user_id == user_id, InterviewSession.context_json.like('%"kind": "taster"%')).first() is not None
+
+
 def routes_compatible(stored, requested):
     return stored == requested or "auto" in (stored, requested)
 
@@ -49,7 +56,7 @@ def questions(user: User = Depends(interview_user)):
 def capabilities(user: User = Depends(interview_user), db: Session = Depends(get_db)):
     runtime = db.query(AiRuntimeConfig).first()
     available = provider.live_available() and (runtime is None or runtime.ai_enabled)
-    return {"chat": available, "voice": available, "demo": True,
+    return {"chat": available, "voice": available, "demo": True, "taster_used": taster_used(db, user.id),
             "provider": "openai", "voice_style": "turn_based",
             "max_answer_chars": 3000, "max_recording_seconds": provider.MAX_RECORDING_SECONDS,
             "max_audio_bytes": provider.MAX_AUDIO_BYTES,
@@ -82,10 +89,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
     if taster:
         if payload.provider != "openai":
             raise HTTPException(422, "The Why MBA taster needs live AI.")
-        # Once per account, whatever became of the first one. No migration: kind lives in context_json.
-        if db.query(InterviewSession.id).filter(
-                InterviewSession.user_id == user.id,
-                InterviewSession.context_json.like('%"kind": "taster"%')).first():
+        if taster_used(db, user.id):
             raise HTTPException(409, "You've used your Why MBA taster. Add your résumé for a full interview.")
         payload.question_limit, payload.practice_focus = 3, "motivation"
     elif payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id):

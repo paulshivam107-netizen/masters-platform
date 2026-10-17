@@ -145,6 +145,17 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.post(question_set_id=self.make_set())).status_code, 201)
         self.assertEqual((await self.post(kind="taster", headers=self.other)).status_code, 201)
 
+    async def test_capabilities_report_whether_the_taster_is_used(self):
+        before = await self.client.get("/interviews/capabilities", headers=self.headers)
+        self.assertIs(before.json()["taster_used"], False)
+        await self.post(kind="taster")
+        after = await self.client.get("/interviews/capabilities", headers=self.headers)
+        self.assertIs(after.json()["taster_used"], True)
+        other = await self.client.get("/interviews/capabilities", headers=self.other)
+        self.assertIs(other.json()["taster_used"], False)
+        listing = await self.client.get("/interviews/sessions", headers=self.headers)
+        self.assertEqual(listing.json()["items"][0]["context"]["kind"], "taster")
+
     async def test_taster_replay_with_same_request_id_is_not_blocked(self):
         payload = {"request_id": str(uuid4()), "kind": "taster", "provider": "openai", "consent": True}
         first = await self.client.post("/interviews/sessions", json=payload, headers=self.headers)
