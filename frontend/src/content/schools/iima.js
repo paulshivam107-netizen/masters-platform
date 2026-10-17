@@ -11,6 +11,7 @@ const iima = {
   name: "Indian Institute of Management Ahmedabad",
   shortName: "IIM Ahmedabad",
   country: "India",
+  region: "India",
   city: "Ahmedabad",
   programmes: [
     {

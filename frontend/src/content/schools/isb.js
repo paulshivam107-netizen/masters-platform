@@ -15,6 +15,7 @@ const isb = {
   name: "Indian School of Business",
   shortName: "ISB",
   country: "India",
+  region: "India",
   city: "Hyderabad and Mohali",
   programmes: [
     {

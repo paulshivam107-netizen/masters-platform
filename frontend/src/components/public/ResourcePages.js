@@ -216,20 +216,33 @@ export function ResourceShell({ children, current = "" }) {
   );
 }
 export function SchoolList({ heading = "Schools" }) {
+  // Grouped by region in registry order, so the list stays scannable as schools are added.
+  const regions = [...new Set(schools.map((s) => s.region))];
   return (
-    <ul className="sp-list" aria-label={heading}>
-      {schools.map((s) => (
-        <li key={s.slug}>
-          <Link to={`/schools/${s.slug}`}>
-            <strong>{s.shortName}</strong>
-            <span>
-              {s.programmes.map((p) => p.name).join(", ")} · {s.city}
-            </span>
-            <ArrowIcon />
-          </Link>
-        </li>
+    <div className="sp-regions" aria-label={heading}>
+      {regions.map((region) => (
+        <section key={region} aria-labelledby={`region-${region}`}>
+          <h3 className="sp-region" id={`region-${region}`}>
+            {region}
+          </h3>
+          <ul className="sp-list">
+            {schools
+              .filter((s) => s.region === region)
+              .map((s) => (
+                <li key={s.slug}>
+                  <Link to={`/schools/${s.slug}`}>
+                    <strong>{s.shortName}</strong>
+                    <span>
+                      {s.programmes.map((p) => p.name).join(", ")} · {s.city}
+                    </span>
+                    <ArrowIcon />
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </section>
       ))}
-    </ul>
+    </div>
   );
 }
 

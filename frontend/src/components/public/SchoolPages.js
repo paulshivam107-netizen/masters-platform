@@ -138,8 +138,9 @@ function Interview({ school }) {
         </>
       ) : (
         <p>
-          {school.shortName} doesn&rsquo;t publish its interview format. Most
-          panels for this kind of programme probe the topics below.
+          We haven&rsquo;t found an official description of{" "}
+          {school.shortName}&rsquo;s interview format to cite yet. Most panels
+          for this kind of programme probe the topics below.
         </p>
       )}
       <aside className="sp-guidance" aria-label="Our general guidance">
@@ -178,6 +179,17 @@ function Interview({ school }) {
 
 function Careers({ school }) {
   const { careers } = school;
+  if (!careers)
+    return (
+      <section id="careers" aria-labelledby="careers-h">
+        <h2 id="careers-h">Where graduates go</h2>
+        <p>
+          We couldn&rsquo;t find an official {school.shortName} placement or
+          employment report to cite yet, so we don&rsquo;t summarise outcomes
+          here. Check the school&rsquo;s own careers pages.
+        </p>
+      </section>
+    );
   return (
     <section id="careers" aria-labelledby="careers-h">
       <h2 id="careers-h">Where graduates go</h2>
@@ -297,7 +309,8 @@ export function SchoolPage() {
         <RelatedLinks
           heading="More schools"
           links={schools
-            .filter((s) => s.slug !== school.slug)
+            .filter((s) => s.slug !== school.slug && s.region === school.region)
+            .slice(0, 8)
             .map((s) => [`/schools/${s.slug}`, s.shortName])}
         />
         <p className="sp-disclaimer">

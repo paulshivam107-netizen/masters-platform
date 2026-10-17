@@ -1,7 +1,7 @@
 import { schools } from "./index";
 import { practiceNext } from "../../components/public/SchoolPages";
 
-// Every value must be present. The only allowed null is an unpublished interview.
+// Every value must be present. The only allowed nulls are an unpublished interview or careers report.
 function findEmpty(value, path, out = []) {
   if (value === null || value === undefined || value === "")
     out.push(path);
@@ -17,9 +17,10 @@ function findEmpty(value, path, out = []) {
 
 describe.each(schools)("school data: $slug", (school) => {
   test("has no empty fields", () => {
-    const { interview, ...rest } = school;
+    const { interview, careers, ...rest } = school;
     expect(findEmpty(rest, school.slug)).toEqual([]);
     if (interview !== null) expect(findEmpty(interview, "interview")).toEqual([]);
+    if (careers !== null) expect(findEmpty(careers, "careers")).toEqual([]);
   });
   test("has sources and a checked date", () => {
     expect(school.sources.length).toBeGreaterThan(0);
@@ -30,10 +31,13 @@ describe.each(schools)("school data: $slug", (school) => {
     const listed = school.sources.map((s) => s.url);
     const cited = [
       ...school.programmes.map((p) => p.source),
-      school.careers.source,
+      ...(school.careers ? [school.careers.source] : []),
       ...(school.interview?.sources || []),
     ];
     for (const url of cited) expect(listed).toContain(url);
+  });
+  test("has a known region", () => {
+    expect(["India", "United States", "Europe"]).toContain(school.region);
   });
   test("practice link carries the programme", () => {
     expect(practiceNext(school)).toMatch(/^\/app\/interviews\?programme=/);
