@@ -1273,7 +1273,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 8px 12px;
-  margin: -4px 0 12px;
+  margin: 8px 0 12px;
 }
 .wi-dictate__btn {
   gap: 8px;
