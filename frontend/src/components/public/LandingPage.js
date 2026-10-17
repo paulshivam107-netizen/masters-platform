@@ -372,9 +372,9 @@ const ROUTES = [
     label: "Executive programmes",
     title: "Experienced applicants",
     text: "ISB PGP, IIMA PGPX, IIMB EPGP, IIML IPMX, IIMC EXEC and similar.",
-    chip: "Programmes",
-    to: "/programs",
-    action: "Browse programmes",
+    chip: "Executive",
+    to: "/mba-interview-practice",
+    action: "See how résumé-based practice works",
   },
 ];
 
