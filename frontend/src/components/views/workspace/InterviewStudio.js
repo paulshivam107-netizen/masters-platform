@@ -8,6 +8,7 @@ import InterviewQuestionBank from "./InterviewQuestionBank";
 import ResumeQuestionBuilder from "./ResumeQuestionBuilder";
 import FocusedPractice from "./FocusedPractice";
 import { clearInterviewIntent, getInterviewIntent } from "./interviewIntent";
+import DictationButton, { appendTranscript } from "./DictationButton";
 import "./InterviewStudio.css";
 import "./WorkspaceInterview.css";
 
@@ -45,6 +46,7 @@ export default function InterviewStudio({
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [answer, setAnswer] = useState("");
+  const [dictating, setDictating] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [chosenQuestion, setChosenQuestion] = useState(null);
   const [reviewedProfile, setReviewedProfile] = useState(null);
@@ -418,7 +420,7 @@ export default function InterviewStudio({
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   const disabled = Boolean(
-    busy || audio.recording || audio.requesting || audio.processing,
+    busy || dictating || audio.recording || audio.requesting || audio.processing,
   );
   const live = Boolean(capabilities?.chat);
   const hasResume = Boolean(reviewedProfile || chosenQuestion?.question_set_id);
@@ -1108,6 +1110,21 @@ export default function InterviewStudio({
                     this browser
                   </small>
                 </div>
+                {session.mode !== "voice" && (
+                  <DictationButton
+                    sessionId={session.id}
+                    version={session.version}
+                    available={Boolean(live && capabilities?.voice)}
+                    disabled={Boolean(busy)}
+                    maxSeconds={capabilities?.max_recording_seconds}
+                    maxBytes={capabilities?.max_audio_bytes}
+                    focusId="studio-answer"
+                    onActiveChange={setDictating}
+                    onTranscript={(text) =>
+                      updateAnswer(appendTranscript(answer, text))
+                    }
+                  />
+                )}
                 <div className="studio-actions">
                   <button
                     className="ws-btn ws-btn--primary"

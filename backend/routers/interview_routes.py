@@ -242,9 +242,10 @@ def finish(session_id: UUID, payload: InterviewAction, user: User = Depends(inte
     return run_step(db, session, op, token, perform)
 
 
-def voice_session(db, session_id, user_id):
+def voice_session(db, session_id, user_id, dictation=False):
     session = owned(db, str(session_id), user_id)
-    if session.provider != "openai" or session.mode != "voice":
+    # Dictation lets typed live sessions transcribe; spoken questions stay voice-only.
+    if session.provider != "openai" or (session.mode != "voice" and not dictation):
         raise HTTPException(422, "Start a voice interview to use audio.")
     require_live(db)
     return session
@@ -253,7 +254,7 @@ def voice_session(db, session_id, user_id):
 @router.post("/sessions/{session_id}/transcribe")
 async def transcribe(session_id: UUID, request: Request, request_id: UUID, expected_version: int,
                      user: User = Depends(interview_user), db: Session = Depends(get_db)):
-    session = voice_session(db, session_id, user.id)
+    session = voice_session(db, session_id, user.id, dictation=True)
     if session.status != "active" or expected_version < 0:
         raise HTTPException(409, "This interview is not waiting for an answer.")
     content_type = request.headers.get("content-type", "").split(";")[0].lower()

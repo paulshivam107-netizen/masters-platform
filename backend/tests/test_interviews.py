@@ -294,6 +294,30 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
             saved = await self.client.get(base, headers=self.headers)
             self.assertEqual(saved.json()["answer_count"], 0, "Reviewing a transcript must not submit an answer")
 
+    async def test_dictation_in_typed_sessions_but_speech_stays_voice_only(self):
+        wav = b"RIFF" + bytes(4) + b"WAVE" + bytes(64)
+        with patch.object(provider, "api_key", return_value="unit-test-key"):
+            typed = await self.create(provider="openai", mode="chat", consent=True)
+            base = f"/interviews/sessions/{typed['id']}"
+            with patch.object(provider, "transcribe", return_value="I led a student project.") as transcription:
+                result = await self.client.post(base + "/transcribe", params={"request_id": str(uuid4()), "expected_version": 0},
+                    content=wav, headers={**self.headers, "Content-Type": "audio/wav"})
+                self.assertEqual(result.status_code, 200)
+                self.assertEqual(result.json()["text"], "I led a student project.")
+                self.assertEqual(transcription.call_count, 1)
+            with patch.object(provider, "speech", return_value=b"fake-mp3") as speech:
+                result = await self.client.post(base + "/speech", headers=self.headers,
+                    json={"request_id": str(uuid4()), "expected_version": 0, "turn_id": "q1"})
+                self.assertEqual(result.status_code, 422)
+                speech.assert_not_called()
+        demo = await self.create(provider="demo", mode="chat")
+        with patch.object(provider, "transcribe") as transcription:
+            result = await self.client.post(f"/interviews/sessions/{demo['id']}/transcribe",
+                params={"request_id": str(uuid4()), "expected_version": 0}, content=wav,
+                headers={**self.headers, "Content-Type": "audio/wav"})
+            self.assertEqual(result.status_code, 422)
+            transcription.assert_not_called()
+
 
 class InterviewProviderTest(unittest.TestCase):
     def test_feedback_requires_real_evidence(self):
