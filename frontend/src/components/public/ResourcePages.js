@@ -4,23 +4,10 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ArrowIcon, CheckIcon } from "../../app/icons";
 import { guides, faqs } from "../../content/guides";
 import { practice } from "../../content/practice";
-import PublicHeader from "./PublicHeader";
-import Brand from "../common/Brand";
+import SiteHeader from "./SiteHeader";
+import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 
-export function ResourceFooter() {
-  return (
-    <footer className="landing-footer">
-      <Brand />
-      <p>Your MBA applications, in one place.</p>
-      <nav aria-label="Footer">
-        <Link to="/mba-interview-practice">MBA interview practice</Link>
-        <Link to="/guides">Guides</Link>
-        <Link to="/help">Getting started & help</Link>
-      </nav>
-    </footer>
-  );
-}
 export function PublicFaq() {
   return (
     <section className="public-faq" aria-labelledby="faq-heading">
@@ -158,20 +145,20 @@ function GuideSection({ section }) {
     </section>
   );
 }
-export function ResourceShell({ children }) {
+export function ResourceShell({ children, current = "" }) {
   return (
     <div className="public-page">
+      <SiteHeader current={current} />
       <div className="public-shell">
-        <PublicHeader />
         <main id="public-main">{children}</main>
-        <ResourceFooter />
       </div>
+      <SiteFooter />
     </div>
   );
 }
 export function GuidesPage() {
   return (
-    <ResourceShell>
+    <ResourceShell current="guides">
       <section className="resource-intro">
         <span className="eyebrow">INDIAN MBA APPLICATIONS</span>
         <h1>
@@ -195,7 +182,7 @@ export function GuidePage() {
   const guide = guides.find((item) => item.slug === slug);
   if (!guide) return <NotFoundPage />;
   return (
-    <ResourceShell>
+    <ResourceShell current="guides">
       <article className="guide-article">
         <nav aria-label="Breadcrumb">
           <Link to="/guides">Guides</Link>

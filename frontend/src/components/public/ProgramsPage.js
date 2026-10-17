@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { listProgramCatalogApi } from "../../api";
 import { useAuth } from "../../contexts/AuthContext";
 import "./PublicPages.css";
-import PublicHeader from "./PublicHeader";
+import SiteHeader from "./SiteHeader";
+import SiteFooter from "./SiteFooter";
 import { catalogStatusLabel } from "../../app/catalogAutofill";
 
 function formatFee(item) {
@@ -64,9 +65,8 @@ export default function ProgramsPage() {
 
   return (
     <div className="public-page">
+      <SiteHeader />
       <div className="public-shell">
-        <PublicHeader />
-
         <section className="public-section">
           <span className="eyebrow">PROGRAMME EXPLORER</span>
           <h1 className="public-section-title">Find your next possibility.</h1>
@@ -147,6 +147,7 @@ export default function ProgramsPage() {
           </article>
         </section>
       </div>
+      <SiteFooter />
     </div>
   );
 }

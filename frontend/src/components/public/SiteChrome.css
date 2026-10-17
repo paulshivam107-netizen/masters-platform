@@ -1,0 +1,319 @@
+/* Shared site header and footer (SiteHeader.js, SiteFooter.js).
+   Breakpoints match the landing page: compact < 640px, medium < 1024px. */
+.site-header,
+.site-footer {
+  --site-pad: clamp(22px, 4vw, 56px);
+  --site-y: 112px;
+  --site-ctrl: color-mix(in srgb, var(--ink) 62%, var(--canvas));
+}
+.site-header a,
+.site-header button,
+.site-footer a,
+.site-footer button {
+  -webkit-tap-highlight-color: transparent;
+}
+.site-header :focus-visible,
+.site-footer :focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+.site-footer :focus-visible {
+  outline-color: var(--accent);
+}
+.site-header h1,
+.site-header h2,
+.site-header h3,
+.site-footer h1,
+.site-footer h2,
+.site-footer h3 {
+  font-family: var(--font-heading);
+  margin: 0;
+}
+.site-frame {
+  width: 100%;
+  max-width: calc(1200px + 2 * var(--site-pad));
+  margin-inline: auto;
+  padding-inline: var(--site-pad);
+}
+.site-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 24px;
+  border: 1px solid color-mix(in srgb, var(--on-accent) 45%, var(--accent));
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 650 15px var(--font-body);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.16s,
+    transform 0.14s;
+}
+.site-btn:hover {
+  background: var(--accent-hover);
+  text-decoration: none;
+}
+.site-btn:active {
+  transform: translateY(1px);
+}
+.site-btn svg {
+  width: 17px;
+  height: 17px;
+}
+
+/* Theme switch drawn as text */
+.site-theme {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: 600 13px var(--font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+.site-theme .is-active {
+  color: var(--ink);
+}
+.site-theme span {
+  transition: color 0.22s linear;
+}
+.site-footer .site-theme {
+  color: var(--hero-muted);
+}
+.site-footer .site-theme .is-active {
+  color: var(--hero-ink);
+}
+
+/* Header */
+.site-header {
+  padding: 28px 0 0;
+  color: var(--ink);
+}
+.site-header-row {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
+  animation: site-fade 0.3s ease both;
+}
+.site-nav a,
+.site-pilot {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.site-nav a {
+  position: relative;
+  display: block;
+  width: fit-content;
+  line-height: 24px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.site-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.18s ease;
+}
+.site-nav a:hover::after,
+.site-nav a:focus-visible::after,
+.site-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+.site-header-theme {
+  margin-top: -10px;
+}
+.site-pilot {
+  margin: 0;
+  text-align: right;
+  color: var(--muted);
+  line-height: 24px;
+}
+.site-pilot strong {
+  display: block;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Footer */
+.site-footer {
+  padding-top: var(--site-y);
+  overflow: hidden;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+  border-top: 1px solid color-mix(in srgb, var(--hero-ink) 14%, transparent);
+}
+.site-footer-top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 32px 64px;
+  align-items: start;
+}
+.site-footer-top h2 {
+  max-width: 14em;
+  font: 500 clamp(28px, 2.6vw, 40px) / 1.2 var(--font-body);
+}
+.site-footer-contact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.site-footer-contact p {
+  margin: 0;
+  font-size: 18px;
+  color: var(--hero-muted);
+}
+.site-footer-cols {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 32px 24px;
+  margin-top: 72px;
+}
+.site-footer-cols h3 {
+  margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 600;
+}
+.site-footer-cols a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: 18px;
+  color: var(--hero-muted);
+  text-decoration: none;
+}
+.site-footer-cols a:hover {
+  color: var(--hero-ink);
+  text-decoration: underline;
+}
+.site-footer-cols p {
+  margin: 6px 0 0;
+  font-size: 16px;
+  color: var(--hero-muted);
+}
+.site-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 56px;
+  padding-top: 24px;
+  border-top: 1px solid color-mix(in srgb, var(--hero-ink) 18%, transparent);
+}
+.site-footer-bottom p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--hero-muted);
+}
+.site-wordmark {
+  margin: 32px 0 0;
+  font: 800 clamp(64px, 20vw, 250px) / 0.9 var(--font-heading);
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  color: transparent;
+  background: repeating-linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--hero-ink) 40%, transparent) 0 8px,
+    transparent 8px 12px
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  user-select: none;
+}
+
+@keyframes site-fade {
+  from {
+    opacity: 0.6;
+  }
+}
+
+/* Medium */
+@media (max-width: 1023px) {
+  .site-footer {
+    --site-y: 88px;
+  }
+  .site-header-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "brand pilot"
+      "nav theme";
+    row-gap: 28px;
+  }
+  .site-nav {
+    grid-area: nav;
+  }
+  .site-header-brand {
+    grid-area: brand;
+  }
+  .site-pilot {
+    grid-area: pilot;
+  }
+  .site-header-theme {
+    grid-area: theme;
+    align-self: end;
+    margin: 0;
+  }
+  .site-footer-top {
+    grid-template-columns: 1fr;
+  }
+  .site-footer-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Compact: one row, wordmark, sign in, theme switch */
+@media (max-width: 639px) {
+  .site-footer {
+    --site-y: 64px;
+  }
+  .site-header-row {
+    grid-template-columns: 1fr auto auto;
+    grid-template-areas: "brand nav theme";
+    align-items: center;
+    gap: 8px 16px;
+  }
+  .site-nav-section,
+  .site-pilot {
+    display: none !important;
+  }
+  .site-theme {
+    letter-spacing: 0.06em;
+  }
+  .site-nav a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    line-height: 1;
+  }
+  .site-footer-cols a {
+    font-size: 16px;
+  }
+  .site-footer-bottom {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .site-footer-bottom p {
+    text-align: center;
+  }
+}

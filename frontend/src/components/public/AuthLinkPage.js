@@ -8,8 +8,7 @@ import {
 } from "../../api";
 import { authError } from "../../api/authErrors";
 import { trackEvent } from "../../app/telemetry";
-import Brand from "../common/Brand";
-import ThemeToggle from "../common/ThemeToggle";
+import SiteHeader from "./SiteHeader";
 import "../Auth.css";
 import "./PublicPages.css";
 
@@ -43,15 +42,7 @@ export function takeTokenFromLocation(win = window) {
 function AuthLinkLayout({ children }) {
   return (
     <div className="public-auth-layout">
-      <header className="public-auth-topbar">
-        <Brand />
-        <div className="public-nav">
-          <Link className="public-nav-link" to="/">
-            Back to home
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
+      <SiteHeader current="signin" />
       <div className="public-auth-shell auth-link-shell">
         <div className="auth-container">
           <div className="auth-box">{children}</div>

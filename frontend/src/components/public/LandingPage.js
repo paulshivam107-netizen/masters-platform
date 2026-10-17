@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
-import { useTheme } from "../../contexts/ThemeContext";
 import { trackEvent } from "../../app/telemetry";
 import {
   ArrowIcon,
@@ -25,6 +24,8 @@ import {
   StepPreview,
   TrackerPanel,
 } from "./LandingPanels";
+import SiteHeader from "./SiteHeader";
+import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 
 const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp";
@@ -155,23 +156,6 @@ function StartButton({ location, className = "" }) {
       Start a mock interview
       <ArrowIcon />
     </Link>
-  );
-}
-
-function ThemeSwitch() {
-  const { isDarkMode, setIsDarkMode } = useTheme();
-  return (
-    <button
-      type="button"
-      className="lp-theme"
-      aria-pressed={isDarkMode}
-      aria-label="Dark mode"
-      onClick={() => setIsDarkMode(!isDarkMode)}
-    >
-      <span className={isDarkMode ? "" : "is-active"}>Light</span>
-      {" / "}
-      <span className={isDarkMode ? "is-active" : ""}>Dark</span>
-    </button>
   );
 }
 
@@ -798,62 +782,7 @@ function Closing() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="lp-footer">
-      <div className="lp-frame">
-        <div className="lp-footer-top">
-          <h2>Tell us what to fix in the pilot.</h2>
-          <div className="lp-footer-contact">
-            <p>Questions, bugs or ideas?</p>
-            <Link className="lp-btn lp-btn--pill" to="/help">
-              Write to us <ArrowIcon />
-            </Link>
-          </div>
-        </div>
-        <nav className="lp-footer-cols" aria-label="Footer">
-          <div>
-            <h3>Explore</h3>
-            <a href="#how_it_works">How it works</a>
-            <a href="#routes">Routes</a>
-            <Link to="/mba-interview-practice">MBA interview practice</Link>
-          </div>
-          <div>
-            <h3>Product</h3>
-            <Link to="/programs">Programmes</Link>
-            <Link to="/auth?mode=login&next=%2Fapp">Sign in</Link>
-            <Link to="/help">Privacy</Link>
-          </div>
-          <div>
-            <h3>Resources</h3>
-            <Link to="/guides">Guides</Link>
-            <Link to="/guides/mba-application-checklist-india">Application checklist</Link>
-            <Link to="/help">Getting started and help</Link>
-          </div>
-          <div>
-            <h3>Say hello</h3>
-            <Link to="/help">Contact and help</Link>
-            <p>Made for Indian MBA applicants</p>
-          </div>
-        </nav>
-        <div className="lp-footer-bottom">
-          <p>
-            © 2026 Masters. Free during the pilot.
-            <br />
-            Masters is independent and not affiliated with any business school.
-          </p>
-          <ThemeSwitch />
-        </div>
-        <p className="lp-wordmark" aria-hidden="true">
-          masters.
-        </p>
-      </div>
-    </footer>
-  );
-}
-
 export default function LandingPage() {
-  const { user } = useAuth();
   const rootRef = React.useRef(null);
   useReveal(rootRef);
   return (
@@ -861,29 +790,8 @@ export default function LandingPage() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="lp-hero">
-        <div className="lp-frame lp-hero-top">
-          <nav className="lp-meta-nav" aria-label="Main navigation">
-            <a className="lp-meta-section" href="#how_it_works">How it works</a>
-            <a className="lp-meta-section" href="#routes">Routes</a>
-            <Link className="lp-meta-section" to="/guides">Guides</Link>
-            {user ? (
-              <Link to="/app/today">Open workspace</Link>
-            ) : (
-              <Link to="/auth?mode=login&next=%2Fapp">Sign in</Link>
-            )}
-          </nav>
-          <div className="lp-meta-theme">
-            <ThemeSwitch />
-          </div>
-          <div className="lp-meta-brand">
-            <Brand />
-          </div>
-          <p className="lp-meta-pilot">
-            <strong>Free during the pilot</strong>
-            For Indian MBA applicants
-          </p>
-        </div>
+      <div className="lp-hero">
+        <SiteHeader home />
         <div className="lp-frame lp-hero-copy">
           <h1 id="hero-heading">
             Practise the MBA interview{" "}
@@ -929,7 +837,7 @@ export default function LandingPage() {
         <div className="lp-frame">
           <p className="lp-caption">Example screens with illustrative data.</p>
         </div>
-      </header>
+      </div>
       <main id="main">
         <section className="lp-why" aria-labelledby="why-heading">
           <div className="lp-frame lp-why-grid">
@@ -984,7 +892,7 @@ export default function LandingPage() {
         <Faq />
         <Closing />
       </main>
-      <Footer />
+      <SiteFooter home />
     </div>
   );
 }

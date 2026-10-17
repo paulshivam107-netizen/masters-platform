@@ -1,11 +1,10 @@
 import React from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import Login from "../Login";
 import Signup from "../Signup";
 import "./PublicPages.css";
-import Brand from "../common/Brand";
-import ThemeToggle from "../common/ThemeToggle";
+import SiteHeader from "./SiteHeader";
 import InterviewPreview from "../common/InterviewPreview";
 
 function parseMode(value) {
@@ -52,15 +51,7 @@ export default function AuthPage() {
 
   return (
     <div className="public-auth-layout">
-      <header className="public-auth-topbar">
-        <Brand />
-        <div className="public-nav">
-          <Link className="public-nav-link" to="/">
-            Back to home
-          </Link>
-          <ThemeToggle />
-        </div>
-      </header>
+      <SiteHeader current="signin" />
       <div className="auth-split-layout">
         <aside className="auth-story">
           <span className="eyebrow">MOCK INTERVIEWS THAT LISTEN</span>
