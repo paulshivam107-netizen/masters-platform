@@ -4,8 +4,9 @@ import { useAuth } from "../../contexts/AuthContext";
 import Login from "../Login";
 import Signup from "../Signup";
 import "./PublicPages.css";
+import "./AuthPages.css";
 import SiteHeader from "./SiteHeader";
-import InterviewPreview from "../common/InterviewPreview";
+import AuthPanel from "./AuthPanel";
 
 function parseMode(value) {
   return value === "signup" ? "signup" : "login";
@@ -50,31 +51,19 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="public-auth-layout">
+    <div className="ap-page">
       <SiteHeader current="signin" />
-      <div className="auth-split-layout">
-        <aside className="auth-story">
-          <span className="eyebrow">MOCK INTERVIEWS THAT LISTEN</span>
-          <h1>
-            Practise the interview
-            <br />
-            before it counts.
-          </h1>
-          <p>
-            Questions drawn from your résumé, follow-ups drawn from your
-            answers, and a debrief you can act on.
-          </p>
-          <InterviewPreview />
-        </aside>
-        <div className="public-auth-shell">
+      <main className="ap-layout">
+        <div className="ap-formcol">
           {mode === "login" ? (
             <Login onSwitchToSignup={() => setMode("signup")} />
           ) : (
             <Signup onSwitchToLogin={() => setMode("login")} />
           )}
-          <p className="auth-next-hint">{nextHint}</p>
+          <p className="ap-next-hint">{nextHint}</p>
         </div>
-      </div>
+        <AuthPanel />
+      </main>
     </div>
   );
 }

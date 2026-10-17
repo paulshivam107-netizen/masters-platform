@@ -1,0 +1,414 @@
+/* ==========================================================================
+   Sign-in, sign-up and emailed-link pages (ap-).
+   Desktop: form column + editorial photo panel. Phone: form only.
+   The Google button (.auth-google-*) is styled in Auth.css and is untouched;
+   the form column stays at least 440px wide so it can render at 400px.
+   ========================================================================== */
+.ap-page {
+  --ap-pad: clamp(22px, 4vw, 56px);
+  /* Derived control border: at least 3:1 against canvas and surface. */
+  --ap-ctrl: color-mix(in srgb, var(--ink) 62%, var(--canvas));
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  color: var(--ink);
+}
+.ap-page :focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.ap-layout {
+  flex: 1;
+  width: 100%;
+  max-width: calc(1200px + 2 * var(--ap-pad));
+  margin-inline: auto;
+  padding: 16px var(--ap-pad) 56px;
+  display: grid;
+  grid-template-columns: minmax(440px, 5fr) minmax(0, 6fr);
+  gap: clamp(32px, 6vw, 96px);
+  align-items: stretch;
+}
+.ap-formcol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: 24px;
+}
+.ap-next-hint {
+  max-width: 440px;
+  width: 100%;
+  margin: 20px auto 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Form card: plain on the canvas, no box. */
+.ap-page .auth-container {
+  width: 100%;
+}
+.ap-page .auth-box {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.ap-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.ap-eyebrow span {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--primary);
+}
+.ap-eyebrow--light {
+  color: var(--hero-kicker);
+}
+.ap-eyebrow--light span {
+  background: var(--accent);
+}
+.ap-page .auth-box h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 3.4vw, 46px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+.ap-page .auth-subtitle {
+  margin: 14px 0 28px;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.ap-page .auth-box form {
+  display: grid;
+  gap: 18px;
+}
+
+/* Fields */
+.ap-page .auth-box .form-group {
+  gap: 8px;
+}
+.ap-page .auth-box .form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.ap-page .auth-box .form-group small {
+  font-size: 13px;
+  color: var(--muted);
+}
+.ap-page .auth-box input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--ap-ctrl);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 16px var(--font-body);
+  transition:
+    border-color 0.16s,
+    box-shadow 0.16s;
+}
+.ap-page .auth-box input::placeholder {
+  color: var(--muted);
+  opacity: 0.8;
+}
+.ap-page .auth-box input:hover {
+  border-color: var(--ink);
+}
+.ap-page .auth-box input:focus-visible {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 28%, transparent);
+}
+/* Validation states: only after the field has been touched. */
+.ap-page .auth-box input:user-invalid,
+.ap-page .auth-box input[aria-invalid="true"] {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 1px var(--danger);
+}
+.ap-page .auth-box input:user-invalid:focus-visible,
+.ap-page .auth-box input[aria-invalid="true"]:focus-visible {
+  box-shadow:
+    0 0 0 1px var(--danger),
+    0 0 0 4px color-mix(in srgb, var(--danger) 25%, transparent);
+}
+.ap-page .auth-box .form-group small.ap-field-error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* Buttons */
+.ap-page .auth-button {
+  width: 100%;
+  min-height: 50px;
+  border-radius: 12px;
+  font: 650 16px var(--font-body);
+  cursor: pointer;
+}
+.ap-page .auth-button:hover {
+  transform: none;
+  box-shadow: none;
+}
+.ap-page .auth-button:disabled {
+  opacity: 0.65;
+  cursor: progress;
+}
+.ap-page .auth-button-secondary {
+  background: var(--surface);
+  border: 1px solid var(--ap-ctrl);
+  color: var(--ink);
+}
+.ap-page .auth-button-secondary:hover {
+  background: var(--surface-hover);
+}
+.ap-page .auth-link-button {
+  display: flex;
+  margin-top: 16px;
+  text-decoration: none;
+}
+.ap-page .link-button {
+  min-height: 44px;
+  padding: 0;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+/* "or" divider between the password button and Google's button */
+.ap-divider {
+  display: none;
+  align-items: center;
+  gap: 14px;
+  margin: 2px 0 -2px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.ap-divider::before,
+.ap-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid var(--line-strong);
+}
+/* Only show the divider when Google's slot follows it (the slot renders nothing if unconfigured). */
+.ap-divider:has(+ .auth-google-slot) {
+  display: flex;
+}
+/* Google slot: spacing only; the button itself is never restyled. */
+.ap-page .auth-google-slot {
+  margin-top: 0;
+}
+
+/* Secondary actions */
+.ap-page .auth-inline-actions {
+  margin-top: 6px;
+  text-align: left;
+}
+.ap-page .auth-inline-actions .link-button {
+  font-size: 15px;
+}
+.ap-page .auth-switch {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  text-align: left;
+  font-size: 15px;
+  color: var(--muted);
+}
+.ap-page .auth-switch .link-button {
+  padding: 0 4px;
+  font-size: 15px;
+}
+.ap-page .auth-reset-panel {
+  display: grid;
+  gap: 16px;
+  margin: 8px 0 12px;
+  padding: 22px 20px;
+  background: var(--surface);
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+}
+.ap-subhead {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+.ap-help {
+  margin: -6px 0 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+/* Banners */
+.ap-page .auth-box .error-message,
+.ap-page .auth-box .success-message {
+  margin: 0 0 20px;
+  padding: 14px 16px 14px 18px;
+  border-radius: 12px;
+  border-left: 4px solid currentColor;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: 550;
+  overflow-wrap: anywhere;
+}
+.ap-page .auth-box h1 + .error-message,
+.ap-page .auth-box h1 + .success-message {
+  margin-top: 20px;
+}
+.ap-page .auth-box form .error-message,
+.ap-page .auth-box form .success-message {
+  margin: 0;
+}
+
+/* Link pages: checking spinner */
+.ap-checking {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.ap-spinner {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--primary);
+  animation: ap-spin 0.8s linear infinite;
+}
+@keyframes ap-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Editorial panel */
+.ap-panel {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  align-self: start;
+  position: sticky;
+  top: 16px;
+  min-height: min(720px, calc(100dvh - 32px));
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--hero-bg);
+  color: #fff;
+}
+.ap-panel-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.ap-panel-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    180deg,
+    rgb(8 20 15 / 0.62) 0%,
+    rgb(8 20 15 / 0.78) 100%
+  );
+}
+.ap-panel-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  padding: clamp(28px, 4vw, 52px);
+}
+.ap-panel-title {
+  max-width: 13em;
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(34px, 3.6vw, 54px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.06;
+}
+.ap-panel-lead {
+  max-width: 34em;
+  margin: 18px 0 0;
+  font-size: 17px;
+  line-height: 1.55;
+  color: rgb(255 255 255 / 0.82);
+}
+.ap-panel .interview-preview {
+  margin-top: 32px;
+  max-width: 520px;
+  padding: 20px;
+  background: rgb(8 20 15 / 0.42);
+  border-color: rgb(255 255 255 / 0.18);
+  backdrop-filter: blur(6px);
+}
+.ap-panel .ip-turn {
+  font-size: 14px;
+}
+.ap-panel .ip-quote {
+  font-size: 13px;
+}
+.ap-panel .ip-header,
+.ap-panel .ip-caption {
+  font-size: 12px;
+}
+
+/* Dark theme: heavier scrim, quieter bubbles (the shared .ip- dark rules apply). */
+:root[data-theme="dark"] .ap-panel-scrim {
+  background: linear-gradient(
+    180deg,
+    rgb(10 11 16 / 0.72) 0%,
+    rgb(10 11 16 / 0.88) 100%
+  );
+}
+:root[data-theme="dark"] .ap-panel .interview-preview {
+  background: rgb(10 11 16 / 0.5);
+}
+
+/* Medium: tighter gap, shorter panel text */
+@media (max-width: 1023px) {
+  .ap-layout {
+    grid-template-columns: minmax(440px, 1fr) minmax(0, 1fr);
+    gap: 32px;
+  }
+  .ap-panel .interview-preview {
+    display: none;
+  }
+}
+
+/* Compact: single column, form first, panel dropped */
+@media (max-width: 899px) {
+  .ap-layout {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 8px;
+  }
+  .ap-formcol {
+    padding-block: 12px 0;
+  }
+  .ap-panel {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .ap-page .auth-box h1 {
+    font-size: 34px;
+  }
+  .ap-page .auth-reset-panel {
+    padding: 18px 16px;
+  }
+}
