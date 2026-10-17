@@ -44,6 +44,7 @@ import {
   HelpPage,
   NotFoundPage,
 } from "./components/public/ResourcePages";
+import { SchoolsPage, SchoolPage } from "./components/public/SchoolPages";
 import Seo from "./seo/Seo";
 import {
   UNIVERSITY_OPTIONS,
@@ -738,6 +739,8 @@ function AppRoutes() {
         <Route path="/programs" element={<ProgramsPage />} />
         <Route path="/guides" element={<GuidesPage />} />
         <Route path="/guides/:slug" element={<GuidePage />} />
+        <Route path="/schools" element={<SchoolsPage />} />
+        <Route path="/schools/:slug" element={<SchoolPage />} />
         <Route path="/mba-interview-practice" element={<PracticePage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/auth" element={<AuthPage />} />

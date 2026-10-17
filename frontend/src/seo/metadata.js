@@ -1,4 +1,5 @@
 import { guides } from "../content/guides";
+import { schools } from "../content/schools";
 import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
@@ -27,6 +28,19 @@ publicPages[practice.path] = {
   updated: practice.updated,
   kind: "website",
 };
+publicPages["/schools"] = {
+  title: "School interview preparation guides",
+  description:
+    "Interview preparation pages for individual MBA schools: programmes, what each school says about its interview and where graduates go, with sources. Independent, not affiliated with any school.",
+  kind: "website",
+};
+for (const school of schools)
+  publicPages[`/schools/${school.slug}`] = {
+    title: `${school.shortName} interview preparation: format, programmes and practice`,
+    description: `${school.shortName} programmes, what the school says about its interview and where graduates go, with source links. Independent guide, not affiliated with ${school.shortName}.`,
+    updated: school.checked,
+    kind: "website",
+  };
 for (const guide of guides)
   publicPages[`/guides/${guide.slug}`] = { ...guide, kind: "article" };
 
