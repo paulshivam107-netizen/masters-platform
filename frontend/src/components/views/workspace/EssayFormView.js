@@ -1,4 +1,5 @@
 import React from "react";
+import "./WorkspaceAccount.css";
 
 function EssayFormView({
   isAdmin,
@@ -106,33 +107,48 @@ function EssayFormView({
     }
   };
 
+  const content = formData.essay_content || "";
+  const wordCount = content.trim().split(/\s+/).filter(Boolean).length;
+
   return (
-    <div className="essay-form" data-testid="compose-form">
+    <div className="wac-page wac-compose" data-testid="compose-form">
       {essayDraftRecovered && (
-        <div className="draft-recovered-banner">
+        <div className="ws-alert ws-alert--warn">
           <p>Recovered unsaved draft from this browser.</p>
-          <button type="button" onClick={handleDiscardEssayDraft}>
+          <button
+            type="button"
+            className="ws-btn ws-btn--sm"
+            onClick={handleDiscardEssayDraft}
+          >
             Discard local draft
           </button>
         </div>
       )}
       {formData.parent_essay_id && (
-        <div className="version-notice">
-          You are creating a new draft based on an existing version. The
-          previous version stays unchanged.
+        <div className="ws-alert">
+          <p>
+            You are creating a new draft based on an existing version. The
+            previous version stays unchanged.
+          </p>
         </div>
       )}
-      <form onSubmit={handleSubmit} data-testid="compose-form-element">
-        <div className="form-section">
-          <div className="form-section-header">
+      <form
+        className="ws-stack"
+        onSubmit={handleSubmit}
+        data-testid="compose-form-element"
+      >
+        <section className="ws-card ws-stack ws-stack--sm">
+          <div className="ws-row ws-row--between">
             <div>
-              <h3>Essay details</h3>
-              <p>Choose the programme and question you’re responding to.</p>
+              <h3 className="ws-h3">Essay details</h3>
+              <p className="ws-help">
+                Choose the programme and the question you are responding to.
+              </p>
             </div>
             {isAdmin && (
               <button
                 type="button"
-                className="form-section-toggle"
+                className="ws-btn ws-btn--sm"
                 data-testid="compose-generate-sample"
                 onClick={handleGenerateSampleText}
               >
@@ -140,58 +156,69 @@ function EssayFormView({
               </button>
             )}
           </div>
-          <div className="form-group">
-            <label htmlFor="essayformview-field-1">School Name</label>
-            <input
-              id="essayformview-field-1"
-              data-testid="compose-school-input"
-              type="text"
-              value={formData.school_name}
-              onChange={(e) =>
-                setFormData({ ...formData, school_name: e.target.value })
-              }
-              list="university-options"
-              placeholder="e.g., Harvard Business School"
-              required
-            />
-            <datalist id="university-options">
-              {UNIVERSITY_OPTIONS.map((school) => (
-                <option key={school} value={school} />
-              ))}
-            </datalist>
+          <div className="ws-grid ws-grid--2">
+            <div className="ws-field">
+              <label className="ws-label" htmlFor="essayformview-field-1">
+                School name
+              </label>
+              <input
+                id="essayformview-field-1"
+                className="ws-input"
+                data-testid="compose-school-input"
+                type="text"
+                value={formData.school_name}
+                onChange={(e) =>
+                  setFormData({ ...formData, school_name: e.target.value })
+                }
+                list="university-options"
+                placeholder="e.g., Harvard Business School"
+                required
+              />
+              <datalist id="university-options">
+                {UNIVERSITY_OPTIONS.map((school) => (
+                  <option key={school} value={school} />
+                ))}
+              </datalist>
+            </div>
+            <div className="ws-field">
+              <label className="ws-label" htmlFor="essay-programme">
+                Programme
+              </label>
+              <input
+                id="essay-programme"
+                className="ws-input"
+                data-testid="compose-program-input"
+                value={formData.program_type}
+                list="essay-programme-options"
+                required
+                minLength={2}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setFormData({ ...formData, program_type: value });
+                  setEssayDegreeChoice(
+                    DEGREE_OPTIONS.includes(value) ? value : "Other",
+                  );
+                  setEssayCustomDegree(
+                    DEGREE_OPTIONS.includes(value) ? "" : value,
+                  );
+                }}
+              />
+              <datalist id="essay-programme-options">
+                {DEGREE_OPTIONS.filter((value) => value !== "Other").map(
+                  (value) => (
+                    <option key={value} value={value} />
+                  ),
+                )}
+              </datalist>
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="essay-programme">Programme</label>
-            <input
-              id="essay-programme"
-              data-testid="compose-program-input"
-              value={formData.program_type}
-              list="essay-programme-options"
-              required
-              minLength={2}
-              onChange={(e) => {
-                const value = e.target.value;
-                setFormData({ ...formData, program_type: value });
-                setEssayDegreeChoice(
-                  DEGREE_OPTIONS.includes(value) ? value : "Other",
-                );
-                setEssayCustomDegree(
-                  DEGREE_OPTIONS.includes(value) ? "" : value,
-                );
-              }}
-            />
-            <datalist id="essay-programme-options">
-              {DEGREE_OPTIONS.filter((value) => value !== "Other").map(
-                (value) => (
-                  <option key={value} value={value} />
-                ),
-              )}
-            </datalist>
-          </div>
-          <div className="form-group">
-            <label htmlFor="essayformview-field-4">Essay Prompt</label>
+          <div className="ws-field">
+            <label className="ws-label" htmlFor="essayformview-field-4">
+              Essay prompt
+            </label>
             <textarea
               id="essayformview-field-4"
+              className="ws-textarea wac-prompt-input"
               data-testid="compose-prompt-input"
               value={formData.essay_prompt}
               onChange={(e) =>
@@ -200,18 +227,21 @@ function EssayFormView({
               placeholder="What matters most to you, and why?"
               required
             />
+            <p className="ws-help">Paste the question exactly as the school words it.</p>
           </div>
-        </div>
+        </section>
 
-        <div className="form-section">
-          <div className="form-section-header">
+        <section className="ws-card ws-stack ws-stack--sm">
+          <div className="ws-row ws-row--between">
             <div>
-              <h3>Outline helper (optional)</h3>
-              <p>Add quick bullet points and get a draft outline.</p>
+              <h3 className="ws-h3">Outline helper (optional)</h3>
+              <p className="ws-help">
+                Add quick bullet points and get a draft outline.
+              </p>
             </div>
             <button
               type="button"
-              className="form-section-toggle"
+              className="ws-btn ws-btn--sm"
               onClick={() => setShowOutlineAssist((prev) => !prev)}
               aria-expanded={showOutlineAssist}
             >
@@ -219,19 +249,25 @@ function EssayFormView({
             </button>
           </div>
           {showOutlineAssist && (
-            <div className="form-group">
-              <label htmlFor="essayformview-field-5">Bullet Points</label>
-              <textarea
-                id="essayformview-field-5"
-                data-testid="compose-skeleton-input"
-                value={assistInput}
-                onChange={(e) => setAssistInput(e.target.value)}
-                placeholder="- Key moment&#10;- Main challenge&#10;- Why this program"
-                rows="5"
-              />
-              <div className="form-actions">
+            <div className="ws-stack ws-stack--sm">
+              <div className="ws-field">
+                <label className="ws-label" htmlFor="essayformview-field-5">
+                  Bullet points
+                </label>
+                <textarea
+                  id="essayformview-field-5"
+                  className="ws-textarea"
+                  data-testid="compose-skeleton-input"
+                  value={assistInput}
+                  onChange={(e) => setAssistInput(e.target.value)}
+                  placeholder="- Key moment&#10;- Main challenge&#10;- Why this program"
+                  rows="5"
+                />
+              </div>
+              <div className="ws-row">
                 <button
                   type="button"
+                  className="ws-btn"
                   data-testid="compose-outline-assist-button"
                   onClick={handleGenerateOutline}
                   disabled={assistLoading}
@@ -241,6 +277,7 @@ function EssayFormView({
                 {assistResult?.outline_markdown && (
                   <button
                     type="button"
+                    className="ws-btn"
                     data-testid="compose-apply-outline-button"
                     onClick={() =>
                       setFormData({
@@ -253,10 +290,10 @@ function EssayFormView({
                   </button>
                 )}
               </div>
-              {assistError && <small>{assistError}</small>}
+              {assistError && <p className="ws-error">{assistError}</p>}
               {assistResult?.outline_markdown && (
                 <div
-                  className="essay-outline-assist-result"
+                  className="wac-outline"
                   data-testid="compose-outline-output"
                 >
                   <small>{assistResult.caution}</small>
@@ -273,52 +310,67 @@ function EssayFormView({
               )}
             </div>
           )}
-        </div>
+        </section>
 
-        <div className="form-section">
-          <div className="form-section-header">
-            <div>
-              <h3>Your draft</h3>
-              <p>
-                Write or paste your response. Save it to return to it later.
-              </p>
-            </div>
+        <section className="ws-card wac-draft">
+          <div>
+            <h3 className="ws-h3">Your draft</h3>
+            <p className="ws-help">
+              Write or paste your response. Save it to return to it later.
+            </p>
           </div>
-          <div className="form-group">
-            <label htmlFor="essayformview-field-6">Essay Content</label>
+          <div className="ws-field">
+            <label className="ws-label" htmlFor="essayformview-field-6">
+              Essay content
+            </label>
             <textarea
               id="essayformview-field-6"
+              className="ws-textarea wac-editor"
               data-testid="compose-content-input"
               value={formData.essay_content}
               onChange={(e) =>
                 setFormData({ ...formData, essay_content: e.target.value })
               }
               placeholder="Your essay here..."
-              rows="10"
+              rows="14"
               minLength={20}
               required
             />
           </div>
-          <div className="form-actions">
-            <button
-              type="submit"
-              data-testid="compose-submit-button"
-              disabled={loading}
-            >
-              {loading ? "Saving…" : "Save draft"}
-            </button>
-            <button
-              type="button"
-              data-testid="compose-cancel-button"
-              onClick={() => {
-                setShowForm(false);
-                setActiveNav("home");
-              }}
-            >
-              Cancel
-            </button>
+          <div className="wac-draft__bar">
+            <p className="wac-count ws-small" aria-live="polite">
+              <strong className="ws-num">{wordCount}</strong>{" "}
+              {wordCount === 1 ? "word" : "words"}
+              <span aria-hidden="true"> · </span>
+              <span className="ws-num">{content.length}</span> characters
+              <span className="wac-count__note">
+                {" "}
+                Check the school’s official word limit.
+              </span>
+            </p>
+            <div className="ws-row">
+              <button
+                type="button"
+                className="ws-btn"
+                data-testid="compose-cancel-button"
+                onClick={() => {
+                  setShowForm(false);
+                  setActiveNav("home");
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="ws-btn ws-btn--primary"
+                data-testid="compose-submit-button"
+                disabled={loading}
+              >
+                {loading ? "Saving…" : "Save draft"}
+              </button>
+            </div>
           </div>
-        </div>
+        </section>
       </form>
     </div>
   );

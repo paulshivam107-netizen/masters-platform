@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowIcon, CheckIcon } from "../../../app/icons";
 import { trackEvent } from "../../../app/telemetry";
+import "./WorkspaceAccount.css";
 
 export default function SetupGuide({
   applications,
@@ -62,7 +63,7 @@ export default function SetupGuide({
       </div>
       <div className="wi-guide__next">
         <div>
-          <h2 id="setup-guide-title">{next.title}</h2>
+          <h2 className="ws-h3" id="setup-guide-title">{next.title}</h2>
           <p>{next.detail}</p>
         </div>
         <button className="ws-btn" onClick={() => openStep(next)}>
@@ -84,11 +85,12 @@ export default function SetupGuide({
         </button>
       )}
       <progress
+        className="wac-progress"
         value={completed}
         max={steps.length}
         aria-label={`${completed} of ${steps.length} setup steps complete`}
       />
-      <details>
+      <details className="wac-guide__steps">
         <summary>
           {completed} of {steps.length} complete · See all steps
         </summary>
@@ -99,7 +101,7 @@ export default function SetupGuide({
                 {step.done ? (
                   <CheckIcon />
                 ) : (
-                  <span className="setup-open-dot" />
+                  <span className="wac-dot" />
                 )}
               </span>
               <button

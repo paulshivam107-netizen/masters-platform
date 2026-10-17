@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./WorkspaceAccount.css";
 
 function NotificationsView({
   activeNotifications,
@@ -12,116 +13,128 @@ function NotificationsView({
   markNotificationRead,
 }) {
   const [visibleCount, setVisibleCount] = useState(6);
+  const total = activeNotifications.length;
+  const dismissedCount = Object.keys(dismissedNotifications).length;
   return (
-    <div className="notifications-panel">
+    <div className="wac-page ws-stack">
       <h2 className="sr-only" data-testid="notifications-heading">
         Notifications
       </h2>
-      <div className="notifications-toolbar">
-        <p>
-          {activeNotifications.length} active notification
-          {activeNotifications.length === 1 ? "" : "s"}
+      <div className="ws-row ws-row--between wac-toolbar">
+        <p className="wac-toolbar__text" aria-live="polite">
+          <strong className="ws-num">{total}</strong> unread notification
+          {total === 1 ? "" : "s"}
+          {dismissedCount > 0 && (
+            <span className="ws-muted"> · {dismissedCount} dismissed</span>
+          )}
         </p>
-        <div className="notifications-actions">
+        <div className="ws-row">
           <button
             type="button"
             data-testid="notifications-mark-all-read"
-            className="secondary-action-btn"
+            className="ws-btn ws-btn--sm"
             onClick={() =>
               markAllNotificationsRead(
                 activeNotifications.map((item) => item.id),
               )
             }
-            disabled={!activeNotifications.length}
+            disabled={!total}
           >
             Mark all read
           </button>
           <button
             type="button"
             data-testid="notifications-reset-history"
-            className="secondary-action-btn"
+            className="ws-btn ws-btn--sm ws-btn--ghost"
             onClick={clearNotificationHistory}
-            disabled={!Object.keys(dismissedNotifications).length}
+            disabled={!dismissedCount}
           >
             Show dismissed updates
           </button>
         </div>
       </div>
 
-      {activeNotifications.length === 0 ? (
-        <div className="empty-state-main">
-          <h2>No active notifications</h2>
+      {total === 0 ? (
+        <div className="ws-card ws-empty wac-empty">
+          <h3 className="ws-empty__title">You are all caught up</h3>
           <p>
             {remindersEnabled
-              ? "You're caught up. Reminder alerts are enabled and will appear as deadlines and requirements change."
-              : "You're caught up. Enable reminders to receive proactive deadline alerts."}
+              ? "Reminder alerts are on and will appear here as deadlines and requirements change."
+              : "Turn on reminders to get proactive deadline alerts here and by email."}
           </p>
-          <div className="empty-state-actions">
+          <div className="ws-row">
             <button
               type="button"
-              className="history-btn"
+              className="ws-btn ws-btn--primary"
               onClick={() => handleNavChange("tracker")}
             >
               Go to Applications
             </button>
             <button
               type="button"
-              className="secondary-action-btn"
+              className="ws-btn"
               onClick={() => handleNavChange("settings")}
             >
-              {remindersEnabled ? "Manage Reminders" : "Enable Reminders"}
+              {remindersEnabled ? "Manage reminders" : "Enable reminders"}
             </button>
           </div>
         </div>
       ) : (
-        <div className="detail-list">
+        <ul className="ws-card ws-card--pad-0 wac-list">
           {activeNotifications.slice(0, visibleCount).map((notification) => (
-            <article
-              key={notification.id}
-              data-testid="notification-item"
-              className={`notification-item notification-item--${notification.severity}`}
-            >
-              <div className="notification-item-main">
-                <strong>{notification.title}</strong>
-                <p>{notification.message}</p>
-              </div>
-              <div className="notification-item-actions">
-                <button
-                  type="button"
-                  data-testid="notification-open-button"
-                  className="history-btn"
-                  onClick={() => {
-                    if (notification.applicationId) {
-                      setSelectedApplicationId(notification.applicationId);
-                      setDocsApplicationId(notification.applicationId);
-                    }
-                    handleNavChange(notification.targetNav || "home");
-                    markNotificationRead(notification.id);
-                  }}
-                >
-                  Open
-                </button>
-                <button
-                  type="button"
-                  data-testid="notification-dismiss-button"
-                  className="secondary-action-btn"
-                  onClick={() => markNotificationRead(notification.id)}
-                >
-                  Dismiss
-                </button>
-              </div>
-            </article>
+            <li key={notification.id}>
+              <article
+                data-testid="notification-item"
+                className={`wac-note wac-note--${notification.severity}`}
+              >
+                <span className="wac-note__dot" aria-hidden="true" />
+                <div className="wac-note__main">
+                  <strong>
+                    {notification.title}
+                    <span className="sr-only"> (unread)</span>
+                  </strong>
+                  <p className="ws-muted">{notification.message}</p>
+                </div>
+                <div className="ws-row wac-note__actions">
+                  <button
+                    type="button"
+                    data-testid="notification-open-button"
+                    className="ws-btn ws-btn--sm"
+                    onClick={() => {
+                      if (notification.applicationId) {
+                        setSelectedApplicationId(notification.applicationId);
+                        setDocsApplicationId(notification.applicationId);
+                      }
+                      handleNavChange(notification.targetNav || "home");
+                      markNotificationRead(notification.id);
+                    }}
+                  >
+                    Open
+                  </button>
+                  <button
+                    type="button"
+                    data-testid="notification-dismiss-button"
+                    className="ws-btn ws-btn--sm ws-btn--ghost"
+                    onClick={() => markNotificationRead(notification.id)}
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </article>
+            </li>
           ))}
-        </div>
+        </ul>
       )}
-      {activeNotifications.length > visibleCount && (
-        <button
-          className="secondary-action-btn"
-          onClick={() => setVisibleCount((count) => count + 6)}
-        >
-          Show more updates ({activeNotifications.length - visibleCount}{" "}
-          remaining)
-        </button>
+      {total > visibleCount && (
+        <div className="ws-row">
+          <button
+            type="button"
+            className="ws-btn"
+            onClick={() => setVisibleCount((count) => count + 6)}
+          >
+            Show more updates ({total - visibleCount} remaining)
+          </button>
+        </div>
       )}
     </div>
   );

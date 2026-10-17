@@ -1,0 +1,41 @@
+{
+  "group": "ws-account",
+  "css": "frontend/src/components/views/workspace/WorkspaceAccount.css",
+  "prefix": "wac-",
+  "pages": {
+    "EssaysView": {
+      "purpose": "Scan every essay draft and jump back in.",
+      "layout": "Toolbar (count, New essay) over a single card of rows: school + programme chip, prompt clamped to 2 lines, meta (updated, words, review).",
+      "states": {"empty": "ws-empty with one action (Start first essay)", "loading": "handled upstream"}
+    },
+    "EssayFormView": {
+      "purpose": "A calm writing surface.",
+      "layout": "Details card (school, programme, prompt), optional outline helper (collapsed), then a draft card: 70ch measure, 17px/1.7, sticky footer with live word and character count, Save draft, Cancel.",
+      "notes": "No invented word limits: the count is shown with a reminder to check the programme's official limit."
+    },
+    "EssayDetailView": {
+      "purpose": "Read, review and version an essay.",
+      "layout": "Action toolbar, prompt card, essay in a readable measure with word count, AI review card, version history as a scannable list (latest chip, date, score) plus diff.",
+      "states": {"no versions": "ws-empty inside panel"}
+    },
+    "ProfileView": {
+      "purpose": "Identity and admissions focus.",
+      "layout": "Summary card (initial avatar, name, email, essay count, sign out) then three form sections (About you, Admissions focus, Email) with helper text and a save row.",
+      "notes": "No resume fields exist in this view; resume handling lives in the interview builder."
+    },
+    "SettingsView": {
+      "purpose": "Preferences.",
+      "layout": "Two-column sections (heading and help left, card right): Appearance, Workspace, Reminders, Feedback, Your data. Collapses to one column on tablet and phone.",
+      "dark": "Switches and theme previews use tokens, so dark and light both work."
+    },
+    "NotificationsView": {
+      "purpose": "Clean list of updates.",
+      "layout": "Toolbar with unread count and bulk actions; rows with severity dot, title, message, Open and Dismiss.",
+      "states": {"empty": "ws-empty with two actions"}
+    },
+    "SetupGuide": {"purpose": "First steps card on Home.", "layout": "Accent-tinted card, next step, progress bar, collapsible steps."},
+    "AccountDataCard": {"purpose": "Export and delete.", "layout": "Two clearly labelled blocks; delete reveals a danger-bordered confirmation form."}
+  },
+  "photos": "none needed",
+  "dark_mode": "Dark first; all colours from index.css tokens, no hard-coded greens."
+}
