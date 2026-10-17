@@ -20,6 +20,7 @@ const checks = [
   ["/guides", 200, null, "index"],
   [guide, 200, null, "index"],
   ["/help", 200, null, "index"],
+  ["/privacy", 200, null, "index"],
   ["/mba-interview-practice", 200, null, "index"],
   ["/guides/mba-interview-from-resume", 200, null, "index"],
   ["/guides/mba-interview-for-freshers", 200, null, "index"],

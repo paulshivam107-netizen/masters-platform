@@ -252,6 +252,15 @@
   color: var(--muted);
 }
 
+.ap-legal {
+  margin: 14px 0 0;
+}
+.ap-legal a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Banners */
 .ap-page .auth-box .error-message,
 .ap-page .auth-box .success-message {
