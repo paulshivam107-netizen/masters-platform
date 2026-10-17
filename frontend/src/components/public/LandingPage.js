@@ -171,7 +171,7 @@ function Eyebrow({ children }) {
 const STEPS = [
   {
     title: "Add your résumé",
-    text: "Upload it or paste the text. Masters picks out the lines a panel is most likely to ask about.",
+    text: "Upload it or paste the text. MockMBA picks out the lines a panel is most likely to ask about.",
   },
   {
     title: "Answer the opening question",
@@ -851,7 +851,7 @@ export default function LandingPage() {
               <div className="lp-why-body">
                 <p>
                   Interviewers often start from what you wrote: a final-year
-                  project, an internship, a role you held. Masters reads your
+                  project, an internship, a role you held. MockMBA reads your
                   résumé first, asks about it, then follows up on your answer
                   the way a panel member might. It cannot predict an admit. It
                   gives you honest repetitions before the real conversation.

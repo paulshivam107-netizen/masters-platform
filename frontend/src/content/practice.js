@@ -7,7 +7,7 @@ const practice = {
     "Practise MBA interviews where the follow-up questions come from your own résumé and what you say. See how it works, the limits of AI practice and what is stored.",
   updated: "2026-10-15",
   answer:
-    "Masters turns the lines on your résumé into interview questions, each with a follow-up and a deeper follow-up, so you can rehearse the part of the interview that is hardest to fake: explaining your own work. It is a practice tool in pilot. It does not predict admission and it does not replace feedback from a person who has sat on or faced a real panel.",
+    "MockMBA turns the lines on your résumé into interview questions, each with a follow-up and a deeper follow-up, so you can rehearse the part of the interview that is hardest to fake: explaining your own work. It is a practice tool in pilot. It does not predict admission and it does not replace feedback from a person who has sat on or faced a real panel.",
   how: {
     title: "How résumé-based follow-ups work",
     steps: [
@@ -59,7 +59,7 @@ const practice = {
         "Read the guide for experienced applicants",
       ],
     ],
-    note: "Programmes differ in format and eligibility, and Masters does not claim to reproduce any school’s interview. Check each school’s own material for how its process works.",
+    note: "Programmes differ in format and eligibility, and MockMBA does not claim to reproduce any school’s interview. Check each school’s own material for how its process works.",
   },
   limits: {
     title: "What to expect, honestly",

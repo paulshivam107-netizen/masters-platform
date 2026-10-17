@@ -16,15 +16,15 @@ const publicPages = {
     kind: "website",
   },
   "/privacy": {
-    title: "Privacy: your data on Masters",
+    title: "Privacy: your data on MockMBA",
     description:
-      "What Masters stores, how AI is used, who processes your data and how to export or delete your account.",
+      "What MockMBA stores, how AI is used, who processes your data and how to export or delete your account.",
     kind: "website",
   },
   "/help": {
     title: "Getting started and help",
     description:
-      "Set up your first application, save an essay and practise an interview answer. Learn what the Masters pilot saves and how to get help.",
+      "Set up your first application, save an essay and practise an interview answer. Learn what the MockMBA pilot saves and how to get help.",
     kind: "website",
   },
 };
@@ -92,7 +92,7 @@ function metadata(pathname, config = defaults) {
           : path === "/programs"
             ? "Explore programmes"
             : "Page not found";
-  const title = `${page?.title || fallbackTitle} | ${config.siteName || "Masters"}`;
+  const title = `${page?.title || fallbackTitle} | ${config.siteName || "MockMBA"}`;
   const description =
     page?.description ||
     "Manage your MBA applications, essay drafts and interview preparation.";
@@ -101,13 +101,13 @@ function metadata(pathname, config = defaults) {
   if (page && origin) {
     const publisher = {
       "@type": "Organization",
-      name: config.siteName || "Masters",
+      name: config.siteName || "MockMBA",
       url: origin,
     };
     graph.push({
       "@type": "WebSite",
       "@id": `${origin}/#website`,
-      name: config.siteName || "Masters",
+      name: config.siteName || "MockMBA",
       url: origin,
     });
     graph.push({
@@ -124,7 +124,7 @@ function metadata(pathname, config = defaults) {
     if (path === "/")
       graph.push({
         "@type": "SoftwareApplication",
-        name: config.siteName || "Masters",
+        name: config.siteName || "MockMBA",
         applicationCategory: "ProductivityApplication",
         operatingSystem: "Web browser",
         url: origin,

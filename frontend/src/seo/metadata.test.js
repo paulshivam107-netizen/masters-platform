@@ -6,7 +6,7 @@ import {
   publicPages,
 } from "./metadata";
 const live = {
-  siteName: "Masters",
+  siteName: "MockMBA",
   siteUrl: "https://admissions-demo.org",
   allowIndexing: true,
 };

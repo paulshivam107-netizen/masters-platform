@@ -66,7 +66,7 @@ const guides = [
         title: "Your first ten minutes",
         paragraphs: [
           "Choose the programme with the nearest confirmed application deadline. Add it, paste its official source URL into your notes, and identify one missing item. Then save a rough essay paragraph or one interview example. Add the rest of your shortlist after that first useful action.",
-          "Masters helps organise your work. It does not submit applications, verify your eligibility or guarantee an admission outcome. Always treat the institution’s current admissions instructions as authoritative.",
+          "MockMBA helps organise your work. It does not submit applications, verify your eligibility or guarantee an admission outcome. Always treat the institution’s current admissions instructions as authoritative.",
         ],
       },
     ],
@@ -277,7 +277,7 @@ const guides = [
         id: "practise-with-your-resume",
         title: "Practise with your own résumé",
         paragraphs: [
-          "In Masters, you can upload or paste your résumé, edit the extracted text, and then ask for practice questions. With your consent, the reviewed text is sent to our AI provider, which drafts three opening questions, each with a follow-up and a deeper follow-up. Every question shows the exact résumé excerpt it is based on, so you can see why it was asked.",
+          "In MockMBA, you can upload or paste your résumé, edit the extracted text, and then ask for practice questions. With your consent, the reviewed text is sent to our AI provider, which drafts three opening questions, each with a follow-up and a deeper follow-up. Every question shows the exact résumé excerpt it is based on, so you can see why it was asked.",
           "The questions are drafted by AI. They can misread a line or ask about something you would not emphasise. Check each premise before you practise, and use them alongside the ladder method above, not instead of it.",
         ],
       },
