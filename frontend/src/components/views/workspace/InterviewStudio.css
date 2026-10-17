@@ -26,9 +26,6 @@
   gap: 16px;
   margin-block: 20px;
 }
-.resume-builder .studio-form-fields > .text-button {
-  justify-self: start;
-}
 .resume-fact {
   display: flex;
   align-items: flex-start;
@@ -154,27 +151,15 @@
   resize: vertical;
   min-height: 100px;
 }
-.studio-context,
 .studio-transcript {
   border-block: 1px solid var(--line);
   padding: 16px 0;
 }
-.studio-context summary,
-.studio-transcript summary,
-.studio-warmup > summary {
+.studio-transcript summary {
   cursor: pointer;
   font-weight: 600;
   padding: 6px 0;
   color: var(--ink);
-}
-.studio-context summary span {
-  color: var(--muted);
-  font-weight: 400;
-  margin-left: 8px;
-  font-size: 12px;
-}
-.studio-context[open] .form-group {
-  margin-top: 18px;
 }
 .studio-mode {
   border: 0;
@@ -231,13 +216,6 @@
   align-items: center;
   gap: 18px;
   flex-wrap: wrap;
-}
-.studio-actions .new-essay-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  min-height: 46px;
 }
 .studio-fine-print {
   color: var(--muted);
@@ -332,9 +310,6 @@
   margin: 12px 0 0;
   overflow-wrap: anywhere;
 }
-.studio-question .text-button {
-  margin-top: 18px;
-}
 .studio-conversation form {
   display: grid;
   gap: 20px;
@@ -428,14 +403,6 @@
   gap: 20px;
   margin-top: 18px;
 }
-.studio-warmup {
-  margin-top: 24px;
-}
-.studio-warmup > summary {
-  color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 14px;
-}
 @media (max-width: 640px) {
   .studio-heading {
     flex-direction: column;
@@ -444,9 +411,6 @@
   .studio-fields {
     grid-template-columns: 1fr;
     gap: 20px;
-  }
-  .studio-actions > .new-essay-btn {
-    width: 100%;
   }
   .studio-question {
     padding: 18px;

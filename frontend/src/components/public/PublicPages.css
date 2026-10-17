@@ -2,35 +2,6 @@
   min-height: 100dvh;
   background: var(--canvas);
 }
-.public-shell {
-  max-width: 1240px;
-  margin: 0 auto;
-  padding: 0 44px;
-}
-.public-card {
-  padding: 28px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-.public-field {
-  display: grid;
-  gap: 8px;
-}
-.public-field textarea {
-  min-height: 70px;
-}
-.public-field #public-demo-draft {
-  min-height: 145px;
-}
-.public-section {
-  padding: 60px 0;
-}
-.public-section-title {
-  font-size: 38px;
-  margin: 10px 0 30px;
-}
 .public-auth-next {
   margin: 12px 0;
   color: var(--muted);
@@ -101,30 +72,6 @@
   font-size: 10.5px;
   color: var(--hero-muted);
   text-align: center;
-}
-@media (max-width: 1000px) {
-  .public-shell {
-    padding-inline: 30px;
-  }
-}
-@media (max-width: 760px) {
-  .public-shell {
-    padding: 0 22px;
-  }
-  .public-card {
-    padding: 22px;
-  }
-  .public-section {
-    padding: 40px 0;
-  }
-  .public-section-title {
-    font-size: 29px;
-  }
-}
-@media (max-width: 390px) {
-  .public-shell {
-    padding-inline: 18px;
-  }
 }
 
 
