@@ -723,6 +723,9 @@
 .rp-notfound-inner {
   position: relative;
 }
+.rp-notfound-code::before {
+  content: attr(data-code);
+}
 .rp-notfound-code {
   margin: 0 0 8px;
   font: 800 clamp(96px, 20vw, 280px) / 0.9 var(--font-heading);

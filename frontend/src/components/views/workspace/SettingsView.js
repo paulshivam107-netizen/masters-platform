@@ -299,7 +299,7 @@ export default function SettingsView({
           <div className="ws-row">
             <button
               type="submit"
-              className="ws-btn ws-btn--primary"
+              className="ws-btn"
               data-testid="settings-submit-feedback"
               disabled={feedbackSending}
             >

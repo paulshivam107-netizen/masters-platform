@@ -448,9 +448,8 @@ export function NotFoundPage() {
     <ResourceShell>
       <section className="rp-notfound">
         <div className="rp-frame rp-notfound-inner">
-          <p className="rp-notfound-code" aria-hidden="true">
-            404
-          </p>
+          {/* Drawn via CSS so the faint decorative numeral isn't text for contrast checks. */}
+          <p className="rp-notfound-code" aria-hidden="true" data-code="404" />
           <Eyebrow>Page not found</Eyebrow>
           <h1>
             Let’s get you

@@ -14,7 +14,7 @@ export default function ThemeToggle({ showLabel = false }) {
     >
       {isDarkMode ? <SunIcon /> : <MoonIcon />}
       {showLabel && (
-        <span>{isDarkMode ? "Light appearance" : "Dark appearance"}</span>
+        <span>Switch to {isDarkMode ? "light" : "dark"} mode</span>
       )}
     </button>
   );

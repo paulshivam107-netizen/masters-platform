@@ -1251,3 +1251,11 @@
   animation: none !important;
   transform: none !important;
 }
+
+/* Phones: helper and meta text no smaller than 14px. */
+@media (max-width: 640px) {
+  .ws-small,
+  .ws-help {
+    font-size: 14px;
+  }
+}
