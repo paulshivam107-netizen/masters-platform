@@ -4,6 +4,7 @@ import { requestEmailVerificationApi } from "../api";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { trackEvent } from "../app/telemetry";
 import "./Auth.css";
+import "./public/AuthPages.css";
 import { authError } from "../api/authErrors";
 
 function Signup({ onSwitchToLogin }) {
@@ -16,6 +17,7 @@ function Signup({ onSwitchToLogin }) {
   const [message, setMessage] = useState("");
   const [devToken, setDevToken] = useState("");
   const [loading, setLoading] = useState(false);
+  const mismatch = confirmPassword.length > 0 && confirmPassword !== password;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -80,9 +82,14 @@ function Signup({ onSwitchToLogin }) {
   return (
     <div className="auth-container">
       <div className="auth-box">
-        <h2 data-testid="auth-signup-heading">Start your next chapter.</h2>
+        <p className="ap-eyebrow">
+          <span aria-hidden="true" />
+          Create your account
+        </p>
+        <h1 data-testid="auth-signup-heading">Start your next chapter.</h1>
         <p className="auth-subtitle">
-          A little clarity for your next big step.
+          Free during the pilot. Add your résumé and run your first mock
+          interview in a few minutes.
         </p>
 
         {error && (
@@ -133,9 +140,7 @@ function Signup({ onSwitchToLogin }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="signup-field-3">
-              Password · At least 8 characters
-            </label>
+            <label htmlFor="signup-field-3">Password</label>
             <input
               id="signup-field-3"
               data-testid="auth-signup-password"
@@ -146,8 +151,10 @@ function Signup({ onSwitchToLogin }) {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
+              aria-describedby="signup-password-hint"
               required
             />
+            <small id="signup-password-hint">At least 8 characters.</small>
           </div>
 
           <div className="form-group">
@@ -162,8 +169,15 @@ function Signup({ onSwitchToLogin }) {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="••••••••"
+              aria-invalid={mismatch ? "true" : undefined}
+              aria-describedby={mismatch ? "signup-confirm-hint" : undefined}
               required
             />
+            {mismatch && (
+              <small id="signup-confirm-hint" className="ap-field-error">
+                The two passwords don't match yet.
+              </small>
+            )}
           </div>
 
           <button
@@ -174,6 +188,9 @@ function Signup({ onSwitchToLogin }) {
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
+          <div className="ap-divider" aria-hidden="true">
+            <span>or</span>
+          </div>
           <GoogleSignInButton
             onCredential={handleGoogleSignup}
             onError={(err) => setError(err.message)}

@@ -9,8 +9,10 @@ import {
 import { authError } from "../../api/authErrors";
 import { trackEvent } from "../../app/telemetry";
 import SiteHeader from "./SiteHeader";
+import AuthPanel from "./AuthPanel";
 import "../Auth.css";
 import "./PublicPages.css";
+import "./AuthPages.css";
 
 const MIN_PASSWORD_LENGTH = 8;
 
@@ -41,13 +43,16 @@ export function takeTokenFromLocation(win = window) {
 
 function AuthLinkLayout({ children }) {
   return (
-    <div className="public-auth-layout">
+    <div className="ap-page">
       <SiteHeader current="signin" />
-      <div className="public-auth-shell auth-link-shell">
-        <div className="auth-container">
-          <div className="auth-box">{children}</div>
+      <main className="ap-layout">
+        <div className="ap-formcol">
+          <div className="auth-container">
+            <div className="auth-box">{children}</div>
+          </div>
         </div>
-      </div>
+        <AuthPanel />
+      </main>
     </div>
   );
 }
@@ -141,9 +146,14 @@ export function VerifyEmailPage() {
 
   return (
     <AuthLinkLayout>
-      <h2 data-testid="auth-link-heading">Verify your email</h2>
+      <p className="ap-eyebrow">
+        <span aria-hidden="true" />
+        Email verification
+      </p>
+      <h1 data-testid="auth-link-heading">Verify your email</h1>
       {status === "checking" && (
-        <p className="auth-subtitle" role="status">
+        <p className="auth-subtitle ap-checking" role="status">
+          <span className="ap-spinner" aria-hidden="true" />
           Checking your link...
         </p>
       )}
@@ -210,7 +220,17 @@ export function ResetPasswordPage() {
 
   return (
     <AuthLinkLayout>
-      <h2 data-testid="auth-link-heading">Choose a new password</h2>
+      <p className="ap-eyebrow">
+        <span aria-hidden="true" />
+        Password reset
+      </p>
+      <h1 data-testid="auth-link-heading">Choose a new password</h1>
+      {status === "ready" && (
+        <p className="auth-subtitle">
+          Use at least {MIN_PASSWORD_LENGTH} characters. You will be signed out
+          on your other devices.
+        </p>
+      )}
       {status === "ready" && (
         <form onSubmit={submit} data-testid="auth-reset-form">
           {error && (
