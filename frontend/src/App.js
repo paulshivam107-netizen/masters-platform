@@ -1,5 +1,6 @@
 import React from "react";
 import "./App.css";
+import "./components/views/Workspace.css";
 import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import {
   BrowserRouter,
@@ -25,6 +26,7 @@ import AppErrorBoundary from "./components/common/AppErrorBoundary";
 import { ThemeProvider, useTheme } from "./contexts/ThemeContext";
 import SidebarNav from "./components/layout/SidebarNav";
 import TopControls from "./components/layout/TopControls";
+import PageHeader from "./components/layout/PageHeader";
 import AdminView from "./components/views/workspace/AdminView";
 import WorkspaceArea from "./components/views/WorkspaceArea";
 import { catalogAutofillPatch } from "./app/catalogAutofill";
@@ -551,6 +553,13 @@ function AppContent() {
     if (activeNav === "compose") setShowForm(true);
   }, [activeNav, setShowForm]);
 
+  const pageEyebrow =
+    activeNav === "compose"
+      ? "Essays"
+      : navGroups.find((group) =>
+          group.items.some((item) => item.id === activeNav),
+        )?.label || "Your account";
+
   return (
     <div
       className={`App ${isDarkMode ? "dark-mode" : "light-mode"} ${reducedMotion ? "reduced-motion" : ""}`}
@@ -573,7 +582,7 @@ function AppContent() {
       <a className="skip-link" href="#main-workspace">
         Skip to content
       </a>
-      <div className="app-layout">
+      <div className="ws-app">
         {/* 1. Left Navigation */}
         <SidebarNav
           navGroups={navGroups}
@@ -581,9 +590,10 @@ function AppContent() {
           expandedNavGroups={expandedNavGroups}
           onToggleGroup={actions.handleToggleNavGroup}
           onNavigate={actions.handleNavChange}
+          user={user}
         />
 
-        <div className="workspace-shell">
+        <div className="ws-shell">
           <TopControls
             onGoHome={() => actions.handleNavChange("home")}
             globalSearch={globalSearch}
@@ -611,21 +621,19 @@ function AppContent() {
           />
 
           <div
-            className={`workspace-body ${showAdminPage ? "workspace-body-admin" : ""}`}
+            className={`ws-body ${showAdminPage ? "ws-body--wide" : ""}`}
           >
             {/* 2. Main Center Workspace */}
-            <main className="main-content" id="main-workspace" tabIndex="-1">
-              <div className="content-header">
-                <div className="content-header-main">
-                  <p className="eyebrow">YOUR ADMISSIONS WORKSPACE</p>
-                  <h1>{pageHeading}</h1>
-                  <p className="header-subtitle">{pageSubtitle}</p>
-                </div>
-              </div>
+            <main className="ws-main ws-page" id="main-workspace" tabIndex="-1">
+              <PageHeader
+                eyebrow={pageEyebrow}
+                title={pageHeading}
+                subtitle={pageSubtitle}
+              />
 
               {!["settings", "profile", "admin"].includes(activeNav) &&
                 Object.values(dataLoadState).includes("error") && (
-                  <div className="data-status" role="alert">
+                  <div className="ws-alert" role="alert">
                     <div>
                       <strong>We couldn’t load all your work.</strong>
                       <p>Check your connection and try again.</p>
