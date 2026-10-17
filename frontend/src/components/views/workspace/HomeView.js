@@ -1,29 +1,15 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SetupGuide from "./SetupGuide";
+import ApplicationDetail from "./ApplicationDetail";
 import {
   ApplicationsIcon,
   ArrowIcon,
-  CheckIcon,
   DeadlinesIcon,
-  DocsIcon,
   EssaysIcon,
   InterviewIcon,
   PlusIcon,
 } from "../../../app/icons";
-
-function Stat({ icon, value, label, note }) {
-  return (
-    <div className="home-metric-card">
-      <div className="metric-top">
-        <span className="metric-icon">{icon}</span>
-        <span>{label}</span>
-      </div>
-      <p className="metric-value">{value}</p>
-      {note && <small>{note}</small>}
-    </div>
-  );
-}
 
 export default function HomeView({
   interviewPrepByApplication,
@@ -104,104 +90,17 @@ export default function HomeView({
 
   if (selectedApplication)
     return (
-      <div
-        className="application-home-panel"
-        data-testid="home-application-panel"
-      >
-        <button
-          className="text-button"
-          onClick={() => setSelectedApplicationId(null)}
-        >
-          ← Back to your overview
-        </button>
-        <section
-          className="application-focus-card"
-          data-testid="home-application-hero"
-        >
-          <span className="eyebrow">YOUR APPLICATION</span>
-          <h2 data-testid="home-application-title">
-            {selectedApplication.school_name}
-          </h2>
-          <p>
-            {selectedApplication.program_name} ·{" "}
-            {selectedApplication.application_round || "Round not set"}
-          </p>
-          <div className="home-hero-actions">
-            <button
-              className="new-essay-btn"
-              data-testid="home-application-new-essay"
-              onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
-            >
-              <PlusIcon /> Write an essay
-            </button>
-            <button
-              className="secondary-action-btn"
-              onClick={() => handleOpenApplicationForm(selectedApplication)}
-            >
-              Edit application
-            </button>
-          </div>
-        </section>
-        <div className="home-metrics-grid">
-          <Stat
-            icon={<EssaysIcon />}
-            value={essaysForSelectedApplication.length}
-            label="Essay drafts"
-          />
-          <Stat
-            icon={<DeadlinesIcon />}
-            value={
-              parseDate(selectedApplication.deadline)?.toLocaleDateString(
-                undefined,
-                { month: "short", day: "numeric" },
-              ) || "Not set"
-            }
-            label="Deadline"
-          />
-          <Stat
-            icon={<CheckIcon />}
-            value={`${getApplicationReadiness(selectedApplication).readiness}%`}
-            label="Checklist completion"
-          />
-        </div>
-        <div className="application-quick-links">
-          {[
-            ["requirements", "Requirements", <CheckIcon />],
-            ["docs", "Documents", <DocsIcon />],
-            ["interviews", "Interview preparation", <InterviewIcon />],
-            ["research", "School research", <ApplicationsIcon />],
-          ].map(([id, label, icon]) => (
-            <button
-              className="secondary-action-btn"
-              key={id}
-              onClick={() => handleNavChange(id)}
-            >
-              {icon}
-              {label}
-              <ArrowIcon />
-            </button>
-          ))}
-        </div>
-        <section className="dashboard-card">
-          <div className="section-heading">
-            <h3>Your essays for this application</h3>
-          </div>
-          {essaysForSelectedApplication.length ? (
-            essayList(essaysForSelectedApplication)
-          ) : (
-            <div className="quiet-empty">
-              <EssaysIcon />
-              <p>A strong application starts with your story.</p>
-              <button
-                className="text-button"
-                onClick={() => handleOpenNewEssayForm(selectedApplication.id)}
-              >
-                Start your first draft <ArrowIcon />
-              </button>
-            </div>
-          )}
-        </section>
-      </div>
+      <ApplicationDetail
+        application={selectedApplication}
+        essays={essaysForSelectedApplication}
+        essayList={essayList}
+        parseDate={parseDate}
+        getApplicationReadiness={getApplicationReadiness}
+        setSelectedApplicationId={setSelectedApplicationId}
+        handleOpenNewEssayForm={handleOpenNewEssayForm}
+        handleOpenApplicationForm={handleOpenApplicationForm}
+        handleNavChange={handleNavChange}
+      />
     );
 
   const isFirstVisit = !applications.length && !essays.length;

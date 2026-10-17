@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./WorkspacePlanning.css";
 export default function ResearchView({
   applications,
   selectedApplicationId,
@@ -15,15 +16,20 @@ export default function ResearchView({
     applications[0];
   if (!application)
     return (
-      <div className="empty-state-main">
-        <h2>Start with one programme</h2>
-        <p>Add an application, then collect the details that matter to you.</p>
-        <button
-          className="history-btn"
-          onClick={() => handleOpenApplicationForm()}
-        >
-          Add application
-        </button>
+      <div className="wpl wpl-empty-wrap">
+        <div className="ws-empty wpl-empty">
+          <h2 className="ws-empty__title">Start with one programme</h2>
+          <p>
+            Add an application, then collect the details that matter to you.
+          </p>
+          <button
+            type="button"
+            className="ws-btn ws-btn--primary"
+            onClick={() => handleOpenApplicationForm()}
+          >
+            Add application
+          </button>
+        </div>
       </div>
     );
   const research = {
@@ -31,10 +37,10 @@ export default function ResearchView({
     ...(researchByApplication[application.id] || {}),
   };
   const field = (key, label, placeholder, type = "textarea") => (
-    <div className="form-group" key={key}>
-      <label htmlFor={`research-${key}`}>{label}</label>
+    <div className="ws-field" key={key}>
+      <label className="ws-label" htmlFor={`research-${key}`}>{label}</label>
       {type === "textarea" ? (
-        <textarea
+        <textarea className="ws-textarea"
           id={`research-${key}`}
           value={research[key]}
           onChange={(e) =>
@@ -43,7 +49,7 @@ export default function ResearchView({
           placeholder={placeholder}
         />
       ) : (
-        <input
+        <input className="ws-input"
           id={`research-${key}`}
           type={type}
           value={research[key]}
@@ -56,10 +62,10 @@ export default function ResearchView({
     </div>
   );
   return (
-    <div className="research-panel">
-      <div className="school-picker">
-        <label htmlFor="research-application">Research for</label>
-        <select
+    <div className="wpl wpl-research">
+      <div className="ws-field wpl-picker">
+        <label className="ws-label" htmlFor="research-application">Research for</label>
+        <select className="ws-select"
           id="research-application"
           value={application.id}
           onChange={(e) => setSelectedId(Number(e.target.value))}
@@ -71,17 +77,17 @@ export default function ResearchView({
           ))}
         </select>
       </div>
-      <section className="detail-list-card" data-testid="research-card">
-        <div className="section-heading">
+      <section className="ws-card wpl-research-card" data-testid="research-card">
+        <div className="wpl-form-head">
           <div>
             <h2 data-testid="research-heading">{application.school_name}</h2>
-            <p className="muted">{application.program_name}</p>
+            <p className="ws-muted">{application.program_name}</p>
           </div>
-          <span className="storage-note">
+          <span className="ws-chip">
             Saved in this browser as you type
           </span>
         </div>
-        <div className="tracker-form-grid">
+        <div className="wpl-form-grid">
           {field("website", "Official programme link", "https://…", "url")}
           {field("location", "Location", "City, country", "text")}
           {field(
@@ -95,9 +101,9 @@ export default function ResearchView({
             "Roles, employers and outcomes to investigate.",
           )}
         </div>
-        <details className="progressive-section">
+        <details className="wpl-disclosure">
           <summary>Funding & other research</summary>
-          <div className="tracker-form-grid">
+          <div className="wpl-form-grid">
             {field(
               "scholarship_notes",
               "Funding notes",
@@ -111,7 +117,7 @@ export default function ResearchView({
           </div>
         </details>
       </section>
-      <p className="field-help">
+      <p className="ws-help">
         Keep links to your sources so you can check details before applying.
         Notes are stored on this device.
       </p>
