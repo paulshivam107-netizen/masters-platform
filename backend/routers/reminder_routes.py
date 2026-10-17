@@ -49,11 +49,11 @@ async def send_test_reminder(
             "",
             "You can change when reminders arrive in Settings > Reminder preferences.",
             "",
-            "— Masters"
+            "— MockMBA"
         ]
     )
     sent, dry_run, message = send_email_notification(
-        subject="Your upcoming deadlines on Masters",
+        subject="Your upcoming deadlines on MockMBA",
         body=body,
         recipient=destination,
         smtp_host=settings.SMTP_HOST,

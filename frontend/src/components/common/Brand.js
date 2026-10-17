@@ -4,13 +4,13 @@ import { BrandLogoIcon } from "../../app/icons";
 
 export default function Brand({ to = "/", compact = false, onClick }) {
   return (
-    <Link to={to} onClick={onClick} className="brand" aria-label="Masters home">
+    <Link to={to} onClick={onClick} className="brand" aria-label="MockMBA home">
       <span className="brand-mark">
         <BrandLogoIcon />
       </span>
       {!compact && (
         <span className="brand-wordmark">
-          masters<span className="brand-dot">.</span>
+          mockmba<span className="brand-dot">.</span>
         </span>
       )}
     </Link>
