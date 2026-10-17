@@ -6,7 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field
 class ResumeQuestionsCreate(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     request_id: UUID
-    route: Literal["cat", "experienced"]
+    route: Literal["auto", "cat", "experienced"] = "auto"
     application_id: Optional[int] = Field(default=None, gt=0)
     programme_name: str = Field(default="", max_length=160)
     resume_text: str = Field(min_length=80, max_length=20000)

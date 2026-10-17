@@ -11,11 +11,14 @@ FOCUS_TOPICS = {
 
 
 def make_plan(route, focus):
+    # "auto": the stage is inferred from the resume, so use the broad (experienced-style) criteria
+    # and a topic order that does not assume work experience.
     return {
         "version": PLAN_VERSION, "focus": focus,
         "priority_topics": FOCUS_TOPICS.get(focus) or (
             ["education", "projects", "behaviour", "motivation", "contribution"] if route == "cat" else
-            ["experience", "projects", "behaviour", "motivation", "contribution"]),
+            ["experience", "projects", "behaviour", "motivation", "contribution"] if route == "experienced" else
+            ["experience", "education", "projects", "behaviour", "motivation", "contribution"]),
         "max_follow_ups": 2 if focus == "balanced" else 4,
         "criteria": (
             ["understanding of studies/projects", "personal contribution", "reasoning and curiosity", "reflection", "MBA motivation"]

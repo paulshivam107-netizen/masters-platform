@@ -1,0 +1,39 @@
+{
+  "id": "auto-02-us-mba-4yrs",
+  "split": "dev",
+  "route": "auto",
+  "programme_name": "Full-time MBA, Kellogg School of Management",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "product operations, US, four years",
+    "employment": true,
+    "managed_people": false,
+    "work_years": 4,
+    "notes": "Individual contributor who led projects without direct reports. Must not be assumed to have a P&L or a team of reports, and must not be assumed to be in India or to be on a CAT route."
+  },
+  "resume_text": "Jordan Ellis (synthetic)\nEXPERIENCE\nSenior Operations Analyst, a US logistics software company, Chicago (2022-present)\n- Led a six-month project to cut warehouse onboarding time for new customers from 31 days to 19 days, working with engineering and support (no direct reports)\n- Built the weekly operations dashboard used by the VP of Customer Success\nOperations Analyst, same company (2021-2022)\n- Documented the customer onboarding process across 3 regions\nEDUCATION\nBA Economics, University of Michigan, 2021, GPA 3.6\nGMAT 720\nVOLUNTEERING\nBoard member, a neighbourhood food pantry (2023-present): organised a volunteer schedule for about 60 volunteers\nInterests: trail running, amateur radio",
+  "background": "Four years in operations at a logistics software company. Want to move into product management at a larger technology firm.",
+  "goal": "Become a product manager for supply-chain software, then lead a product line.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I have worked four years in operations at a logistics software company. The project I am proudest of cut warehouse onboarding time for new customers from 31 days to 19 over six months. I did not manage anyone, but I coordinated engineering and support, and I decided to rebuild the data-import step first because it caused most of the delay. I want an MBA to move into product management and learn how to make trade-offs across a whole product, not just one process."
+    },
+    {
+      "tag": "contradiction",
+      "text": "Actually, I should say that I managed a team of eight analysts on that project. They reported to me throughout."
+    },
+    {
+      "tag": "confidential",
+      "text": "I cannot name our biggest customer or share the contract value. It is covered by a non-disclosure agreement. I can describe how we handled their rollout in general terms."
+    },
+    {
+      "tag": "irrelevant",
+      "text": "Before the next question, do you know whether Chicago winters are worse than Boston's? I am trying to decide where to live."
+    },
+    {
+      "tag": "disagree",
+      "text": "I do not agree that operations is a step away from product. In my job I made product decisions every week, so I would rather you ask what I decided than why I want to switch."
+    }
+  ]
+}

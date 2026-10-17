@@ -29,10 +29,15 @@ def question_bank():
     return bank
 
 
+def route_matches(route, routes):
+    """"auto" (no stage chosen) matches nodes of any route; so does a node built for "auto"."""
+    return route == "auto" or "auto" in routes or route in routes
+
+
 def starting_question(question_id, route):
     bank = question_bank()
     return next((node for node in bank["nodes"]
-                 if node["id"] == question_id and node["id"] in bank["roots"] and route in node["routes"]), None)
+                 if node["id"] == question_id and node["id"] in bank["roots"] and route_matches(route, node["routes"])), None)
 
 
 def follow_up_questions(root_id, route, limit=16):
@@ -45,7 +50,7 @@ def follow_up_questions(root_id, route, limit=16):
         parent = pending.pop(0)
         for edge in bank["edges"]:
             child = edge["child"]
-            if edge["parent"] != parent or child in visited or route not in nodes[child]["routes"]:
+            if edge["parent"] != parent or child in visited or not route_matches(route, nodes[child]["routes"]):
                 continue
             visited.add(child)
             pending.append(child)

@@ -26,6 +26,13 @@ FALLBACK_QUESTIONS = {
         "What would you like to learn in a two-year MBA that your studies so far have not taught you?",
         "What do you hope to contribute to your classmates?",
     ],
+    "auto": [
+        "Tell me about a decision where the trade-offs were not obvious. How did you decide?",
+        "Describe a setback in your work, studies or activities. What did you learn from it?",
+        "Tell me about a time you worked with others towards a shared goal. What did you personally do?",
+        "Why is this the right point for you to do a management programme?",
+        "What do you hope to contribute to your classmates?",
+    ],
     "experienced": [
         "Tell me about a decision where the trade-offs were not obvious. How did you decide?",
         "Describe a setback in your work. What did you learn from it?",
@@ -66,7 +73,7 @@ def closing_turn(context, transcript):
 def fallback_question(context, transcript):
     """A fixed, route-appropriate new topic that has not been asked yet. No model call."""
     asked = {t["text"].strip().casefold() for t in transcript if t["role"] == "assistant"}
-    candidates = FALLBACK_QUESTIONS[context["route"]] + list(context.get("resume_follow_ups") or []) + \
+    candidates = FALLBACK_QUESTIONS.get(context["route"], FALLBACK_QUESTIONS["auto"]) + list(context.get("resume_follow_ups") or []) + \
         ["What else would you like the panel to understand about you?"]
     question = next((q for q in candidates if q.strip().casefold() not in asked), candidates[-1])
     step = next_step(context, transcript)

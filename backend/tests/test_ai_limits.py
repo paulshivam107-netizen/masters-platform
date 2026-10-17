@@ -19,7 +19,7 @@ from starlette.requests import Request
 from auth import create_access_token
 from config import get_settings
 from database import Base, get_db
-from models import AiCostEntry, AiPriceVersion, AiRuntimeConfig, AiSpendCounter, InterviewSession, RateLimitBucket, User
+from models import AiCostEntry, AiPriceVersion, AiRuntimeConfig, AiSpendCounter, InterviewSession, RateLimitBucket, ResumeQuestionSet, User
 from routers.admin_operations import router as admin_router
 from routers.interview_routes import router as interview_router
 from routers.resume_routes import router as resume_router
@@ -236,8 +236,16 @@ class BillableApiTest(unittest.IsolatedAsyncioTestCase):
         self.tmp.cleanup()
 
     async def session(self):
+        with self.Session() as db:
+            row = ResumeQuestionSet(id=str(uuid4()), user_id=1, request_id=str(uuid4()), fingerprint="x",
+                                    context_json=json.dumps({"route": "cat"}), status="completed",
+                                    questions_json=json.dumps({"version": "resume-v2", "profile": [], "roots": [], "nodes": [], "edges": []}))
+            db.add(row)
+            db.commit()
+            set_id = row.id
         response = await self.client.post("/interviews/sessions", headers=self.headers, json={
-            "request_id": str(uuid4()), "route": "cat", "provider": "openai", "consent": True, "question_limit": 5})
+            "request_id": str(uuid4()), "route": "cat", "provider": "openai", "consent": True, "question_limit": 5,
+            "question_set_id": set_id})
         self.assertEqual(response.status_code, 201, response.text)
         return response.json()
 
