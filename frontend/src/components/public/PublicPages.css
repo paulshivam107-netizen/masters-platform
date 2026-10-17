@@ -127,7 +127,6 @@
   }
 }
 
-}
 
 /* Dark theme: the light note colours are too bright on the dark panel; keep bubbles quiet. */
 :root[data-theme="dark"] .interview-preview {

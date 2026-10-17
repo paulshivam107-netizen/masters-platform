@@ -317,3 +317,15 @@
     text-align: center;
   }
 }
+
+/* Narrowest phones (320-359px): tighten the one-row header so it never scrolls sideways. */
+@media (max-width: 359px) {
+  .site-header-row {
+    gap: 8px 10px;
+  }
+  .site-nav a,
+  .site-theme {
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+}
