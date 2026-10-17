@@ -1,0 +1,15 @@
+{
+  "downloaded": "2026-10-17",
+  "licence": "Unsplash License (https://unsplash.com/license): free for commercial and non-commercial use, no permission or attribution required; may not be sold unaltered or used to build a competing photo service.",
+  "assets": [
+    {"file": "photo_practice_at_laptop.jpg", "size": "1920x1280", "source": "https://unsplash.com/photos/uA8_uSOxFt4", "photographer": "Sanket Mishra", "subject": "Young woman practising on a laptop outdoors"},
+    {"file": "photo_applicant_at_desk.jpg", "size": "1600x933", "source": "https://unsplash.com/photos/TLdmnQz4Pns", "photographer": "Fotos", "subject": "Young man thinking at a desk with a laptop"},
+    {"file": "photo_route_fresher.jpg", "size": "1600x1065", "source": "https://unsplash.com/photos/3S0Ucv4BDCk", "photographer": "AMIT RANJAN", "subject": "Student with a laptop on campus steps"},
+    {"file": "photo_route_working_professional.jpg", "size": "1600x1067", "source": "https://unsplash.com/photos/RcPx_WTQyrM", "photographer": "Zulfugar Karimov", "subject": "Young professional at a desk with a laptop"},
+    {"file": "photo_route_experienced.jpg", "size": "1600x1067", "source": "https://unsplash.com/photos/QgYvORVDdd8", "photographer": "LinkedIn Sales Solutions", "subject": "Senior professional in an office"},
+    {"file": "photo_interview_practice_pair.jpg", "size": "1600x1103", "source": "https://unsplash.com/photos/-P7kHROe-6A", "photographer": "Mina Rad", "subject": "Two people talking across a table"},
+    {"file": "photo_resume_printout.jpg", "size": "1600x900", "source": "https://unsplash.com/photos/3q4V539j_bw", "photographer": "2H Media", "subject": "Laptop and printed papers on a wooden desk"},
+    {"file": "photo_story_cards_notebook.jpg", "size": "1600x1094", "source": "https://unsplash.com/photos/3ym6i13Y9LU", "photographer": "Mike Tinnion", "subject": "Open notebook with a pen"},
+    {"file": "photo_quiet_interview_room.jpg", "size": "1920x1280", "source": "https://unsplash.com/photos/Lq7bZKnoZfQ", "photographer": "Brayan Granados", "subject": "Quiet dim room with window light (background, under a scrim)"}
+  ]
+}

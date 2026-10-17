@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import SetupGuide from "./SetupGuide";
-import JourneyArtwork from "../../common/JourneyArtwork";
 import {
   ApplicationsIcon,
   ArrowIcon,
@@ -233,7 +232,22 @@ export default function HomeView({
               official deadline.
             </p>
           </div>
-          <JourneyArtwork />
+          <div className="home-start-interview">
+            <span className="metric-icon">
+              <InterviewIcon />
+            </span>
+            <h3>Start a mock interview</h3>
+            <p>
+              Questions from your résumé, follow-ups on your answers and a
+              debrief when you finish.
+            </p>
+            <button
+              className="text-button"
+              onClick={() => handleNavChange("interviews")}
+            >
+              Open Interview Studio <ArrowIcon />
+            </button>
+          </div>
         </div>
         <Link className="text-button" to="/help">
           New here? See the two-minute setup guide <ArrowIcon />

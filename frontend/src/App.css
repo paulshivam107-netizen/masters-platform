@@ -728,6 +728,33 @@
   display: grid;
   place-items: center;
 }
+.home-start-interview {
+  align-self: center;
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  padding: 22px;
+  border: 1px solid color-mix(in srgb, var(--hero-ink) 18%, transparent);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--hero-ink) 7%, transparent);
+  color: var(--hero-ink);
+}
+.home-start-interview h3 {
+  font-size: 18px;
+}
+.home-start-interview p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--hero-muted);
+}
+.home-start-interview .text-button {
+  color: var(--hero-link);
+}
+.home-start-interview .metric-icon {
+  background: color-mix(in srgb, var(--hero-ink) 12%, transparent);
+  color: var(--hero-ink);
+}
 .home-metrics-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
