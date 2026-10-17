@@ -1,0 +1,18 @@
+{
+  "page": "/programs",
+  "component": "frontend/src/components/public/ProgramsPage.js",
+  "css": "frontend/src/components/public/ProgramsPage.css (prefix pp-)",
+  "sections": [
+    {"id": "hero", "purpose": "Orient and search", "content": "Eyebrow, H1, lead, search form (same API call and query param), notched photo tile", "photos": ["photo_resume_printout"]},
+    {"id": "results", "purpose": "Browse catalogue records", "content": "Count summary (aria-live), client-side chips (Verified only; country and degree only when the results hold more than one value), two-column card grid. Card fields are only those the API returns: degree, cycle, school, programme, city, country, application fee, round deadlines, verification status, official source link."}
+  ],
+  "states": {
+    "loading": "six skeleton cards, aria-busy",
+    "results": "card grid",
+    "empty": "No matching programs message, Show all programmes button",
+    "filtersNoMatch": "message plus Clear filters",
+    "error": "Catalogue unavailable, danger-tinted panel, Try again"
+  },
+  "dark": "token driven; photo dimmed slightly",
+  "notes": "No route exists for starting a mock interview per programme, so no such link. Route-type filters (CAT, GMAT, executive) are not in the catalogue data, so not offered."
+}

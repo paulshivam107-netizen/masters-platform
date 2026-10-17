@@ -31,45 +31,6 @@
   font-size: 38px;
   margin: 10px 0 30px;
 }
-.public-program-toolbar {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-.public-program-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-}
-.public-program-card {
-  padding: 24px;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: var(--surface-soft);
-  display: grid;
-  gap: 17px;
-}
-.public-program-card h3 {
-  font-size: 17px;
-  line-height: 1.5;
-}
-.public-program-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-  font-size: 11px;
-  color: var(--muted);
-}
-.public-hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px;
-}
-.public-program-card .public-btn {
-  font-size: 11px;
-}
 .public-auth-next {
   margin: 12px 0;
   color: var(--muted);
@@ -218,20 +179,11 @@
   .public-card {
     padding: 22px;
   }
-  .public-program-grid {
-    grid-template-columns: 1fr;
-  }
   .public-section {
     padding: 40px 0;
   }
   .public-section-title {
     font-size: 29px;
-  }
-  .public-program-toolbar {
-    flex-wrap: wrap;
-  }
-  .public-program-toolbar button {
-    width: 100%;
   }
   .public-auth-layout {
     padding: 0 22px 30px;
@@ -434,15 +386,6 @@
   .landing-resources {
     padding: 40px 0;
   }
-}
-
-.public-program-status {
-  margin: 0.25rem 0 0;
-  font-size: 0.85rem;
-}
-
-.public-program-status.is-unverified {
-  color: #a15c00;
 }
 
 /* Worked examples, follow-up ladders and related links inside guides. */
