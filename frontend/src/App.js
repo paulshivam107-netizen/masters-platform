@@ -624,7 +624,7 @@ function AppContent() {
             className={`ws-body ${showAdminPage ? "ws-body--wide" : ""}`}
           >
             {/* 2. Main Center Workspace */}
-            <main className="ws-main ws-page" id="main-workspace" tabIndex="-1">
+            <main className="ws-main ws-page" id="main-workspace" tabIndex="-1" key={activeNav}>
               <PageHeader
                 eyebrow={pageEyebrow}
                 title={pageHeading}

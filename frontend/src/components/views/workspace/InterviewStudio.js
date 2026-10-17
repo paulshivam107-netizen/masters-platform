@@ -866,7 +866,7 @@ export default function InterviewStudio({
           {session.status === "active" && (
             <div className="studio-conversation">
               {lastAnswer && (
-                <figure className="wi-said">
+                <figure className="wi-said" key={session.answer_count}>
                   <figcaption>
                     {session.provider === "demo"
                       ? "Your last answer"
@@ -877,6 +877,7 @@ export default function InterviewStudio({
               )}
               <div
                 className="studio-question"
+                key={session.answer_count}
                 tabIndex={-1}
                 ref={transcriptEnd}
               >

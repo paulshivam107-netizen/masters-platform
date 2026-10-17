@@ -1254,3 +1254,15 @@
 .wi-studio .resume-builder .studio-form-fields > .ws-btn--ghost {
   justify-self: start;
 }
+
+/* Each new question and the quoted answer arrive gently, so the turn feels like a reply. */
+.wi-studio .studio-question,
+.wi-studio .wi-said {
+  animation: ws-enter var(--motion-slow) var(--ease-out) both;
+}
+.wi-studio .studio-question {
+  animation-delay: 90ms;
+}
+.wi-progress__dots i {
+  transition: background-color var(--motion-base) var(--ease-out), opacity var(--motion-base) var(--ease-out);
+}

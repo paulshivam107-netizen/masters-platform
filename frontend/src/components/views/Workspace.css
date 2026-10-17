@@ -1259,3 +1259,48 @@
     font-size: 14px;
   }
 }
+
+/* ---------- Motion ----------
+   One soft entrance per view, short staggers on the first few list items,
+   and sheets/menus that open from where they were triggered. */
+@keyframes ws-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes ws-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+@keyframes ws-sheet-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0.6;
+  }
+}
+.ws-main {
+  animation: ws-enter var(--motion-base) var(--ease-out) both;
+}
+.ws-popover {
+  transform-origin: top right;
+  animation: ws-pop var(--motion-fast) var(--ease-out) both;
+}
+.ws-sheet[open] .ws-sheet__body {
+  animation: ws-sheet-up var(--motion-base) var(--ease-out) both;
+}
+.ws-card details[open] > :not(summary),
+details.ws-card[open] > :not(summary) {
+  animation: ws-enter var(--motion-base) var(--ease-out) both;
+}
+.wpl-app-list > *,
+.wac-essay,
+.wac-note {
+  animation: ws-enter var(--motion-slow) var(--ease-out) both;
+}
+:is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(2) { animation-delay: 40ms; }
+:is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(3) { animation-delay: 80ms; }
+:is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(4) { animation-delay: 120ms; }
+:is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(n + 5) { animation-delay: 160ms; }
