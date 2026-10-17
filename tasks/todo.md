@@ -14,10 +14,10 @@ Details and acceptance criteria are in [plan.md](plan.md).
 - [ ] Open one PR (don't merge)
 
 ## Phase 2: reasons to come back
-- [ ] 2.1 Evidence levels per dimension in the debrief (quote-backed, verbatim-checked)
-- [ ] 2.2 "Interview readiness" /100, computed by fixed arithmetic + trend + "how it's calculated"
+- [ ] 2.1 Evidence levels per dimension in the debrief (quote-backed, verbatim-checked). Backend done (prompt v12); debrief UI and live re-score pending
+- [ ] 2.2 "Interview readiness" /100, computed by fixed arithmetic + trend + "how it's calculated". Score in API (3+ assessed areas, else "partial"); UI pending
 - [ ] 2.3 Interview count, latest score and history on Today
-- [ ] 2.4 Admin metric: interviews per user, 7-day return
+- [ ] 2.4 Admin metric: interviews per user, 7-day return. In /admin/overview; admin UI pending
 
 ## Phase 3: school interview pages (indexed before January)
 - [ ] Owner: turn on indexing (Cloudflare `REACT_APP_ALLOW_INDEXING=true`) + Search Console, once PR #26 and this PR are live

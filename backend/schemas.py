@@ -211,6 +211,12 @@ class AdminOverviewResponse(BaseModel):
     applications_created_7d: int
     essays_created_7d: int
     api_error_events_7d: int
+    interviews_completed: int
+    interview_users: int
+    interviews_per_user: float
+    users_3plus_interviews: int
+    return_7d_eligible_users: int
+    return_7d_rate: float
 
 
 class AdminUserRow(BaseModel):

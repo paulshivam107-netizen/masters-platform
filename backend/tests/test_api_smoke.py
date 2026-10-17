@@ -185,6 +185,7 @@ class ApiSmokeTest(unittest.IsolatedAsyncioTestCase):
         admin_overview = await self.client.get("/admin/overview", headers=headers)
         self.assertEqual(admin_overview.status_code, 200, admin_overview.text)
         self.assertIn("total_users", admin_overview.json())
+        self.assertIn("return_7d_rate", admin_overview.json())
 
         admin_events = await self.client.get("/admin/events", headers=headers)
         self.assertEqual(admin_events.status_code, 200, admin_events.text)

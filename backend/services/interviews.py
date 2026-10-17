@@ -14,6 +14,7 @@ from models import AiRuntimeConfig, InterviewOperation, InterviewQuota, Intervie
 from services import ai_costs
 from services import interview_provider as provider
 from services.interview_plan import next_step
+from services.readiness import readiness
 
 # The third try of the same answer skips the model and asks a fixed question, so a session can
 # never be stuck on repeated grounding failures (R07). That try is not billed.
@@ -166,8 +167,10 @@ def serialize(session, detail=True):
         "updated_at": session.updated_at.isoformat() + "Z",
         "busy": bool(session.pending_token and session.pending_until and session.pending_until > datetime.utcnow()),
     }
+    feedback = json.loads(session.feedback_json) if session.feedback_json else None
+    result["readiness"] = readiness(feedback)
     if detail:
-        result.update(transcript=transcript, feedback=json.loads(session.feedback_json) if session.feedback_json else None)
+        result.update(transcript=transcript, feedback=feedback)
     else:
         # Background and goals are unnecessary in the history list.
         result["context"] = {k: v for k, v in result["context"].items() if k in ("school", "programme", "route", "kind")}

@@ -9,7 +9,7 @@ from auth import require_admin_user
 from database import get_db
 from routers.admin_operations import router as operations_router
 from routers.catalog_routes import admin_router as catalog_admin_router
-from models import AdminEvent, ApplicationTracker, Essay, PilotFeedback, User
+from models import AdminEvent, ApplicationTracker, Essay, InterviewSession, PilotFeedback, User
 from schemas import (
     AdminAiRuntimeConfigResponse,
     AdminAiRuntimeConfigUpdateRequest,
@@ -39,6 +39,30 @@ REQUIRED_EVENT_COVERAGE = [
     "ui_right_sidebar_essay_selected",
     "ui_error_boundary_triggered",
 ]
+
+
+def interview_return_metrics(db, now):
+    """Pilot success metric: completed interviews per user, 3+ interviews, and return within 7 days.
+
+    Return = a second completed interview started within 7 days of the user's first. Only users whose
+    first interview is at least 7 days old are counted, so recent signups don't drag the rate down.
+    """
+    # shortcut: loads (user_id, created_at) for every completed interview; move to SQL window functions past ~100k rows.
+    rows = (db.query(InterviewSession.user_id, InterviewSession.created_at)
+            .filter(InterviewSession.status == "completed").order_by(InterviewSession.created_at).all())
+    starts = {}
+    for user_id, created_at in rows:
+        starts.setdefault(user_id, []).append(created_at)
+    eligible = [times for times in starts.values() if times[0] <= now - timedelta(days=7)]
+    returned = sum(1 for times in eligible if len(times) > 1 and times[1] - times[0] <= timedelta(days=7))
+    return {
+        "interviews_completed": len(rows),
+        "interview_users": len(starts),
+        "interviews_per_user": round(len(rows) / len(starts), 2) if starts else 0.0,
+        "users_3plus_interviews": sum(1 for times in starts.values() if len(times) >= 3),
+        "return_7d_eligible_users": len(eligible),
+        "return_7d_rate": round(returned / len(eligible) * 100, 2) if eligible else 0.0,
+    }
 
 
 @router.get("/overview", response_model=AdminOverviewResponse)
@@ -144,6 +168,7 @@ async def get_admin_overview(
         "applications_created_7d": applications_created_7d,
         "essays_created_7d": essays_created_7d,
         "api_error_events_7d": api_error_events_7d,
+        **interview_return_metrics(db, datetime.utcnow()),
     }
 
 

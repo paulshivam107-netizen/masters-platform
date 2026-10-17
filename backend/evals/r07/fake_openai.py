@@ -92,6 +92,9 @@ def _feedback(context, transcript):
         "strengths": [{**point(answers[0]), "observation": "Fake observation."}],
         "improvements": [{**point(answers[-1]), "observation": "Fake observation.", "suggestion": "Fake suggestion."}],
         "next_exercise": "Fake exercise.",
+        "dimensions": [{"dimension": name, **point(answers[0]), "level": "partial"} if name in ("motivation", "communication")
+                       else {"dimension": name, "turn_id": "", "quote": "", "level": "not_assessed"}
+                       for name in ("motivation", "work_experience", "academics", "projects", "communication")],
     }
 
 
