@@ -1266,3 +1266,61 @@
 .wi-progress__dots i {
   transition: background-color var(--motion-base) var(--ease-out), opacity var(--motion-base) var(--ease-out);
 }
+
+/* ---------- Dictation for the typed answer ---------- */
+.wi-dictate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  margin: -4px 0 12px;
+}
+.wi-dictate__btn {
+  gap: 8px;
+}
+.wi-dictate__dot {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.wi-dictate.is-requesting .wi-dictate__dot,
+.wi-dictate.is-transcribing .wi-dictate__dot {
+  background: var(--warning);
+}
+.wi-dictate.is-recording .wi-dictate__btn {
+  border-color: var(--danger);
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+.wi-dictate.is-recording .wi-dictate__dot {
+  background: var(--danger);
+  animation: wi-pulse 1.4s ease-in-out infinite;
+}
+.wi-dictate__time {
+  font-variant-numeric: tabular-nums;
+}
+.wi-dictate__btn[aria-disabled="true"] {
+  opacity: 0.7;
+  cursor: default;
+}
+.wi-dictate__hint,
+.wi-dictate__status {
+  color: var(--muted);
+  font-size: 13px;
+}
+.wi-dictate__status.is-error {
+  color: var(--danger);
+}
+.wi-dictate__status:empty {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wi-dictate.is-recording .wi-dictate__dot {
+    animation: none;
+  }
+}
+.reduced-motion .wi-dictate.is-recording .wi-dictate__dot {
+  animation: none;
+}
