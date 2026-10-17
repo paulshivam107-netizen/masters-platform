@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
+import { setInterviewIntent } from "./interviewIntent";
 import ApplicationDetail from "./ApplicationDetail";
 import {
   ApplicationsIcon,
@@ -118,17 +119,24 @@ export default function HomeView({
               Welcome, <span>{firstName}.</span>
             </h2>
             <p>
-              Start with a mock interview: questions from your résumé,
-              follow-ups on your answers and a debrief when you finish.
+              Start with a short Why MBA interview: follow-ups on your own
+              answers and a debrief when you finish.
             </p>
             <div className="ws-row">
               <button
                 className="ws-btn ws-btn--primary"
-                onClick={() => handleNavChange("interviews")}
+                onClick={() => {
+                  setInterviewIntent("taster");
+                  handleNavChange("interviews");
+                }}
               >
-                Start a mock interview <ArrowIcon />
+                Start your Why MBA interview <ArrowIcon />
               </button>
             </div>
+            <p className="ws-muted ws-small" data-testid="home-taster-note">
+              3 questions, about 5 minutes. Add your résumé after for a full
+              interview.
+            </p>
           </div>
           <div className="ws-card wi-welcome__side">
             <span className="wi-row__icon">
@@ -136,8 +144,8 @@ export default function HomeView({
             </span>
             <h3>Track your applications</h3>
             <p>
-              Add a programme you’re considering, on any route,
-              with its official deadline. Build your plan at your own pace.
+              Add a programme you’re considering, on any route, with its
+              official deadline. Build your plan at your own pace.
             </p>
             <button
               className="ws-btn ws-btn--ghost ws-btn--sm"
