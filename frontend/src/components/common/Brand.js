@@ -10,7 +10,7 @@ export default function Brand({ to = "/", compact = false, onClick }) {
       </span>
       {!compact && (
         <span className="brand-wordmark">
-          mockmba<span className="brand-dot">.</span>
+          mockMBA<span className="brand-dot">.</span>
         </span>
       )}
     </Link>

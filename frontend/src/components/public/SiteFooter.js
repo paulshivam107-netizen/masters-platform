@@ -50,7 +50,7 @@ export default function SiteFooter({ home = false }) {
           <ThemeSwitch />
         </div>
         <p className="site-wordmark" aria-hidden="true">
-          mockmba.
+          mockMBA.
         </p>
       </div>
     </footer>
