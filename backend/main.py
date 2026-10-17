@@ -79,7 +79,7 @@ except Exception as exc:
         raise RuntimeError(f"Database schema check failed: {exc}") from exc
     print(f"WARNING: database schema check skipped due to error: {exc}")
 
-app = FastAPI(title="Masters API")
+app = FastAPI(title="MockMBA API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins_list,

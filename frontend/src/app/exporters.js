@@ -42,7 +42,7 @@ export const buildDeadlinesIcsContent = ({ applications, parseDate, now = new Da
     .filter(Boolean)
     .join('\r\n');
 
-  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Masters Application Platform//EN', events, 'END:VCALENDAR'].join(
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//MockMBA//EN', events, 'END:VCALENDAR'].join(
     '\r\n'
   );
 };

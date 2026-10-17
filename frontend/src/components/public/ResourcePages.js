@@ -456,7 +456,7 @@ export function HelpPage() {
               important work during the pilot.
             </p>
             <p>
-              Masters is an independent planning tool, not affiliated with an
+              MockMBA is an independent planning tool, not affiliated with an
               admissions office, exam provider or school.
             </p>
             <Link className="rp-link" to="/app/settings">
@@ -473,7 +473,7 @@ const PRIVACY_TOC = [
   ["what-we-store", "What we store"],
   ["what-we-dont", "What we don't store"],
   ["ai", "How AI is used"],
-  ["providers", "Who helps us run Masters"],
+  ["providers", "Who helps us run MockMBA"],
   ["browser", "Cookies and browser storage"],
   ["your-choices", "Export, edit or delete"],
   ["contact", "Questions and changes"],
@@ -484,8 +484,8 @@ export function PrivacyPage() {
     <ResourceShell>
       <ArticleLayout
         eyebrow={`Privacy · Updated ${formatDate(PRIVACY_UPDATED)}`}
-        title="Your data on Masters"
-        summary="What Masters stores, why, who processes it and how to take it with you or delete it. Written for the pilot in plain language."
+        title="Your data on MockMBA"
+        summary="What MockMBA stores, why, who processes it and how to take it with you or delete it. Written for the pilot in plain language."
         toc={PRIVACY_TOC}
         tocLabel="On this page"
       >
@@ -558,8 +558,8 @@ export function PrivacyPage() {
           </p>
         </section>
         <section id="providers">
-          <h2>Who helps us run Masters</h2>
-          <p>These services process data on our behalf, only to run Masters:</p>
+          <h2>Who helps us run MockMBA</h2>
+          <p>These services process data on our behalf, only to run MockMBA:</p>
           <ul>
             <li>
               <strong>Neon:</strong> the database, hosted in Singapore.
@@ -588,7 +588,7 @@ export function PrivacyPage() {
         <section id="browser">
           <h2>Cookies and browser storage</h2>
           <p>
-            Masters sets one cookie that keeps you signed in. Your browser also
+            MockMBA sets one cookie that keeps you signed in. Your browser also
             stores your theme and motion settings, unsent drafts, and the
             interview preparation notes marked "saved in this browser". Those
             notes stay on your device; clearing your browser data removes them.
@@ -617,7 +617,7 @@ export function PrivacyPage() {
         <section id="contact">
           <h2>Questions and changes</h2>
           <p>
-            Masters is an independent pilot, not affiliated with any business
+            MockMBA is an independent pilot, not affiliated with any business
             school, exam body or admissions office. For a privacy question or
             request, use Settings → Help shape this space while signed in.
           </p>

@@ -43,14 +43,14 @@ export default function SiteFooter({ home = false }) {
         </nav>
         <div className="site-footer-bottom">
           <p>
-            © 2026 Masters. Free during the pilot.
+            © 2026 MockMBA. Free during the pilot.
             <br />
-            Masters is independent and not affiliated with any business school.
+            MockMBA is independent and not affiliated with any business school.
           </p>
           <ThemeSwitch />
         </div>
         <p className="site-wordmark" aria-hidden="true">
-          masters.
+          mockMBA.
         </p>
       </div>
     </footer>

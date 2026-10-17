@@ -5,7 +5,7 @@ import InterviewPreview from "../common/InterviewPreview";
    The photo is decorative and sits under a scrim so the text stays legible. */
 export default function AuthPanel() {
   return (
-    <aside className="ap-panel" aria-label="About Masters">
+    <aside className="ap-panel" aria-label="About MockMBA">
       <img
         className="ap-panel-photo"
         src="/images/landing/photo_quiet_interview_room.jpg"
