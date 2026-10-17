@@ -29,6 +29,7 @@ DEFAULT_MODEL = "gpt-4.1-mini"
 DEFAULT_OPENINGS = {
     "cat": "Tell me about yourself and why a two-year MBA is the next step you want to take.",
     "experienced": "Walk me through your experience and why a management programme makes sense for you now.",
+    "auto": "Walk me through yourself, and why a management programme is the right next step for you now.",
 }
 
 

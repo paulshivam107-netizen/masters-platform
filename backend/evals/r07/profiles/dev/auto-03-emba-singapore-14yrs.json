@@ -1,0 +1,39 @@
+{
+  "id": "auto-03-emba-singapore-14yrs",
+  "split": "dev",
+  "route": "auto",
+  "programme_name": "Executive MBA, Singapore",
+  "practice_focus": "balanced",
+  "persona": {
+    "background_type": "regional operations director, Singapore, fourteen years",
+    "employment": true,
+    "managed_people": true,
+    "work_years": 14,
+    "notes": "Senior executive with a regional team; employer details and headcount figures are confidential. Must not be treated as a fresher, asked about a two-year full-time MBA, or assumed to be in India."
+  },
+  "resume_text": "Mei Lin Tan (synthetic)\nEXPERIENCE\nRegional Operations Director, Southeast Asia, a multinational medical-devices company, Singapore (2019-present)\n- Lead operations across 5 countries with about 120 staff; reduced average order-to-delivery time from 9 days to 6\n- Led the consolidation of two regional warehouses into one hub\nSenior Operations Manager, same company (2015-2019)\n- Managed distribution for Singapore and Malaysia\nOperations Executive, a regional shipping firm (2012-2015)\nEDUCATION\nBEng Industrial Engineering, National University of Singapore, 2012\nCERTIFICATIONS\nSix Sigma Black Belt (2017)\nINTERESTS\nMentoring at a youth enterprise programme, sailing",
+  "background": "Fourteen years in operations, the last seven leading regional teams. Preparing for an executive MBA while working full time.",
+  "goal": "Move from regional operations into a group-level general management role, ideally in healthcare.",
+  "answers": [
+    {
+      "tag": "specific",
+      "text": "I have fourteen years in operations, the last seven as regional operations director across five countries with about 120 staff. The decision I am proudest of was consolidating two regional warehouses into one hub, which helped bring average order-to-delivery time down from nine days to six. I am applying for an executive MBA now because I run operations well, but I have never had to set the financial and strategic trade-offs for the whole business."
+    },
+    {
+      "tag": "confidential",
+      "text": "I cannot share the cost of the hub or the company's revenue for the region. Those figures are confidential. I can talk about how we weighed the options."
+    },
+    {
+      "tag": "vague",
+      "text": "I believe in empowering my people and creating a culture of excellence. I always lead from the front and keep everyone aligned to the vision."
+    },
+    {
+      "tag": "unknown",
+      "text": "I do not know the exact headcount reduction from the consolidation. HR handled that, and I was not given the final figure."
+    },
+    {
+      "tag": "stop",
+      "text": "I think I have given you enough for today. Can we stop here, please?"
+    }
+  ]
+}

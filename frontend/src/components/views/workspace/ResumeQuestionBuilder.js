@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as api from "../../../api/interviewsApi";
 import InterviewQuestionBank from "./InterviewQuestionBank";
+import { routeLabel } from "./interviewIntent";
 
 export default function ResumeQuestionBuilder({
   capabilities,
-  route,
-  showRoutePicker = true,
-  onRouteChange,
   applicationId,
   programmeName = "",
   disabled,
@@ -116,7 +114,7 @@ export default function ResumeQuestionBuilder({
   function generate(event) {
     event.preventDefault();
     const payload = {
-      route,
+      route: "auto",
       resume_text: text.trim(),
       application_id: applicationId ? Number(applicationId) : null,
       programme_name: programmeName,
@@ -238,23 +236,6 @@ export default function ResumeQuestionBuilder({
               </small>
             </div>
           )}
-          {!route && showRoutePicker && (
-            <div className="ws-field">
-              <label htmlFor="resume-route">Programme type</label>
-              <select
-                id="resume-route"
-                required
-                value={route}
-                onChange={(event) => onRouteChange(event.target.value)}
-              >
-                <option value="">Choose your programme type</option>
-                <option value="cat">Two-year MBA</option>
-                <option value="experienced">
-                  One-year MBA · Experienced professionals
-                </option>
-              </select>
-            </div>
-          )}
           {text && (
             <label className="studio-consent">
               <input
@@ -278,7 +259,6 @@ export default function ResumeQuestionBuilder({
               disabled={
                 locked ||
                 !capabilities?.chat ||
-                !route ||
                 text.trim().length < 80 ||
                 !consent
               }
@@ -310,10 +290,8 @@ export default function ResumeQuestionBuilder({
                 <span className="wi-topic">Your résumé profile</span>
                 <h3>{selected.context.school}</h3>
                 <p>
-                  {selected.context.route === "cat"
-                    ? "Two-year MBA"
-                    : "One-year MBA · Experienced professionals"}{" "}
-                  · {new Date(selected.created_at).toLocaleDateString()}
+                  {routeLabel(selected.context.route)} ·{" "}
+                  {new Date(selected.created_at).toLocaleDateString()}
                 </p>
               </div>
               <div className="studio-actions">
@@ -468,10 +446,7 @@ export default function ResumeQuestionBuilder({
                 <strong>{item.context.school}</strong>
                 <small>
                   {new Date(item.created_at).toLocaleDateString()} · 9 questions
-                  ·{" "}
-                  {item.context.route === "cat"
-                    ? "Two-year MBA"
-                    : "Experienced professionals"}
+                  · {routeLabel(item.context.route)}
                 </small>
               </span>
               <span aria-hidden="true">→</span>

@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from auth import create_access_token
 from database import Base, get_db
-from models import ApplicationTracker, InterviewOperation, InterviewQuota, InterviewSession, User
+from models import ApplicationTracker, InterviewOperation, InterviewQuota, InterviewSession, ResumeQuestionSet, User
 from routers.interview_routes import router
 from services import interview_provider as provider
 from services.interview_questions import question_bank
@@ -52,8 +52,22 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
         self.engine.dispose()
         self.tmp.cleanup()
 
+    def resume_set(self, user_id=1, route="cat"):
+        """A completed, reviewed resume set: a full live interview needs one."""
+        with self.Session() as db:
+            row = ResumeQuestionSet(id=str(uuid4()), user_id=user_id, request_id=str(uuid4()), fingerprint="x",
+                                    context_json=json.dumps({"route": route}), status="completed",
+                                    questions_json=json.dumps({"version": "resume-v2", "profile": [], "roots": [], "nodes": [], "edges": []}))
+            db.add(row)
+            db.commit()
+            return row.id
+
     async def create(self, **changes):
         payload = {"request_id": str(uuid4()), "route": "cat", "provider": "demo", "question_limit": 3, **changes}
+        if payload["provider"] == "openai" and not (payload.get("question_set_id") or payload.get("profile_set_id")) \
+                and payload.get("kind") != "taster" and not changes.get("_bare"):
+            payload["question_set_id"] = self.resume_set()
+        payload.pop("_bare", None)
         response = await self.client.post("/interviews/sessions", json=payload, headers=self.headers)
         self.assertEqual(response.status_code, 201, response.text)
         return response.json()

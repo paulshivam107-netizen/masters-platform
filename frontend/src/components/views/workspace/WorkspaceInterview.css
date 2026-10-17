@@ -1266,3 +1266,66 @@
 .wi-progress__dots i {
   transition: background-color var(--motion-base) var(--ease-out), opacity var(--motion-base) var(--ease-out);
 }
+
+/* ---------- Résumé-first call to action ---------- */
+.wi-studio .studio-cta {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  padding: 16px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--primary);
+  border-radius: 12px;
+  background: var(--surface-soft);
+  color: var(--ink);
+}
+.wi-studio .studio-cta strong {
+  font: 700 16px/1.3 var(--font-heading);
+}
+.wi-studio .studio-cta p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+.wi-studio .studio-options {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 4px 16px;
+}
+.wi-studio .studio-options > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font: 650 14px var(--font-body);
+}
+.wi-studio .studio-options[open] {
+  display: grid;
+  gap: 16px;
+  padding-bottom: 16px;
+}
+.wi-studio .studio-sop .ws-field {
+  margin-top: 8px;
+}
+.wi-studio .studio-sop textarea {
+  width: 100%;
+  resize: vertical;
+}
+.wi-studio .studio-form-fields,
+.wi-studio .studio-setup,
+.wi-studio .studio-cta,
+.wi-studio .studio-selected-question {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.wi-studio .studio-cta .ws-btn,
+.wi-studio .studio-selected-question .ws-btn,
+.wi-studio .studio-actions .ws-btn {
+  max-width: 100%;
+  height: auto;
+  min-height: 44px;
+  white-space: normal;
+  text-align: center;
+}
