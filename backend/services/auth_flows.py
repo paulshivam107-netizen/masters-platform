@@ -82,13 +82,13 @@ RESET_PASSWORD_ROUTE = "/auth/reset-password"
 
 def send_verification_email(settings: Settings, recipient: str, token: str) -> tuple[bool, bool, str]:
     verification_link = build_auth_link(settings, VERIFY_EMAIL_ROUTE, token)
-    subject = "Verify your email - Master's Application Platform"
+    subject = "Verify your email for Masters"
     body = (
-        "Welcome to Master's Application Platform.\n\n"
+        "Welcome to Masters, mock MBA interview practice at mockmba.com.\n\n"
         "Please verify your email by clicking this link:\n"
         f"{verification_link}\n\n"
         "This link works once and expires in 24 hours.\n\n"
-        "If you did not sign up, you can ignore this email."
+        "If you did not sign up, you can ignore this email.\n\n— Masters"
     )
     return send_email_notification(
         subject=subject,
@@ -104,13 +104,13 @@ def send_verification_email(settings: Settings, recipient: str, token: str) -> t
 
 def send_password_reset_email(settings: Settings, recipient: str, token: str) -> tuple[bool, bool, str]:
     reset_link = build_auth_link(settings, RESET_PASSWORD_ROUTE, token)
-    subject = "Reset your password - Master's Application Platform"
+    subject = "Reset your Masters password"
     body = (
         "We received a request to reset your password.\n\n"
         "Reset link:\n"
         f"{reset_link}\n\n"
         "This link works once and expires in 60 minutes.\n\n"
-        "If you did not request this, ignore this email."
+        "If you did not request this, ignore this email.\n\n— Masters"
     )
     return send_email_notification(
         subject=subject,

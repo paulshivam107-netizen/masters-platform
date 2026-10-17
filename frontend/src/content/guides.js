@@ -85,7 +85,7 @@ const guides = [
     slug: "mba-interview-story-bank",
     title: "Build an MBA interview story bank",
     description:
-      "Prepare specific examples for Indian MBA interviews with a reusable story bank, follow-up questions and a self-guided practice routine.",
+      "Prepare specific examples for MBA interviews with a reusable story bank, follow-up questions and a self-guided practice routine.",
     updated: "2026-10-08",
     readingTime: "5 min",
     summary:
@@ -466,7 +466,7 @@ const guides = [
 const faqs = [
   [
     "Who is this for?",
-    "Indian MBA applicants organising two-year CAT-route applications, GMAT or other test routes, and programmes for experienced professionals. Requirements vary by programme; check official admissions instructions.",
+    "Applicants preparing for MBA, executive MBA and Master in Management interviews anywhere, including Indian CAT-route and GMAT-route programmes. Requirements vary by programme; check official admissions instructions.",
   ],
   [
     "Is it free?",

@@ -8,12 +8,14 @@ class InterviewCreate(BaseModel):
     model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
     request_id: UUID
     application_id: Optional[int] = Field(default=None, gt=0)
-    route: Literal["cat", "experienced"]
+    # "auto" is the default: the interviewer infers the stage. "cat"/"experienced" stay valid for old data.
+    route: Literal["auto", "cat", "experienced"] = "auto"
+    kind: Literal["full", "taster"] = "full"
     programme_name: str = Field(default="", max_length=160)
     practice_focus: Literal["balanced", "resume", "behavioural", "motivation", "academics", "work"] = "balanced"
     profile_fact_ids: Optional[list[str]] = Field(default=None, max_length=12)
     profile_set_id: Optional[UUID] = None
-    background: str = Field(default="", max_length=2000)
+    background: str = Field(default="", max_length=4000)
     goal: str = Field(default="", max_length=1000)
     mode: Literal["chat", "voice"] = "chat"
     provider: Literal["openai", "demo"] = "openai"

@@ -1,17 +1,24 @@
 import { guides } from "../content/guides";
+import { schools } from "../content/schools";
 import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
   "/": {
-    title: "Practise Indian MBA interviews with résumé-based questions",
+    title: "Practise MBA interviews with résumé-based questions",
     description:
-      "Mock MBA interviews for Indian applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
+      "Mock interviews for MBA, EMBA and MiM applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
     kind: "website",
   },
   "/guides": {
-    title: "Indian MBA application guides and free templates",
+    title: "MBA interview and application guides, with free templates",
     description:
-      "Practical application checklists and interview story templates for Indian MBA applicants. Read and download without an account.",
+      "Interview story templates, résumé follow-up practice and application checklists, including a checklist for Indian MBA routes. Read and download without an account.",
+    kind: "website",
+  },
+  "/privacy": {
+    title: "Privacy: your data on Masters",
+    description:
+      "What Masters stores, how AI is used, who processes your data and how to export or delete your account.",
     kind: "website",
   },
   "/help": {
@@ -27,6 +34,19 @@ publicPages[practice.path] = {
   updated: practice.updated,
   kind: "website",
 };
+publicPages["/schools"] = {
+  title: "School interview preparation guides",
+  description:
+    "Interview preparation pages for individual MBA schools: programmes, what each school says about its interview and where graduates go, with sources. Independent, not affiliated with any school.",
+  kind: "website",
+};
+for (const school of schools)
+  publicPages[`/schools/${school.slug}`] = {
+    title: `${school.shortName} interview preparation: format, programmes and practice`,
+    description: `${school.shortName} programmes, what the school says about its interview and where graduates go, with source links. Independent guide, not affiliated with ${school.shortName}.`,
+    updated: school.checked,
+    kind: "website",
+  };
 for (const guide of guides)
   publicPages[`/guides/${guide.slug}`] = { ...guide, kind: "article" };
 

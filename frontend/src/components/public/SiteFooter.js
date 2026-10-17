@@ -26,9 +26,8 @@ export default function SiteFooter({ home = false }) {
           </div>
           <div>
             <h3>Product</h3>
-            <Link to="/programs">Programmes</Link>
             <Link to="/auth?mode=login&next=%2Fapp">Sign in</Link>
-            <Link to="/help">Privacy</Link>
+            <Link to="/privacy">Privacy</Link>
           </div>
           <div>
             <h3>Resources</h3>
@@ -39,7 +38,7 @@ export default function SiteFooter({ home = false }) {
           <div>
             <h3>Say hello</h3>
             <Link to="/help">Contact and help</Link>
-            <p>Made for Indian MBA applicants</p>
+            <p>Made for MBA, EMBA and MiM applicants</p>
           </div>
         </nav>
         <div className="site-footer-bottom">

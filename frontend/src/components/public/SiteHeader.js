@@ -72,7 +72,7 @@ export default function SiteHeader({ home = false, current = "" }) {
         </div>
         <p className="site-pilot">
           <strong>Free during the pilot</strong>
-          For Indian MBA applicants
+          For MBA, EMBA and MiM applicants
         </p>
       </div>
     </header>

@@ -19,9 +19,9 @@ const BASE_NAV_GROUPS = [
     label: "Workspace",
     items: [
       { id: "home", label: "Today", icon: <HomeIcon /> },
+      { id: "interviews", label: "Interviews", icon: <InterviewIcon /> },
       { id: "tracker", label: "Applications", icon: <ApplicationsIcon /> },
       { id: "essays", label: "Essays", icon: <EssaysIcon /> },
-      { id: "interviews", label: "Interviews", icon: <InterviewIcon /> },
     ],
   },
   {

@@ -15,7 +15,7 @@ from database import get_db
 from interview_schemas import InterviewAction, InterviewAnswer, InterviewCreate, InterviewSpeech
 from models import AiRuntimeConfig, ApplicationTracker, InterviewOperation, InterviewSession, User
 from services import interview_provider as provider
-from services.interview_questions import question_bank, starting_question, follow_up_questions
+from services.interview_questions import question_bank, route_matches, starting_question, follow_up_questions
 from services.resume_questions import owned_set
 from services.interview_plan import make_plan
 from services.interviews import (FALLBACK_AFTER_ATTEMPTS, claim, closing_turn, complete, fallback_question,
@@ -24,6 +24,18 @@ from services.interviews import (FALLBACK_AFTER_ATTEMPTS, claim, closing_turn, c
 from services.rate_limit import enforce_rate_limit
 
 router = APIRouter(prefix="/interviews", tags=["interviews"])
+
+
+# shortcut: no unique constraint, so two simultaneous first tasters can both start (a few paise); add one if abuse appears.
+def taster_used(db, user_id):
+    # Once per account, whatever became of the first one. No migration: kind lives in context_json.
+    # Quotes inside a free-text field are escaped in the JSON, so only a real "kind" key matches.
+    return db.query(InterviewSession.id).filter(
+        InterviewSession.user_id == user_id, InterviewSession.context_json.like('%"kind": "taster"%')).first() is not None
+
+
+def routes_compatible(stored, requested):
+    return stored == requested or "auto" in (stored, requested)
 
 
 def interview_user(request: Request, response: Response, user: User = Depends(get_current_user),
@@ -45,7 +57,7 @@ def questions(user: User = Depends(interview_user)):
 def capabilities(user: User = Depends(interview_user), db: Session = Depends(get_db)):
     runtime = db.query(AiRuntimeConfig).first()
     available = provider.live_available() and (runtime is None or runtime.ai_enabled)
-    return {"chat": available, "voice": available, "demo": True,
+    return {"chat": available, "voice": available, "demo": True, "taster_used": taster_used(db, user.id),
             "provider": "openai", "voice_style": "turn_based",
             "max_answer_chars": 3000, "max_recording_seconds": provider.MAX_RECORDING_SECONDS,
             "max_audio_bytes": provider.MAX_AUDIO_BYTES,
@@ -74,22 +86,33 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
             raise HTTPException(422, "Confirm the AI processing notice before starting.")
     if payload.provider == "demo" and payload.mode == "voice":
         raise HTTPException(422, "The demo supports typed answers. Voice needs a live AI connection.")
+    taster = payload.kind == "taster"
+    if taster:
+        if payload.provider != "openai":
+            raise HTTPException(422, "The Why MBA taster needs live AI.")
+        if taster_used(db, user.id):
+            raise HTTPException(409, "You've used your Why MBA taster. Add your résumé for a full interview.")
+        payload.question_limit, payload.practice_focus = 3, "motivation"
+    elif payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id):
+        raise HTTPException(422, "Add your résumé to start a full interview.")
     application = None
     if payload.application_id:
         application = db.query(ApplicationTracker).filter_by(id=payload.application_id, user_id=user.id).first()
         if not application:
             raise HTTPException(404, "Application not found")
-    context = {"route": payload.route, "background": payload.background, "goal": payload.goal,
+    context = {"route": payload.route, "kind": payload.kind, "background": payload.background, "goal": payload.goal,
                "school": application.school_name if application else "General MBA practice",
                "programme": application.program_name if application else (payload.programme_name or "MBA"),
                "practice_focus": payload.practice_focus, "question_limit": payload.question_limit,
                "interview_plan": make_plan(payload.route, payload.practice_focus)}
     opening = ("Tell me about yourself and why a two-year MBA is the next step you want to take."
                if payload.route == "cat" else
-               "Walk me through your experience and why a management programme makes sense for you now.")
+               "Walk me through your experience and why a management programme makes sense for you now."
+               if payload.route == "experienced" else
+               "Walk me through yourself, and why a management programme is the right next step for you now.")
     if payload.profile_set_id:
         profile_set = owned_set(db, payload.profile_set_id, user.id)
-        if profile_set.status != "completed" or json.loads(profile_set.context_json)["route"] != payload.route:
+        if profile_set.status != "completed" or not routes_compatible(json.loads(profile_set.context_json)["route"], payload.route):
             raise HTTPException(422, "Choose a completed resume profile for this programme type.")
         profile_graph = json.loads(profile_set.questions_json)
         facts = {fact["id"]: fact for fact in profile_graph.get("profile", [])}
@@ -103,11 +126,11 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         if question_set.status != "completed":
             raise HTTPException(409, "These resume questions are not ready yet.")
         graph = json.loads(question_set.questions_json)
-        if json.loads(question_set.context_json)["route"] != payload.route:
+        if not routes_compatible(json.loads(question_set.context_json)["route"], payload.route):
             raise HTTPException(422, "Choose a resume profile for this programme type.")
         context.update(question_set_id=question_set.id, question_bank_version=graph["version"])
         chosen = next((node for node in graph["nodes"] if node["id"] == payload.question_id
-                       and node["id"] in graph["roots"] and payload.route in node["routes"]), None)
+                       and node["id"] in graph["roots"] and route_matches(payload.route, node["routes"])), None)
         if payload.question_id and chosen is None:
             raise HTTPException(422, "Choose an opening from your saved set for the same application route.")
         if chosen:
@@ -127,7 +150,9 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         context.update(question_id=chosen["id"], question_bank_version=question_bank()["version"])
     if payload.profile_fact_ids and not payload.profile_set_id:
         raise HTTPException(422, "Choose the saved resume profile for these facts.")
-    if not payload.question_id:
+    if taster:
+        opening = "Walk me through yourself, and why an MBA is the next step you want to take."
+    elif not payload.question_id:
         openings = {
             "behavioural": "Tell me about a time something you tried did not work out. What happened?",
             "motivation": "Why is this management programme the right next step for you now?",
@@ -218,9 +243,10 @@ def finish(session_id: UUID, payload: InterviewAction, user: User = Depends(inte
     return run_step(db, session, op, token, perform)
 
 
-def voice_session(db, session_id, user_id):
+def voice_session(db, session_id, user_id, dictation=False):
     session = owned(db, str(session_id), user_id)
-    if session.provider != "openai" or session.mode != "voice":
+    # Dictation lets typed live sessions transcribe; spoken questions stay voice-only.
+    if session.provider != "openai" or (session.mode != "voice" and not dictation):
         raise HTTPException(422, "Start a voice interview to use audio.")
     require_live(db)
     return session
@@ -229,7 +255,7 @@ def voice_session(db, session_id, user_id):
 @router.post("/sessions/{session_id}/transcribe")
 async def transcribe(session_id: UUID, request: Request, request_id: UUID, expected_version: int,
                      user: User = Depends(interview_user), db: Session = Depends(get_db)):
-    session = voice_session(db, session_id, user.id)
+    session = voice_session(db, session_id, user.id, dictation=True)
     if session.status != "active" or expected_version < 0:
         raise HTTPException(409, "This interview is not waiting for an answer.")
     content_type = request.headers.get("content-type", "").split(";")[0].lower()

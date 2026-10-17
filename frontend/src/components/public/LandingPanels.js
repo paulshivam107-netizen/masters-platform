@@ -119,7 +119,7 @@ export function TrackerPanel() {
       </div>
       <ul className="lp-rows">
         <li>
-          <span>IIM Ahmedabad PGPX</span>
+          <span>INSEAD MBA</span>
           <small>Interview 14 Nov</small>
           <em>Preparing</em>
         </li>
@@ -129,7 +129,7 @@ export function TrackerPanel() {
           <em>Drafting</em>
         </li>
         <li>
-          <span>IIM Bangalore EPGP</span>
+          <span>HEC Paris MiM</span>
           <small>&nbsp;</small>
           <em>Submitted</em>
         </li>

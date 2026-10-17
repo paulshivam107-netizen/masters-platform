@@ -12,7 +12,7 @@ settings = get_settings()
 
 @router.get("/")
 def read_root():
-    return {"message": "MBA/MS Application Platform API", "status": "running"}
+    return {"message": "Masters API", "status": "running"}
 
 
 @router.get("/health")

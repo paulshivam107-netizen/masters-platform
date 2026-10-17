@@ -44,14 +44,16 @@ async def send_test_reminder(
         [
             f"Hi {current_user.name},",
             "",
-            "Here is your Master's application reminder summary:",
+            "Here are your upcoming application deadlines:",
             *summary_lines,
             "",
-            "You can adjust reminder windows in Settings > Profile & Preferences."
+            "You can change when reminders arrive in Settings > Reminder preferences.",
+            "",
+            "— Masters"
         ]
     )
     sent, dry_run, message = send_email_notification(
-        subject="Your Master's Application Deadline Reminder",
+        subject="Your upcoming deadlines on Masters",
         body=body,
         recipient=destination,
         smtp_host=settings.SMTP_HOST,

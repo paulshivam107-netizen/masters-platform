@@ -36,7 +36,7 @@ def validate_profile(profile, split):
 
     need(path.stem == pid, "file name must equal id")
     need(profile.get("split") == split, f"split must be {split!r}")
-    need(profile.get("route") in ("cat", "experienced"), "route must be cat|experienced")
+    need(profile.get("route") in ("auto", "cat", "experienced"), "route must be auto|cat|experienced")
     need(profile.get("practice_focus", "balanced") in FOCUSES, "unknown practice_focus")
     need(len(profile.get("programme_name", "")) <= 160, "programme_name too long")
     need(80 <= len(profile.get("resume_text", "")) <= 20000, "resume_text must be 80-20000 chars")

@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from auth import create_access_token
 from database import Base, get_db
-from models import ApplicationTracker, InterviewOperation, InterviewQuota, InterviewSession, User
+from models import ApplicationTracker, InterviewOperation, InterviewQuota, InterviewSession, ResumeQuestionSet, User
 from routers.interview_routes import router
 from services import interview_provider as provider
 from services.interview_questions import question_bank
@@ -52,8 +52,22 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
         self.engine.dispose()
         self.tmp.cleanup()
 
+    def resume_set(self, user_id=1, route="cat"):
+        """A completed, reviewed resume set: a full live interview needs one."""
+        with self.Session() as db:
+            row = ResumeQuestionSet(id=str(uuid4()), user_id=user_id, request_id=str(uuid4()), fingerprint="x",
+                                    context_json=json.dumps({"route": route}), status="completed",
+                                    questions_json=json.dumps({"version": "resume-v2", "profile": [], "roots": [], "nodes": [], "edges": []}))
+            db.add(row)
+            db.commit()
+            return row.id
+
     async def create(self, **changes):
         payload = {"request_id": str(uuid4()), "route": "cat", "provider": "demo", "question_limit": 3, **changes}
+        if payload["provider"] == "openai" and not (payload.get("question_set_id") or payload.get("profile_set_id")) \
+                and payload.get("kind") != "taster" and not changes.get("_bare"):
+            payload["question_set_id"] = self.resume_set()
+        payload.pop("_bare", None)
         response = await self.client.post("/interviews/sessions", json=payload, headers=self.headers)
         self.assertEqual(response.status_code, 201, response.text)
         return response.json()
@@ -279,6 +293,30 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(speech.call_args.args[0], session["transcript"][0]["text"])
             saved = await self.client.get(base, headers=self.headers)
             self.assertEqual(saved.json()["answer_count"], 0, "Reviewing a transcript must not submit an answer")
+
+    async def test_dictation_in_typed_sessions_but_speech_stays_voice_only(self):
+        wav = b"RIFF" + bytes(4) + b"WAVE" + bytes(64)
+        with patch.object(provider, "api_key", return_value="unit-test-key"):
+            typed = await self.create(provider="openai", mode="chat", consent=True)
+            base = f"/interviews/sessions/{typed['id']}"
+            with patch.object(provider, "transcribe", return_value="I led a student project.") as transcription:
+                result = await self.client.post(base + "/transcribe", params={"request_id": str(uuid4()), "expected_version": 0},
+                    content=wav, headers={**self.headers, "Content-Type": "audio/wav"})
+                self.assertEqual(result.status_code, 200)
+                self.assertEqual(result.json()["text"], "I led a student project.")
+                self.assertEqual(transcription.call_count, 1)
+            with patch.object(provider, "speech", return_value=b"fake-mp3") as speech:
+                result = await self.client.post(base + "/speech", headers=self.headers,
+                    json={"request_id": str(uuid4()), "expected_version": 0, "turn_id": "q1"})
+                self.assertEqual(result.status_code, 422)
+                speech.assert_not_called()
+        demo = await self.create(provider="demo", mode="chat")
+        with patch.object(provider, "transcribe") as transcription:
+            result = await self.client.post(f"/interviews/sessions/{demo['id']}/transcribe",
+                params={"request_id": str(uuid4()), "expected_version": 0}, content=wav,
+                headers={**self.headers, "Content-Type": "audio/wav"})
+            self.assertEqual(result.status_code, 422)
+            transcription.assert_not_called()
 
 
 class InterviewProviderTest(unittest.TestCase):
