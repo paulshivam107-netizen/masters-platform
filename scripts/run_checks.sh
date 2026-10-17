@@ -77,6 +77,7 @@ echo "      (PostgreSQL runtime-role tests run when TEST_POSTGRES_ADMIN_URL is s
   "${PYTHON_BIN}" -m unittest \
     tests.test_interviews \
     tests.test_resume_questions \
+    tests.test_resume_first \
     tests.test_interview_plan \
     tests.test_admin_operations \
     tests.test_auth_email_flows \
