@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Boolean, Date, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, Boolean, Date, UniqueConstraint, Index, text
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -160,12 +160,18 @@ class AiRuntimeConfig(Base):
 
 class InterviewSession(Base):
     __tablename__ = "interview_sessions"
-    __table_args__ = (UniqueConstraint("user_id", "create_request_id"),)
+    __table_args__ = (
+        UniqueConstraint("user_id", "create_request_id"),
+        # The Why MBA taster is once per account, enforced by the database so concurrent starts cannot both win.
+        Index("uq_interview_sessions_one_taster", "user_id", unique=True,
+              sqlite_where=text("kind = 'taster'"), postgresql_where=text("kind = 'taster'")),
+    )
 
     id = Column(String(36), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     create_request_id = Column(String(36), nullable=False)
     create_fingerprint = Column(String(64), nullable=False)
+    kind = Column(String(16), nullable=True)  # "taster" or "full"; NULL on sessions created before 0008
     # Snapshot context survives deletion/renaming of the source application.
     context_json = Column(Text, nullable=False)
     provider = Column(String(16), nullable=False)

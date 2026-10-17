@@ -5,11 +5,14 @@ PostgreSQL-specific checks (runtime role, concurrency) live in test_postgres_run
 import tempfile
 import unittest
 
+from alembic import command
 from sqlalchemy import create_engine, inspect, text
+from sqlalchemy.exc import IntegrityError
 
 from config import Settings
 from services.schema import (
     SchemaNotReady,
+    alembic_config,
     ensure_schema_ready,
     head_revision,
     migrate_to_head,
@@ -109,6 +112,29 @@ class SchemaMigrationTest(unittest.TestCase):
         enabled = self.engine("enabled")
         self.assertTrue(ensure_schema_ready(enabled, settings()).is_current)
         enabled.dispose()
+
+    def test_taster_backfill_marks_only_the_earliest_and_the_index_blocks_a_second(self):
+        engine = self.engine()
+        with engine.begin() as conn:
+            command.upgrade(alembic_config(conn), "0007")
+            conn.execute(text("INSERT INTO users (id, email, name, role, timezone, is_active) "
+                              "VALUES (1, 'a@example.com', 'A', 'user', 'UTC', 1)"))
+            for sid, kind, created in (("s1", "taster", "2026-10-01"), ("s2", "taster", "2026-10-02"),
+                                       ("s3", "full", "2026-10-03")):
+                conn.execute(text(
+                    "INSERT INTO interview_sessions (id, user_id, create_request_id, create_fingerprint, context_json, "
+                    "provider, mode, question_limit, status, transcript_json, prompt_version, version, created_at, "
+                    "updated_at) VALUES (:id, 1, :id, 'x', :ctx, 'openai', 'chat', 3, 'active', '[]', 'v', 0, :at, :at)"),
+                    {"id": sid, "ctx": '{"route": "auto", "kind": "%s"}' % kind, "at": created})
+        migrate_to_head(engine)
+        with engine.connect() as conn:
+            kinds = dict(conn.execute(text("SELECT id, kind FROM interview_sessions")).all())
+        self.assertEqual(kinds, {"s1": "taster", "s2": None, "s3": None})
+        with self.assertRaises(IntegrityError), engine.begin() as conn:
+            conn.execute(text("UPDATE interview_sessions SET kind = 'taster' WHERE id = 's2'"))
+        with engine.begin() as conn:  # other kinds are unrestricted
+            conn.execute(text("UPDATE interview_sessions SET kind = 'full' WHERE id IN ('s2', 's3')"))
+        engine.dispose()
 
     def test_models_and_migrations_stay_in_sync(self):
         """Fails when a model changes without a matching Alembic revision."""

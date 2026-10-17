@@ -26,12 +26,12 @@ from services.rate_limit import enforce_rate_limit
 router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
-# shortcut: no unique constraint, so two simultaneous first tasters can both start (a few paise); add one if abuse appears.
+TASTER_USED = "You've used your Why MBA taster. Add your résumé for a full interview."
+
+
 def taster_used(db, user_id):
-    # Once per account, whatever became of the first one. No migration: kind lives in context_json.
-    # Quotes inside a free-text field are escaped in the JSON, so only a real "kind" key matches.
-    return db.query(InterviewSession.id).filter(
-        InterviewSession.user_id == user_id, InterviewSession.context_json.like('%"kind": "taster"%')).first() is not None
+    # Once per account, whatever became of the first one; a partial unique index enforces it (migration 0008).
+    return db.query(InterviewSession.id).filter_by(user_id=user_id, kind="taster").first() is not None
 
 
 def routes_compatible(stored, requested):
@@ -92,7 +92,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         if payload.provider != "openai":
             raise HTTPException(422, "The Why MBA taster needs live AI.")
         if taster_used(db, user.id):
-            raise HTTPException(409, "You've used your Why MBA taster. Add your résumé for a full interview.")
+            raise HTTPException(409, TASTER_USED)
         payload.question_limit, payload.practice_focus = 3, "motivation"
     elif payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id):
         raise HTTPException(422, "Add your résumé to start a full interview.")
@@ -165,7 +165,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
     reserve_quota(db, user.id, "sessions")
     session = InterviewSession(
         id=str(uuid4()), user_id=user.id, create_request_id=str(payload.request_id), create_fingerprint=digest,
-        context_json=json.dumps(context), provider=payload.provider, mode=payload.mode,
+        kind=payload.kind, context_json=json.dumps(context), provider=payload.provider, mode=payload.mode,
         question_limit=payload.question_limit, prompt_version=provider.PROMPT_VERSION,
         transcript_json=json.dumps([{"id": "q1", "role": "assistant", "text": opening}]),
     )
@@ -177,6 +177,8 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         previous = db.query(InterviewSession).filter_by(user_id=user.id, create_request_id=str(payload.request_id)).first()
         if previous and previous.create_fingerprint == digest:
             return serialize(previous)
+        if taster and taster_used(db, user.id):  # a concurrent first taster won the race
+            raise HTTPException(409, TASTER_USED) from None
         raise HTTPException(409, "An interview with this request ID already exists") from None
     db.refresh(session)
     return serialize(session)
