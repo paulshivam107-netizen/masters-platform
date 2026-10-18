@@ -7,12 +7,33 @@ const iimb = {
   "city": "Bengaluru",
   "programmes": [
     {
-      "name": "Post Graduate Programme in Management (PGP), leading to an MBA",
+      "name": "PGP",
       "format": "Full-time, residential",
       "duration": "Two years (six trimesters, with a summer project in between)",
       "experience": "No minimum stated; work experience earns up to 10 points in the pre-PI score. In the current batch 82 of 540 had none.",
       "intake": "540 students enrolled (2026)",
-      "source": "https://www.iimb.ac.in/programmes/pgp"
+      "source": "https://www.iimb.ac.in/programmes/pgp",
+      "track": "two-year"
+    },
+    {
+      "name": "EPGP",
+      "track": "executive",
+      "format": "Full-time, residential",
+      "duration": "One year",
+      "experience": "Minimum 5 years of full-time work experience (as of 31 March 2027); average in the 2026 batch is 5 years",
+      "intake": "74 students enrolled (2026)",
+      "source": "https://www.iimb.ac.in/programmes/epgp",
+      "interview": {
+        "points": [
+          "Admission criteria: academic background, work experience, valid GMAT or GRE score (no minimum score), statement of purpose and two online reference letters.",
+          "The process includes an interview and a written test.",
+          "Interviews are held in Bangalore, New Delhi, Mumbai and Kolkata; online for applicants outside India.",
+          "IIMB publishes no weights or stage breakdown for the EPGP."
+        ],
+        "sources": [
+          "https://www.iimb.ac.in/programmes/epgp"
+        ]
+      }
     }
   ],
   "interview": {
@@ -50,6 +71,14 @@ const iimb = {
     {
       "label": "IIMB: Placement Report 2026 (PDF)",
       "url": "https://www.iimb.ac.in/sites/default/files/inline-files/Placement-Report-2026.pdf"
+    },
+    {
+      "label": "IIMB: EPGP programme page and FAQ",
+      "url": "https://www.iimb.ac.in/programmes/epgp"
+    },
+    {
+      "label": "IIMB: EPGP admissions page",
+      "url": "https://www.iimb.ac.in/epgp-admissions"
     }
   ],
   "checked": "2026-10-18"

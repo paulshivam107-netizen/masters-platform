@@ -7,12 +7,13 @@ const sibmPune = {
   "city": "Pune",
   "programmes": [
     {
-      "name": "M.B.A. (flagship)",
+      "name": "MBA",
       "format": "Full-time, residential",
       "duration": "Two years (four semesters)",
       "experience": "No minimum work experience stated; eligibility is a graduate degree with at least 50% marks (45% for SC/ST)",
       "intake": "180 students",
-      "source": "https://sibm.edu/mba/"
+      "source": "https://sibm.edu/mba/",
+      "track": "two-year"
     }
   ],
   "interview": {

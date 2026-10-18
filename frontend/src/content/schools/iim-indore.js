@@ -7,11 +7,33 @@ const iimIndore = {
   "city": "Indore",
   "programmes": [
     {
-      "name": "Post Graduate Programme in Management (PGP)",
+      "name": "PGP",
       "format": "Full-time, residential",
       "duration": "Two years (six trimesters, with an eight-week summer project in between)",
       "experience": "No minimum stated; work experience adds 0 to 3 points to the interview shortlist score",
-      "source": "https://iimidr.ac.in/programmes/academic-programmes/post-graduate-programme-in-management-pgp/"
+      "source": "https://iimidr.ac.in/programmes/academic-programmes/post-graduate-programme-in-management-pgp/",
+      "track": "two-year"
+    },
+    {
+      "name": "EPGP",
+      "track": "executive",
+      "format": "Full-time, residential",
+      "duration": "One year",
+      "experience": "Minimum 5 years of full-time paid work experience after graduation; the 2026-27 batch averages about 7 years",
+      "intake": "58 participants (2026-27 batch)",
+      "source": "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/",
+      "interview": {
+        "points": [
+          "Shortlisting for interview uses GMAT, GRE or CAT scores and/or other criteria set by the Admissions Committee.",
+          "Shortlisted candidates take a Personal Interview (PI), offline or online on Zoom; candidates below the minimum on any PI parameter do not go further.",
+          "Merit list uses a composite score: GMAT/GRE/CAT 40%, PI 55%, diversity factor 5%.",
+          "The FAQ says work-experience nature, education, statement of purpose and sponsorship also matter."
+        ],
+        "sources": [
+          "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/admissions/",
+          "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/faqs/"
+        ]
+      }
     }
   ],
   "interview": {
@@ -49,6 +71,18 @@ const iimIndore = {
     {
       "label": "IIM Indore: Final Placement Report 2026 (PDF)",
       "url": "https://iimidr.ac.in/wp-content/uploads/2026/08/Final-Placement-Report-2026.pdf"
+    },
+    {
+      "label": "IIM Indore: EPGP programme page",
+      "url": "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/"
+    },
+    {
+      "label": "IIM Indore: EPGP admissions",
+      "url": "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/admissions/"
+    },
+    {
+      "label": "IIM Indore: EPGP FAQs",
+      "url": "https://iimidr.ac.in/programmes/academic-programmes/executive-post-graduate-programme-in-management-epgp/faqs/"
     }
   ],
   "checked": "2026-10-18"

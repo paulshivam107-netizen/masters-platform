@@ -7,11 +7,12 @@ const iimMumbai = {
   "city": "Mumbai",
   "programmes": [
     {
-      "name": "MBA (General Management), Batch 2026-2028",
+      "name": "MBA",
       "format": "Full-time, residential",
       "duration": "Two years",
       "experience": "No minimum stated; work experience is part of a 20-point academic and experience score (zero below 12 months)",
-      "source": "https://iimmumbai.ac.in/admissions/assets/admission-policy-2026-MBA.pdf"
+      "source": "https://iimmumbai.ac.in/admissions/assets/admission-policy-2026-MBA.pdf",
+      "track": "two-year"
     }
   ],
   "interview": {

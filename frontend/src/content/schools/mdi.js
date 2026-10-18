@@ -7,11 +7,31 @@ const mdi = {
   "city": "Gurugram",
   "programmes": [
     {
-      "name": "Post Graduate Diploma in Management (PGDM), the flagship programme",
+      "name": "PGDM",
       "format": "Full-time",
       "duration": "Two years",
       "experience": "No minimum stated; work experience carries 10% of the final selection score",
-      "source": "https://mdi.ac.in/programmes"
+      "source": "https://mdi.ac.in/programmes",
+      "track": "two-year"
+    },
+    {
+      "name": "PGDM-BM (formerly NMP)",
+      "track": "executive",
+      "format": "Full-time, residential",
+      "duration": "18 months (15 months residential plus 3 months dissertation)",
+      "experience": "Minimum 4 years of full-time work experience as on 31 March 2027",
+      "source": "https://mdi.ac.in/admissions/post-graduate-diploma-in-management-business-management-pgdm-bm",
+      "interview": {
+        "points": [
+          "Shortlisting uses the application details and CAT, GMAT or XAT scores.",
+          "Shortlisted applicants are called for a Personal Interview, conducted online.",
+          "Applicants may apply in any one admission phase; the phase does not affect the chance of an offer.",
+          "MDI publishes no weights for these stages on this page."
+        ],
+        "sources": [
+          "https://mdi.ac.in/admissions/post-graduate-diploma-in-management-business-management-pgdm-bm"
+        ]
+      }
     }
   ],
   "interview": {
@@ -49,6 +69,14 @@ const mdi = {
     {
       "label": "MDI: Final Placement Report 2024-26 (PDF)",
       "url": "https://mdi.ac.in/resources/admin_uploads/placements/2026_Placement_20260609145535.pdf"
+    },
+    {
+      "label": "MDI: PGDM-BM admission process 2027",
+      "url": "https://mdi.ac.in/admissions/post-graduate-diploma-in-management-business-management-pgdm-bm"
+    },
+    {
+      "label": "MDI: PGDM-BM programme page",
+      "url": "https://mdi.ac.in/programmes/post-graduate-diploma-in-management-business-management-pgdm-bm"
     }
   ],
   "checked": "2026-10-18"

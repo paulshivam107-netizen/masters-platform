@@ -7,18 +7,39 @@ const xlri = {
   "city": "Jamshedpur",
   "programmes": [
     {
-      "name": "PGDM (Business Management)",
+      "name": "PGDM (BM)",
       "format": "Full-time, residential",
       "duration": "Two years",
       "experience": "No minimum stated; eligibility is a three-year bachelor's degree. Relevant work experience may be factored in.",
-      "source": "https://www.xlri.ac.in/academic-programmes/school-of-business/pgdbm"
+      "source": "https://www.xlri.ac.in/academic-programmes/school-of-business/pgdbm",
+      "track": "two-year"
     },
     {
-      "name": "PGDM (Human Resource Management)",
+      "name": "PGDM (HRM)",
       "format": "Full-time, residential",
       "duration": "Two years",
       "experience": "No minimum stated; eligibility is a three-year bachelor's degree. Relevant work experience may be factored in.",
-      "source": "https://www.xlri.ac.in/academic-programmes/school-of-hrm/pgdm-hrm"
+      "source": "https://www.xlri.ac.in/academic-programmes/school-of-hrm/pgdm-hrm",
+      "track": "two-year"
+    },
+    {
+      "name": "PGDM (GM)",
+      "track": "executive",
+      "format": "Full-time, residential",
+      "duration": "18 months (12 months on campus plus 6 months field-based learning)",
+      "experience": "Minimum 3 years of managerial or supervisory experience",
+      "source": "https://pgdm-gm.xlri.ac.in/",
+      "interview": {
+        "points": [
+          "Apply with GMAT, GRE or XAT scores.",
+          "Candidates are shortlisted on test scores, academic performance and work experience.",
+          "Multiple rounds of online interviews are held between September and February.",
+          "XLRI publishes no weights for these stages on this page."
+        ],
+        "sources": [
+          "https://pgdm-gm.xlri.ac.in/"
+        ]
+      }
     }
   ],
   "interview": {
@@ -60,6 +81,10 @@ const xlri = {
     {
       "label": "XLRI: placement reports (batch 2024-26 highlights)",
       "url": "https://www.xlri.ac.in/corporate-relations-and-placement/placement-reports"
+    },
+    {
+      "label": "XLRI: PGDM (General Management) programme page",
+      "url": "https://pgdm-gm.xlri.ac.in/"
     }
   ],
   "checked": "2026-10-18"

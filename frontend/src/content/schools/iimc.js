@@ -7,11 +7,32 @@ const iimc = {
   "city": "Kolkata",
   "programmes": [
     {
-      "name": "MBA (two-year programme; admission policy for Batch 2027-29)",
+      "name": "MBA",
       "format": "Full-time, residential",
       "duration": "Two years, with a compulsory summer internship between the first and second year",
       "experience": "No minimum stated; work experience earns up to 8 of 100 points in the final selection score",
-      "source": "https://www.iimcal.ac.in/programs/mba"
+      "source": "https://www.iimcal.ac.in/programs/mba",
+      "track": "two-year"
+    },
+    {
+      "name": "MBAEx (formerly PGPEX)",
+      "track": "executive",
+      "format": "Full-time, residential",
+      "duration": "One year",
+      "experience": "At least 5 years of full-time professional experience after graduation (as on 31 March 2027)",
+      "source": "https://www.iimcal.ac.in/programs/pgpex/admissions/admissions-policy",
+      "interview": {
+        "points": [
+          "Three stages: application and shortlisting, then interview, then results and offers.",
+          "Eligible applicants are invited for a Written Aptitude Test (WAT, pen and paper, scored out of 15) and a Personal Interview (PI).",
+          "Final rank uses a composite score: GMAT 25%, PI 30%, WAT 15%, work experience 15%, academic record 10%, diversity 5%.",
+          "A valid GMAT score is needed, with a minimum at the 50th percentile; online GMAT is not accepted.",
+          "Offers go first to the top of the Round 1 rank list; the rest are waitlisted and pooled with Round 2."
+        ],
+        "sources": [
+          "https://www.iimcal.ac.in/programs/pgpex/admissions/admissions-policy"
+        ]
+      }
     }
   ],
   "interview": {
@@ -48,6 +69,10 @@ const iimc = {
     {
       "label": "IIMC: MBA Placement Report 2023 (PDF)",
       "url": "https://www.iimcal.ac.in/sites/default/files/pdfs/placement_report_2023.pdf"
+    },
+    {
+      "label": "IIMC: MBAEx admission policy (AY 2027-28)",
+      "url": "https://www.iimcal.ac.in/programs/pgpex/admissions/admissions-policy"
     }
   ],
   "checked": "2026-10-18"

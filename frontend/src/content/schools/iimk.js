@@ -7,12 +7,13 @@ const iimk = {
   "city": "Kozhikode",
   "programmes": [
     {
-      "name": "Post Graduate Programme in Management (PGP), the flagship MBA",
+      "name": "PGP",
       "format": "Full-time",
       "duration": "Two years (2025-2027 cohort; batch 2026-2028 for the latest admission policy)",
       "experience": "No minimum stated; work experience of 6 months or more earns up to 5% of the stage 2 shortlist score",
       "intake": "489 students inducted into the PGP in 2025",
-      "source": "https://www.iimk.ac.in/announcements/pgp-inauguration-2025"
+      "source": "https://www.iimk.ac.in/announcements/pgp-inauguration-2025",
+      "track": "two-year"
     }
   ],
   "interview": {

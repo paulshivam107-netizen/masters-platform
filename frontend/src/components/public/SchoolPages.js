@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
-import { schools, schoolBySlug } from "../../content/schools";
+import { schools, schoolBySlug, TRACK_LABELS } from "../../content/schools";
 import {
   ResourceShell,
   ResourceCta,
@@ -9,6 +9,7 @@ import {
   RelatedLinks,
   NotFoundPage,
 } from "./ResourcePages";
+import { useAuth } from "../../contexts/AuthContext";
 import "./SchoolPages.css";
 
 const MONTHS = [
@@ -30,10 +31,11 @@ export function monthYear(iso) {
   const [year, month] = iso.split("-").map(Number);
   return `${MONTHS[month - 1]} ${year}`;
 }
-export const practiceNext = (school) =>
+export const practiceNext = (school, programme = school.programmes[0]) =>
   `/app/interviews?programme=${encodeURIComponent(
-    `${school.shortName} ${school.programmes[0].name}`,
+    `${school.shortName} ${programme.name}`,
   )}`;
+
 
 function SourceLink({ url, label = "Source" }) {
   return (
@@ -75,12 +77,19 @@ export function SchoolsPage() {
 }
 
 function Programmes({ school }) {
+  const { user } = useAuth();
+  // Same rule as ResourceCta: signed-out visitors sign up first, then land in the interview.
+  const practiseTo = (p) => {
+    const next = practiceNext(school, p);
+    return user ? next : `/auth?mode=signup&next=${encodeURIComponent(next)}`;
+  };
   return (
     <section id="programmes" aria-labelledby="programmes-h">
       <h2 id="programmes-h">Programmes</h2>
       <div className="sp-cards">
         {school.programmes.map((p) => (
           <article className="sp-card" key={p.name}>
+            {p.track && <p className="sp-tag">{TRACK_LABELS[p.track]}</p>}
             <h3>{p.name}</h3>
             <p>{p.format}</p>
             <dl>
@@ -102,6 +111,11 @@ function Programmes({ school }) {
               )}
             </dl>
             <SourceLink url={p.source} />
+            {school.programmes.length > 1 && (
+              <Link className="sp-practise" to={practiseTo(p)}>
+                Practise for {p.name}
+              </Link>
+            )}
           </article>
         ))}
       </div>
@@ -109,34 +123,58 @@ function Programmes({ school }) {
   );
 }
 
+function InterviewFacts({ school, facts, heading }) {
+  return (
+    <>
+      <h3>{heading}</h3>
+      <ul>
+        {facts.points.map((point) => (
+          <li key={point}>{point}</li>
+        ))}
+      </ul>
+      {facts.note && <p>{facts.note}</p>}
+      <p className="sp-sources-inline">
+        Sources:{" "}
+        {facts.sources.map((url, i) => (
+          <React.Fragment key={url}>
+            {i > 0 && ", "}
+            <SourceLink
+              url={url}
+              label={school.sources.find((x) => x.url === url)?.label}
+            />
+          </React.Fragment>
+        ))}
+      </p>
+    </>
+  );
+}
+
 function Interview({ school }) {
   const { interview } = school;
+  const programmeInterviews = school.programmes.filter((p) => p.interview);
   return (
     <section id="interview" aria-labelledby="interview-h">
       <h2 id="interview-h">The interview</h2>
-      {interview ? (
-        <>
-          <h3>What {school.shortName} says</h3>
-          <ul>
-            {interview.points.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
-          {interview.note && <p>{interview.note}</p>}
-          <p className="sp-sources-inline">
-            Sources:{" "}
-            {interview.sources.map((url, i) => (
-              <React.Fragment key={url}>
-                {i > 0 && ", "}
-                <SourceLink
-                  url={url}
-                  label={school.sources.find((x) => x.url === url)?.label}
-                />
-              </React.Fragment>
-            ))}
-          </p>
-        </>
-      ) : (
+      {interview && (
+        <InterviewFacts
+          school={school}
+          facts={interview}
+          heading={
+            programmeInterviews.length
+              ? `${school.programmes[0].name}: what ${school.shortName} says`
+              : `What ${school.shortName} says`
+          }
+        />
+      )}
+      {programmeInterviews.map((p) => (
+        <InterviewFacts
+          key={p.name}
+          school={school}
+          facts={p.interview}
+          heading={`${p.name}: what ${school.shortName} says`}
+        />
+      ))}
+      {!interview && !programmeInterviews.length && (
         <p>
           We haven&rsquo;t found an official description of{" "}
           {school.shortName}&rsquo;s interview format to cite yet. Most panels

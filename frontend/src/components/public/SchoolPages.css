@@ -12,8 +12,8 @@
   display: grid;
   gap: 28px;
 }
-.sp-region {
-  margin: 0 0 12px;
+.rp .sp-region {
+  margin: 0 0 20px;
   font: 700 13px / 1.4 var(--font-body);
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -155,4 +155,19 @@
     grid-template-columns: 1fr;
     gap: 2px;
   }
+}
+
+.rp-prose .sp-card .sp-tag {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.sp-practise {
+  display: block;
+  width: fit-content;
+  margin-top: 12px;
+  font-weight: 600;
 }

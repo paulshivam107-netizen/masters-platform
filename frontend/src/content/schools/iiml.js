@@ -7,11 +7,32 @@ const iiml = {
   "city": "Lucknow",
   "programmes": [
     {
-      "name": "Post Graduate Programme (PGP), leading to an MBA",
+      "name": "PGP",
       "format": "Full-time, residential",
       "duration": "Two years",
       "experience": "No minimum stated; work experience counts 5 of 100 in the final score (MBA). MBA-SM needs at least 24 months.",
-      "source": "https://www.iiml.ac.in/master-business-administration"
+      "source": "https://www.iiml.ac.in/master-business-administration",
+      "track": "two-year"
+    },
+    {
+      "name": "IPMX",
+      "track": "executive",
+      "format": "Full-time, residential (Noida campus)",
+      "duration": "One year",
+      "experience": "Minimum 4 years of full-time post-graduation work experience (as on 31 March 2027)",
+      "intake": "About 110 seats (2027-28)",
+      "source": "https://www.iiml.ac.in/programme/mba-executives/ipmx",
+      "interview": {
+        "points": [
+          "Applicants submit an online application with recommenders' details and a valid GMAT or GRE score.",
+          "Based on GMAT/GRE scores, candidates are shortlisted for a Writing Ability Test (WAT) and a Personal Interview (PI).",
+          "Final score weights: GMAT/GRE 30%, academic and professional profile 30%, WAT 10%, PI 30%.",
+          "Offers are made on the final score."
+        ],
+        "sources": [
+          "https://www.iiml.ac.in/programme/mba-executives/ipmx"
+        ]
+      }
     }
   ],
   "interview": {
@@ -50,6 +71,10 @@ const iiml = {
     {
       "label": "IIML: Final Placement Report, Batch of 2026 (PDF)",
       "url": "https://www.iiml.ac.in/sites/default/files/2026-07/Final%20Placement%20Report%202024-26.pdf"
+    },
+    {
+      "label": "IIML: IPMX programme page (eligibility, selection, FAQ)",
+      "url": "https://www.iiml.ac.in/programme/mba-executives/ipmx"
     }
   ],
   "checked": "2026-10-18"
