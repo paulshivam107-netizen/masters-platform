@@ -35,6 +35,20 @@ import uvaDarden from "./uva-darden";
 import nyuStern from "./nyu-stern";
 import cornellJohnson from "./cornell-johnson";
 import insead from "./insead";
+import lbs from "./lbs";
+import hecParis from "./hec-paris";
+import iese from "./iese";
+import ieBusinessSchool from "./ie-business-school";
+import esade from "./esade";
+import sdaBocconi from "./sda-bocconi";
+import essec from "./essec";
+import oxfordSaid from "./oxford-said";
+import cambridgeJudge from "./cambridge-judge";
+import imd from "./imd";
+import escp from "./escp";
+import stGallen from "./st-gallen";
+import rsm from "./rsm";
+import mannheim from "./mannheim";
 
 // Order sets the region order on /schools: India, United States, Europe.
 // India: IIMs in NIRF 2025 Management order, then ISB and FMS, then the top private schools by NIRF.
@@ -65,7 +79,24 @@ export const india = [
 export const unitedStates = [
   hbs, stanfordGsb, wharton, chicagoBooth, kellogg, columbia, mitSloan, tuck, berkeleyHaas, yaleSom, dukeFuqua, uvaDarden, nyuStern, cornellJohnson,
 ];
-export const schools = [...india, ...unitedStates, insead];
+export const europe = [
+  insead,
+  lbs,
+  hecParis,
+  iese,
+  ieBusinessSchool,
+  esade,
+  sdaBocconi,
+  essec,
+  oxfordSaid,
+  cambridgeJudge,
+  imd,
+  escp,
+  stGallen,
+  rsm,
+  mannheim,
+];
+export const schools = [...india, ...unitedStates, ...europe];
 export const TRACK_LABELS = {
   "two-year": "Two-year MBA",
   executive: "Executive and one-year MBA",
