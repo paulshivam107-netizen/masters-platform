@@ -145,7 +145,6 @@ export default function InterviewStudio({
     goal: "",
     mode: "chat",
     question_limit: 5,
-    consent: false,
   });
   // "full" needs a reviewed résumé; "taster" is the 3-question Why MBA interview.
   const [plan, setPlan] = useState("full");
@@ -868,24 +867,15 @@ export default function InterviewStudio({
                 </details>
               )}
               {live && (
-                <label className="studio-consent">
-                  <input
-                    type="checkbox"
-                    required
-                    checked={setup.consent}
-                    onChange={(event) =>
-                      setSetup({ ...setup, consent: event.target.checked })
-                    }
-                  />
-                  <span>
-                    I agree to send my selected profile facts, anything I add as
-                    extra context and my answers to OpenAI for this practice.
-                    Voice recordings are sent for transcription; this app does
-                    not retain audio. My transcript, copied profile facts, extra
-                    context and feedback are saved to my account until I delete
-                    the session.
-                  </span>
-                </label>
+                <p className="studio-fine-print">
+                  Your profile facts, any extra context and your answers are
+                  sent to OpenAI for this practice; voice recordings are
+                  transcribed and not kept. Sessions stay in your account until
+                  you delete them.{" "}
+                  <a href="/privacy" target="_blank" rel="noopener noreferrer">
+                    Privacy notice
+                  </a>
+                </p>
               )}
               {!live && (
                 <p className="studio-fine-print">

@@ -83,8 +83,6 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         return serialize(previous)
     if payload.provider == "openai":
         require_live(db)
-        if not payload.consent:
-            raise HTTPException(422, "Confirm the AI processing notice before starting.")
     if payload.provider == "demo" and payload.mode == "voice":
         raise HTTPException(422, "The demo supports typed answers. Voice needs a live AI connection.")
     taster = payload.kind == "taster"

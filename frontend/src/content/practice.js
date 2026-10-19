@@ -74,7 +74,7 @@ const practice = {
   privacy: {
     title: "What happens to your résumé",
     items: [
-      "Your résumé text is sent to the AI provider only after you review it and give consent.",
+      "Your résumé text is sent to the AI provider only after you review it.",
       "The original file and the reviewed résumé text are not saved in our database.",
       "What is saved is the practice set: the questions and the short résumé excerpts they are based on, so you can see them again.",
     ],

@@ -135,11 +135,9 @@ class ResumeApiTest(unittest.IsolatedAsyncioTestCase):
         preserved = await self.client.get(f"/interviews/sessions/{session['id']}", headers=self.headers)
         self.assertEqual(preserved.status_code, 200)
 
-    async def test_consent_failure_retry_lease_and_daily_cap(self):
+    async def test_failure_retry_lease_and_daily_cap(self):
         with patch.object(provider, "api_key", return_value="synthetic-key"), patch.object(provider, "_structured", return_value=(draft(), {})) as generate:
-            unconsented = await self.post(self.payload(consent=False))
-            self.assertEqual(unconsented.status_code, 422)
-            payload = self.payload()
+            payload = self.payload(consent=False)  # An inline notice replaced the checkbox; consent is no longer required.
             generate.side_effect = provider.ProviderFailure("Please retry.")
             failed = await self.post(payload)
             self.assertEqual(failed.status_code, 503)

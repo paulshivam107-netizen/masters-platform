@@ -121,9 +121,6 @@ test("a reviewed resume and common opening combine without turning the common qu
     focus.dispatchEvent(new Event("change", { bubbles: true }));
   });
   await act(async () =>
-    container.querySelector(".studio-consent input").click(),
-  );
-  await act(async () =>
     container
       .querySelector("#studio-start-form")
       .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
@@ -138,7 +135,6 @@ test("a reviewed resume and common opening combine without turning the common qu
       kind: "full",
       practice_focus: "resume",
       application_id: 42,
-      consent: true,
     }),
     expect.any(AbortSignal),
   );
@@ -161,8 +157,6 @@ const submitForm = () =>
       .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
   );
 const tick = (fn) => act(async () => fn());
-const agree = () =>
-  tick(() => container.querySelector(".studio-consent input").click());
 
 test("without a resume the full interview is replaced by a call to add one, with the taster as a secondary choice", async () => {
   await render();
@@ -174,7 +168,6 @@ test("without a resume the full interview is replaced by a call to add one, with
   expect(button("Start interview")).toBeUndefined();
   const taster = button("Try a 3-question Why MBA interview");
   expect(taster).toBeDefined();
-  await agree();
   await tick(() => taster.click());
   expect(api.createInterview).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -219,7 +212,6 @@ test("a 409 from the server also hides the taster", async () => {
   });
   api.interviewError.mockResolvedValue("used");
   await render();
-  await agree();
   await tick(() => button("Try a 3-question Why MBA interview").click());
   expect(button("Try a 3-question Why MBA interview")).toBeUndefined();
   expect(container.querySelector('[data-testid="taster-used"]')).not.toBeNull();
@@ -233,7 +225,6 @@ test("Today can open the studio with the taster preselected", async () => {
   ).not.toBeNull();
   expect(button("Start your Why MBA interview")).toBeDefined();
   expect(container.querySelector('[data-testid="resume-cta"]')).toBeNull();
-  await agree();
   await submitForm();
   expect(api.createInterview).toHaveBeenCalledWith(
     expect.objectContaining({ kind: "taster", question_limit: 3 }),
@@ -278,7 +269,6 @@ test("extra context is optional, capped at 4000 characters, counted and sent", a
   });
   expect(container.textContent).toContain("38/4,000 characters");
   await tick(() => button("Use reviewed profile").click());
-  await agree();
   await submitForm();
   expect(api.createInterview).toHaveBeenCalledWith(
     expect.objectContaining({
@@ -318,7 +308,6 @@ test("the interview header names the candidate and programme; a taster debrief e
     },
   });
   await render();
-  await agree();
   await tick(() => button("Try a 3-question Why MBA interview").click());
   expect(
     container.querySelector('[data-testid="interview-header"]').textContent,
@@ -348,7 +337,6 @@ test("an old session with a stored route still reads sensibly", async () => {
   });
   await render();
   await tick(() => button("Use reviewed profile").click());
-  await agree();
   await submitForm();
   expect(
     container.querySelector('[data-testid="interview-header"]').textContent,
@@ -405,7 +393,6 @@ const debrief = (readiness) => ({
 const openDebrief = async (readiness) => {
   api.createInterview.mockResolvedValue(debrief(readiness));
   await render();
-  await agree();
   await tick(() => button("Try a 3-question Why MBA interview").click());
 };
 

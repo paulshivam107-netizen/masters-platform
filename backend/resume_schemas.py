@@ -10,6 +10,7 @@ class ResumeQuestionsCreate(BaseModel):
     application_id: Optional[int] = Field(default=None, gt=0)
     programme_name: str = Field(default="", max_length=160)
     resume_text: str = Field(min_length=80, max_length=20000)
+    # Ignored: an inline notice replaced the checkbox. Kept so older clients that still send it are accepted.
     consent: bool = False
 
 
