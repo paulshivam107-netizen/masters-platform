@@ -29,6 +29,7 @@ export default function FocusedPractice({
   opening = "",
   active = true,
   disclosureRef,
+  defaultOpen = false,
 }) {
   const questions = [
     ...new Set(
@@ -228,6 +229,7 @@ export default function FocusedPractice({
       className="studio-bank-disclosure focused-practice"
       ref={disclosureRef}
       hidden={!active}
+      open={defaultOpen || undefined}
     >
       <summary>
         Practise one question{" "}
@@ -236,7 +238,7 @@ export default function FocusedPractice({
       <p className="studio-fine-print">
         Audio stays on this page and is never uploaded. Up to 2 minutes per
         answer, 6 attempts. Download anything you want to keep before leaving
-        Interviews or reloading.
+        this page or reloading.
       </p>
       <div className="ws-field">
         <label htmlFor="focused-question">Question</label>
@@ -341,8 +343,8 @@ export default function FocusedPractice({
         </details>
       )}
       <p className="studio-fine-print">
-        This is self-review. For transcription and AI feedback, start an
-        Interview Studio voice session when AI is connected.
+        This is self-review. For AI follow-ups on your answers and a debrief,
+        start a full mock interview.
       </p>
     </details>
   );
