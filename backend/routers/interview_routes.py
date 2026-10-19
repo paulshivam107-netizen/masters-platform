@@ -18,8 +18,8 @@ from services import interview_provider as provider
 from services.interview_questions import question_bank, route_matches, starting_question, follow_up_questions
 from services.resume_questions import owned_set
 from services.interview_plan import make_plan
-from services.interviews import (FALLBACK_AFTER_ATTEMPTS, claim, closing_turn, complete, fallback_question,
-                                 fingerprint, is_stop_request, owned, require_live, reserve_quota, run_step,
+from services.interviews import (FALLBACK_AFTER_ATTEMPTS, answer_count, claim, closing_turn, complete, fallback_question,
+                                 fingerprint, is_stop_request, non_answer_reason, owned, require_live, reserve_quota, run_step,
                                  serialize)
 from services.rate_limit import enforce_rate_limit
 
@@ -44,7 +44,9 @@ def interview_user(request: Request, response: Response, user: User = Depends(ge
     response.headers["X-Robots-Tag"] = "noindex, nofollow"
     if not user.is_active:
         raise HTTPException(403, "This account is inactive")
-    enforce_rate_limit(request, action="interviews", limit=90, window_seconds=60, user_id=user.id, db=db)
+    # Reads use the in-process limiter: a database round trip per GET made every page load slower.
+    enforce_rate_limit(request, action="interviews", limit=90, window_seconds=60, user_id=user.id,
+                       db=db, memory=request.method == "GET")
     return user
 
 
@@ -190,9 +192,12 @@ def get_session(session_id: UUID, user: User = Depends(interview_user), db: Sess
 
 @router.post("/sessions/{session_id}/answers")
 def answer(session_id: UUID, payload: InterviewAnswer, user: User = Depends(interview_user), db: Session = Depends(get_db)):
+    reason = None if is_stop_request(payload.text) else non_answer_reason(payload.text)
+    if reason:  # before claim: nothing is saved, versioned or charged
+        raise HTTPException(422, {"code": "not_an_answer", "message": reason})
     session = owned(db, str(session_id), user.id)
     transcript = json.loads(session.transcript_json)
-    count = sum(turn["role"] == "user" for turn in transcript)
+    count = answer_count(transcript)
     # Replay checks in claim precede closed-session/version checks.
     op, token = claim(db, session, payload.request_id, payload.expected_version, "answer", {"text": payload.text},
                       billable=count + 1 < session.question_limit)
@@ -202,7 +207,7 @@ def answer(session_id: UUID, payload: InterviewAnswer, user: User = Depends(inte
     def perform():
         if session.status != "active" or count >= session.question_limit:
             raise provider.ProviderFailure("All answers are saved. Open the debrief to finish.", 409)
-        transcript.append({"id": f"a{count + 1}", "role": "user", "text": payload.text, "request_id": str(payload.request_id)})
+        transcript.append({"id": f"a{sum(t['role'] == 'user' for t in transcript) + 1}", "role": "user", "text": payload.text, "request_id": str(payload.request_id)})
         status = "ready_for_feedback"
         usage, billing = {}, "charged"
         if count + 1 < session.question_limit:
@@ -216,7 +221,9 @@ def answer(session_id: UUID, payload: InterviewAnswer, user: User = Depends(inte
                 question, billing = fallback_question(json.loads(session.context_json), transcript), "none"
             else:
                 question, usage = provider.next_question(json.loads(session.context_json), transcript)
-            transcript.append({"id": f"q{count + 2}", "role": "assistant", "text": question["question"],
+            if question.get("kind") == "off_topic":  # the re-asked question still needs its answer
+                transcript[-1]["off_topic"] = True
+            transcript.append({"id": f"q{sum(t['role'] == 'assistant' for t in transcript) + 1}", "role": "assistant", "text": question["question"],
                                **{key: value for key, value in question.items() if key != "question"}})
             # A stop request closes the interview: the closing message is the last turn.
             status = "ready_for_feedback" if question.get("kind") == "end_requested" else "active"

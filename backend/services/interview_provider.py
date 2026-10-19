@@ -13,7 +13,7 @@ from services.interview_questions import follow_up_questions
 from services.interview_plan import make_plan, next_step
 from services.readiness import DIMENSIONS
 
-PROMPT_VERSION = "mba-interview-v12"
+PROMPT_VERSION = "mba-interview-v13"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -166,15 +166,18 @@ def _request_schema(transcript, move_on, beyond_limit=False):
     base = copy.deepcopy(NextQuestion.model_json_schema())
     properties = {"conflict": base["properties"].pop("conflict"), **base["properties"]}
     answers = [t["id"] for t in transcript if t["role"] == "user"]
+    # v13: one off_topic re-ask per answer; right after one, the interview must move on.
+    last_assistant = next((t for t in reversed(transcript) if t["role"] == "assistant"), {})
+    off_topic = [] if last_assistant.get("kind") == "off_topic" else ["off_topic"]
     if beyond_limit:
         # The one clarification allowed at the limit is used up: only a new topic remains (v10;
         # in v9 the model kept clarifying and every refusal was a billed retry).
-        properties["kind"] = {"type": "string", "enum": ["new_topic"]}
+        properties["kind"] = {"type": "string", "enum": ["new_topic"] + off_topic}
         for field in ("anchor_turn_id", "anchor_quote"):
             properties[field] = {"type": "string", "enum": [""]}
         return {**base, "properties": properties, "required": list(properties)}
-    properties["kind"] = {"type": "string", "enum": ["new_topic", "clarification"] if move_on
-                          else ["follow_up", "clarification", "new_topic"]}
+    properties["kind"] = {"type": "string", "enum": (["new_topic", "clarification"] if move_on
+                          else ["follow_up", "clarification", "new_topic"]) + off_topic}
     properties["anchor_turn_id"] = {"type": "string", "enum": [""] + (answers[-1:] if move_on else answers)}
     return {**base, "properties": properties, "required": list(properties)}
 
@@ -194,8 +197,12 @@ def next_question(context, transcript):
         "First fill conflict: if the latest answer conflicts with the resume or an earlier answer (a different title, "
         "team size, reports, dates, figures or who made a decision), state the conflict in one short sentence; "
         "otherwise leave it empty. When conflict is not empty, kind MUST be clarification of the latest answer, "
-        "politely naming both versions; never treat the new claim as fact or build a question on it. After an irrelevant or off-topic answer, redirect in a few words and ask about a priority "
-        "topic not yet covered. Never re-ask an earlier question, even reworded. "
+        "politely naming both versions; never treat the new claim as fact or build a question on it. If the latest answer is real language but does not address the question asked at all (it is about "
+        "something unrelated), use kind off_topic: say briefly and politely that the answer did not address the question, "
+        "then re-ask the SAME question, lightly rephrased, with empty anchors and the same topic. Never use off_topic for "
+        "vague, short, partial, confidential, I-don't-know, disagreeing or stop answers; handle those as described here "
+        "(clarification, or move on). If off_topic is not an allowed kind, you already asked once: redirect in a few words "
+        "and ask about a priority topic not yet covered. Otherwise never re-ask an earlier question, even reworded. "
         "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
         "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
         "a short exact substring of that answer supporting the question: one continuous passage, never shortened "
@@ -226,9 +233,9 @@ def _check_next_question(result, context, transcript):
     # it); beyond that only a stated conflict justifies another, so a thread cannot run on.
     extra_clarification = result["kind"] == "clarification" and (
         conflict or context["next_step"]["branch_depth"] <= context["next_step"]["max_follow_ups"])
-    if move_on and not (result["kind"] == "new_topic" or extra_clarification):
+    if move_on and not (result["kind"] in ("new_topic", "off_topic") or extra_clarification):
         raise ProviderFailure("The follow-up could not be matched to your answer. Your answer is still here; please retry.")
-    if result["kind"] not in ("new_topic", "end_requested"):
+    if result["kind"] not in ("new_topic", "end_requested", "off_topic"):
         # A clarification probes the latest answer; a follow-up may return to any earlier answer.
         target = next((t for t in transcript if t["role"] == "user" and t["id"] == result["anchor_turn_id"]), None)
         if result["kind"] == "clarification" and target is not last:

@@ -18,10 +18,13 @@ from models import ApplicationTracker, InterviewOperation, InterviewQuota, Inter
 from routers.interview_routes import router
 from services import interview_provider as provider
 from services.interview_questions import question_bank
+from services.interviews import non_answer_reason
+from services import rate_limit
 
 
 class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
     async def asyncSetUp(self):
+        rate_limit._memory.clear()
         self.tmp = tempfile.TemporaryDirectory()
         self.engine = create_engine("sqlite:///" + self.tmp.name + "/test.sqlite", connect_args={"check_same_thread": False})
         Base.metadata.create_all(self.engine)
@@ -228,6 +231,44 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
                 self.assertEqual(replay.status_code, 200)
                 self.assertEqual(called.call_count, 1)
 
+    async def test_non_answer_is_rejected_without_a_provider_call_or_change(self):
+        with patch.object(provider, "api_key", return_value="unit-test-key"):
+            session = await self.create(provider="openai", consent=True)
+            with patch.object(provider, "next_question") as called:
+                response = await self.send(session, text="The cat sat on a mat. " * 5)
+            self.assertEqual(response.status_code, 422)
+            self.assertEqual(response.json()["detail"]["code"], "not_an_answer")
+            self.assertIn("doesn't look like an answer", response.json()["detail"]["message"])
+            called.assert_not_called()
+            saved = (await self.client.get(f"/interviews/sessions/{session['id']}", headers=self.headers)).json()
+            self.assertEqual((saved["version"], saved["transcript"]), (session["version"], session["transcript"]))
+            with self.Session() as db:
+                self.assertEqual(db.query(InterviewOperation).count(), 0)
+                self.assertEqual(db.query(InterviewQuota).filter(InterviewQuota.id.like("ai:%")).count(), 0)
+
+    async def test_off_topic_retry_does_not_use_up_a_question(self):
+        with patch.object(provider, "api_key", return_value="unit-test-key"):
+            session = await self.create(provider="openai", consent=True, question_limit=3)
+            asked = {"kind": "off_topic", "topic": "projects", "anchor_turn_id": "", "anchor_quote": ""}
+            with patch.object(provider, "next_question", return_value=({"question": "That did not address my question. What did you do?", **asked}, {})):
+                first = (await self.send(session, text="Do you know if the hostel allows cooking?")).json()
+            self.assertTrue(first["transcript"][1]["off_topic"])
+            self.assertEqual(first["answer_count"], 0)
+            self.assertEqual([t["id"] for t in first["transcript"]], ["q1", "a1", "q2"])
+            with patch.object(provider, "next_question", return_value=({"question": "What did you personally decide?"}, {})):
+                second = (await self.send(first)).json()
+            self.assertEqual([t["id"] for t in second["transcript"]], ["q1", "a1", "q2", "a2", "q3"])
+            self.assertEqual(second["answer_count"], 1)
+            self.assertEqual(second["status"], "active")
+
+    async def test_reads_use_the_in_memory_limiter(self):
+        with patch("routers.interview_routes.enforce_rate_limit") as limiter:
+            await self.client.get("/interviews/sessions", headers=self.headers)
+            await self.client.post("/interviews/sessions", headers=self.headers, json={"request_id": str(uuid4())})
+        self.assertEqual([c.kwargs["memory"] for c in limiter.call_args_list], [True, False])
+        self.assertEqual(rate_limit.hit_memory("k", limit=1, window_seconds=60)[0], True)
+        self.assertEqual(rate_limit.hit_memory("k", limit=1, window_seconds=60)[0], False)
+
     async def test_end_requested_closes_the_interview_for_the_debrief(self):
         with patch.object(provider, "api_key", return_value="unit-test-key"):
             session = await self.create(provider="openai", consent=True)
@@ -363,3 +404,17 @@ class InterviewProviderTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class NonAnswerTest(unittest.TestCase):
+    def test_blocks_answers_that_cannot_be_real(self):
+        for text in ["The cat sat on a mat. " * 5, "the cat sat on a mat the cat sat on a mat the cat sat on a mat",
+                     "I like tea. I like tea! i like tea", "asdf jkl qwer zxcv", "hjkl dfghjk sdfgkl wrtpsdk",
+                     "blah", "!!! ???", "ok ok ok ok ok ok ok ok ok ok ok ok ok ok"]:
+            self.assertIsNotNone(non_answer_reason(text), text)
+
+    def test_lets_genuine_short_answers_through(self):
+        for text in ["I don't know", "I'd rather not say", "Yes, I led it", "Skip this one please",
+                     "Can we stop here? I'd like to end the session.", "5 years", "I worked on SQL dashboards.",
+                     "I led a team of four. I enjoyed it. I would do it again.", "मैंने टीम का नेतृत्व किया"]:
+            self.assertIsNone(non_answer_reason(text), text)
