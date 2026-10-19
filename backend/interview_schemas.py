@@ -20,6 +20,7 @@ class InterviewCreate(BaseModel):
     mode: Literal["chat", "voice"] = "chat"
     provider: Literal["openai", "demo"] = "openai"
     question_limit: Literal[3, 5, 8] = 5
+    # Ignored: an inline notice replaced the checkbox. Kept so older clients that still send it are accepted.
     consent: bool = False
     question_id: Optional[str] = Field(default=None, max_length=80, pattern=r"^[a-z0-9-]+$")
     question_set_id: Optional[UUID] = None

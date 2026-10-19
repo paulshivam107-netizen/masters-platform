@@ -83,7 +83,7 @@ test("keyless upload extracts editable text but never calls AI", async () => {
   expect(container.querySelector("textarea")).toBeNull();
 });
 
-test("consented generation preserves retries, clears résumé text on success and selects a private opening", async () => {
+test("generation preserves retries, clears résumé text on success and selects a private opening", async () => {
   const choose = jest.fn();
   await act(async () =>
     root.render(
@@ -95,10 +95,7 @@ test("consented generation preserves retries, clears résumé text on success an
     ),
   );
   await upload();
-  expect(button("Build my profile & questions").disabled).toBe(true);
-  await act(async () =>
-    container.querySelector('input[type="checkbox"]').click(),
-  );
+  expect(button("Build my profile & questions").disabled).toBe(false);
   api.createResumeQuestions
     .mockRejectedValueOnce(new Error("temporary failure"))
     .mockResolvedValue(set);

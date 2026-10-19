@@ -54,8 +54,6 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
         if row.status == "completed":
             return serialize_set(row)
     require_live(db)
-    if not payload.consent:
-        raise HTTPException(422, "Confirm the resume processing notice before generating questions.")
     application = None
     if payload.application_id:
         application = db.query(ApplicationTracker).filter_by(id=payload.application_id, user_id=user.id).first()

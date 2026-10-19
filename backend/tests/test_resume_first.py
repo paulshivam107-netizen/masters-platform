@@ -178,9 +178,9 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(response.status_code, 201)
         self.assertEqual((await self.post(kind="taster")).status_code, 201)
 
-    async def test_taster_needs_consent_and_live_ai(self):
-        self.assertEqual((await self.post(kind="taster", consent=False)).status_code, 422)
-        self.assertEqual((await self.post(kind="taster", provider="demo", consent=False)).status_code, 422)
+    async def test_taster_needs_live_ai_but_no_consent_tick(self):
+        self.assertEqual((await self.post(kind="taster", provider="demo")).status_code, 422)
+        self.assertEqual((await self.post(kind="taster", consent=False)).status_code, 201)
 
     async def test_taster_answers_go_through_the_cost_reservation(self):
         session = (await self.post(kind="taster")).json()

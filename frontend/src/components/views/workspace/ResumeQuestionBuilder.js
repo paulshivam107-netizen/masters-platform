@@ -15,7 +15,6 @@ export default function ResumeQuestionBuilder({
   const [text, setText] = useState("");
   const [showText, setShowText] = useState(false);
   const [filename, setFilename] = useState("");
-  const [consent, setConsent] = useState(false);
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
@@ -103,7 +102,6 @@ export default function ResumeQuestionBuilder({
       if (!active.current) return;
       setText(result.text);
       setFilename(file.name);
-      setConsent(false);
       generation.current = null;
       setNotice(
         "Text extracted. Review it below and remove anything you do not want sent to AI.",
@@ -118,7 +116,6 @@ export default function ResumeQuestionBuilder({
       resume_text: text.trim(),
       application_id: applicationId ? Number(applicationId) : null,
       programme_name: programmeName,
-      consent,
     };
     const signature = JSON.stringify(payload);
     if (generation.current?.signature !== signature)
@@ -138,7 +135,6 @@ export default function ResumeQuestionBuilder({
       // The original résumé stays out of browser storage and saved interview context.
       setText("");
       setFilename("");
-      setConsent(false);
       generation.current = null;
       setNotice(
         "Your profile and questions are saved. Review the facts below before using them in practice. The full résumé text has been cleared.",
@@ -224,7 +220,6 @@ export default function ResumeQuestionBuilder({
                 rows={8}
                 onChange={(event) => {
                   setText(event.target.value);
-                  setConsent(false);
                 }}
                 aria-describedby="resume-text-help"
                 placeholder="Paste your education, work experience, projects and achievements here. Remove contact details and anything you do not want to share."
@@ -237,20 +232,14 @@ export default function ResumeQuestionBuilder({
             </div>
           )}
           {text && (
-            <label className="studio-consent">
-              <input
-                type="checkbox"
-                checked={consent}
-                disabled={!capabilities?.chat || locked}
-                onChange={(event) => setConsent(event.target.checked)}
-              />
-              <span>
-                I agree to send this reviewed text to OpenAI to extract profile
-                facts and draft questions. The facts, questions and short
-                supporting excerpts are saved privately to my account and can be
-                deleted. This app does not save the full résumé text.
-              </span>
-            </label>
+            <p className="studio-fine-print">
+              Your reviewed text is sent to OpenAI to pull out profile facts and
+              draft questions. We save the facts and questions, not the full
+              résumé, and you can delete them.{" "}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer">
+                Privacy notice
+              </a>
+            </p>
           )}
           <div className="studio-actions">
             <button
@@ -259,8 +248,7 @@ export default function ResumeQuestionBuilder({
               disabled={
                 locked ||
                 !capabilities?.chat ||
-                text.trim().length < 80 ||
-                !consent
+                text.trim().length < 80
               }
             >
               {busy || "Build my profile & questions"}
@@ -272,7 +260,6 @@ export default function ResumeQuestionBuilder({
                 onClick={() => {
                   setText("");
                   setFilename("");
-                  setConsent(false);
                   generation.current = null;
                 }}
               >

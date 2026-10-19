@@ -555,8 +555,8 @@ export function PrivacyPage() {
           <p>
             When you run an AI interview or generate résumé questions, the text
             needed for that step (the programme you chose, your answers, any
-            extra context you added, and the résumé text you reviewed and
-            agreed to send) goes to OpenAI to
+            extra context you added, and the résumé text you reviewed) goes to
+            OpenAI to
             draft questions, follow-ups and the debrief. Voice answers are
             transcribed by OpenAI, including answers you dictate. We send these requests with OpenAI's storage
             option turned off.
