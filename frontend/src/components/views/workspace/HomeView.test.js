@@ -51,6 +51,19 @@ afterEach(() => {
   container.remove();
 });
 
+test("first visit: primary start card goes to interviews, tracker is secondary", async () => {
+  listInterviews.mockResolvedValue({ completed_count: 0, items: [] });
+  const handleNavChange = jest.fn();
+  await renderHome({ firstVisit: true, handleNavChange });
+  act(() => byId("home-start-interview").click());
+  expect(handleNavChange).toHaveBeenCalledWith("interviews");
+  expect(
+    byId("home-start-interview").compareDocumentPosition(
+      byId("home-track-card"),
+    ) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+});
+
 describe.each([
   ["first-visit", true],
   ["normal", false],
@@ -67,17 +80,17 @@ describe.each([
     );
     act(() => again.click());
     expect(handleNavChange).toHaveBeenCalledWith("interviews");
-    expect(byId("home-taster-note")).toBeNull();
   });
 
-  test("keeps the taster card when the interview list fails", async () => {
+  test("keeps the start card when the interview list fails", async () => {
     listInterviews.mockRejectedValue(new Error("offline"));
     await renderHome({ firstVisit });
 
     expect(byId("home-practice")).toBeNull();
     if (firstVisit) {
-      expect(byId("home-taster-note")).not.toBeNull();
-      expect(container.textContent).toContain("Start your Why MBA interview");
+      expect(container.textContent).toContain(
+        "Start your first mock interview",
+      );
     }
   });
 });

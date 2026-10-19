@@ -8,6 +8,9 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
 import { schoolGroups } from "../../content/schools";
+import FocusedPractice from "../views/workspace/FocusedPractice";
+import "../views/Workspace.css";
+import "../views/workspace/InterviewStudio.css";
 import "./PublicPages.css";
 import "./ResourcePages.css";
 
@@ -694,6 +697,7 @@ export function PracticePage() {
         header={null}
         toc={[
           ["how-it-works", how.title],
+          ["try", "Try one question now"],
           ["example", "A short example"],
           ["routes", routes.title],
           ["limits", limits.title],
@@ -708,6 +712,17 @@ export function PracticePage() {
             ))}
           </ol>
           <p>{how.note}</p>
+        </section>
+        <section id="try">
+          <h2>Try one question now</h2>
+          <p>
+            No account needed. Pick a question, record your answer, listen back
+            and try again. Recordings stay in your browser; nothing is uploaded
+            and no AI is involved.
+          </p>
+          <div className="rp-try">
+            <FocusedPractice defaultOpen />
+          </div>
         </section>
         <section id="example">
           <h2>A short example</h2>

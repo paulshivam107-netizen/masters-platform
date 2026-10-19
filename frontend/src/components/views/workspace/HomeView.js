@@ -3,7 +3,6 @@ import * as interviewsApi from "../../../api/interviewsApi";
 import { Link } from "react-router-dom";
 import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
-import { setInterviewIntent } from "./interviewIntent";
 import ApplicationDetail from "./ApplicationDetail";
 import {
   ApplicationsIcon,
@@ -153,66 +152,38 @@ export default function HomeView({
             {practiceCard || (
               <>
                 <p>
-                  Start with a short Why MBA interview: follow-ups on your own
-                  answers and a debrief when you finish.
+                  A short mock interview with follow-ups on your own answers
+                  and a debrief when you finish. No résumé needed.
                 </p>
                 <div className="ws-row">
                   <button
                     className="ws-btn ws-btn--primary"
-                    onClick={() => {
-                      setInterviewIntent("taster");
-                      handleNavChange("interviews");
-                    }}
+                    data-testid="home-start-interview"
+                    onClick={() => handleNavChange("interviews")}
                   >
-                    Start your Why MBA interview <ArrowIcon />
+                    Start your first mock interview <ArrowIcon />
                   </button>
                 </div>
-                <p className="ws-muted ws-small" data-testid="home-taster-note">
-                  3 questions, about 5 minutes. Add your résumé after for a full
-                  interview.
-                </p>
               </>
             )}
-          </div>
-          <div className="ws-card wi-welcome__side">
-            <span className="wi-row__icon">
-              <ApplicationsIcon />
-            </span>
-            <h3>Track your applications</h3>
-            <p>
-              Add a programme you’re considering, on any route, with its
-              official deadline. Build your plan at your own pace.
-            </p>
-            <button
-              className="ws-btn ws-btn--ghost ws-btn--sm"
-              data-testid="home-dashboard-start-application"
-              onClick={() => handleOpenApplicationForm()}
-            >
-              Add your first application <ArrowIcon />
-            </button>
           </div>
         </div>
         <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
           New here? See the two-minute setup guide <ArrowIcon />
         </Link>
-        <div className="wi-steps">
-          <h3>One step at a time</h3>
-          <ol>
-            <li>
-              <strong>Choose your programme</strong>
-              <span>Keep its deadline and requirements together.</span>
-            </li>
-            <li>
-              <strong>Build your application</strong>
-              <span>
-                Save preparation notes, drafts and document checklists.
-              </span>
-            </li>
-            <li>
-              <strong>Practise your story</strong>
-              <span>Prepare a few clear answers for your interview.</span>
-            </li>
-          </ol>
+        <div className="ws-card" data-testid="home-track-card">
+          <h3>Track your applications</h3>
+          <p className="ws-muted">
+            Add a programme you’re considering, on any route, with its official
+            deadline. Build your plan at your own pace.
+          </p>
+          <button
+            className="ws-btn ws-btn--ghost ws-btn--sm"
+            data-testid="home-dashboard-start-application"
+            onClick={() => handleOpenApplicationForm()}
+          >
+            Add your first application <ArrowIcon />
+          </button>
         </div>
       </section>
     );

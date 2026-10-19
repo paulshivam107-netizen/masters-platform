@@ -857,3 +857,9 @@ html[data-reduced-motion="true"] .rp-link::after,
 html[data-reduced-motion="true"] .rp-faq-icon::after {
   transition: none;
 }
+
+/* The workspace recorder, embedded on a public page: give it the workspace control colour. */
+.rp-try {
+  --ws-ctrl: color-mix(in srgb, var(--ink) 62%, var(--canvas));
+  margin-top: 16px;
+}

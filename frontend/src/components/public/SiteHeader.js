@@ -57,7 +57,7 @@ export default function SiteHeader({ home = false, current = "" }) {
             <Link to="/app/today">Open workspace</Link>
           ) : (
             <Link
-              to="/auth?mode=login&next=%2Fapp"
+              to="/auth?mode=login&next=%2Fapp%2Finterviews"
               aria-current={mark("signin")}
             >
               Sign in

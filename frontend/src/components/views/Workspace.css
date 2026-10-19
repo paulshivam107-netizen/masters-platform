@@ -1304,3 +1304,29 @@ details.ws-card[open] > :not(summary) {
 :is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(3) { animation-delay: 80ms; }
 :is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(4) { animation-delay: 120ms; }
 :is(.wpl-app-list > *, .wac-essay, .wac-note):nth-child(n + 5) { animation-delay: 160ms; }
+
+.verify-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+  border-radius: 10px;
+  background: var(--warning-bg);
+  color: var(--warning);
+  font-size: 14px;
+}
+.verify-banner span {
+  flex: 1;
+}
+.verify-banner button {
+  min-height: 32px;
+  padding: 0 6px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}

@@ -144,7 +144,7 @@ export default function ProgramsPage() {
       navigate("/app");
       return;
     }
-    navigate("/auth?mode=signup&next=%2Fapp");
+    navigate("/auth?mode=signup&next=%2Fapp%2Finterviews");
   };
 
   const countries = distinct(items, "country");

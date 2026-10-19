@@ -96,8 +96,7 @@ export function resolvePageHeader({
     pageSubtitle = "Use your application details to decide where to focus next";
   } else if (activeNav === "interviews") {
     pageHeading = "Interview preparation";
-    pageSubtitle =
-      "Prepare stories, mock notes, and schedules for interview rounds";
+    pageSubtitle = "";
   } else if (activeNav === "research") {
     pageHeading = "School research";
     pageSubtitle =

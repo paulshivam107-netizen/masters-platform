@@ -26,7 +26,7 @@ export default function SiteFooter({ home = false }) {
           </div>
           <div>
             <h3>Product</h3>
-            <Link to="/auth?mode=login&next=%2Fapp">Sign in</Link>
+            <Link to="/auth?mode=login&next=%2Fapp%2Finterviews">Sign in</Link>
             <Link to="/privacy">Privacy</Link>
           </div>
           <div>

@@ -28,7 +28,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 
-const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp";
+const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
 
 function buildDemoReview(prompt, draft) {
   const trimmedPrompt = (prompt || "").trim();
@@ -143,12 +143,26 @@ function useCompact() {
   return compact;
 }
 
+// Signed-out visitors can rehearse one question in the browser first (no AI, no account).
+function TryLink() {
+  const { user } = useAuth();
+  return user ? (
+    <a className="lp-link" href="#how_it_works">
+      See how a session works <ArrowIcon />
+    </a>
+  ) : (
+    <Link className="lp-link" to="/mba-interview-practice#try">
+      Try one question, no sign-up <ArrowIcon />
+    </Link>
+  );
+}
+
 function StartButton({ location, className = "" }) {
   const { user } = useAuth();
   return (
     <Link
       className={`lp-btn ${className}`.trim()}
-      to={user ? "/app/today" : SIGNUP_PATH}
+      to={user ? "/app/interviews" : SIGNUP_PATH}
       onClick={() =>
         trackEvent("public_cta_clicked", { location, signedIn: Boolean(user) })
       }
@@ -804,9 +818,7 @@ export default function LandingPage() {
           </p>
           <div className="lp-cta-row">
             <StartButton location="hero" />
-            <a className="lp-link" href="#how_it_works">
-              See how a session works <ArrowIcon />
-            </a>
+            <TryLink />
           </div>
         </div>
         <div className="lp-strip" tabIndex={0} aria-label="Example screens">

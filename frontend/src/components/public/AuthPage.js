@@ -13,9 +13,9 @@ function parseMode(value) {
 }
 
 function normalizeNext(value) {
-  if (!value || typeof value !== "string") return "/app";
-  if (!value.startsWith("/")) return "/app";
-  if (value.startsWith("//")) return "/app";
+  if (!value || typeof value !== "string") return "/app/interviews";
+  if (!value.startsWith("/")) return "/app/interviews";
+  if (value.startsWith("//")) return "/app/interviews";
   return value;
 }
 
@@ -39,17 +39,15 @@ export default function AuthPage() {
       const nextParams = new URLSearchParams(searchParams);
       nextParams.set("mode", nextMode);
       if (!nextParams.get("next")) {
-        nextParams.set("next", "/app");
+        nextParams.set("next", "/app/interviews");
       }
       setSearchParams(nextParams, { replace: true });
     },
     [searchParams, setSearchParams],
   );
 
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
-
+  // Render the form at once; the session check finishes in the background and the effect above
+  // redirects a visitor who turns out to be signed in already.
   return (
     <div className="ap-page">
       <SiteHeader current="signin" />

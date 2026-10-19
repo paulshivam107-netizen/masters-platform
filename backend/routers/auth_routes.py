@@ -217,6 +217,14 @@ def refresh_access_token(
     payload: RefreshTokenRequest | None = None,
     db: Session = Depends(get_db),
 ):
+    cookie_token = request.cookies.get(settings.AUTH_COOKIE_NAME)
+    # Legacy clients stored the refresh token themselves and send it in the body. That path is
+    # kept so existing sessions migrate to the cookie on their next refresh.
+    raw_token = cookie_token or (payload.refresh_token if payload else None)
+    # Every page load asks this; with no token there is nothing to check or brute-force, so
+    # answer before the database-backed rate limiter (it cost new visitors about a second).
+    if not raw_token:
+        raise SessionRejected("no_session", "You are not signed in.")
     enforce_rate_limit(
         request,
         db=db,
@@ -224,14 +232,8 @@ def refresh_access_token(
         limit=120,
         window_seconds=10 * 60,
     )
-    cookie_token = request.cookies.get(settings.AUTH_COOKIE_NAME)
-    # Legacy clients stored the refresh token themselves and send it in the body. That path is
-    # kept so existing sessions migrate to the cookie on their next refresh.
-    raw_token = cookie_token or (payload.refresh_token if payload else None)
     if cookie_token:
         require_trusted_origin(request, settings)
-    if not raw_token:
-        raise SessionRejected("no_session", "You are not signed in.")
     try:
         user, access_token = rotate_refresh_token(db, settings, raw_token, response)
     except SessionRejected as exc:

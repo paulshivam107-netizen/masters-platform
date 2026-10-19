@@ -17,7 +17,7 @@ from services import interview_provider as provider
 from services import ai_costs
 from services.interviews import fingerprint, reserve_cost, reserve_quota, require_live
 from services.resume_parser import MAX_BYTES
-from services.resume_questions import extract_document, generate_questions, owned_set, serialize_set
+from services.resume_questions import extract_document, strip_contact_details, generate_questions, owned_set, serialize_set
 
 router = APIRouter(prefix="/interviews/resume", tags=["resume questions"])
 
@@ -52,8 +52,9 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
         if row.fingerprint != digest:
             raise HTTPException(409, "This request ID was already used with different resume details.")
         if row.status == "completed":
-            return serialize_set(row)
+            return {**serialize_set(row), "contact_details_removed": strip_contact_details(payload.resume_text)[1]}
     require_live(db)
+    resume_text, removed = strip_contact_details(payload.resume_text)
     application = None
     if payload.application_id:
         application = db.query(ApplicationTracker).filter_by(id=payload.application_id, user_id=user.id).first()
@@ -83,11 +84,11 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
     reserve_quota(db, user.id)
     row_id = row.id
     entry_id = reserve_cost(db, user.id, "resume_questions", provider.text_model(),
-                            ai_costs.text_tokens_upper_bound(len(payload.resume_text) + len(json.dumps(context)) + 6000),
+                            ai_costs.text_tokens_upper_bound(len(resume_text) + len(json.dumps(context)) + 6000),
                             3800, row_id).id
     db.commit()
     try:
-        graph, usage = generate_questions(payload.resume_text, context)
+        graph, usage = generate_questions(resume_text, context)
         changed = db.query(ResumeQuestionSet).filter_by(id=row_id, pending_token=token).update({
             "status": "completed", "questions_json": json.dumps(graph), "usage_json": json.dumps(usage),
             "pending_token": None, "pending_until": None}, synchronize_session=False)
@@ -99,7 +100,7 @@ def create_set(payload: ResumeQuestionsCreate, user: User = Depends(interview_us
         ai_costs.finish(db, entry_id, "charged", usage)
         db.commit()
         db.refresh(row)
-        return serialize_set(row)
+        return {**serialize_set(row), "contact_details_removed": removed}
     except HTTPException:
         raise
     except Exception as exc:

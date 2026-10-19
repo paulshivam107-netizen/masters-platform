@@ -92,8 +92,9 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         if taster_used(db, user.id):
             raise HTTPException(409, TASTER_USED)
         payload.question_limit, payload.practice_focus = 3, "motivation"
-    elif payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id):
-        raise HTTPException(422, "Add your résumé to start a full interview.")
+    general = payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id)
+    if general and not taster:  # no résumé: same motivation-led plan and opening as the taster, but repeatable
+        payload.practice_focus = "motivation"
     application = None
     if payload.application_id:
         application = db.query(ApplicationTracker).filter_by(id=payload.application_id, user_id=user.id).first()
@@ -149,7 +150,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         context.update(question_id=chosen["id"], question_bank_version=question_bank()["version"])
     if payload.profile_fact_ids and not payload.profile_set_id:
         raise HTTPException(422, "Choose the saved resume profile for these facts.")
-    if taster:
+    if taster or (general and not payload.question_id):
         opening = "Walk me through yourself, and why an MBA is the next step you want to take."
     elif not payload.question_id:
         openings = {

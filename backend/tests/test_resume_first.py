@@ -19,7 +19,6 @@ from routers.interview_routes import router
 from services import interview_provider as provider
 from services.interview_questions import follow_up_questions, question_bank, starting_question
 
-RESUME_MESSAGE = "Add your résumé to start a full interview."
 TASTER_USED = "You've used your Why MBA taster. Add your résumé for a full interview."
 
 
@@ -102,12 +101,11 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(response.json()["transcript"][0]["text"], "Walk me through your analyst role.")
 
     # Resume required for a full live interview
-    async def test_full_live_interview_requires_resume(self):
-        response = await self.post()
-        self.assertEqual(response.status_code, 422)
-        self.assertIn(RESUME_MESSAGE, response.text)
-        with self.Session() as db:
-            self.assertEqual(db.query(InterviewSession).count(), 0)
+    async def test_full_live_interview_without_resume_is_a_general_interview(self):
+        for _ in range(2):
+            response = await self.post()
+            self.assertEqual(response.status_code, 201, response.text)
+            self.assertEqual(response.json()["context"]["practice_focus"], "motivation")
 
     async def test_full_live_interview_with_reviewed_profile_or_question_set(self):
         set_id = self.make_set()
