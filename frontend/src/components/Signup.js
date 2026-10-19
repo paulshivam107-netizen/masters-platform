@@ -129,29 +129,30 @@ function Signup({ onSwitchToLogin }) {
 
           <div className="form-group">
             <label htmlFor="signup-field-3">Password</label>
-            <input
-              id="signup-field-3"
-              data-testid="auth-signup-password"
-              type={showPassword ? "text" : "password"}
-              autoComplete="new-password"
-              minLength={8}
-              maxLength={128}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              aria-describedby="signup-password-hint"
-              required
-            />
-            <button
-              type="button"
-              className="link-button"
-              data-testid="auth-signup-toggle-password"
-              aria-pressed={showPassword}
-              aria-label={showPassword ? "Hide password" : "Show password"}
-              onClick={() => setShowPassword((v) => !v)}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </button>
+            <div className="password-field">
+              <input
+                id="signup-field-3"
+                data-testid="auth-signup-password"
+                type={showPassword ? "text" : "password"}
+                autoComplete="new-password"
+                minLength={8}
+                maxLength={128}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                aria-describedby="signup-password-hint"
+                required
+              />
+              <button
+                type="button"
+                className="password-toggle"
+                data-testid="auth-signup-toggle-password"
+                aria-pressed={showPassword}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                onClick={() => setShowPassword((v) => !v)}
+              >
+                {showPassword ? "Hide" : "Show"}
+              </button>
+            </div>
             <small id="signup-password-hint">At least 8 characters.</small>
           </div>
 
