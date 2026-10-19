@@ -46,10 +46,8 @@ export default function AuthPage() {
     [searchParams, setSearchParams],
   );
 
-  if (loading) {
-    return <div className="loading-screen">Loading...</div>;
-  }
-
+  // Render the form at once; the session check finishes in the background and the effect above
+  // redirects a visitor who turns out to be signed in already.
   return (
     <div className="ap-page">
       <SiteHeader current="signin" />

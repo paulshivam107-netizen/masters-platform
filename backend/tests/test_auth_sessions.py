@@ -170,6 +170,14 @@ class AuthSessionTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(r.status_code, 200, r.text)
         self.assertIn(COOKIE, r.cookies)
 
+    async def test_no_session_answers_before_the_rate_limiter(self):
+        # Every page load calls refresh; a visitor with no token must not wait on the DB limiter.
+        with patch("routers.auth_routes.enforce_rate_limit") as limiter:
+            async with self.new_client() as c:
+                r = await c.post("/auth/refresh")
+        self.assertEqual(r.status_code, 401, r.text)
+        limiter.assert_not_called()
+
     # --- logout and revocation ----------------------------------------------------------------
 
     async def test_logout_ends_this_session_only(self):
