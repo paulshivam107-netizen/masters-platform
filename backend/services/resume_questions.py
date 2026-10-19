@@ -1,3 +1,4 @@
+import re
 import json
 import os
 from pathlib import Path
@@ -37,6 +38,45 @@ def owned_set(db, set_id, user_id):
 def serialize_set(row):
     return {"id": row.id, "context": json.loads(row.context_json), "status": row.status,
             "created_at": row.created_at.isoformat() + "Z", "graph": json.loads(row.questions_json) if row.questions_json else None}
+
+
+_CONTACT = re.compile(r"""
+    [\w.+-]+@[\w-]+(?:\.[\w-]+)+                                  # email
+  | (?:https?://|www\.)\S+                                        # web url
+  | \b(?:[\w-]+\.)*(?:linkedin|github|gitlab|behance)\.com/\S+     # profile url without scheme
+  | (?P<phone>(?<![\w/.,$%-])(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d[\d\s().-]{6,}\d(?![\w/%]))  # phone
+""", re.X | re.I)
+
+
+def _is_phone_like(match):
+    text = match.group("phone")
+    if text is None:
+        return True
+    digits = re.sub(r"\D", "", text)
+    if not 10 <= len(digits) <= 13:
+        return False
+    # Years, ranges and figures such as "2017-2021" or "5,000,000" are not phones.
+    if re.fullmatch(r"(?:19|20)\d{2}\s*[-\u2013]\s*(?:19|20)\d{2}", text.strip()) or "," in text:
+        return False
+    return text.lstrip().startswith(("+", "(", "0")) or len(digits) == 10 or bool(re.search(r"[\s.-]", text))
+
+
+def strip_contact_details(text):
+    """Remove emails, phone numbers and profile/web URLs; return (clean_text, removed_count).
+
+    Run before any resume text reaches the AI. Dates, CGPA ("8.84/10.00"), percentages and money are kept.
+    shortcut: regex heuristics, an unusual phone layout may slip through; extend the pattern if one does.
+    """
+    removed = 0
+
+    def drop(match):
+        nonlocal removed
+        if not _is_phone_like(match):
+            return match.group(0)
+        removed += 1
+        return ""
+    clean = _CONTACT.sub(drop, text)
+    return re.sub(r"[ \t]{2,}", " ", clean), removed
 
 
 def generate_questions(resume_text, context):
