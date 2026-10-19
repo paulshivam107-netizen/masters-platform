@@ -201,8 +201,13 @@
   border-top: 1px solid var(--line-strong);
 }
 /* Only show the divider when Google's slot follows it (the slot renders nothing if unconfigured). */
-.ap-divider:has(+ .auth-google-slot) {
+.ap-divider:has(+ .auth-google-slot),
+.auth-google-slot + .ap-divider {
   display: flex;
+}
+/* Sign-up puts Google first: give the divider room before the form. */
+.auth-google-slot + .ap-divider {
+  margin: 18px 0 10px;
 }
 /* Google slot: spacing only; the button itself is never restyled. */
 .ap-page .auth-google-slot {
@@ -420,4 +425,30 @@
   .ap-page .auth-reset-panel {
     padding: 18px 16px;
   }
+}
+
+/* Password with an inline Show/Hide toggle. */
+.ap-page .password-field {
+  position: relative;
+}
+.ap-page .password-field input {
+  width: 100%;
+  padding-right: 72px;
+}
+.ap-page .password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--primary);
+  font: 600 14px var(--font-body);
+  cursor: pointer;
+}
+.ap-page .password-toggle:hover {
+  background: var(--tint);
 }
