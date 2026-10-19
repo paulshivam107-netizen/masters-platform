@@ -97,7 +97,9 @@ def question_rows(session):
         previous = transcript[index - 1]
         answer_number = int(previous["id"][1:])  # ids count every answer, so tags line up with the script
         flags = _text_flags(turn["text"], persona, _sources(session, answer_number))
-        if any(SequenceMatcher(None, turn["text"].casefold(), earlier.casefold()).ratio() >= REPEAT_RATIO for earlier in asked):
+        # An off_topic turn deliberately repeats the unanswered question; that is not a repeat.
+        if turn.get("kind") != "off_topic" and any(
+                SequenceMatcher(None, turn["text"].casefold(), earlier.casefold()).ratio() >= REPEAT_RATIO for earlier in asked):
             flags.insert(0, "repeat")
         asked.append(turn["text"])
         rows.append({

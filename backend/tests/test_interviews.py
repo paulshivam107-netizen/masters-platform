@@ -361,6 +361,16 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
 
 
 class InterviewProviderTest(unittest.TestCase):
+    def test_off_topic_retry_is_the_exact_unanswered_question(self):
+        transcript = [{"id": "q1", "role": "assistant", "text": "Why an MBA now?", "topic": "motivation"},
+                      {"id": "a1", "role": "user", "text": "I watched a lovely film about the Cholas last weekend."}]
+        context = {"next_step": {"move_on": False, "branch_depth": 0, "max_follow_ups": 2}}
+        result = provider._check_next_question(
+            {"conflict": "", "question": "Earlier you said you lead from the front; tell me more.", "kind": "off_topic",
+             "topic": "projects", "anchor_turn_id": "a1", "anchor_quote": "film"}, context, transcript)
+        self.assertEqual(result["question"], f"{provider.OFF_TOPIC_RETRY} Why an MBA now?")
+        self.assertEqual((result["topic"], result["anchor_turn_id"], result["anchor_quote"]), ("motivation", "", ""))
+
     def test_feedback_requires_real_evidence(self):
         transcript = [{"id": "a1", "role": "user", "text": "I organised a team."}]
         result = provider.demo_feedback(transcript)

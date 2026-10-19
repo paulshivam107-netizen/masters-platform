@@ -14,6 +14,7 @@ from services.interview_plan import make_plan, next_step
 from services.readiness import DIMENSIONS
 
 PROMPT_VERSION = "mba-interview-v13"
+OFF_TOPIC_RETRY = "That didn't seem to answer the question, so let me ask it again:"
 MAX_AUDIO_BYTES = 3 * 1024 * 1024
 MAX_RECORDING_SECONDS = 120
 
@@ -198,10 +199,13 @@ def next_question(context, transcript):
         "team size, reports, dates, figures or who made a decision), state the conflict in one short sentence; "
         "otherwise leave it empty. When conflict is not empty, kind MUST be clarification of the latest answer, "
         "politely naming both versions; never treat the new claim as fact or build a question on it. If the latest answer is real language but does not address the question asked at all (it is about "
-        "something unrelated), use kind off_topic: say briefly and politely that the answer did not address the question, "
-        "then re-ask the SAME question, lightly rephrased, with empty anchors and the same topic. Never use off_topic for "
-        "vague, short, partial, confidential, I-don't-know, disagreeing or stop answers; handle those as described here "
-        "(clarification, or move on). If off_topic is not an allowed kind, you already asked once: redirect in a few words "
+        "something unrelated), use kind off_topic; the app then repeats the question word for word, so your question "
+        "text is ignored and anchors stay empty. Examples of off_topic: chatting about a film, food, the weather or campus "
+        "facilities, or asking the interviewer an unrelated question. NOT off_topic, ever: I don't know, I wasn't given "
+        "that figure, someone else handled it, I'd rather not say, a short or partial answer, an answer about a different "
+        "example from the applicant's own work or studies, disagreeing with the question, or asking to stop; handle those "
+        "as described here (clarification, or move on). When unsure, it is not off_topic. "
+        "If off_topic is not an allowed kind, you already asked once: redirect in a few words "
         "and ask about a priority topic not yet covered. Otherwise never re-ask an earlier question, even reworded. "
         "A follow_up may anchor to the latest answer or to an earlier one when something said earlier is more worth "
         "probing; prefer the latest answer. anchor_turn_id MUST identify the answer you quote and anchor_quote MUST be "
@@ -247,6 +251,14 @@ def _check_next_question(result, context, transcript):
     else:
         # Anchors carry no meaning here; rejecting would only waste a billed call.
         result["anchor_turn_id"] = result["anchor_quote"] = ""
+    if result["kind"] == "off_topic":
+        # The app, not the model, writes the retry: the exact question the applicant just did not answer,
+        # so a re-ask can never drift into a new question or an invented premise.
+        asked = next((t for t in reversed(transcript) if t["role"] == "assistant"), None)
+        if asked:
+            result["question"] = f"{OFF_TOPIC_RETRY} {asked['text']}"
+            result["topic"] = asked.get("topic") or result["topic"]
+        return result
     if any(t["role"] == "assistant" and t["text"].strip().casefold() == result["question"].strip().casefold() for t in transcript):
         raise ProviderFailure("The interviewer repeated a question. Please retry this step.")
     return result
