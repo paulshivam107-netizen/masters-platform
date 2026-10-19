@@ -20,14 +20,14 @@ import httpx
 from fastapi import FastAPI, HTTPException
 from sqlalchemy import create_engine, pool, text
 from sqlalchemy.engine import make_url
-from sqlalchemy.exc import DBAPIError
+from sqlalchemy.exc import DBAPIError, IntegrityError
 from sqlalchemy.orm import sessionmaker
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from database import get_db  # noqa: E402
-from models import InterviewQuota, InterviewSession  # noqa: E402
+from models import InterviewQuota, InterviewSession, User  # noqa: E402
 from services.schema import migrate_to_head, schema_drift  # noqa: E402
 
 ADMIN_URL = os.environ.get("TEST_POSTGRES_ADMIN_URL")
@@ -228,6 +228,39 @@ class PostgresRuntimeTest(unittest.IsolatedAsyncioTestCase):
         with self.Session() as db:
             count = db.query(InterviewSession).filter_by(create_request_id=payload["request_id"]).count()
         self.assertEqual(count, 1)
+
+    def test_concurrent_first_tasters_insert_only_one(self):
+        with self.Session() as db:
+            user = User(email=f"taster-{uuid.uuid4().hex[:10]}@example.com", name="Taster", is_active=True)
+            db.add(user)
+            db.commit()
+            user_id = user.id
+        successes, conflicts, barrier = [], [], threading.Barrier(8)
+
+        def worker():
+            with self.Session() as db:
+                db.add(InterviewSession(id=str(uuid.uuid4()), user_id=user_id, create_request_id=str(uuid.uuid4()),
+                                        create_fingerprint="x", kind="taster", context_json="{}", provider="openai",
+                                        mode="chat", question_limit=3))
+                barrier.wait()
+                try:
+                    db.commit()
+                    successes.append(1)
+                except IntegrityError:
+                    db.rollback()
+                    conflicts.append(1)
+
+        threads = [threading.Thread(target=worker) for _ in range(8)]
+        for t in threads:
+            t.start()
+        for t in threads:
+            t.join()
+        self.assertEqual((len(successes), len(conflicts)), (1, 7))
+        with self.Session() as db:
+            db.add(InterviewSession(id=str(uuid.uuid4()), user_id=user_id, create_request_id=str(uuid.uuid4()),
+                                    create_fingerprint="x", kind="full", context_json="{}", provider="openai",
+                                    mode="chat", question_limit=3))
+            db.commit()  # full interviews are not limited by the taster index
 
     async def test_concurrent_reset_link_use_succeeds_once(self):
         from unittest.mock import patch

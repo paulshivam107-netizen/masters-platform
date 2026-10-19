@@ -225,6 +225,24 @@ class AuthSessionTest(unittest.IsolatedAsyncioTestCase):
             good = await self.refresh_with(cookie, origin=APP_ORIGIN)
             self.assertEqual(good.status_code, 200, good.text)
 
+    async def test_api_subdomain_cutover_settings(self):
+        # docs/runbooks/api-mockmba-cutover.md: API on api.mockmba.com, site on www.mockmba.com.
+        site = "https://www.mockmba.com"
+        prod = make_settings(APP_ENV="production", PUBLIC_APP_URL=site, CORS_ORIGINS=site,
+                             EXPOSE_DEV_AUTH_TOKENS=False)
+        self.assertIsNone(prod.public_app_url_error)
+        self.assertFalse(prod.cors_has_localhost_origin)
+        with patch.object(auth_routes, "settings", prod):
+            r = await self.signup()
+            set_cookie = r.headers["set-cookie"].lower()
+            for attr in ("httponly", "secure", "samesite=lax", "path=/auth"):
+                self.assertIn(attr, set_cookie)
+            self.assertNotIn("domain=", set_cookie, "cookie must stay host-only on api.mockmba.com")
+            good = await self.refresh_with(r.cookies[COOKIE], origin=site)
+            self.assertEqual(good.status_code, 200, good.text)
+            old_host = await self.refresh_with(good.cookies[COOKIE], origin="https://masters-platform-production.up.railway.app")
+            self.assertEqual(old_host.status_code, 403)
+
     # --- admin bootstrap ----------------------------------------------------------------------
 
     async def test_admin_email_needs_verification_before_admin_rights(self):
