@@ -145,6 +145,16 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
         self.assertEqual((await self.post(question_set_id=self.make_set())).status_code, 201)
         self.assertEqual((await self.post(kind="taster", headers=self.other)).status_code, 201)
 
+    async def test_concurrent_first_tasters_start_only_one(self):
+        # Both requests passed the pre-check; the partial unique index rejects the second insert.
+        self.assertEqual((await self.post(kind="taster")).status_code, 201)
+        with patch("routers.interview_routes.taster_used", side_effect=[False, True]):
+            raced = await self.post(kind="taster")
+        self.assertEqual(raced.status_code, 409)
+        self.assertEqual(raced.json()["detail"], TASTER_USED)
+        with self.Session() as db:
+            self.assertEqual(db.query(InterviewSession).filter_by(user_id=1, kind="taster").count(), 1)
+
     async def test_capabilities_report_whether_the_taster_is_used(self):
         before = await self.client.get("/interviews/capabilities", headers=self.headers)
         self.assertIs(before.json()["taster_used"], False)

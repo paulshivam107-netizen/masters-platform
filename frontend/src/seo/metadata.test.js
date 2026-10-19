@@ -91,3 +91,13 @@ test("priority interview pages have unique metadata and the right structured dat
     }
   }
 });
+test("page titles name the brand exactly once", () => {
+  const routes = [...Object.keys(publicPages), "/app/today", "/auth", "/missing"];
+  for (const route of routes) {
+    const { title } = metadata(route, live);
+    expect(title.split(live.siteName).length - 1).toBe(1);
+  }
+  expect(metadata("/privacy", live).title).toBe(
+    "Privacy: how your data is handled | MockMBA",
+  );
+});
