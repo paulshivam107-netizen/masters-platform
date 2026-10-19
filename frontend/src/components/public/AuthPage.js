@@ -13,9 +13,9 @@ function parseMode(value) {
 }
 
 function normalizeNext(value) {
-  if (!value || typeof value !== "string") return "/app";
-  if (!value.startsWith("/")) return "/app";
-  if (value.startsWith("//")) return "/app";
+  if (!value || typeof value !== "string") return "/app/interviews";
+  if (!value.startsWith("/")) return "/app/interviews";
+  if (value.startsWith("//")) return "/app/interviews";
   return value;
 }
 
@@ -39,7 +39,7 @@ export default function AuthPage() {
       const nextParams = new URLSearchParams(searchParams);
       nextParams.set("mode", nextMode);
       if (!nextParams.get("next")) {
-        nextParams.set("next", "/app");
+        nextParams.set("next", "/app/interviews");
       }
       setSearchParams(nextParams, { replace: true });
     },

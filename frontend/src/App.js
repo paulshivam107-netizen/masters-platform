@@ -28,6 +28,7 @@ import SidebarNav from "./components/layout/SidebarNav";
 import TopControls from "./components/layout/TopControls";
 import PageHeader from "./components/layout/PageHeader";
 import AdminView from "./components/views/workspace/AdminView";
+import VerifyEmailBanner from "./components/layout/VerifyEmailBanner";
 import WorkspaceArea from "./components/views/WorkspaceArea";
 import { catalogAutofillPatch } from "./app/catalogAutofill";
 import LandingPage from "./components/public/LandingPage";
@@ -633,6 +634,7 @@ function AppContent() {
                 subtitle={pageSubtitle}
               />
 
+              <VerifyEmailBanner user={user} />
               {!["settings", "profile", "admin"].includes(activeNav) &&
                 Object.values(dataLoadState).includes("error") && (
                   <div className="ws-alert" role="alert">

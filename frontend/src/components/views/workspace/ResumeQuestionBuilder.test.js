@@ -64,62 +64,153 @@ async function upload() {
   );
 }
 
+const withProfile = {
+  ...set,
+  contact_details_removed: 2,
+  graph: {
+    ...set.graph,
+    profile: [
+      {
+        id: "fact-1",
+        category: "education",
+        evidence_quote: "Studied computer science",
+      },
+      {
+        id: "fact-2",
+        category: "experience",
+        evidence_quote: "Built monitoring",
+      },
+    ],
+  },
+};
+
 test("keyless upload extracts editable text but never calls AI", async () => {
   await act(async () =>
-    root.render(
-      <ResumeQuestionBuilder
-        capabilities={{ chat: false }}
-        route="experienced"
-      />,
-    ),
+    root.render(<ResumeQuestionBuilder capabilities={{ chat: false }} />),
   );
   await upload();
   expect(container.querySelector("textarea").value).toBe(text);
-  expect(document.activeElement).toBe(container.querySelector("textarea"));
-  expect(button("Build my profile & questions").disabled).toBe(true);
-  expect(container.textContent).toContain("when AI is connected");
+  expect(container.textContent).toContain("temporarily unavailable");
   expect(api.createResumeQuestions).not.toHaveBeenCalled();
-  await act(async () => button("Clear résumé text").click());
-  expect(container.querySelector("textarea")).toBeNull();
 });
 
-test("generation preserves retries, clears résumé text on success and selects a private opening", async () => {
-  const choose = jest.fn();
+test("upload auto-builds, applies all highlights and keeps the text", async () => {
+  const use = jest.fn();
+  api.createResumeQuestions.mockResolvedValue(withProfile);
   await act(async () =>
     root.render(
       <ResumeQuestionBuilder
         capabilities={{ chat: true }}
-        route="experienced"
-        onChoose={choose}
+        onUseProfile={use}
+      />,
+    ),
+  );
+  expect(button("Build my")).toBeUndefined();
+  await upload();
+  expect(api.createResumeQuestions).toHaveBeenCalledTimes(1);
+  expect(use).toHaveBeenCalledWith({
+    id: "set-one",
+    route: "experienced",
+    facts: withProfile.graph.profile,
+  });
+  expect(container.textContent).toContain("synthetic-resume.txt · read ✓");
+  expect(container.textContent).toContain(
+    "Ready: 2 highlights from your résumé",
+  );
+  expect(container.textContent).toContain(
+    "Contact details removed before sending",
+  );
+  expect(container.textContent.match(/Sent to OpenAI/g)).toHaveLength(1);
+  // Text is retained inside the collapsed check; editing reveals Rebuild.
+  const area = container.querySelector("textarea");
+  expect(area.value).toBe(text);
+  expect(button("Rebuild").disabled).toBe(true);
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "value",
+    ).set.call(area, text + " Also led a migration.");
+    area.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  expect(button("Rebuild").disabled).toBe(false);
+});
+
+test("unticking a highlight re-applies only the kept ones", async () => {
+  const use = jest.fn();
+  api.createResumeQuestions.mockResolvedValue(withProfile);
+  await act(async () =>
+    root.render(
+      <ResumeQuestionBuilder
+        capabilities={{ chat: true }}
+        onUseProfile={use}
       />,
     ),
   );
   await upload();
-  expect(button("Build my profile & questions").disabled).toBe(false);
+  await act(async () =>
+    container.querySelectorAll(".resume-fact input")[1].click(),
+  );
+  expect(use).toHaveBeenLastCalledWith({
+    id: "set-one",
+    route: "experienced",
+    facts: [withProfile.graph.profile[0]],
+  });
+});
+
+test("a failed build shows progress then a retry that reuses the same request", async () => {
   api.createResumeQuestions
     .mockRejectedValueOnce(new Error("temporary failure"))
     .mockResolvedValue(set);
-  const submit = () =>
-    act(async () =>
-      container
-        .querySelector("form")
-        .dispatchEvent(
-          new Event("submit", { bubbles: true, cancelable: true }),
-        ),
-    );
-  await submit();
-  expect(container.querySelector("textarea").value).toBe(text);
-  await submit();
+  await act(async () =>
+    root.render(<ResumeQuestionBuilder capabilities={{ chat: true }} />),
+  );
+  await upload();
+  expect(container.querySelector('[role="alert"]').textContent).toContain(
+    "Please retry.",
+  );
+  expect(api.extractResume).toHaveBeenCalledTimes(1);
+  await act(async () => button("Try again").click());
+  expect(api.extractResume).toHaveBeenCalledTimes(1);
   expect(api.createResumeQuestions.mock.calls[0][0]).toEqual(
     api.createResumeQuestions.mock.calls[1][0],
   );
-  expect(container.querySelector("textarea")).toBeNull();
-  await act(async () => button("What did you learn").click());
-  expect(container.textContent).toContain("coordinated releases");
-  await act(async () => button("Practise from this opening").click());
-  expect(choose).toHaveBeenCalledWith(
-    expect.objectContaining({ id: "one", question_set_id: "set-one" }),
+  expect(container.textContent).toContain("synthetic-resume.txt · read ✓");
+});
+
+test("too little extracted text opens the paste area with an explanation and does not build", async () => {
+  api.extractResume.mockResolvedValue({ text: "scan" });
+  await act(async () =>
+    root.render(<ResumeQuestionBuilder capabilities={{ chat: true }} />),
   );
+  const input = container.querySelector('input[type="file"]');
+  Object.defineProperty(input, "files", {
+    value: [new File(["x"], "scan.pdf", { type: "application/pdf" })],
+  });
+  await act(async () =>
+    input.dispatchEvent(new Event("change", { bubbles: true })),
+  );
+  expect(container.textContent).toContain("scanned PDF");
+  expect(container.querySelector("textarea")).not.toBeNull();
+  expect(api.createResumeQuestions).not.toHaveBeenCalled();
+});
+
+test("paste text instead reveals the textarea and builds on click", async () => {
+  api.createResumeQuestions.mockResolvedValue(set);
+  await act(async () =>
+    root.render(<ResumeQuestionBuilder capabilities={{ chat: true }} />),
+  );
+  expect(container.querySelector("textarea")).toBeNull();
+  await act(async () => button("Paste text instead").click());
+  const area = container.querySelector("textarea");
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "value",
+    ).set.call(area, text);
+    area.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await act(async () => button("Build my interview").click());
+  expect(api.createResumeQuestions).toHaveBeenCalledTimes(1);
 });
 
 test("saved sets can be reopened and deletion requires confirmation", async () => {
@@ -137,58 +228,14 @@ test("saved sets can be reopened and deletion requires confirmation", async () =
     ),
   );
   await act(async () => button("General MBA practice").click());
-  await act(async () => button("Delete set").click());
+  await act(async () => button("Delete").click());
   expect(api.deleteResumeQuestions).not.toHaveBeenCalled();
   expect(container.textContent).toContain(
-    "Existing practice sessions will keep their copied profile facts and questions",
+    "Existing practice sessions keep their copied highlights",
   );
   await act(async () => button("Delete permanently").click());
   expect(api.deleteResumeQuestions).toHaveBeenCalledWith(
     "set-one",
     expect.any(AbortSignal),
   );
-});
-
-test("profile review sends only the facts the applicant kept", async () => {
-  const choose = jest.fn();
-  const withProfile = {
-    ...set,
-    graph: {
-      ...set.graph,
-      profile: [
-        {
-          id: "fact-1",
-          category: "education",
-          evidence_quote: "Studied computer science",
-        },
-        {
-          id: "fact-2",
-          category: "experience",
-          evidence_quote: "Built monitoring",
-        },
-      ],
-    },
-  };
-  api.listResumeQuestions.mockResolvedValueOnce({
-    items: [withProfile],
-    has_more: false,
-  });
-  await act(async () =>
-    root.render(
-      <ResumeQuestionBuilder
-        capabilities={{ chat: false }}
-        route="experienced"
-        onUseProfile={choose}
-      />,
-    ),
-  );
-  await act(async () => button("General MBA practice").click());
-  const checks = container.querySelectorAll(".resume-fact input");
-  await act(async () => checks[1].click());
-  await act(async () => button("Use reviewed profile").click());
-  expect(choose).toHaveBeenCalledWith({
-    id: "set-one",
-    route: "experienced",
-    facts: [withProfile.graph.profile[0]],
-  });
 });

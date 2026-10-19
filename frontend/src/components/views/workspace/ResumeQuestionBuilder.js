@@ -1,7 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as api from "../../../api/interviewsApi";
 import InterviewQuestionBank from "./InterviewQuestionBank";
-import { routeLabel } from "./interviewIntent";
+
+const MIN_TEXT = 80;
+const BUILDING =
+  "Building your interview from your résumé… usually 20–30 seconds";
 
 export default function ResumeQuestionBuilder({
   capabilities,
@@ -23,9 +26,9 @@ export default function ResumeQuestionBuilder({
   const [offset, setOffset] = useState(0);
   const [selected, setSelected] = useState(null);
   const [factIds, setFactIds] = useState([]);
-  useEffect(() => {
-    setFactIds((selected?.graph.profile || []).map((fact) => fact.id));
-  }, [selected]);
+  const [retry, setRetry] = useState(null);
+  const [builtText, setBuiltText] = useState("");
+  const [checkOpen, setCheckOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [reload, setReload] = useState(0);
   const active = useRef(true);
@@ -61,7 +64,9 @@ export default function ResumeQuestionBuilder({
         setHasMore(result.has_more);
       })
       .catch(async (err) => {
-        if (!controller.signal.aborted) setError(await api.interviewError(err));
+        if (controller.signal.aborted) return;
+        setError(await api.interviewError(err));
+        setRetry(() => () => setReload((value) => value + 1));
       });
     return () => controller.abort();
   }, [reload]);
@@ -71,6 +76,7 @@ export default function ResumeQuestionBuilder({
     inFlight.current = true;
     setBusy(label);
     setError("");
+    setRetry(null);
     setNotice("");
     const controller = new AbortController();
     pending.current.add(controller);
@@ -95,74 +101,155 @@ export default function ResumeQuestionBuilder({
       file.size > 5 * 1024 * 1024
     ) {
       setError("Choose a PDF, DOCX or UTF-8 text file under 5 MiB.");
+      setRetry(null);
       return;
     }
     run("Reading your résumé…", async (signal) => {
-      const result = await api.extractResume(file, format, signal);
+      let result;
+      try {
+        result = await api.extractResume(file, format, signal);
+      } catch (err) {
+        if (active.current && !signal.aborted) {
+          setShowText(true);
+          setNotice(
+            "We could not read that file. Paste your résumé text instead.",
+          );
+        }
+        throw err;
+      }
       if (!active.current) return;
-      setText(result.text);
       setFilename(file.name);
       generation.current = null;
-      setNotice(
-        "Text extracted. Review it below and remove anything you do not want sent to AI.",
-      );
-      focusTarget.current = review;
+      setBuiltText("");
+      setSelected(null);
+      if (result.text.trim().length < MIN_TEXT) {
+        setText(result.text);
+        setShowText(true);
+        setNotice(
+          "We could not read enough text from that file (it may be a scanned PDF). Paste your résumé text instead.",
+        );
+        return;
+      }
+      setText(result.text);
+      if (!capabilities?.chat) {
+        setCheckOpen(true);
+        return;
+      }
+      await build(result.text, signal);
     });
   }
-  function generate(event) {
-    event.preventDefault();
+  async function build(resumeText, signal) {
     const payload = {
       route: "auto",
-      resume_text: text.trim(),
+      resume_text: resumeText.trim(),
       application_id: applicationId ? Number(applicationId) : null,
       programme_name: programmeName,
     };
     const signature = JSON.stringify(payload);
     if (generation.current?.signature !== signature)
       generation.current = { signature, id: crypto.randomUUID() };
-    run("Preparing your profile and questions…", async (signal) => {
-      const result = await api.createResumeQuestions(
-        { ...payload, request_id: generation.current.id },
-        signal,
-      );
-      if (!active.current) return;
-      setSelected(result);
-      setConfirmDelete(false);
-      setHistory((items) => [
-        result,
-        ...items.filter((item) => item.id !== result.id),
-      ]);
-      // The original résumé stays out of browser storage and saved interview context.
-      setText("");
-      setFilename("");
-      generation.current = null;
-      setNotice(
-        "Your profile and questions are saved. Review the facts below before using them in practice. The full résumé text has been cleared.",
-      );
-      focusTarget.current = questions;
-    });
+    setRetry(() => () => rebuild(resumeText));
+    setBusy(BUILDING);
+    const result = await api.createResumeQuestions(
+      { ...payload, request_id: generation.current.id },
+      signal,
+    );
+    if (!active.current) return;
+    setRetry(null);
+    setConfirmDelete(false);
+    setHistory((items) => [
+      result,
+      ...items.filter((item) => item.id !== result.id),
+    ]);
+    // The text stays in memory (not storage) so it can be checked and rebuilt.
+    setBuiltText(resumeText);
+    generation.current = null;
+    apply(result);
+  }
+  function rebuild(resumeText) {
+    run(BUILDING, (signal) => build(resumeText, signal));
+  }
+  function apply(set, ids) {
+    const facts = set.graph.profile || [];
+    const keep = ids || facts.map((fact) => fact.id);
+    setSelected(set);
+    setFactIds(keep);
+    if (!facts.length) return;
+    if (keep.length)
+      onUseProfile?.({
+        id: set.id,
+        route: set.context.route,
+        facts: facts.filter((fact) => keep.includes(fact.id)),
+      });
+    else onRemoveProfile?.(set.id);
   }
   const locked = disabled || Boolean(busy);
+  const removed = Number(selected?.contact_details_removed) || 0;
+  const textarea = (
+    <div className="ws-field">
+      <label htmlFor="resume-text" className="sr-only">
+        Résumé text
+      </label>
+      <textarea
+        id="resume-text"
+        ref={review}
+        value={text}
+        maxLength={20000}
+        rows={8}
+        onChange={(event) => setText(event.target.value)}
+        aria-describedby="resume-text-help"
+        placeholder="Paste your education, work experience, projects and achievements here."
+      />
+      <small id="resume-text-help">
+        {text.length.toLocaleString()} / 20,000 characters · At least 80. Stays
+        on this page until you leave.
+      </small>
+      <div className="studio-actions">
+        <button
+          type="submit"
+          className="ws-btn ws-btn--primary ws-btn--sm"
+          disabled={
+            locked ||
+            !capabilities?.chat ||
+            text.trim().length < MIN_TEXT ||
+            text === builtText
+          }
+        >
+          {builtText ? "Rebuild" : "Build my interview"}
+        </button>
+      </div>
+    </div>
+  );
+  const topics = selected && (
+    <details className="resume-mapped-questions">
+      <summary>Explore 3 interview topics and follow-ups</summary>
+      <InterviewQuestionBank
+        key={selected.id}
+        bankData={selected.graph}
+        heading="Your tailored questions"
+        route={selected.context.route}
+        disabled={locked}
+        onChoose={(node) => onChoose({ ...node, question_set_id: selected.id })}
+      />
+    </details>
+  );
   return (
     <section className="resume-builder" aria-label="Questions from your résumé">
-      <p className="resume-intro">
-        Your résumé is enough to start. Review its text, then check the facts we
-        extract. Live follow-ups will respond to your answers; mapped questions
-        are possible starting points.
-      </p>
       {error && (
         <div className="studio-message error" role="alert">
           <p>{error}</p>
-          <button
-            className="ws-btn ws-btn--ghost ws-btn--sm"
-            disabled={locked}
-            onClick={() => {
-              setError("");
-              setReload((value) => value + 1);
-            }}
-          >
-            Reload saved sets
-          </button>
+          {retry && (
+            <button
+              className="ws-btn ws-btn--ghost ws-btn--sm"
+              disabled={locked}
+              onClick={() => {
+                setError("");
+                retry();
+              }}
+            >
+              Try again
+            </button>
+          )}
         </div>
       )}
       {notice && (
@@ -172,101 +259,81 @@ export default function ResumeQuestionBuilder({
       )}
       {!capabilities?.chat && (
         <p className="studio-message">
-          You can upload and review your résumé now. Generating tailored
-          questions becomes available when AI is connected.
+          AI interviews are temporarily unavailable, so we cannot build
+          questions from your résumé yet.
         </p>
       )}
-      <form onSubmit={generate}>
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          rebuild(text);
+        }}
+      >
         <fieldset className="studio-form-fields" disabled={locked}>
           <div className="resume-upload">
-            <label htmlFor="resume-upload">Upload your résumé</label>
             <input
               id="resume-upload"
+              className="sr-only"
               type="file"
               accept=".pdf,.docx,.txt"
               aria-describedby="resume-upload-help"
               onChange={upload}
             />
-            <small id="resume-upload-help">
-              PDF (up to 10 pages), DOCX or TXT · Up to 5 MiB. Scanned PDFs need
-              pasted text. The uploaded file is not saved.
-            </small>
-          </div>
-          {!text && !showText && (
-            <button
-              type="button"
-              className="ws-btn ws-btn--ghost ws-btn--sm"
-              onClick={() => {
-                focusTarget.current = review;
-                setShowText(true);
-              }}
-            >
-              Paste résumé text instead
-            </button>
-          )}
-          {(text || showText) && (
-            <div className="ws-field">
-              <label htmlFor="resume-text">
-                Review or paste résumé text{" "}
-                {filename && (
-                  <span className="resume-filename">· {filename}</span>
-                )}
-              </label>
-              <textarea
-                id="resume-text"
-                ref={review}
-                value={text}
-                maxLength={20000}
-                rows={8}
-                onChange={(event) => {
-                  setText(event.target.value);
-                }}
-                aria-describedby="resume-text-help"
-                placeholder="Paste your education, work experience, projects and achievements here. Remove contact details and anything you do not want to share."
-              />
-              <small id="resume-text-help">
-                {text.length.toLocaleString()} / 20,000 characters · At least
-                80. Check reading order and missing lines. Text stays on this
-                page until you leave or clear it.
-              </small>
-            </div>
-          )}
-          {text && (
-            <p className="studio-fine-print">
-              Your reviewed text is sent to OpenAI to pull out profile facts and
-              draft questions. We save the facts and questions, not the full
-              résumé, and you can delete them.{" "}
-              <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                Privacy notice
-              </a>
-            </p>
-          )}
-          <div className="studio-actions">
-            <button
-              type="submit"
-              className="ws-btn ws-btn--primary"
-              disabled={
-                locked ||
-                !capabilities?.chat ||
-                text.trim().length < 80
+            <label
+              htmlFor="resume-upload"
+              className={
+                selected
+                  ? "ws-btn ws-btn--ghost ws-btn--sm"
+                  : "ws-btn ws-btn--primary"
               }
             >
-              {busy || "Build my profile & questions"}
-            </button>
-            {text && (
+              {selected ? "Use a different résumé" : "Upload résumé"}
+            </label>
+            {!showText && !filename && !selected && (
               <button
                 type="button"
                 className="ws-btn ws-btn--ghost ws-btn--sm"
                 onClick={() => {
-                  setText("");
-                  setFilename("");
-                  generation.current = null;
+                  focusTarget.current = review;
+                  setShowText(true);
                 }}
               >
-                Clear résumé text
+                Paste text instead
               </button>
             )}
+            {!selected && (
+              <small id="resume-upload-help">
+                PDF, DOCX or TXT, up to 5 MiB.
+              </small>
+            )}
           </div>
+          <p className="studio-fine-print">
+            Sent to OpenAI to build your questions. We keep the highlights, not
+            the file.{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer">
+              Privacy notice
+            </a>
+          </p>
+          {filename && (
+            <p className="resume-filename-card">{filename} · read ✓</p>
+          )}
+          {busy && (
+            <p className="resume-progress" role="status">
+              <span className="resume-spinner" aria-hidden="true" />
+              {busy}
+            </p>
+          )}
+          {showText && !filename && textarea}
+          {filename && (
+            <details
+              className="resume-check-text"
+              open={checkOpen}
+              onToggle={(event) => setCheckOpen(event.currentTarget.open)}
+            >
+              <summary>Check extracted text</summary>
+              {textarea}
+            </details>
+          )}
         </fieldset>
       </form>
       <div ref={questions} tabIndex={-1} className="resume-results">
@@ -274,13 +341,16 @@ export default function ResumeQuestionBuilder({
           <>
             <div className="resume-set-heading">
               <div>
-                <span className="wi-topic">Your résumé profile</span>
-                <h3>{selected.context.school}</h3>
-                <p>
-                  {routeLabel(selected.context.route)} ·{" "}
-                  {new Date(selected.created_at).toLocaleDateString()}
-                </p>
+                <h3>
+                  {selected.graph.profile?.length
+                    ? `Ready: ${factIds.length} ${factIds.length === 1 ? "highlight" : "highlights"} from your résumé`
+                    : selected.context.school}
+                </h3>
+                {removed > 0 && <p>Contact details removed before sending</p>}
               </div>
+            </div>
+            <details className="resume-manage">
+              <summary>Manage</summary>
               <div className="studio-actions">
                 <button
                   className="ws-btn ws-btn--ghost ws-btn--sm"
@@ -298,31 +368,31 @@ export default function ResumeQuestionBuilder({
                     setTimeout(() => URL.revokeObjectURL(url), 1000);
                   }}
                 >
-                  Export questions
+                  Export
                 </button>
                 <button
                   className="ws-btn ws-btn--ghost ws-btn--sm wi-danger"
                   disabled={locked}
                   onClick={() => setConfirmDelete(true)}
                 >
-                  Delete set
+                  Delete
                 </button>
               </div>
-            </div>
+              {topics}
+            </details>
             {confirmDelete && (
               <div className="studio-message" role="alert">
                 <p>
-                  Delete this profile, question set and its résumé excerpts?
-                  Existing practice sessions will keep their copied profile
-                  facts and questions until you delete those sessions
-                  separately.
+                  Delete these highlights, interview topics and résumé excerpts?
+                  Existing practice sessions keep their copied highlights until
+                  you delete those sessions separately.
                 </p>
                 <div className="studio-actions">
                   <button
                     className="ws-btn"
                     disabled={locked}
                     onClick={() =>
-                      run("Deleting question set…", async (signal) => {
+                      run("Deleting…", async (signal) => {
                         await api.deleteResumeQuestions(selected.id, signal);
                         if (!active.current) return;
                         setHistory((items) =>
@@ -331,7 +401,7 @@ export default function ResumeQuestionBuilder({
                         setSelected(null);
                         onRemoveProfile?.(selected.id);
                         setConfirmDelete(false);
-                        setNotice("Question set deleted.");
+                        setNotice("Deleted.");
                         setReload((value) => value + 1);
                       })
                     }
@@ -343,32 +413,31 @@ export default function ResumeQuestionBuilder({
                     disabled={locked}
                     onClick={() => setConfirmDelete(false)}
                   >
-                    Keep set
+                    Keep
                   </button>
                 </div>
               </div>
             )}
             {selected.graph.profile?.length > 0 && (
-              <div className="resume-profile-review">
-                <h3>Check what the interviewer will know</h3>
+              <details className="resume-profile-review">
+                <summary>Review what the interviewer will know</summary>
                 <p className="studio-fine-print">
-                  These are excerpts from your résumé, not verified
-                  achievements. Uncheck anything irrelevant or inaccurate. To
-                  correct the source text, paste or upload a revised résumé
-                  above.
+                  Excerpts from your résumé, not verified achievements. Untick
+                  anything irrelevant or inaccurate.
                 </p>
                 <fieldset className="studio-form-fields" disabled={locked}>
-                  <legend className="sr-only">Facts to use in practice</legend>
+                  <legend className="sr-only">Highlights to use</legend>
                   {selected.graph.profile.map((fact) => (
                     <label className="resume-fact" key={fact.id}>
                       <input
                         type="checkbox"
                         checked={factIds.includes(fact.id)}
                         onChange={(event) =>
-                          setFactIds((ids) =>
+                          apply(
+                            selected,
                             event.target.checked
-                              ? [...ids, fact.id]
-                              : ids.filter((id) => id !== fact.id),
+                              ? [...factIds, fact.id]
+                              : factIds.filter((id) => id !== fact.id),
                           )
                         }
                       />
@@ -379,45 +448,14 @@ export default function ResumeQuestionBuilder({
                     </label>
                   ))}
                 </fieldset>
-                <button
-                  type="button"
-                  className="ws-btn ws-btn--primary"
-                  disabled={locked || !factIds.length}
-                  onClick={() =>
-                    onUseProfile?.({
-                      id: selected.id,
-                      route: selected.context.route,
-                      facts: selected.graph.profile.filter((fact) =>
-                        factIds.includes(fact.id),
-                      ),
-                    })
-                  }
-                >
-                  Use reviewed profile
-                </button>
-              </div>
+              </details>
             )}
-            <details className="resume-mapped-questions">
-              <summary>
-                Explore 3 openings and their possible follow-ups
-              </summary>
-              <InterviewQuestionBank
-                key={selected.id}
-                bankData={selected.graph}
-                heading="Your tailored questions"
-                route={selected.context.route}
-                disabled={locked}
-                onChoose={(node) =>
-                  onChoose({ ...node, question_set_id: selected.id })
-                }
-              />
-            </details>
           </>
         )}
       </div>
-      {history.length > 0 && (
+      {(history.length > 1 || (!selected && history.length > 0)) && (
         <div className="studio-history">
-          <h3>Saved profiles & question sets</h3>
+          <h3>Your résumés</h3>
           {history.map((item) => (
             <button
               key={item.id}
@@ -425,16 +463,13 @@ export default function ResumeQuestionBuilder({
               disabled={locked}
               aria-pressed={selected?.id === item.id}
               onClick={() => {
-                setSelected(item);
+                apply(item);
                 setConfirmDelete(false);
               }}
             >
               <span>
                 <strong>{item.context.school}</strong>
-                <small>
-                  {new Date(item.created_at).toLocaleDateString()} · 9 questions
-                  · {routeLabel(item.context.route)}
-                </small>
+                <small>{new Date(item.created_at).toLocaleDateString()}</small>
               </span>
               <span aria-hidden="true">→</span>
             </button>
@@ -444,7 +479,7 @@ export default function ResumeQuestionBuilder({
               className="ws-btn ws-btn--ghost ws-btn--sm"
               disabled={locked}
               onClick={() =>
-                run("Loading saved sets…", async (signal) => {
+                run("Loading…", async (signal) => {
                   const result = await api.listResumeQuestions(offset, signal);
                   if (!active.current) return;
                   setHistory((items) => [
@@ -458,7 +493,7 @@ export default function ResumeQuestionBuilder({
                 })
               }
             >
-              More saved sets
+              More résumés
             </button>
           )}
         </div>

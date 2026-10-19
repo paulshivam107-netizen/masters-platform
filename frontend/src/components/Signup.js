@@ -12,23 +12,14 @@ function Signup({ onSwitchToLogin }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
-  const [devToken, setDevToken] = useState("");
   const [loading, setLoading] = useState(false);
-  const mismatch = confirmPassword.length > 0 && confirmPassword !== password;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setMessage("");
-    setDevToken("");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
 
     if (password.length < 8) {
       setError("Password must be at least 8 characters");
@@ -39,9 +30,8 @@ function Signup({ onSwitchToLogin }) {
 
     try {
       await signup(email, name, password);
-      const verifyResponse = await requestEmailVerificationApi(email);
-      setMessage(verifyResponse.message || "Verification email sent.");
-      if (verifyResponse.dev_token) setDevToken(verifyResponse.dev_token);
+      // Best effort: the workspace banner offers a resend, nothing waits on it.
+      requestEmailVerificationApi(email).catch(() => {});
       trackEvent("auth_signup_success", { method: "password" });
     } catch (err) {
       setError(authError(err, "Signup failed. Please try again."));
@@ -53,8 +43,6 @@ function Signup({ onSwitchToLogin }) {
 
   const handleGoogleSignup = async (idToken) => {
     setError("");
-    setMessage("");
-    setDevToken("");
     if (!idToken) {
       setError("Google did not return a sign-in token. Please try again.");
       trackEvent("auth_signup_failure", { method: "google" });
@@ -97,16 +85,16 @@ function Signup({ onSwitchToLogin }) {
             {error}
           </div>
         )}
-        {message && (
-          <div className="success-message" role="status">
-            {message}
-          </div>
-        )}
-        {devToken && (
-          <div className="success-message" role="status">
-            Dev token: {devToken}
-          </div>
-        )}
+
+        <GoogleSignInButton
+          onCredential={handleGoogleSignup}
+          onError={(err) => setError(err.message)}
+          disabled={loading}
+          text="signup_with"
+        />
+        <div className="ap-divider" aria-hidden="true">
+          <span>or</span>
+        </div>
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -144,7 +132,7 @@ function Signup({ onSwitchToLogin }) {
             <input
               id="signup-field-3"
               data-testid="auth-signup-password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               autoComplete="new-password"
               minLength={8}
               maxLength={128}
@@ -154,30 +142,17 @@ function Signup({ onSwitchToLogin }) {
               aria-describedby="signup-password-hint"
               required
             />
+            <button
+              type="button"
+              className="link-button"
+              data-testid="auth-signup-toggle-password"
+              aria-pressed={showPassword}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              onClick={() => setShowPassword((v) => !v)}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
             <small id="signup-password-hint">At least 8 characters.</small>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="signup-field-4">Confirm Password</label>
-            <input
-              id="signup-field-4"
-              data-testid="auth-signup-confirm-password"
-              type="password"
-              autoComplete="new-password"
-              minLength={8}
-              maxLength={128}
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="••••••••"
-              aria-invalid={mismatch ? "true" : undefined}
-              aria-describedby={mismatch ? "signup-confirm-hint" : undefined}
-              required
-            />
-            {mismatch && (
-              <small id="signup-confirm-hint" className="ap-field-error">
-                The two passwords don't match yet.
-              </small>
-            )}
           </div>
 
           <button
@@ -188,15 +163,6 @@ function Signup({ onSwitchToLogin }) {
           >
             {loading ? "Creating account..." : "Sign Up"}
           </button>
-          <div className="ap-divider" aria-hidden="true">
-            <span>or</span>
-          </div>
-          <GoogleSignInButton
-            onCredential={handleGoogleSignup}
-            onError={(err) => setError(err.message)}
-            disabled={loading}
-            text="signup_with"
-          />
         </form>
         <p className="ap-help ap-legal">
           By creating an account you agree to how we handle your data in the{" "}

@@ -28,7 +28,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 
-const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp";
+const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
 
 function buildDemoReview(prompt, draft) {
   const trimmedPrompt = (prompt || "").trim();
