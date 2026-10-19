@@ -10,6 +10,7 @@ const insead = {
   name: "INSEAD",
   shortName: "INSEAD",
   country: "France and Singapore",
+  region: "Europe",
   city: "Fontainebleau and Singapore",
   programmes: [
     {

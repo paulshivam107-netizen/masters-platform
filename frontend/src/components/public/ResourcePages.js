@@ -7,7 +7,7 @@ import { practice } from "../../content/practice";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
-import { schools } from "../../content/schools";
+import { schoolGroups } from "../../content/schools";
 import "./PublicPages.css";
 import "./ResourcePages.css";
 
@@ -217,19 +217,28 @@ export function ResourceShell({ children, current = "" }) {
 }
 export function SchoolList({ heading = "Schools" }) {
   return (
-    <ul className="sp-list" aria-label={heading}>
-      {schools.map((s) => (
-        <li key={s.slug}>
-          <Link to={`/schools/${s.slug}`}>
-            <strong>{s.shortName}</strong>
-            <span>
-              {s.programmes.map((p) => p.name).join(", ")} · {s.city}
-            </span>
-            <ArrowIcon />
-          </Link>
-        </li>
+    <div className="sp-regions" aria-label={heading}>
+      {schoolGroups().map((group) => (
+        <section key={group.id} aria-labelledby={`region-${group.id}`}>
+          <h3 className="sp-region" id={`region-${group.id}`}>
+            {group.heading}
+          </h3>
+          <ul className="sp-list">
+            {group.items.map(({ school, programmes }) => (
+              <li key={school.slug}>
+                <Link to={`/schools/${school.slug}`}>
+                  <strong>{school.shortName}</strong>
+                  <span>
+                    {programmes.map((p) => p.name).join(", ")} · {school.city}
+                  </span>
+                  <ArrowIcon />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
       ))}
-    </ul>
+    </div>
   );
 }
 
