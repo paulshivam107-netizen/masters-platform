@@ -224,7 +224,7 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
 
     # Prompt contract
     def test_prompt_v11_is_global_and_keeps_the_safety_rules(self):
-        self.assertEqual(provider.PROMPT_VERSION, "mba-interview-v12")
+        self.assertEqual(provider.PROMPT_VERSION, "mba-interview-v13")
         text = provider.INSTRUCTIONS
         self.assertNotIn("Indian MBA applicants", text)
         self.assertIn("MBA, executive MBA and Master in Management", text)

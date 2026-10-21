@@ -48,7 +48,7 @@ class RunnerTest(unittest.TestCase):
             self.assertGreaterEqual(call["latency_ms"], 0)
         meta = json.loads((run_dir / "run.json").read_text())
         self.assertEqual(meta["model"], "gpt-4.1-mini")
-        self.assertEqual(meta["prompt_version"], "mba-interview-v12")
+        self.assertEqual(meta["prompt_version"], "mba-interview-v13")
         self.assertEqual(meta["eval_version"], profiles.EVAL_VERSION)
         self.assertEqual(meta["provider"], "fake")
 

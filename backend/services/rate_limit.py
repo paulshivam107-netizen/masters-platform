@@ -108,6 +108,7 @@ def purge_expired(db=None) -> int:
 
 def reset_rate_limits(db=None) -> None:
     """Remove all buckets. For tests and owner maintenance only."""
+    _memory.clear()
     with _engine(db).begin() as conn:
         conn.execute(delete(TABLE))
 
@@ -137,6 +138,22 @@ def hit(key: str, *, limit: int, window_seconds: int, db=None, now: Optional[flo
     return allowed, (0 if allowed else retry_after)
 
 
+_memory = {}
+
+
+def hit_memory(key, *, limit, window_seconds):
+    """Per-process fixed-window counter for cheap reads. Not shared between workers (each allows ``limit``)."""
+    window = int(time.time() // window_seconds)
+    if len(_memory) > 10000:
+        _memory.clear()
+    count = _memory.get(key, (window, 0))
+    count = count[1] if count[0] == window else 0
+    if count >= limit:
+        return False, max(1, int((window + 1) * window_seconds - time.time()))
+    _memory[key] = (window, count + 1)
+    return True, 0
+
+
 def rate_limit_layers(request: Request, action: str, limit: int, user_id=None, email=None, ip_limit=None):
     ip = client_ip(request)
     if user_id is None and not email:
@@ -150,10 +167,11 @@ def rate_limit_layers(request: Request, action: str, limit: int, user_id=None, e
 
 def enforce_rate_limit(request: Request, *, action: str, limit: int, window_seconds: int,
                        user_id: Optional[int] = None, email: Optional[str] = None,
-                       ip_limit: Optional[int] = None, db=None):
+                       ip_limit: Optional[int] = None, db=None, memory=False):
     """Apply the IP layer and (when known) the account/e-mail layer; raise 429 when either is spent."""
     for key, cap in rate_limit_layers(request, action, limit, user_id, email, ip_limit):
-        allowed, retry_after = hit(key, limit=cap, window_seconds=window_seconds, db=db)
+        allowed, retry_after = (hit_memory(key, limit=cap, window_seconds=window_seconds) if memory else
+                                hit(key, limit=cap, window_seconds=window_seconds, db=db))
         if not allowed:
             raise HTTPException(
                 status_code=status.HTTP_429_TOO_MANY_REQUESTS,

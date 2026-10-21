@@ -45,7 +45,7 @@ class InterviewAnswer(InterviewAction):
 
 
 class InterviewSpeech(InterviewAction):
-    turn_id: str = Field(pattern=r"^q[1-8]$")
+    turn_id: str = Field(pattern=r"^q([1-9]|1[0-6])$")
 
 
 class NextQuestion(BaseModel):
@@ -53,15 +53,15 @@ class NextQuestion(BaseModel):
     # Any clash between the latest answer and the resume or earlier answers; empty when none.
     conflict: str = Field(default="", max_length=300)
     question: str = Field(min_length=10, max_length=650)
-    kind: Literal["follow_up", "clarification", "new_topic", "end_requested"]
+    kind: Literal["follow_up", "clarification", "new_topic", "end_requested", "off_topic"]
     topic: Literal["education", "experience", "projects", "behaviour", "motivation", "contribution", "interests"]
-    anchor_turn_id: str = Field(pattern=r"^(a[1-8])?$")
+    anchor_turn_id: str = Field(pattern=r"^(a([1-9]|1[0-6]))?$")
     anchor_quote: str = Field(max_length=240)
 
 
 class FeedbackPoint(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    turn_id: str = Field(pattern=r"^a[1-8]$")
+    turn_id: str = Field(pattern=r"^a([1-9]|1[0-6])$")
     quote: str = Field(min_length=1, max_length=400)
     observation: str = Field(min_length=1, max_length=600)
 
@@ -74,7 +74,7 @@ class DimensionEvidence(BaseModel):
     model_config = ConfigDict(extra="forbid")
     dimension: Literal["motivation", "work_experience", "academics", "projects", "communication"]
     # Evidence comes before the level so the model commits to a quote first; empty when not assessed.
-    turn_id: str = Field(pattern=r"^(a[1-8])?$")
+    turn_id: str = Field(pattern=r"^(a([1-9]|1[0-6]))?$")
     quote: str = Field(max_length=400)
     level: Literal["not_assessed", "missing", "partial", "strong"]
 

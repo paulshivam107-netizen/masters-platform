@@ -205,7 +205,9 @@ def run_profile(run, profile):
         if question is None:
             stopped_at = f"a{index}"
             break
-        transcript.append({"id": f"q{index + 1}", "role": "assistant", "text": question["question"],
+        if question["kind"] == "off_topic":  # as the answer route: that answer does not use up a question
+            transcript[-1]["off_topic"] = True
+        transcript.append({"id": f"q{sum(t['role'] == 'assistant' for t in transcript) + 1}", "role": "assistant", "text": question["question"],
                            **{key: value for key, value in question.items() if key != "question"}})
         if question["kind"] == "end_requested":
             ended_by_request = True

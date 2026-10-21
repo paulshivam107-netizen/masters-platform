@@ -75,6 +75,7 @@ export async function interviewError(error) {
   if (error.response?.status === 401)
     return "Your sign-in expired. Sign in again to continue this saved interview.";
   if (typeof data?.detail === "string") return data.detail;
+  if (typeof data?.detail?.message === "string") return data.detail.message;
   if (error.response?.status === 422)
     return "Check the interview details and answer length, then try again.";
   return "We could not reach the interview service. Your answer is still here. Reload the session or retry when connected.";

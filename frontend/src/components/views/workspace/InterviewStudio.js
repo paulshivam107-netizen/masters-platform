@@ -114,6 +114,8 @@ export default function InterviewStudio({
   const [hasMore, setHasMore] = useState(false);
   const [historyOffset, setHistoryOffset] = useState(0);
   const [session, setSession] = useState(null);
+  const [resumable, setResumable] = useState(null);
+  const [guard, setGuard] = useState("");
   const [loading, setLoading] = useState(true);
   const [reload, setReload] = useState(0);
   const [busy, setBusy] = useState("");
@@ -182,6 +184,7 @@ export default function InterviewStudio({
   const openSession = (next) => {
     if (!active.current) return;
     setSession(next);
+    setGuard("");
     setConfirmDelete(false);
     writeUserValue(user.id, "interview_active_id", next.id);
     const saved = readUserValue(user.id, draftKey(next.id), null);
@@ -217,36 +220,49 @@ export default function InterviewStudio({
 
   useEffect(() => {
     const controller = new AbortController();
+    const { signal } = controller;
+    const fail = async (err) => {
+      if (!signal.aborted) setError(await api.interviewError(err));
+    };
     setLoading(true);
-    Promise.all([
-      api.getInterviewCapabilities(controller.signal),
-      api.listInterviews(0, controller.signal),
-    ])
-      .then(async ([caps, previous]) => {
-        if (controller.signal.aborted) return;
+    setResumable(null);
+    api
+      .getInterviewCapabilities(signal)
+      .then((caps) => {
+        if (signal.aborted) return;
         setCapabilities(caps);
         clearInterviewIntent();
+      })
+      .catch(fail)
+      .finally(() => {
+        if (!signal.aborted) setLoading(false);
+      });
+    // History and the last session load in the background; setup never waits on them.
+    api
+      .listInterviews(0, signal)
+      .then((previous) => {
+        if (signal.aborted) return;
         setHistory(previous.items);
         setHasMore(previous.has_more);
         setHistoryOffset(previous.items.length);
-        const lastId = readUserValue(user.id, "interview_active_id", "");
-        if (lastId) {
-          try {
-            const current = await api.getInterview(lastId, controller.signal);
-            if (!controller.signal.aborted) openSession(current);
-          } catch (err) {
-            if (err.response?.status === 404)
-              writeUserValue(user.id, "interview_active_id", null);
-            else throw err;
-          }
-        }
       })
-      .catch(async (err) => {
-        if (!controller.signal.aborted) setError(await api.interviewError(err));
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setLoading(false);
-      });
+      .catch(fail);
+    const lastId = readUserValue(user.id, "interview_active_id", "");
+    if (lastId)
+      api
+        .getInterview(lastId, signal)
+        .then((current) => {
+          if (
+            !signal.aborted &&
+            ["active", "ready_for_feedback"].includes(current.status)
+          )
+            setResumable(current);
+        })
+        .catch((err) => {
+          if (err.response?.status === 404)
+            writeUserValue(user.id, "interview_active_id", null);
+          else fail(err);
+        });
     return () => controller.abort();
     // Account changes remount the workspace. A reload explicitly refreshes capabilities/history.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -281,6 +297,7 @@ export default function InterviewStudio({
   };
   const updateAnswer = (text) => {
     setAnswer(text);
+    setGuard("");
     draft.current = {
       text,
       request_id: requestId(),
@@ -401,8 +418,19 @@ export default function InterviewStudio({
     };
     draft.current = payload;
     writeUserValue(user.id, draftKey(session.id), payload);
+    setGuard("");
     run("Thinking… preparing your next question", async (signal) => {
-      const next = await api.answerInterview(session.id, payload, signal);
+      let next;
+      try {
+        next = await api.answerInterview(session.id, payload, signal);
+      } catch (err) {
+        const detail = err.response?.data?.detail;
+        if (err.response?.status === 422 && detail?.code === "not_an_answer") {
+          if (active.current) setGuard(detail.message);
+          return;
+        }
+        throw err;
+      }
       if (!active.current) return;
       updateSession(next);
       setAnswer("");
@@ -435,6 +463,10 @@ export default function InterviewStudio({
   const lastAnswer = session?.transcript
     .filter((turn) => turn.role === "user")
     .slice(-1)[0];
+  // Off-topic retries do not count; fall back to the server count when none exist.
+  const answers = session?.transcript.some((t) => t.off_topic)
+    ? session.transcript.filter((t) => t.role === "user" && !t.off_topic).length
+    : session?.answer_count;
   const closing = question?.kind === "end_requested" ? question : null;
   const hearQuestion = () => {
     if (audio.playing) {
@@ -541,6 +573,20 @@ export default function InterviewStudio({
         </p>
       ) : !session ? (
         <>
+          {resumable && (
+            <p className="studio-message" role="status">
+              You have an interview in progress.{" "}
+              <button
+                className="ws-btn ws-btn--ghost ws-btn--sm"
+                onClick={() => {
+                  openSession(resumable);
+                  setResumable(null);
+                }}
+              >
+                Resume your interview
+              </button>
+            </p>
+          )}
           <p className="studio-intro">
             {live
               ? "A live interviewer asks about you and follows up on your answers. Debrief at the end."
@@ -849,17 +895,16 @@ export default function InterviewStudio({
                   <i
                     key={i}
                     className={
-                      i < session.answer_count
+                      i < answers
                         ? "is-done"
-                        : i === session.answer_count &&
-                            session.status === "active"
+                        : i === answers && session.status === "active"
                           ? "is-now"
                           : ""
                     }
                   />
                 ))}
               </span>
-              {session.answer_count} of {session.question_limit} answers saved
+              {answers} of {session.question_limit} answers saved
             </span>
           </div>
           <p className="studio-programme" data-testid="interview-header">
@@ -880,7 +925,7 @@ export default function InterviewStudio({
           {session.status === "active" && (
             <div className="studio-conversation">
               {lastAnswer && (
-                <figure className="wi-said" key={session.answer_count}>
+                <figure className="wi-said" key={`said-${answers}`}>
                   <figcaption>
                     {session.provider === "demo"
                       ? "Your last answer"
@@ -891,20 +936,17 @@ export default function InterviewStudio({
               )}
               <div
                 className="studio-question"
-                key={session.answer_count}
+                key={answers}
                 tabIndex={-1}
                 ref={transcriptEnd}
               >
                 <span className="ws-eyebrow">
                   <span aria-hidden="true" />
-                  {session.answer_count > 0
-                    ? "Follow-up"
-                    : "Opening question"}{" "}
-                  · Question {session.answer_count + 1} of{" "}
-                  {session.question_limit}
+                  {answers > 0 ? "Follow-up" : "Opening question"} · Question{" "}
+                  {answers + 1} of {session.question_limit}
                 </span>
                 <h3>{question.text}</h3>
-                {session.provider === "demo" && session.answer_count > 0 && (
+                {session.provider === "demo" && answers > 0 && (
                   <p className="wi-demo-note">
                     Demo questions are fixed. A live interviewer would build
                     this follow-up on your words above.
@@ -979,6 +1021,11 @@ export default function InterviewStudio({
                     onChange={(event) => updateAnswer(event.target.value)}
                     placeholder="Take your time. Use a specific example and explain your own contribution."
                   />
+                  {guard && (
+                    <p className="studio-message error" role="alert">
+                      {guard}
+                    </p>
+                  )}
                   <small className="studio-char-count">
                     {answer.length}/3,000 characters · Unsent draft stays in
                     this browser
@@ -1007,7 +1054,7 @@ export default function InterviewStudio({
                   >
                     {busy || "Send answer"} <ArrowIcon />
                   </button>
-                  {session.answer_count > 0 && !answer.trim() && (
+                  {answers > 0 && !answer.trim() && (
                     <button
                       type="button"
                       className="ws-btn ws-btn--ghost ws-btn--sm"

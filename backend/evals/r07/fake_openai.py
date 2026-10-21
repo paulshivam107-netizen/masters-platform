@@ -14,6 +14,9 @@ import httpx
 FAULTS = ("timeout", "rate_limit", "malformed", "incomplete", "bad_anchor")
 # Only explicit requests to end, so a "specific" answer mentioning a stop doesn't end the fake run.
 STOP_REQUEST = re.compile(r"\b(stop|end) (here|now|the (practice )?session|this session)\b|\bend the practice\b")
+# Chatty asides the profiles tag "irrelevant"; the fake treats them as off_topic (once in a row).
+OFF_TOPIC = re.compile(r"\b(do you know|have you (seen|heard)|could you recommend|do you follow|what do you think about|"
+                       r"by the way|off topic|unrelated|just to share|before the next question)\b")
 TOPICS = ("education", "experience", "projects", "behaviour", "motivation", "contribution", "interests")
 
 
@@ -39,8 +42,9 @@ class FakeOpenAI:
         payload = json.loads(body["input"])
         output = {"NextQuestion": _next_question, "InterviewFeedback": _feedback,
                   "ResumeQuestionDraft": _resume_draft}[schema](payload["context"], payload["transcript"])
-        if fault == "bad_anchor" and schema == "NextQuestion" and output["kind"] in ("follow_up", "clarification"):
-            output["anchor_quote"] = "text that is not in the answer"
+        if fault == "bad_anchor" and schema == "NextQuestion":
+            last = next(t for t in reversed(payload["transcript"]) if t["role"] == "user")
+            output.update(kind="follow_up", anchor_turn_id=last["id"], anchor_quote="text that is not in the answer")
         text = "not json {" if fault == "malformed" else json.dumps(output)
         return httpx.Response(200, json={
             "status": "incomplete" if fault == "incomplete" else "completed",
@@ -77,6 +81,10 @@ def _next_question(context, transcript):
     if STOP_REQUEST.search(lowered):
         return {"question": "Understood, we will stop here. Thank you for practising today.",
                 "kind": "end_requested", "topic": TOPICS[0], "anchor_turn_id": "", "anchor_quote": ""}
+    previous = next((t for t in reversed(transcript) if t["role"] == "assistant"), {})
+    if OFF_TOPIC.search(lowered) and previous.get("kind") != "off_topic":
+        return {"question": "That did not address my question. Could you answer it, please, and say what you personally did?",
+                "kind": "off_topic", "topic": TOPICS[0], "anchor_turn_id": "", "anchor_quote": ""}
     if context["next_step"]["move_on"] or not quote or quote not in last["text"]:
         return {"question": f"Turning to {topic}, what is one example you would like to discuss?",
                 "kind": "new_topic", "topic": topic, "anchor_turn_id": "", "anchor_quote": ""}
