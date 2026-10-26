@@ -9,17 +9,8 @@ import {
   PlusIcon,
   ShareIcon,
 } from "../../app/icons";
-import { guides, faqs } from "../../content/guides";
-import { practice } from "../../content/practice";
-import Brand from "../common/Brand";
-import { formatDate } from "./ResourcePages";
-import {
-  EssayPanel,
-  HistoryPanel,
-  LandingPhoto,
-  StepPreview,
-  TrackerPanel,
-} from "./LandingPanels";
+import { landingFaqs } from "../../content/guides";
+import { LandingPhoto, StepPreview } from "./LandingPanels";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
@@ -29,79 +20,6 @@ import { DebriefSpotlight, SchoolBand } from "./LandingBands";
 
 const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
 
-function buildDemoReview(prompt, draft) {
-  const trimmedPrompt = (prompt || "").trim();
-  const trimmedDraft = (draft || "").trim();
-  const wordCount = trimmedDraft
-    ? trimmedDraft.split(/\s+/).filter(Boolean).length
-    : 0;
-  const sentenceCount = trimmedDraft
-    ? trimmedDraft.split(/[.!?]+/).filter((s) => s.trim()).length
-    : 0;
-  const avgSentenceLength = sentenceCount
-    ? Math.round(wordCount / sentenceCount)
-    : 0;
-  const hasNumbers = /\d/.test(trimmedDraft);
-  const hasPersonalVoice = /\b(I|my|me)\b/i.test(trimmedDraft);
-  const hasProgramWhy = /\b(program|school|mba|masters|university)\b/i.test(
-    trimmedDraft,
-  );
-
-  const strengths = [];
-  const improvements = [];
-
-  if (wordCount >= 180) {
-    strengths.push(
-      "Draft has enough substance to evaluate narrative and clarity.",
-    );
-  } else {
-    improvements.push(
-      "Add detail: target at least 180-220 words for useful review depth.",
-    );
-  }
-
-  if (hasPersonalVoice) {
-    strengths.push("Personal voice is visible, which helps authenticity.");
-  } else {
-    improvements.push(
-      "Use first-person examples to make the response feel specific and personal.",
-    );
-  }
-
-  if (hasNumbers) {
-    strengths.push(
-      "Includes concrete facts or metrics, which improves credibility.",
-    );
-  } else {
-    improvements.push(
-      "Add one measurable detail (result, timeline, or scope).",
-    );
-  }
-
-  if (hasProgramWhy) {
-    strengths.push(
-      "Mentions program fit, which aligns well with admissions expectations.",
-    );
-  } else if (trimmedPrompt) {
-    improvements.push("Tie your story back to program fit and why now.");
-  }
-
-  if (avgSentenceLength > 22) {
-    improvements.push("Shorten long sentences to improve readability.");
-  } else if (avgSentenceLength >= 10) {
-    strengths.push("Sentence length is balanced and readable.");
-  }
-
-  return {
-    wordCount,
-    strengths: strengths.slice(0, 3),
-    improvements: improvements.slice(0, 4),
-  };
-}
-
-// Elements marked data-reveal rise and fade in once, the first time they scroll into view.
-// Only elements that start below the viewport are hidden, and only after JavaScript runs, so
-// the prerendered page and no-JS visitors always see the final state.
 function useReveal(rootRef) {
   React.useEffect(() => {
     const root = rootRef.current;
@@ -275,97 +193,6 @@ function HowItWorks() {
   );
 }
 
-function Closeup() {
-  return (
-    <section className="lp-closeup" aria-labelledby="closeup-heading">
-      <div className="lp-frame">
-        <div className="lp-bento" data-reveal>
-          <article className="lp-card lp-card--dark lp-card-a">
-            <header>
-              <Eyebrow>Illustrative example</Eyebrow>
-              <p className="lp-card-title">Mock interview</p>
-              <p>
-                Mock interview, question 2 of 5. Illustrative example, not a
-                real applicant.
-              </p>
-            </header>
-            <h2 className="lp-display" id="closeup-heading">
-              “six weeks to two”
-            </h2>
-            <figure
-              className="lp-exchange"
-              aria-label="Example exchange from a mock interview"
-            >
-              <p className="lp-turn lp-turn--panel">
-                <span>Interviewer</span>
-                Your résumé says you cleared a vendor payment backlog. What was
-                the first thing you did?
-              </p>
-              <p className="lp-turn lp-turn--you">
-                <span>Your answer</span>I sorted the unpaid invoices by vendor,
-                cleared the oldest first and agreed a weekly payment run, so the
-                backlog fell from six weeks to two.
-              </p>
-              <p className="lp-turn lp-turn--panel lp-turn--followup">
-                <span>Follow-up</span>
-                <q>six weeks to two.</q> How did you measure that, and what
-                would you do differently now?
-              </p>
-            </figure>
-            <footer>
-              <Link
-                className="lp-link lp-link--light"
-                to="/mba-interview-practice"
-              >
-                See a full session <ArrowIcon />
-              </Link>
-              <strong>Every follow-up builds on what you just said.</strong>
-            </footer>
-          </article>
-          <article className="lp-card lp-card-b">
-            <h3 className="lp-label">What the follow-up did</h3>
-            <p className="lp-card-display">
-              Quoted your answer. Asked how you measured it.
-            </p>
-            <h3 className="lp-label">What it asks next</h3>
-            <p className="lp-card-display">
-              What would you do differently now?
-            </p>
-            <div className="lp-card-b-foot">
-              <h3 className="lp-label">Your answer</h3>
-              <p>
-                I sorted the unpaid invoices by vendor and agreed a weekly
-                payment run.
-              </p>
-            </div>
-          </article>
-          <article className="lp-card lp-card-c">
-            <h3 className="lp-label">One exercise to practise</h3>
-            <p className="lp-exercise">
-              Retell the backlog story in 60 seconds: the decision, the
-              alternative you rejected, the result.
-            </p>
-            <p className="lp-illustrative">
-              Each debrief ends with a single drill. Illustrative example.
-            </p>
-          </article>
-          <article className="lp-card lp-card-d">
-            <h3 className="lp-card-heading">
-              Your debrief <span className="lp-chip">Three parts</span>
-            </h3>
-            <ol className="lp-bars">
-              <li>What worked</li>
-              <li>What to tighten</li>
-              <li className="is-accent">One exercise</li>
-            </ol>
-            <p className="lp-illustrative">Illustrative structure</p>
-          </article>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 const ROUTES = [
   {
     photo: "photo_route_fresher",
@@ -533,164 +360,8 @@ function Routes() {
   );
 }
 
-function Workspace() {
-  return (
-    <section className="lp-workspace" aria-labelledby="workspace-heading">
-      <div className="lp-frame">
-        <header className="lp-workspace-head">
-          <div>
-            <Eyebrow>Your workspace</Eyebrow>
-            <h2 id="workspace-heading">
-              Your interviews, essays and deadlines.
-              <br />
-              <em>In one place.</em>
-            </h2>
-          </div>
-          <StartButton location="workspace" className="lp-btn--pill" />
-        </header>
-        <div className="lp-workspace-grid">
-          {[
-            {
-              panel: <TrackerPanel />,
-              title: "Application tracker",
-              text: "Deadlines and status by programme.",
-              to: "/guides/mba-application-checklist-india",
-              action: "Read the application checklist",
-            },
-            {
-              panel: <EssayPanel />,
-              title: "Essay drafts",
-              text: "Every draft and its feedback together.",
-            },
-            {
-              panel: <HistoryPanel />,
-              title: "Interview Studio",
-              text: "Transcripts you can export or delete.",
-              to: "/mba-interview-practice",
-              action: "How résumé-based practice works",
-            },
-          ].map((card, index) => (
-            <article
-              className="lp-ws-card"
-              key={card.title}
-              style={{ "--i": index }}
-            >
-              <div className="lp-ws-frame">{card.panel}</div>
-              <div className="lp-ws-caption">
-                <div>
-                  <h3>{card.title}</h3>
-                  <p>{card.text}</p>
-                </div>
-                {card.to && (
-                  <Link
-                    className="lp-square"
-                    to={card.to}
-                    aria-label={card.action}
-                  >
-                    <ArrowIcon />
-                  </Link>
-                )}
-              </div>
-            </article>
-          ))}
-        </div>
-        <p className="lp-illustrative">
-          Example screens with illustrative data.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-const GUIDE_CARDS = ["mba-interview-from-resume", "mba-interview-story-bank"];
-const GUIDE_PHOTOS = {
-  "mba-interview-from-resume": [
-    "photo_resume_printout",
-    "A printed résumé on a desk with a pen beside it",
-    1600,
-    900,
-  ],
-  "mba-interview-story-bank": [
-    "photo_story_cards_notebook",
-    "Index cards and an open notebook on a desk",
-    1600,
-    1094,
-  ],
-};
-
-function GuidesSection() {
-  const picked = GUIDE_CARDS.map((slug) =>
-    guides.find((g) => g.slug === slug),
-  ).filter(Boolean);
-  return (
-    <section className="lp-guides" aria-labelledby="guides-heading">
-      <div className="lp-frame">
-        <header className="lp-guides-head">
-          <h2 id="guides-heading">Guides for interview day</h2>
-          <Link className="lp-label-link" to="/guides">
-            <span aria-hidden="true" />
-            All guides
-          </Link>
-        </header>
-        <div className="lp-guide-grid" data-reveal>
-          <article className="lp-guide lp-guide--large">
-            <div className="lp-guide-text">
-              <p className="lp-category">
-                <span aria-hidden="true" /> Practice page
-              </p>
-              <h3>
-                <Link to={practice.path}>{practice.title}</Link>
-              </h3>
-              <p className="lp-meta">Updated {formatDate(practice.updated)}</p>
-              <p className="lp-guide-summary">{practice.description}</p>
-              <Link className="lp-link" to={practice.path}>
-                Read the guide <ArrowIcon />
-              </Link>
-            </div>
-            <div className="lp-guide-photo">
-              <LandingPhoto
-                id="photo_interview_practice_pair"
-                alt="Two people practising an interview across a table"
-                width={1600}
-                height={1103}
-              />
-            </div>
-          </article>
-          {picked.map((guide, index) => (
-            <article
-              className="lp-guide lp-guide--small"
-              key={guide.slug}
-              style={{ "--i": index + 1 }}
-            >
-              <div className="lp-guide-text">
-                <p className="lp-category">
-                  <span aria-hidden="true" /> Guide
-                </p>
-                <h3>
-                  <Link to={`/guides/${guide.slug}`}>{guide.title}</Link>
-                </h3>
-                <p className="lp-meta">
-                  {guide.readingTime} read · Updated {formatDate(guide.updated)}
-                </p>
-              </div>
-              <div className="lp-guide-thumb">
-                <LandingPhoto
-                  id={GUIDE_PHOTOS[guide.slug][0]}
-                  alt={GUIDE_PHOTOS[guide.slug][1]}
-                  width={GUIDE_PHOTOS[guide.slug][2]}
-                  height={GUIDE_PHOTOS[guide.slug][3]}
-                />
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Faq() {
-  const items = faqs.slice(0, 5);
+  const items = landingFaqs;
   return (
     <section className="lp-faq" aria-labelledby="faq-heading">
       <div className="lp-frame lp-faq-grid">
@@ -701,7 +372,7 @@ function Faq() {
           <h2 id="faq-heading">Questions applicants ask</h2>
           <div className="lp-faq-list">
             {items.map(([question, answer], index) => (
-              <details key={question} open={index === 0}>
+              <details key={question} open={index < 3}>
                 <summary>
                   {question}
                   <span className="lp-faq-icon" aria-hidden="true" />
@@ -720,28 +391,8 @@ function Faq() {
 }
 
 function Closing() {
-  const [prompt, setPrompt] = React.useState(
-    "Describe a time you led through uncertainty. What did you learn?",
-  );
-  const [draft, setDraft] = React.useState("");
-  const [result, setResult] = React.useState(null);
-  const [error, setError] = React.useState("");
-  const runCheck = () => {
-    if (!draft.trim()) {
-      setError("Add a few sentences to get started.");
-      setResult(null);
-      return;
-    }
-    setError("");
-    setResult(buildDemoReview(prompt, draft));
-  };
-  const wordCount = draft.trim() ? draft.trim().split(/\s+/).length : 0;
   return (
-    <section
-      className="lp-closing"
-      id="writing-check"
-      aria-labelledby="closing-heading"
-    >
+    <section className="lp-closing" aria-labelledby="closing-heading">
       <LandingPhoto
         id="photo_quiet_interview_room"
         alt=""
@@ -785,67 +436,6 @@ function Closing() {
             </div>
           </div>
         </div>
-        <div className="lp-closing-form">
-          <div className="lp-form-card">
-            <Brand />
-            <h3>
-              Try one answer now<span>, in your own words</span>
-            </h3>
-            <div className="lp-field">
-              <label htmlFor="public-demo-prompt">
-                What are you writing about?
-              </label>
-              <textarea
-                id="public-demo-prompt"
-                value={prompt}
-                onChange={(event) => setPrompt(event.target.value)}
-                rows="2"
-              />
-            </div>
-            <div className="lp-field">
-              <label htmlFor="public-demo-draft">Your first draft</label>
-              <textarea
-                id="public-demo-draft"
-                value={draft}
-                onChange={(event) => setDraft(event.target.value)}
-                placeholder="Think of a moment that changed the way you work. What happened?"
-                rows="5"
-              />
-            </div>
-            <button
-              type="button"
-              className="lp-btn lp-btn--pill lp-btn--block"
-              onClick={runCheck}
-            >
-              Check my draft <ArrowIcon />
-            </button>
-            <p className="lp-form-note">
-              {wordCount} words. Your text stays on this page and is not saved.
-              This is a basic writing check, not an assessment of admission
-              chances.
-            </p>
-            {error && (
-              <p className="error-message" role="alert">
-                {error}
-              </p>
-            )}
-            {result && (
-              <div
-                className="lp-feedback"
-                data-testid="public-demo-feedback"
-                role="status"
-              >
-                <h4>A few things to consider</h4>
-                <ul>
-                  {[...result.strengths, ...result.improvements].map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-                <small>Basic writing check · {result.wordCount} words</small>
-              </div>
-            )}
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -876,11 +466,15 @@ export default function LandingPage() {
               <StartButton location="hero" />
               <TryLink />
             </div>
+            <p className="lp-hero-note">
+              Free during the pilot · Five questions · Résumé optional
+            </p>
           </div>
           <LiveInterview />
         </div>
       </div>
       <main id="main">
+        <DebriefSpotlight action={<StartButton location="debrief" />} />
         <section className="lp-why" aria-labelledby="why-heading">
           <div className="lp-frame lp-why-grid">
             <div className="lp-why-text" data-reveal>
@@ -896,6 +490,11 @@ export default function LandingPage() {
                   résumé first, asks about it, then follows up on your answer
                   the way a panel member might. It cannot predict an admit. It
                   gives you honest repetitions before the real conversation.
+                </p>
+                <p className="lp-why-privacy">
+                  Your résumé goes to OpenAI only to write your questions, with
+                  contact details removed. We keep the highlights, not the file,
+                  and you can delete your account at any time.
                 </p>
                 <Link
                   className="lp-btn lp-btn--ghost"
@@ -916,24 +515,8 @@ export default function LandingPage() {
           </div>
         </section>
         <HowItWorks />
-        <DebriefSpotlight />
-        <Closeup />
         <Routes />
-        <Workspace />
         <SchoolBand />
-        <GuidesSection />
-        <section className="lp-pilot" aria-labelledby="pilot-heading">
-          <div className="lp-frame">
-            <h2 id="pilot-heading">
-              Free during the pilot. No admit promises. <br />
-              Just more practice before the real panel.
-            </h2>
-            <p className="lp-pilot-meta">
-              <strong>The pilot</strong>
-              <span>Prices are not decided yet</span>
-            </p>
-          </div>
-        </section>
         <Faq />
         <Closing />
       </main>

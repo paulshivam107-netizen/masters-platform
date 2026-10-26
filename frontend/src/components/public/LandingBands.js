@@ -55,7 +55,7 @@ function useDebriefPlay(ref) {
   return state;
 }
 
-export function DebriefSpotlight() {
+export function DebriefSpotlight({ action = null }) {
   const ref = useRef(null);
   const { score, shown } = useDebriefPlay(ref);
   return (
@@ -69,6 +69,7 @@ export function DebriefSpotlight() {
             Every point quotes your own words, so you know exactly what to
             change before the next interview.
           </p>
+          {action}
         </div>
         <figure
           className={`lp-debrief-card${shown ? " is-shown" : ""}`}

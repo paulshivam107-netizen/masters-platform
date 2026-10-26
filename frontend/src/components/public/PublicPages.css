@@ -288,6 +288,22 @@
   color: var(--muted);
   animation: lp-rise 0.9s var(--lp-ease) 0.16s both;
 }
+.lp-hero-note {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+.lp-why-privacy {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.6;
+}
+.lp-debrief-copy .lp-btn {
+  margin-top: 24px;
+}
 .lp-cta-row {
   display: flex;
   flex-wrap: wrap;
@@ -811,8 +827,7 @@
 
 .lp-why {
   padding-block: var(--lp-y);
-  /* Its own field: in light mode the soft surface matched the page and the tiles above. */
-  background: var(--lp-tint);
+  /* Page ground: it sits between the tinted debrief and how-it-works. */
 }
 .lp-why-grid {
   display: grid;
@@ -865,7 +880,7 @@
   --hero-link: var(--ink);
 }
 .lp-how {
-  --hero-bg: var(--canvas);
+  --hero-bg: var(--lp-tint);
 }
 .lp-schools-band {
   --hero-bg: var(--lp-tint);
@@ -1229,7 +1244,6 @@
 /* Routes */
 .lp-routes {
   padding-block: var(--lp-y);
-  background: var(--lp-tint);
 }
 .lp-routes-head {
   display: grid;
@@ -1787,10 +1801,6 @@
   grid-column: 2;
   grid-row: 1;
 }
-.lp-closing-form {
-  grid-column: 1;
-  grid-row: 1;
-}
 .lp-closing h2 {
   font-size: clamp(56px, 7vw, 112px);
   font-weight: 800;
@@ -2073,12 +2083,8 @@ html[data-reduced-motion="true"] .lp .is-pending {
     grid-template-columns: minmax(0, 1fr);
     max-width: calc(0.7 * 100% + 2 * var(--lp-pad));
   }
-  .lp-closing-copy,
-  .lp-closing-form {
-    grid-column: 1;
-  }
   .lp-closing-copy {
-    grid-row: 2;
+    grid-column: 1;
   }
 }
 
@@ -2237,9 +2243,6 @@ html[data-reduced-motion="true"] .lp .is-pending {
   }
   .lp-closing-grid {
     max-width: none;
-  }
-  .lp-closing-form {
-    order: -1;
   }
   .lp-closing h2 {
     font-size: clamp(56px, 16vw, 72px);

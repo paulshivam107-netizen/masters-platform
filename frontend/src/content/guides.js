@@ -489,4 +489,25 @@ const faqs = [
     "Verify dates and requirements on the school’s official page. Automated essay feedback is guidance, not an admissions decision or probability. A demo or mock review is not an expert assessment.",
   ],
 ];
-export { guides, faqs };
+// The questions a first-time visitor asks before trying it, in that order.
+const landingFaqs = [
+  [
+    "What happens to my résumé?",
+    "It is sent to OpenAI only to write your interview questions, with email addresses, phone numbers and profile links removed first. MockMBA keeps the highlights it uses, not the file, and you can export or permanently delete your account at any time.",
+  ],
+  ["Is it free?", "Yes, during the pilot. Prices for later have not been set."],
+  [
+    "How long is a session?",
+    "A standard interview is five questions, each followed up on your answer, then a debrief. You can choose three or eight instead, and type your answers or, where your browser supports it, speak them. It works on a phone or a laptop.",
+  ],
+  [
+    "Does it need my résumé?",
+    "No. Without one you get a general interview on motivation, goals and your background. With one, the questions start from what you wrote.",
+  ],
+  [
+    "Can it predict my admit?",
+    "No. Readiness rates the answers you gave in practice, not your chances. Check each programme's official admissions instructions.",
+  ],
+];
+
+export { guides, faqs, landingFaqs };
