@@ -490,7 +490,7 @@ export function HelpPage() {
     </ResourceShell>
   );
 }
-const PRIVACY_UPDATED = "2026-10-17";
+const PRIVACY_UPDATED = "2026-10-26";
 const PRIVACY_TOC = [
   ["what-we-store", "What we store"],
   ["what-we-dont", "What we don't store"],
@@ -558,8 +558,9 @@ export function PrivacyPage() {
               discarded; only the text of your answer is saved.
             </li>
             <li>
-              No advertising, no third-party analytics or tracking cookies, and
-              we don't sell your data.
+              No advertising, no tracking cookies, and we don't sell your data.
+              We count visits with Cloudflare Web Analytics, which sets no
+              cookies and doesn't follow you across other sites.
             </li>
           </ul>
         </section>
@@ -586,12 +587,12 @@ export function PrivacyPage() {
               <strong>Neon:</strong> the database, hosted in Singapore.
             </li>
             <li>
-              <strong>Railway:</strong> the application server, currently in the
-              United States.
+              <strong>Railway:</strong> the application server, hosted in
+              Singapore.
             </li>
             <li>
-              <strong>Cloudflare:</strong> the website and the mockmba.com
-              domain.
+              <strong>Cloudflare:</strong> the website, the mockmba.com domain,
+              forwarding of hello@mockmba.com, and cookieless visit counts.
             </li>
             <li>
               <strong>Resend:</strong> account and reminder emails.
