@@ -3,6 +3,7 @@ import * as interviewsApi from "../../../api/interviewsApi";
 import { Link } from "react-router-dom";
 import "./WorkspaceInterview.css";
 import SetupGuide from "./SetupGuide";
+import Silk from "../../common/Silk/Silk";
 import ApplicationDetail from "./ApplicationDetail";
 import {
   ApplicationsIcon,
@@ -148,6 +149,18 @@ export default function HomeView({
       <section className="wi-home ws-stack" data-testid="home-first-visit">
         <div className="wi-welcome">
           <div className="wi-welcome__copy">
+            <div className="wi-welcome__bg" aria-hidden="true">
+              <Silk
+                color="#2f6b50"
+                sheenColor="#9cc982"
+                speed={3}
+                sheen={0.22}
+                glow={0.15}
+                depth={0.35}
+                clickRipple={false}
+              />
+            </div>
+            <div className="wi-welcome__scrim" aria-hidden="true" />
             <div className="wi-welcome__text">
               <span className="ws-eyebrow">
                 <span aria-hidden="true" />
@@ -174,11 +187,6 @@ export default function HomeView({
                 </>
               )}
             </div>
-            <img
-              className="wi-welcome__photo"
-              src="/images/landing/photo_interview_practice_pair.jpg"
-              alt=""
-            />
           </div>
         </div>
         <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
