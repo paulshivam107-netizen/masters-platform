@@ -43,4 +43,4 @@ def next_step(context, transcript):
     covered = list(dict.fromkeys(t["topic"] for t in transcript if t.get("topic")))
     return {**plan, "branch_depth": depth, "covered_topics": covered,
             "move_on": depth >= plan["max_follow_ups"],
-            "answers_remaining": max(0, context.get("question_limit", 5) - sum(t["role"] == "user" for t in transcript))}
+            "answers_remaining": max(0, context.get("question_limit", 5) - sum(t["role"] == "user" and not t.get("off_topic") for t in transcript))}

@@ -30,12 +30,13 @@ from models import AiCostEntry, AiPriceVersion, AiRuntimeConfig, AiSpendCounter
 PRICE_BASIS = "builtin-2026-10 (USD list price at Rs 90/USD)"
 # Paise per million units. Replace with a database price version (admin API) when prices change.
 BUILTIN_PRICES = {
+    "gpt-6-luna": ("tokens", "tokens", 900, 4_500, 0),  # $0.10 / $0.50 per 1M (OpenAI pricing, Oct 2026)
     "gpt-4.1-mini": ("tokens", "tokens", 3_600, 14_400, 0),
     "gpt-4o-mini": ("tokens", "tokens", 1_350, 5_400, 0),
     "gpt-4o-mini-tts": ("text_tokens", "audio_tokens", 5_400, 108_000, 0),
     "gpt-4o-transcribe": ("audio_seconds", "tokens", 900_000, 90_000, 0),
     "gpt-4o-mini-transcribe": ("audio_seconds", "tokens", 450_000, 45_000, 0),
-    "gpt-transcribe": ("audio_seconds", "tokens", 900_000, 90_000, 0),
+    "gpt-transcribe": ("audio_seconds", "tokens", 675_000, 90_000, 0),  # $0.0045 / minute
 }
 # Unknown model: price it like a premium model rather than refuse or under-reserve.
 FALLBACK_PRICE = ("tokens", "tokens", 45_000, 180_000, 0)

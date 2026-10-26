@@ -2,18 +2,20 @@ import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import InterviewStudio from "./InterviewStudio";
 import * as api from "../../../api/interviewsApi";
-import { writeUserValue } from "../../../app/workspaceStorage";
+import { readUserValue, writeUserValue } from "../../../app/workspaceStorage";
 jest.mock("../../../contexts/AuthContext", () => ({
   useAuth: () => ({ user: { id: 99, name: "Asha Rao" } }),
 }));
 jest.mock("../../../app/workspaceStorage", () => ({
-  readUserValue: (_user, _key, fallback) => fallback,
+  readUserValue: jest.fn((_user, _key, fallback) => fallback),
   writeUserValue: jest.fn(() => true),
 }));
 jest.mock("../../../api/interviewsApi", () => ({
   getInterviewCapabilities: jest.fn(),
   listInterviews: jest.fn(),
   createInterview: jest.fn(),
+  getInterview: jest.fn(),
+  answerInterview: jest.fn(),
   interviewError: jest.fn(),
 }));
 jest.mock(
@@ -73,6 +75,7 @@ beforeEach(() => {
     value: { randomUUID: () => "test-request-id" },
   });
   jest.clearAllMocks();
+  readUserValue.mockImplementation((_u, _k, f) => f);
   api.getInterviewCapabilities.mockResolvedValue({
     chat: true,
     voice: true,
@@ -387,4 +390,85 @@ test("a debrief without readiness shows neither", async () => {
   await openDebrief(null);
   expect(container.textContent).not.toContain("Partial readiness");
   expect(container.textContent).not.toContain("How this is calculated");
+});
+
+const activeSession = (transcript, answer_count = 0) => ({
+  id: "s-act",
+  provider: "openai",
+  mode: "chat",
+  status: "active",
+  version: 2,
+  answer_count,
+  question_limit: 5,
+  context: { school: "Test School", programme: "MBA", route: "experienced" },
+  transcript,
+});
+const resumeStored = () =>
+  readUserValue.mockImplementation((_u, key, fallback) =>
+    key === "interview_active_id" ? "s-act" : fallback,
+  );
+
+test("setup shows before history resolves", async () => {
+  api.listInterviews.mockReturnValue(new Promise(() => {}));
+  await render();
+  expect(button("Start interview")).toBeDefined();
+  expect(container.textContent).not.toContain("Opening your interview");
+});
+
+test("a stored active session shows a resume notice that opens it", async () => {
+  resumeStored();
+  api.getInterview.mockResolvedValue(
+    activeSession([{ id: "q1", role: "assistant", text: "Resume me?" }]),
+  );
+  await render();
+  expect(button("Start interview")).toBeDefined();
+  await tick(() => button("Resume your interview").click());
+  expect(container.textContent).toContain("Resume me?");
+});
+
+test("a not_an_answer 422 keeps the text and shows the message inline", async () => {
+  resumeStored();
+  api.getInterview.mockResolvedValue(
+    activeSession([{ id: "q1", role: "assistant", text: "Why MBA?" }]),
+  );
+  api.answerInterview.mockRejectedValue({
+    response: {
+      status: 422,
+      data: { detail: { code: "not_an_answer", message: "Not an answer." } },
+    },
+  });
+  await render();
+  await tick(() => button("Resume your interview").click());
+  const box = container.querySelector("#studio-answer");
+  await act(async () => {
+    Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "value",
+    ).set.call(box, "asdf");
+    box.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  await tick(() => button("Send answer").click());
+  expect(container.querySelector('[role="alert"]').textContent).toBe(
+    "Not an answer.",
+  );
+  expect(container.querySelector("#studio-answer").value).toBe("asdf");
+  expect(container.querySelectorAll('[role="alert"]')).toHaveLength(1);
+  expect(api.interviewError).not.toHaveBeenCalled();
+});
+
+test("the question counter ignores off_topic user turns", async () => {
+  resumeStored();
+  api.getInterview.mockResolvedValue(
+    activeSession(
+      [
+        { id: "q1", role: "assistant", text: "Why MBA?" },
+        { id: "a1", role: "user", text: "pizza", off_topic: true },
+        { id: "q2", role: "assistant", kind: "off_topic", text: "Why MBA?" },
+      ],
+      1,
+    ),
+  );
+  await render();
+  await tick(() => button("Resume your interview").click());
+  expect(container.textContent).toContain("Question 1 of 5");
 });

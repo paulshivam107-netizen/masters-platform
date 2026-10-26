@@ -65,6 +65,25 @@ def _text_flags(text, persona, sources):
     return flags
 
 
+FALSE_RETRY_TAGS = ("specific", "vague", "unknown", "disagree", "confidential", "contradiction")
+
+
+def off_topic_stats(session):
+    """(irrelevant answers, those caught by an off_topic turn, off_topic turns after a tag that must not trigger one)."""
+    tags = session.get("answer_tags") or []
+    irrelevant = caught = false_retries = 0
+    transcript = session["transcript"]
+    for index, turn in enumerate(transcript[:-1]):
+        if turn["role"] != "user":
+            continue
+        tag = tags[int(turn["id"][1:]) - 1] if int(turn["id"][1:]) <= len(tags) else ""
+        off = transcript[index + 1].get("kind") == "off_topic"
+        irrelevant += tag == "irrelevant"
+        caught += tag == "irrelevant" and off
+        false_retries += off and tag in FALSE_RETRY_TAGS
+    return irrelevant, caught, false_retries
+
+
 def question_rows(session):
     persona = session.get("persona") or {}
     transcript, rows, asked = session["transcript"], [], []
@@ -76,9 +95,11 @@ def question_rows(session):
             asked.append(turn["text"])
             continue
         previous = transcript[index - 1]
-        answer_number = int(previous["id"][1:])
+        answer_number = int(previous["id"][1:])  # ids count every answer, so tags line up with the script
         flags = _text_flags(turn["text"], persona, _sources(session, answer_number))
-        if any(SequenceMatcher(None, turn["text"].casefold(), earlier.casefold()).ratio() >= REPEAT_RATIO for earlier in asked):
+        # An off_topic turn deliberately repeats the unanswered question; that is not a repeat.
+        if turn.get("kind") != "off_topic" and any(
+                SequenceMatcher(None, turn["text"].casefold(), earlier.casefold()).ratio() >= REPEAT_RATIO for earlier in asked):
             flags.insert(0, "repeat")
         asked.append(turn["text"])
         rows.append({

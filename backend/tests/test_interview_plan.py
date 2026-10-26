@@ -84,7 +84,7 @@ class NextQuestionRequestTest(unittest.TestCase):
         schema = body["text"]["format"]["schema"]
         self.assertTrue(body["text"]["format"]["strict"])
         # A follow-up is impossible; a clarification may only target the latest answer (a3).
-        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic", "clarification"])
+        self.assertEqual(schema["properties"]["kind"]["enum"], ["new_topic", "clarification", "off_topic"])
         self.assertEqual(schema["properties"]["anchor_turn_id"]["enum"], ["", "a3"])
         self.assertEqual(list(schema["properties"])[0], "conflict")
         self.assertEqual(schema["required"], list(schema["properties"]))
@@ -97,7 +97,7 @@ class NextQuestionRequestTest(unittest.TestCase):
                   "anchor_turn_id": "a2", "anchor_quote": "reviewed the evidence"}
         body, (result, _) = self.sent(turns, output)
         self.assertEqual(set(body["text"]["format"]["schema"]["properties"]["kind"]["enum"]),
-                         {"follow_up", "clarification", "new_topic"})
+                         {"follow_up", "clarification", "new_topic", "off_topic"})
         self.assertNotIn("move_on is TRUE", body["instructions"])
         self.assertEqual(result["kind"], "follow_up")
 
@@ -105,7 +105,7 @@ class NextQuestionRequestTest(unittest.TestCase):
         self.sent(exhausted_turns(), {"question": "What do you hope to learn in the MBA?", "kind": "new_topic",
                                       "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
         from interview_schemas import NextQuestion
-        self.assertEqual(len(NextQuestion.model_json_schema()["properties"]["kind"]["enum"]), 4)
+        self.assertEqual(len(NextQuestion.model_json_schema()["properties"]["kind"]["enum"]), 5)
 
 
 def answered(*answers):
@@ -209,9 +209,20 @@ class BeyondLimitSchemaTest(unittest.TestCase):
             "conflict": "", "question": "What do you hope to learn in the MBA?", "kind": "new_topic",
             "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
         properties = body["text"]["format"]["schema"]["properties"]
-        self.assertEqual(properties["kind"]["enum"], ["new_topic"])
+        self.assertEqual(properties["kind"]["enum"], ["new_topic", "off_topic"])
         self.assertEqual((properties["anchor_turn_id"]["enum"], properties["anchor_quote"]["enum"]), ([""], [""]))
         at_limit, _ = NextQuestionRequestTest.sent(self, exhausted_turns(), {
             "conflict": "", "question": "What do you hope to learn in the MBA?", "kind": "new_topic",
             "topic": "motivation", "anchor_turn_id": "", "anchor_quote": ""})
-        self.assertEqual(at_limit["text"]["format"]["schema"]["properties"]["kind"]["enum"], ["new_topic", "clarification"])
+        self.assertEqual(at_limit["text"]["format"]["schema"]["properties"]["kind"]["enum"], ["new_topic", "clarification", "off_topic"])
+
+
+class OffTopicSchemaTest(unittest.TestCase):
+    def test_no_second_consecutive_off_topic(self):
+        turns = answered("Do you know about hostels?", "Still talking about hostels.")
+        turns.insert(2, {"role": "assistant", "id": "q2", "text": "Please answer the question.", "kind": "off_topic"})
+        turns.insert(3, {"role": "user", "id": "a2", "text": "I enjoy cooking."})
+        turns[-1]["id"] = "a3"
+        turns.insert(-1, {"role": "assistant", "id": "q3", "text": "Again, please answer.", "kind": "off_topic"})
+        self.assertNotIn("off_topic", provider._request_schema(turns, False)["properties"]["kind"]["enum"])
+        self.assertIn("off_topic", provider._request_schema(answered("Hello there friend"), False)["properties"]["kind"]["enum"])

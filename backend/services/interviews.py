@@ -3,6 +3,7 @@ import hashlib
 import json
 import os
 import re
+from collections import Counter
 from datetime import datetime, timedelta
 from uuid import uuid4
 
@@ -61,6 +62,43 @@ MAX_OUTPUT_TOKENS = {"answer": 800, "feedback": 2200}
 
 def is_stop_request(text):
     return bool(STOP_REQUEST.search(text or ""))
+
+
+def answer_count(transcript):
+    """Answers that use up a question: an answer to an off_topic re-ask replaces the off-topic one."""
+    return sum(t["role"] == "user" and not t.get("off_topic") for t in transcript)
+
+
+NOT_AN_ANSWER = "That doesn't look like an answer to the question. Try again in a sentence or two."
+WORD = re.compile(r"[^\W_]+(?:['\u2019][^\W_]+)*")
+# Adjacent keys on a keyboard row: what mashing produces.
+KEY_ROWS = ("qwertyuiop", "asdfghjkl", "zxcvbnm")
+KEY_RUNS = {row[i:i + 4] for row in KEY_ROWS for i in range(len(row) - 3)}
+
+
+def _word_like(word):
+    if not word.isascii() or any(c.isdigit() for c in word):
+        return True  # other scripts and numbers are not judged
+    return bool(re.search("[aeiouy]", word)) and not re.search(r"[^aeiouy]{6}|(.)\1{3}", word) \
+        and not any(run in word for run in KEY_RUNS)
+
+
+def non_answer_reason(text):
+    """A message when the text cannot be a real answer whatever the question was, else None.
+
+    Deliberately narrow: short or evasive genuine answers ("I don't know") go to the interviewer.
+    """
+    words = WORD.findall((text or "").casefold())
+    if len(words) < 2:
+        return NOT_AN_ANSWER
+    sentences = [" ".join(WORD.findall(s)) for s in re.split(r"[.!?;\n]+", text.casefold())]
+    if max(Counter(s for s in sentences if s).values(), default=0) >= 3 or re.fullmatch(r"(.+?)(?: \1){2,}", " ".join(words)):
+        return NOT_AN_ANSWER
+    if len(words) >= 12 and len(set(words)) / len(words) < 0.3:
+        return NOT_AN_ANSWER
+    if sum(not _word_like(w) for w in words) * 2 > len(words):
+        return NOT_AN_ANSWER
+    return None
 
 
 def closing_turn(context, transcript):
@@ -161,7 +199,7 @@ def serialize(session, detail=True):
         "id": session.id, "provider": session.provider, "mode": session.mode,
         "status": session.status, "version": session.version,
         "question_limit": session.question_limit,
-        "answer_count": sum(t["role"] == "user" for t in transcript),
+        "answer_count": answer_count(transcript),
         "context": json.loads(session.context_json), "prompt_version": session.prompt_version,
         "created_at": session.created_at.isoformat() + "Z",
         "updated_at": session.updated_at.isoformat() + "Z",
