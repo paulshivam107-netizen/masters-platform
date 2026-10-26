@@ -244,9 +244,30 @@
 
 /* Hero */
 .lp-hero {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 0 0 56px;
+}
+/* Dot field behind the first screen only; the headline and demo sit above it. */
+.lp-hero-dots {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  /* Quieter under the headline and text, full strength around the demo. */
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0.35) 38%, #000 62%);
+  mask-image: linear-gradient(90deg, rgb(0 0 0 / 0.35) 0%, rgb(0 0 0 / 0.35) 38%, #000 62%);
+}
+@media (max-width: 999px) {
+  .lp-hero-dots {
+    -webkit-mask-image: none;
+    mask-image: none;
+    opacity: 0.55;
+  }
+}
+.lp-hero > :not(.lp-hero-dots) {
+  position: relative;
+  z-index: 1;
 }
 .lp-hero-copy {
   margin-top: clamp(56px, 14vh, 150px);

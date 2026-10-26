@@ -24,6 +24,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 import LiveInterview from "./LiveInterview";
+import HeroDots from "./HeroDots";
 import { DebriefSpotlight, SchoolBand } from "./LandingBands";
 
 const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
@@ -859,6 +860,7 @@ export default function LandingPage() {
         Skip to content
       </a>
       <div className="lp-hero">
+        <HeroDots />
         <SiteHeader home />
         <div className="lp-frame lp-hero-copy">
           <div className="lp-hero-text">

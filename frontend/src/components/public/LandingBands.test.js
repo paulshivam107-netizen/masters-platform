@@ -1,10 +1,10 @@
 import React from "react";
 import { renderToString } from "react-dom/server";
-import { MemoryRouter } from "react-router-dom";
+import { StaticRouter } from "react-router-dom/server";
 import { DebriefSpotlight, SchoolBand } from "./LandingBands";
 import { schools } from "../../content/schools";
 
-const html = (node) => renderToString(<MemoryRouter>{node}</MemoryRouter>);
+const html = (node) => renderToString(<StaticRouter location="/">{node}</StaticRouter>);
 
 test("the prerendered debrief shows the finished score and says it is not an admit prediction", () => {
   const out = html(<DebriefSpotlight />);
