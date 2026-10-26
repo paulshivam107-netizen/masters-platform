@@ -391,13 +391,17 @@
   color: var(--muted);
   font-size: 13px;
 }
+/* Three section fields only: the page ground, a tint and the deep brand green. Neighbouring
+   sections are either the same field or clearly different ones, never nearly the same. */
 .lp {
-  --lp-why-bg: color-mix(in srgb, var(--accent) 38%, var(--canvas));
+  --lp-tint: color-mix(in srgb, var(--accent) 38%, var(--canvas));
   --lp-live-mark: #d7ecac;
   --lp-live-you: color-mix(in srgb, var(--accent) 35%, var(--surface));
 }
 [data-theme="dark"] .lp {
-  --lp-why-bg: var(--surface-soft);
+  --lp-tint: var(--surface-soft);
+  /* The app's dark hero green (#142a20) sat between ground and tint; use the brand green. */
+  --hero-bg: #183d30;
   --lp-live-mark: #3d5a2a;
   --lp-live-you: color-mix(in srgb, var(--accent) 12%, var(--surface));
 }
@@ -798,7 +802,7 @@
 .lp-why {
   padding-block: var(--lp-y);
   /* Its own field: in light mode the soft surface matched the page and the tiles above. */
-  background: var(--lp-why-bg);
+  background: var(--lp-tint);
 }
 .lp-why-grid {
   display: grid;
@@ -1201,7 +1205,7 @@
 /* Routes */
 .lp-routes {
   padding-block: var(--lp-y);
-  background: var(--surface-soft);
+  background: var(--lp-tint);
 }
 .lp-routes-head {
   display: grid;
@@ -1503,7 +1507,7 @@
 /* Guides */
 .lp-guides {
   padding-block: var(--lp-y);
-  background: var(--surface-soft);
+  background: var(--lp-tint);
 }
 .lp-guides-head {
   display: flex;
@@ -1630,8 +1634,8 @@
 /* Pilot promise */
 .lp-pilot {
   padding-block: clamp(64px, 9vw, 120px);
-  background: var(--surface);
-  border-block: 1px solid var(--line);
+  background: var(--hero-bg);
+  color: var(--hero-ink);
 }
 .lp-pilot h2 {
   font-size: clamp(28px, 2.9vw, 52px);
@@ -1654,7 +1658,7 @@
 .lp-pilot-meta span {
   font-size: 14px;
   letter-spacing: 0.08em;
-  color: var(--muted);
+  color: var(--hero-muted);
 }
 
 /* FAQ */

@@ -914,11 +914,11 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <SchoolBand />
         <HowItWorks />
         <Closeup />
         <Routes />
         <Workspace />
+        <SchoolBand />
         <GuidesSection />
         <section className="lp-pilot" aria-labelledby="pilot-heading">
           <div className="lp-frame">
