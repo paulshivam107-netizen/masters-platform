@@ -12,15 +12,11 @@ import {
 import { guides, faqs } from "../../content/guides";
 import { practice } from "../../content/practice";
 import Brand from "../common/Brand";
-import JourneyArtwork from "../common/JourneyArtwork";
 import { formatDate } from "./ResourcePages";
 import {
-  AnswerPanel,
-  DebriefPanel,
   EssayPanel,
   HistoryPanel,
   LandingPhoto,
-  QuestionPanel,
   StepPreview,
   TrackerPanel,
 } from "./LandingPanels";
@@ -28,6 +24,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
 import LiveInterview from "./LiveInterview";
+import { DebriefSpotlight, SchoolBand } from "./LandingBands";
 
 const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
 
@@ -880,36 +877,9 @@ export default function LandingPage() {
           </div>
           <LiveInterview />
         </div>
-        <div className="lp-strip" tabIndex={0} aria-label="Example screens">
-          <div className="lp-tile lp-tile--dark">
-            <div className="lp-orb">
-              <JourneyArtwork />
-            </div>
-          </div>
-          <div className="lp-tile lp-tile--soft">
-            <QuestionPanel />
-          </div>
-          <div className="lp-tile lp-tile--dark">
-            <AnswerPanel />
-          </div>
-          <div className="lp-tile lp-tile--soft">
-            <DebriefPanel />
-          </div>
-          <div className="lp-tile lp-tile--photo">
-            <LandingPhoto
-              id="photo_practice_at_laptop"
-              alt="An applicant practising an answer at a laptop"
-              width={1920}
-              height={1280}
-              eager
-            />
-          </div>
-        </div>
-        <div className="lp-frame">
-          <p className="lp-caption">Example screens with illustrative data.</p>
-        </div>
       </div>
       <main id="main">
+        <DebriefSpotlight />
         <section className="lp-why" aria-labelledby="why-heading">
           <div className="lp-frame lp-why-grid">
             <div className="lp-why-text" data-reveal>
@@ -944,6 +914,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
+        <SchoolBand />
         <HowItWorks />
         <Closeup />
         <Routes />

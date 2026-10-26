@@ -420,58 +420,6 @@
   }
 }
 
-.lp-strip {
-  --lp-tile-h: clamp(380px, 52vh, 640px);
-  display: flex;
-  gap: 8px;
-  height: var(--lp-tile-h);
-  margin-top: clamp(32px, 6vh, 64px);
-}
-.lp-tile {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
-  container-type: inline-size;
-  animation: lp-rise 0.9s var(--lp-ease) both;
-}
-.lp-tile:nth-child(1) {
-  animation-delay: 0.32s;
-}
-.lp-tile:nth-child(2) {
-  animation-delay: 0.38s;
-}
-.lp-tile:nth-child(3) {
-  animation-delay: 0.44s;
-}
-.lp-tile:nth-child(4) {
-  animation-delay: 0.5s;
-}
-.lp-tile:nth-child(5) {
-  animation-delay: 0.56s;
-}
-.lp-tile--dark,
-.lp-tile--photo {
-  background: var(--hero-bg);
-}
-.lp-tile--soft {
-  background: var(--surface-soft);
-}
-.lp-orb {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-}
-.lp-orb .journey-art {
-  transform: scale(0.8);
-}
-.lp-caption {
-  margin: 12px 0 0;
-  text-align: right;
-  font-size: 13px;
-  color: var(--muted);
-}
 .lp-photo {
   position: absolute;
   inset: 0;
@@ -637,6 +585,216 @@
 }
 
 /* Why résumé-led */
+/* Debrief spotlight: what you get after the interview the hero demo shows. */
+.lp-debrief-band {
+  padding-block: clamp(48px, 7vw, 88px) var(--lp-y);
+}
+.lp-debrief-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(24px, 3vw, 40px);
+  align-items: center;
+}
+.lp-debrief-copy h2 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 3vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.lp-debrief-copy p {
+  margin: 0;
+  max-width: 40ch;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+.lp-debrief-card {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 22px;
+  border-radius: 18px;
+  background: var(--surface);
+  box-shadow: 0 1px 0 var(--line), 0 24px 48px -30px rgb(0 0 0 / 0.35);
+}
+.lp-debrief-score {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.lp-debrief-num {
+  font: 800 56px/1 var(--font-heading);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.lp-debrief-of {
+  color: var(--muted);
+  font: 700 20px var(--font-heading);
+}
+.lp-debrief-label {
+  margin-left: auto;
+  color: var(--muted);
+  font-weight: 600;
+}
+.lp-debrief-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-soft);
+}
+.lp-debrief-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+}
+.lp-debrief-findings {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.lp-debrief-findings div {
+  display: grid;
+  gap: 2px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: var(--surface-soft);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.5s, transform 0.5s var(--lp-ease);
+}
+.lp-debrief-findings div:nth-child(2) {
+  transition-delay: 0.25s;
+}
+.lp-debrief-findings div:nth-child(3) {
+  transition-delay: 0.5s;
+}
+.lp-debrief-card.is-shown .lp-debrief-findings div {
+  opacity: 1;
+  transform: none;
+}
+.lp-debrief-findings dt {
+  font-weight: 650;
+  font-size: 14px;
+}
+.lp-debrief-findings dd {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+.lp-debrief-card figcaption {
+  color: var(--muted);
+  font-size: 12px;
+}
+.lp-debrief-photo {
+  position: relative;
+  align-self: stretch;
+  min-height: 320px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--hero-bg);
+}
+
+/* School band: two rows of school links drifting in opposite directions. */
+.lp-schools-band {
+  display: grid;
+  /* The rows are wider than the screen on purpose; the column must not grow with them. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: 28px;
+  padding-block: clamp(48px, 6vw, 72px);
+  overflow: hidden;
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+}
+.lp-schools-band-head h2 {
+  margin: 0 0 8px;
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+.lp-schools-band-head p {
+  margin: 0;
+  color: var(--hero-muted);
+}
+.lp-schools-band-head a {
+  color: var(--hero-ink);
+  font-weight: 600;
+}
+.lp-marquee {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+.lp-marquee-row {
+  display: flex;
+  width: max-content;
+  animation: lp-marquee 90s linear infinite;
+}
+.lp-marquee-row--rev {
+  animation-direction: reverse;
+  animation-duration: 110s;
+}
+.lp-marquee:hover .lp-marquee-row,
+.lp-marquee:focus-within .lp-marquee-row {
+  animation-play-state: paused;
+}
+.lp-marquee-set {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px 0 0;
+  list-style: none;
+}
+.lp-marquee-set a {
+  display: block;
+  padding: 12px 20px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--hero-ink) 10%, transparent);
+  color: var(--hero-ink);
+  font: 700 18px var(--font-heading);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.lp-marquee-set a:hover,
+.lp-marquee-set a:focus-visible {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+@keyframes lp-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@media (max-width: 900px) {
+  .lp-debrief-grid {
+    grid-template-columns: 1fr;
+  }
+  .lp-debrief-photo {
+    min-height: 240px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lp-marquee-row {
+    width: auto;
+    animation: none;
+  }
+  .lp-marquee-set {
+    flex-wrap: wrap;
+    padding-inline: var(--lp-pad);
+  }
+  .lp-marquee-set[aria-hidden] {
+    display: none;
+  }
+  .lp-debrief-findings div {
+    transition: none;
+  }
+}
+
 .lp-why {
   padding-block: var(--lp-y);
   /* Its own field: in light mode the soft surface matched the page and the tiles above. */
@@ -1814,21 +1972,6 @@ html[data-reduced-motion="true"] .lp .is-pending {
   .lp-hero-copy h1 {
     max-width: 80%;
   }
-  .lp-strip {
-    --lp-tile-h: 520px;
-    overflow-x: auto;
-    padding-inline: var(--lp-pad);
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--lp-pad);
-    scrollbar-width: none;
-  }
-  .lp-strip::-webkit-scrollbar {
-    display: none;
-  }
-  .lp-tile {
-    flex: 0 0 calc((100vw - 24px) / 3.5);
-    scroll-snap-align: start;
-  }
   .lp-why-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -1937,17 +2080,6 @@ html[data-reduced-motion="true"] .lp .is-pending {
   }
   .lp-cta-row .lp-link {
     justify-content: center;
-  }
-  .lp-strip {
-    --lp-tile-h: 460px;
-    gap: 8px;
-  }
-  .lp-tile {
-    flex-basis: 72vw;
-    border-radius: 4px;
-  }
-  .lp-caption {
-    text-align: left;
   }
   .lp-why-grid {
     grid-template-columns: 1fr;
@@ -2106,12 +2238,6 @@ html[data-reduced-motion="true"] .lp .is-pending {
 
 /* Wide screens keep the same frame; only the hero strip and bands go edge to edge. */
 @media (min-width: 1024px) {
-  .lp-hero {
-    min-height: min(max(100vh, 760px), 1080px);
-  }
-  .lp-strip {
-    overflow: hidden;
-  }
   .lp-route-track {
     overflow-x: visible;
   }
@@ -2124,16 +2250,3 @@ html[data-reduced-motion="true"] .lp .is-pending {
   }
 }
 
-/* Dark theme: keep the orb notes quiet on the dark tile. */
-:root[data-theme="dark"] .lp-orb .journey-note {
-  background: color-mix(in srgb, var(--hero-ink) 10%, transparent);
-  color: var(--hero-ink);
-  box-shadow: none;
-}
-:root[data-theme="dark"] .lp-orb .journey-note small {
-  color: var(--hero-muted);
-}
-:root[data-theme="dark"] .lp-orb .art-icon {
-  background: color-mix(in srgb, var(--art-core-start) 25%, transparent);
-  color: var(--hero-ink);
-}
