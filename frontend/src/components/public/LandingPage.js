@@ -879,7 +879,6 @@ export default function LandingPage() {
         </div>
       </div>
       <main id="main">
-        <DebriefSpotlight />
         <section className="lp-why" aria-labelledby="why-heading">
           <div className="lp-frame lp-why-grid">
             <div className="lp-why-text" data-reveal>
@@ -915,6 +914,7 @@ export default function LandingPage() {
           </div>
         </section>
         <HowItWorks />
+        <DebriefSpotlight />
         <Closeup />
         <Routes />
         <Workspace />

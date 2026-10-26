@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { schools } from "../../content/schools";
-import { LandingPhoto } from "./LandingPanels";
 
 const SCORE = 72;
 const FINDINGS = [
@@ -95,14 +94,6 @@ export function DebriefSpotlight() {
             Illustrative. Readiness rates your answers, not your admit chances.
           </figcaption>
         </figure>
-        <div className="lp-debrief-photo">
-          <LandingPhoto
-            id="photo_practice_at_laptop"
-            alt="An applicant reviewing her practice at a laptop"
-            width={1920}
-            height={1280}
-          />
-        </div>
       </div>
     </section>
   );

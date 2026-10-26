@@ -391,17 +391,17 @@
   color: var(--muted);
   font-size: 13px;
 }
-/* Three section fields only: the page ground, a tint and the deep brand green. Neighbouring
-   sections are either the same field or clearly different ones, never nearly the same. */
+/* Section fields: sections alternate between the page ground and the tint; the deep brand
+   green is kept for the closing band and footer only (deep next to tint looked muddy). */
 .lp {
   --lp-tint: color-mix(in srgb, var(--accent) 38%, var(--canvas));
+  --lp-accent-ink: #2f6b50;
   --lp-live-mark: #d7ecac;
   --lp-live-you: color-mix(in srgb, var(--accent) 35%, var(--surface));
 }
 [data-theme="dark"] .lp {
   --lp-tint: var(--surface-soft);
-  /* The app's dark hero green (#142a20) sat between ground and tint; use the brand green. */
-  --hero-bg: #183d30;
+  --lp-accent-ink: var(--accent);
   --lp-live-mark: #3d5a2a;
   --lp-live-you: color-mix(in srgb, var(--accent) 12%, var(--surface));
 }
@@ -591,12 +591,13 @@
 /* Why résumé-led */
 /* Debrief spotlight: what you get after the interview the hero demo shows. */
 .lp-debrief-band {
-  padding-block: clamp(48px, 7vw, 88px) var(--lp-y);
+  padding-block: var(--lp-y);
+  background: var(--lp-tint);
 }
 .lp-debrief-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(24px, 3vw, 40px);
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 1fr);
+  gap: clamp(32px, 5vw, 64px);
   align-items: center;
 }
 .lp-debrief-copy h2 {
@@ -692,15 +693,6 @@
   color: var(--muted);
   font-size: 12px;
 }
-.lp-debrief-photo {
-  position: relative;
-  align-self: stretch;
-  min-height: 320px;
-  overflow: hidden;
-  border-radius: 18px;
-  background: var(--hero-bg);
-}
-
 /* School band: two rows of school links drifting in opposite directions. */
 .lp-schools-band {
   display: grid;
@@ -778,9 +770,6 @@
   .lp-debrief-grid {
     grid-template-columns: 1fr;
   }
-  .lp-debrief-photo {
-    min-height: 240px;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .lp-marquee-row {
@@ -846,6 +835,20 @@
 }
 
 /* How it works: the page's dark storytelling block */
+/* Built for the deep field; on the ground it reads the page's own ink. */
+.lp-how,
+.lp-schools-band {
+  --hero-ink: var(--ink);
+  --hero-muted: var(--muted);
+  --hero-kicker: var(--lp-accent-ink);
+  --hero-link: var(--ink);
+}
+.lp-how {
+  --hero-bg: var(--canvas);
+}
+.lp-schools-band {
+  --hero-bg: var(--lp-tint);
+}
 .lp-how {
   padding-block: var(--lp-y);
   background: var(--hero-bg);
@@ -918,7 +921,7 @@
   font: 600 28px/1.2 var(--font-heading);
 }
 .is-open .lp-step-title {
-  color: var(--accent);
+  color: var(--lp-accent-ink);
 }
 .lp-step-pill {
   flex: none;
@@ -1507,7 +1510,6 @@
 /* Guides */
 .lp-guides {
   padding-block: var(--lp-y);
-  background: var(--lp-tint);
 }
 .lp-guides-head {
   display: flex;
@@ -1634,8 +1636,7 @@
 /* Pilot promise */
 .lp-pilot {
   padding-block: clamp(64px, 9vw, 120px);
-  background: var(--hero-bg);
-  color: var(--hero-ink);
+  background: var(--lp-tint);
 }
 .lp-pilot h2 {
   font-size: clamp(28px, 2.9vw, 52px);
@@ -1658,7 +1659,7 @@
 .lp-pilot-meta span {
   font-size: 14px;
   letter-spacing: 0.08em;
-  color: var(--hero-muted);
+  color: var(--muted);
 }
 
 /* FAQ */
