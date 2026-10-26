@@ -69,6 +69,10 @@
   color: var(--ink);
   font: 650 14px var(--font-body);
 }
+/* A file-picker label styled as the primary button keeps the button's text colour (invisible in dark mode otherwise). */
+.wi-studio label.ws-btn--primary {
+  color: var(--on-accent);
+}
 .wi-studio .ws-field {
   gap: 6px;
 }
