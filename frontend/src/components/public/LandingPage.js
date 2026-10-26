@@ -9,7 +9,6 @@ import {
   PlusIcon,
   ShareIcon,
 } from "../../app/icons";
-import { landingFaqs } from "../../content/guides";
 import { LandingPhoto, StepPreview } from "./LandingPanels";
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
@@ -360,36 +359,6 @@ function Routes() {
   );
 }
 
-function Faq() {
-  const items = landingFaqs;
-  return (
-    <section className="lp-faq" aria-labelledby="faq-heading">
-      <div className="lp-frame lp-faq-grid">
-        <div className="lp-faq-label">
-          <Eyebrow>Before you start</Eyebrow>
-        </div>
-        <div>
-          <h2 id="faq-heading">Questions applicants ask</h2>
-          <div className="lp-faq-list">
-            {items.map(([question, answer], index) => (
-              <details key={question} open={index < 3}>
-                <summary>
-                  {question}
-                  <span className="lp-faq-icon" aria-hidden="true" />
-                </summary>
-                <p>{answer}</p>
-              </details>
-            ))}
-          </div>
-          <Link className="lp-link" to="/help">
-            Getting started and help <ArrowIcon />
-          </Link>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function Closing() {
   return (
     <section className="lp-closing" aria-labelledby="closing-heading">
@@ -517,7 +486,6 @@ export default function LandingPage() {
         <HowItWorks />
         <Routes />
         <SchoolBand />
-        <Faq />
         <Closing />
       </main>
       <SiteFooter home />
