@@ -44,7 +44,10 @@ export default function HomeView({
       .then((page) => {
         if (controller.signal.aborted || !page.completed_count) return;
         const latest = page.items.find((i) => i.readiness?.status === "full");
-        setPractice({ count: page.completed_count, score: latest?.readiness.score });
+        setPractice({
+          count: page.completed_count,
+          score: latest?.readiness.score,
+        });
       })
       .catch(() => {}); // the existing start card stays
     return () => controller.abort();
@@ -119,7 +122,10 @@ export default function HomeView({
     );
 
   const practiceCard = practice && (
-    <section className="ws-card ws-card--soft wi-banner" data-testid="home-practice">
+    <section
+      className="ws-card ws-card--soft wi-banner"
+      data-testid="home-practice"
+    >
       <span className="wi-row__icon">
         <InterviewIcon />
       </span>
@@ -142,30 +148,37 @@ export default function HomeView({
       <section className="wi-home ws-stack" data-testid="home-first-visit">
         <div className="wi-welcome">
           <div className="wi-welcome__copy">
-            <span className="ws-eyebrow">
-              <span aria-hidden="true" />
-              Let’s get started
-            </span>
-            <h2>
-              Welcome, <span>{firstName}.</span>
-            </h2>
-            {practiceCard || (
-              <>
-                <p>
-                  A short mock interview with follow-ups on your own answers
-                  and a debrief when you finish. No résumé needed.
-                </p>
-                <div className="ws-row">
-                  <button
-                    className="ws-btn ws-btn--primary"
-                    data-testid="home-start-interview"
-                    onClick={() => handleNavChange("interviews")}
-                  >
-                    Start your first mock interview <ArrowIcon />
-                  </button>
-                </div>
-              </>
-            )}
+            <div className="wi-welcome__text">
+              <span className="ws-eyebrow">
+                <span aria-hidden="true" />
+                Let’s get started
+              </span>
+              <h2>
+                Welcome, <span>{firstName}.</span>
+              </h2>
+              {practiceCard || (
+                <>
+                  <p>
+                    A short mock interview with follow-ups on your own answers
+                    and a debrief when you finish. No résumé needed.
+                  </p>
+                  <div className="ws-row">
+                    <button
+                      className="ws-btn ws-btn--primary"
+                      data-testid="home-start-interview"
+                      onClick={() => handleNavChange("interviews")}
+                    >
+                      Start your first mock interview <ArrowIcon />
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+            <img
+              className="wi-welcome__photo"
+              src="/images/landing/photo_interview_practice_pair.jpg"
+              alt=""
+            />
           </div>
         </div>
         <Link className="ws-btn ws-btn--ghost ws-btn--sm" to="/help">
