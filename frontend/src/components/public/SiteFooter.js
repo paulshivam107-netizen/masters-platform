@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ThemeSwitch, sectionHref } from "./SiteHeader";
+import { contactEmail } from "../../content/site";
 import "./SiteChrome.css";
 
 export default function SiteFooter({ home = false }) {
@@ -30,7 +31,8 @@ export default function SiteFooter({ home = false }) {
           </div>
           <div>
             <h3>Say hello</h3>
-            <Link to="/help">Contact and help</Link>
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+            <Link to="/help">Getting started and help</Link>
             <p>Made for MBA, EMBA and MiM applicants</p>
           </div>
         </nav>

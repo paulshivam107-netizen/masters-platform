@@ -8,6 +8,7 @@ import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
 import { schoolGroups } from "../../content/schools";
+import { contactEmail } from "../../content/site";
 import FocusedPractice from "../views/workspace/FocusedPractice";
 import "../views/Workspace.css";
 import "../views/workspace/InterviewStudio.css";
@@ -290,7 +291,15 @@ export function GuidesPage() {
   );
 }
 
-export function ArticleLayout({ eyebrow, title, summary, toc, children, header, tocLabel = "In this guide" }) {
+export function ArticleLayout({
+  eyebrow,
+  title,
+  summary,
+  toc,
+  children,
+  header,
+  tocLabel = "In this guide",
+}) {
   return (
     <article className="rp-article">
       <header className="rp-article-head">
@@ -462,7 +471,8 @@ export function HelpPage() {
           <h2 id="support-heading">Something feels confusing?</h2>
           <div>
             <p>
-              Open Settings → Help shape this space to send feedback. Include
+              Write to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>,
+              or, once signed in, open Settings → Help shape this space. Include
               the page and what you expected to happen; leave passwords and
               private application documents out. Keep your own copies of
               important work during the pilot.
@@ -540,8 +550,8 @@ export function PrivacyPage() {
           <ul>
             <li>
               Your original résumé file and its full text. You review the text
-              before anything is sent, and only the questions and short
-              excerpts are kept.
+              before anything is sent, and only the questions and short excerpts
+              are kept.
             </li>
             <li>
               Voice recordings. Audio is sent for transcription and then
@@ -559,10 +569,9 @@ export function PrivacyPage() {
             When you run an AI interview or generate résumé questions, the text
             needed for that step (the programme you chose, your answers, any
             extra context you added, and the résumé text you reviewed) goes to
-            OpenAI to
-            draft questions, follow-ups and the debrief. Voice answers are
-            transcribed by OpenAI, including answers you dictate. We send these requests with OpenAI's storage
-            option turned off.
+            OpenAI to draft questions, follow-ups and the debrief. Voice answers
+            are transcribed by OpenAI, including answers you dictate. We send
+            these requests with OpenAI's storage option turned off.
           </p>
           <p>
             AI output can be wrong. It is practice material, not an admissions
@@ -577,8 +586,8 @@ export function PrivacyPage() {
               <strong>Neon:</strong> the database, hosted in Singapore.
             </li>
             <li>
-              <strong>Railway:</strong> the application server, currently in
-              the United States.
+              <strong>Railway:</strong> the application server, currently in the
+              United States.
             </li>
             <li>
               <strong>Cloudflare:</strong> the website and the mockmba.com
@@ -621,8 +630,8 @@ export function PrivacyPage() {
               <strong>Delete:</strong> Settings → Your data → Delete my account
               permanently removes your account and your work. We keep only
               records with no link to you: a count of deleted items and AI cost
-              totals. Database backups that already contain your data expire
-              on their normal schedule.
+              totals. Database backups that already contain your data expire on
+              their normal schedule.
             </li>
           </ul>
         </section>
@@ -631,11 +640,13 @@ export function PrivacyPage() {
           <p>
             MockMBA is an independent pilot, not affiliated with any business
             school, exam body or admissions office. For a privacy question or
-            request, use Settings → Help shape this space while signed in.
+            request, write to{" "}
+            <a href={`mailto:${contactEmail}`}>{contactEmail}</a>, or use
+            Settings → Help shape this space while signed in.
           </p>
           <p>
-            We will update this page when anything changes, and the date at
-            the top shows the latest version.
+            We will update this page when anything changes, and the date at the
+            top shows the latest version.
           </p>
         </section>
       </ArticleLayout>
