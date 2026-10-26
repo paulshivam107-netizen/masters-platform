@@ -27,6 +27,7 @@ import {
 import SiteHeader from "./SiteHeader";
 import SiteFooter from "./SiteFooter";
 import "./PublicPages.css";
+import LiveInterview from "./LiveInterview";
 
 const SIGNUP_PATH = "/auth?mode=signup&next=%2Fapp%2Finterviews";
 
@@ -99,7 +100,6 @@ function buildDemoReview(prompt, draft) {
     improvements: improvements.slice(0, 4),
   };
 }
-
 
 // Elements marked data-reveal rise and fade in once, the first time they scroll into view.
 // Only elements that start below the viewport are hidden, and only after JavaScript runs, so
@@ -286,22 +286,27 @@ function Closeup() {
             <header>
               <Eyebrow>Illustrative example</Eyebrow>
               <p className="lp-card-title">Mock interview</p>
-              <p>Mock interview, question 2 of 5. Illustrative example, not a real applicant.</p>
+              <p>
+                Mock interview, question 2 of 5. Illustrative example, not a
+                real applicant.
+              </p>
             </header>
             <h2 className="lp-display" id="closeup-heading">
               “six weeks to two”
             </h2>
-            <figure className="lp-exchange" aria-label="Example exchange from a mock interview">
+            <figure
+              className="lp-exchange"
+              aria-label="Example exchange from a mock interview"
+            >
               <p className="lp-turn lp-turn--panel">
                 <span>Interviewer</span>
-                Your résumé says you cleared a vendor payment backlog. What
-                was the first thing you did?
+                Your résumé says you cleared a vendor payment backlog. What was
+                the first thing you did?
               </p>
               <p className="lp-turn lp-turn--you">
-                <span>Your answer</span>
-                I sorted the unpaid invoices by vendor, cleared the oldest
-                first and agreed a weekly payment run, so the backlog fell from
-                six weeks to two.
+                <span>Your answer</span>I sorted the unpaid invoices by vendor,
+                cleared the oldest first and agreed a weekly payment run, so the
+                backlog fell from six weeks to two.
               </p>
               <p className="lp-turn lp-turn--panel lp-turn--followup">
                 <span>Follow-up</span>
@@ -310,7 +315,10 @@ function Closeup() {
               </p>
             </figure>
             <footer>
-              <Link className="lp-link lp-link--light" to="/mba-interview-practice">
+              <Link
+                className="lp-link lp-link--light"
+                to="/mba-interview-practice"
+              >
                 See a full session <ArrowIcon />
               </Link>
               <strong>Every follow-up builds on what you just said.</strong>
@@ -318,9 +326,13 @@ function Closeup() {
           </article>
           <article className="lp-card lp-card-b">
             <h3 className="lp-label">What the follow-up did</h3>
-            <p className="lp-card-display">Quoted your answer. Asked how you measured it.</p>
+            <p className="lp-card-display">
+              Quoted your answer. Asked how you measured it.
+            </p>
             <h3 className="lp-label">What it asks next</h3>
-            <p className="lp-card-display">What would you do differently now?</p>
+            <p className="lp-card-display">
+              What would you do differently now?
+            </p>
             <div className="lp-card-b-foot">
               <h3 className="lp-label">Your answer</h3>
               <p>
@@ -410,7 +422,9 @@ function Routes() {
       let best = 0;
       let bestDistance = Infinity;
       cards.forEach((card, index) => {
-        const distance = Math.abs(card.offsetLeft - el.offsetLeft - el.scrollLeft);
+        const distance = Math.abs(
+          card.offsetLeft - el.offsetLeft - el.scrollLeft,
+        );
         if (distance < bestDistance) {
           best = index;
           bestDistance = distance;
@@ -429,7 +443,11 @@ function Routes() {
   const scrollToCard = (index) => {
     const el = track.current;
     const card = el?.children[Math.max(0, Math.min(ROUTES.length - 1, index))];
-    if (card) el.scrollTo({ left: card.offsetLeft - el.offsetLeft, behavior: "smooth" });
+    if (card)
+      el.scrollTo({
+        left: card.offsetLeft - el.offsetLeft,
+        behavior: "smooth",
+      });
   };
   return (
     <section className="lp-routes" id="routes" aria-labelledby="routes-heading">
@@ -451,7 +469,9 @@ function Routes() {
               disabled={edge.start}
               onClick={() => scrollToCard(nearest - 1)}
             >
-              <span className="lp-flip"><ArrowIcon /></span>
+              <span className="lp-flip">
+                <ArrowIcon />
+              </span>
             </button>
             <button
               type="button"
@@ -473,7 +493,11 @@ function Routes() {
           data-reveal
         >
           {ROUTES.map((route, index) => (
-            <article className="lp-route-card" key={route.title} style={{ "--i": index }}>
+            <article
+              className="lp-route-card"
+              key={route.title}
+              style={{ "--i": index }}
+            >
               <LandingPhoto
                 id={route.photo}
                 alt={route.alt}
@@ -548,7 +572,11 @@ function Workspace() {
               action: "How résumé-based practice works",
             },
           ].map((card, index) => (
-            <article className="lp-ws-card" key={card.title} style={{ "--i": index }}>
+            <article
+              className="lp-ws-card"
+              key={card.title}
+              style={{ "--i": index }}
+            >
               <div className="lp-ws-frame">{card.panel}</div>
               <div className="lp-ws-caption">
                 <div>
@@ -556,7 +584,11 @@ function Workspace() {
                   <p>{card.text}</p>
                 </div>
                 {card.to && (
-                  <Link className="lp-square" to={card.to} aria-label={card.action}>
+                  <Link
+                    className="lp-square"
+                    to={card.to}
+                    aria-label={card.action}
+                  >
                     <ArrowIcon />
                   </Link>
                 )}
@@ -564,7 +596,9 @@ function Workspace() {
             </article>
           ))}
         </div>
-        <p className="lp-illustrative">Example screens with illustrative data.</p>
+        <p className="lp-illustrative">
+          Example screens with illustrative data.
+        </p>
       </div>
     </section>
   );
@@ -587,7 +621,9 @@ const GUIDE_PHOTOS = {
 };
 
 function GuidesSection() {
-  const picked = GUIDE_CARDS.map((slug) => guides.find((g) => g.slug === slug)).filter(Boolean);
+  const picked = GUIDE_CARDS.map((slug) =>
+    guides.find((g) => g.slug === slug),
+  ).filter(Boolean);
   return (
     <section className="lp-guides" aria-labelledby="guides-heading">
       <div className="lp-frame">
@@ -623,7 +659,11 @@ function GuidesSection() {
             </div>
           </article>
           {picked.map((guide, index) => (
-            <article className="lp-guide lp-guide--small" key={guide.slug} style={{ "--i": index + 1 }}>
+            <article
+              className="lp-guide lp-guide--small"
+              key={guide.slug}
+              style={{ "--i": index + 1 }}
+            >
               <div className="lp-guide-text">
                 <p className="lp-category">
                   <span aria-hidden="true" /> Guide
@@ -699,7 +739,11 @@ function Closing() {
   };
   const wordCount = draft.trim() ? draft.trim().split(/\s+/).length : 0;
   return (
-    <section className="lp-closing" id="writing-check" aria-labelledby="closing-heading">
+    <section
+      className="lp-closing"
+      id="writing-check"
+      aria-labelledby="closing-heading"
+    >
       <LandingPhoto
         id="photo_quiet_interview_room"
         alt=""
@@ -736,7 +780,10 @@ function Closing() {
               <p className="lp-signup-label">Pilot access</p>
               <p className="lp-signup-muted">Email or Google sign-in</p>
               <p className="lp-signup-title">Mock interview</p>
-              <StartButton location="closing_try" className="lp-btn--pill lp-btn--block" />
+              <StartButton
+                location="closing_try"
+                className="lp-btn--pill lp-btn--block"
+              />
             </div>
           </div>
         </div>
@@ -747,7 +794,9 @@ function Closing() {
               Try one answer now<span>, in your own words</span>
             </h3>
             <div className="lp-field">
-              <label htmlFor="public-demo-prompt">What are you writing about?</label>
+              <label htmlFor="public-demo-prompt">
+                What are you writing about?
+              </label>
               <textarea
                 id="public-demo-prompt"
                 value={prompt}
@@ -765,7 +814,11 @@ function Closing() {
                 rows="5"
               />
             </div>
-            <button type="button" className="lp-btn lp-btn--pill lp-btn--block" onClick={runCheck}>
+            <button
+              type="button"
+              className="lp-btn lp-btn--pill lp-btn--block"
+              onClick={runCheck}
+            >
               Check my draft <ArrowIcon />
             </button>
             <p className="lp-form-note">
@@ -779,7 +832,11 @@ function Closing() {
               </p>
             )}
             {result && (
-              <div className="lp-feedback" data-testid="public-demo-feedback" role="status">
+              <div
+                className="lp-feedback"
+                data-testid="public-demo-feedback"
+                role="status"
+              >
                 <h4>A few things to consider</h4>
                 <ul>
                   {[...result.strengths, ...result.improvements].map((item) => (
@@ -807,19 +864,21 @@ export default function LandingPage() {
       <div className="lp-hero">
         <SiteHeader home />
         <div className="lp-frame lp-hero-copy">
-          <h1 id="hero-heading">
-            Practise the MBA interview{" "}
-            <br />
-            before it counts.
-          </h1>
-          <p className="lp-hero-lead">
-            Questions come from your résumé. Follow-ups quote what you just
-            said. A debrief shows what to fix next.
-          </p>
-          <div className="lp-cta-row">
-            <StartButton location="hero" />
-            <TryLink />
+          <div className="lp-hero-text">
+            <h1 id="hero-heading">
+              Practise the MBA interview <br />
+              before it counts.
+            </h1>
+            <p className="lp-hero-lead">
+              Questions come from your résumé. Follow-ups quote what you just
+              said. A debrief shows what to fix next.
+            </p>
+            <div className="lp-cta-row">
+              <StartButton location="hero" />
+              <TryLink />
+            </div>
           </div>
+          <LiveInterview />
         </div>
         <div className="lp-strip" tabIndex={0} aria-label="Example screens">
           <div className="lp-tile lp-tile--dark">
@@ -856,8 +915,7 @@ export default function LandingPage() {
             <div className="lp-why-text" data-reveal>
               <Eyebrow>Why résumé-led practice</Eyebrow>
               <h2 id="why-heading">
-                Panels read your résumé.{" "}
-                <br />
+                Panels read your résumé. <br />
                 So does your practice.
               </h2>
               <div className="lp-why-body">
@@ -868,7 +926,10 @@ export default function LandingPage() {
                   the way a panel member might. It cannot predict an admit. It
                   gives you honest repetitions before the real conversation.
                 </p>
-                <Link className="lp-btn lp-btn--ghost" to="/mba-interview-practice">
+                <Link
+                  className="lp-btn lp-btn--ghost"
+                  to="/mba-interview-practice"
+                >
                   How résumé-based practice works
                 </Link>
               </div>
@@ -891,8 +952,7 @@ export default function LandingPage() {
         <section className="lp-pilot" aria-labelledby="pilot-heading">
           <div className="lp-frame">
             <h2 id="pilot-heading">
-              Free during the pilot. No admit promises.{" "}
-              <br />
+              Free during the pilot. No admit promises. <br />
               Just more practice before the real panel.
             </h2>
             <p className="lp-pilot-meta">
