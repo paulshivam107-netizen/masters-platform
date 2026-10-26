@@ -5,3 +5,6 @@
 /app/*      /app-shell  200
 /auth       /app-shell  200
 /auth/*     /app-shell  200
+# Short, typeable links (e.g. from a post) to the sign-up and sign-in forms.
+/signup     /auth?mode=signup&next=%2Fapp%2Finterviews  302
+/login      /auth?mode=login&next=%2Fapp%2Finterviews   302

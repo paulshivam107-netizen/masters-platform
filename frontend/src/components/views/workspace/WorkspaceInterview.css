@@ -1002,17 +1002,33 @@
 }
 
 /* first visit */
-.wi-welcome {
-  display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(260px, 1fr);
-  gap: 20px;
-  align-items: stretch;
-}
 .wi-welcome__copy {
-  padding: clamp(24px, 3.4vw, 40px);
+  position: relative;
+  overflow: hidden;
   border-radius: 18px;
   background: var(--hero-bg);
   color: var(--hero-ink);
+}
+/* Animated WebGL background; without WebGL the card keeps its flat hero colour. */
+.wi-welcome__bg {
+  position: absolute;
+  inset: 0;
+}
+/* Holds the text clear of the silk's bright folds; the silk shows in full on the right. */
+.wi-welcome__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    var(--hero-bg) 0%,
+    color-mix(in srgb, var(--hero-bg) 88%, transparent) 42%,
+    transparent 68%
+  );
+}
+.wi-welcome__text {
+  position: relative;
+  max-width: 640px;
+  padding: clamp(28px, 4vw, 48px);
 }
 .wi-welcome__copy .ws-eyebrow {
   color: var(--hero-kicker);
@@ -1026,11 +1042,11 @@
   letter-spacing: -0.03em;
 }
 .wi-welcome__copy h2 span {
-  color: var(--hero-kicker);
+  color: var(--accent);
 }
 .wi-welcome__copy p {
   max-width: 52ch;
-  color: var(--hero-muted);
+  color: var(--hero-ink);
   font-size: 16px;
   line-height: 1.55;
 }
@@ -1040,20 +1056,12 @@
 .wi-welcome__copy .ws-muted {
   color: var(--hero-muted);
 }
-.wi-welcome__side {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
+/* The practice summary is a surface card: it takes the page's ink, not the hero's light text. */
+.wi-welcome__copy .wi-banner {
+  color: var(--ink);
 }
-.wi-welcome__side h3 {
-  margin: 8px 0 0;
-  font: 700 18px var(--font-heading);
-}
-.wi-welcome__side p {
-  margin: 0;
+.wi-welcome__copy .wi-banner p {
   color: var(--muted);
-  line-height: 1.55;
 }
 .wi-steps h3 {
   margin: 0 0 12px;
@@ -1171,8 +1179,8 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-  .wi-welcome {
-    grid-template-columns: 1fr;
+  .wi-welcome__scrim {
+    background: color-mix(in srgb, var(--hero-bg) 84%, transparent);
   }
   .wi-steps ol {
     grid-template-columns: 1fr;
