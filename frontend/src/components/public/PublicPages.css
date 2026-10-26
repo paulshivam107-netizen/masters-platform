@@ -392,10 +392,12 @@
   font-size: 13px;
 }
 .lp {
+  --lp-why-bg: color-mix(in srgb, var(--accent) 38%, var(--canvas));
   --lp-live-mark: #d7ecac;
   --lp-live-you: color-mix(in srgb, var(--accent) 35%, var(--surface));
 }
 [data-theme="dark"] .lp {
+  --lp-why-bg: var(--surface-soft);
   --lp-live-mark: #3d5a2a;
   --lp-live-you: color-mix(in srgb, var(--accent) 12%, var(--surface));
 }
@@ -637,7 +639,8 @@
 /* Why résumé-led */
 .lp-why {
   padding-block: var(--lp-y);
-  background: var(--surface-soft);
+  /* Its own field: in light mode the soft surface matched the page and the tiles above. */
+  background: var(--lp-why-bg);
 }
 .lp-why-grid {
   display: grid;

@@ -143,13 +143,8 @@
 .site-pilot {
   margin: 0;
   text-align: right;
-  color: var(--muted);
-  line-height: 24px;
-}
-.site-pilot strong {
-  display: block;
   color: var(--ink);
-  font-weight: 600;
+  line-height: 24px;
 }
 
 /* Footer */

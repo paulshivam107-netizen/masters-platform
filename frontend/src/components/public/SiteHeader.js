@@ -70,10 +70,7 @@ export default function SiteHeader({ home = false, current = "" }) {
         <div className="site-header-brand">
           <Brand />
         </div>
-        <p className="site-pilot">
-          <strong>Free during the pilot</strong>
-          For MBA, EMBA and MiM applicants
-        </p>
+        <p className="site-pilot">For MBA, EMBA and MiM applicants</p>
       </div>
     </header>
   );
