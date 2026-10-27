@@ -57,7 +57,12 @@ test("overview keeps heavy controls out of the initial view and sections navigat
           adminEvents={[]}
           adminBreakdown={[]}
           programCatalog={[]}
-          adminOverview={{ total_users: 5 }}
+          adminOverview={{
+            total_users: 5,
+            funnel_signups: 3,
+            funnel_signups_7d: 2,
+            funnel_started: 1,
+          }}
           onRefresh={async () => {}}
         />
       </MemoryRouter>,
@@ -66,6 +71,8 @@ test("overview keeps heavy controls out of the initial view and sections navigat
   expect(
     container.querySelector('nav[aria-label="Admin sections"]'),
   ).toBeTruthy();
+  expect(container.textContent).toContain("Signed up (this week)3 (2)");
+  expect(container.textContent).toContain("Started an interview1");
   const systemHeading = [...container.querySelectorAll("h3")].find(
     (h) => h.textContent === "AI controls",
   );

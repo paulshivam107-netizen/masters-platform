@@ -9,13 +9,11 @@ export default function ThemeToggle({ showLabel = false }) {
       type="button"
       className={`theme-toggle ${showLabel ? "theme-toggle-label" : ""}`}
       onClick={() => setIsDarkMode(!isDarkMode)}
-      aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
-      title={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
+      aria-label={`${isDarkMode ? "Light" : "Dark"} mode`}
+      title={`${isDarkMode ? "Light" : "Dark"} mode`}
     >
       {isDarkMode ? <SunIcon /> : <MoonIcon />}
-      {showLabel && (
-        <span>Switch to {isDarkMode ? "light" : "dark"} mode</span>
-      )}
+      {showLabel && <span>{isDarkMode ? "Light" : "Dark"} mode</span>}
     </button>
   );
 }
