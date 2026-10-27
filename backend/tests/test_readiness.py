@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker
 from auth import create_access_token
 from database import Base, get_db
 from models import InterviewSession, User
-from routers.admin_routes import interview_return_metrics
+from routers.admin_routes import interview_return_metrics, signup_funnel
 from routers.interview_routes import router
 from services import interview_provider as provider
 from services.readiness import DIMENSIONS, readiness
@@ -138,6 +138,21 @@ class ReadinessApiTest(unittest.IsolatedAsyncioTestCase):
             metrics = interview_return_metrics(db, datetime.utcnow())
         self.assertEqual(metrics, {"interviews_completed": 6, "interview_users": 3, "interviews_per_user": 2.0,
                                    "users_3plus_interviews": 1, "return_7d_eligible_users": 2, "return_7d_rate": 50.0})
+
+
+    def test_signup_funnel_ignores_admins(self):
+        with self.Session() as db:
+            db.add(User(id=4, email="admin@example.com", name="Admin", role="admin", is_active=True))
+            db.query(User).filter(User.id == 1).update({"email_verified": True})
+            db.query(User).filter(User.id == 3).update({"created_at": datetime.utcnow() - timedelta(days=30)})
+            db.commit()
+        self.add(1, 1); self.add(1, 2)                  # two completed runs still count one user
+        self.add(2, 1, status="active")                 # started, never finished
+        self.add(4, 1)                                  # admin test run is excluded
+        with self.Session() as db:
+            self.assertEqual(signup_funnel(db, datetime.utcnow()), {
+                "funnel_signups": 3, "funnel_signups_7d": 2, "funnel_verified": 1,
+                "funnel_started": 2, "funnel_completed": 1})
 
 
 class RescoreSummaryTest(unittest.TestCase):

@@ -966,6 +966,26 @@ export default function AdminPilot({ section, refresh, overview, onSelect }) {
             value={overview?.wau_users_7d ?? "—"}
           />
         </div>
+        <h3>Sign-up funnel</h3>
+        <p>Applicant accounts only; admin test runs are left out.</p>
+        <div className="pilot-metrics">
+          <Metric
+            label="Signed up (this week)"
+            value={`${overview?.funnel_signups ?? "—"} (${overview?.funnel_signups_7d ?? "—"})`}
+          />
+          <Metric
+            label="Verified email"
+            value={overview?.funnel_verified ?? "—"}
+          />
+          <Metric
+            label="Started an interview"
+            value={overview?.funnel_started ?? "—"}
+          />
+          <Metric
+            label="Completed an interview"
+            value={overview?.funnel_completed ?? "—"}
+          />
+        </div>
       </section>
       <InterviewOperations
         active={section === "interviews"}

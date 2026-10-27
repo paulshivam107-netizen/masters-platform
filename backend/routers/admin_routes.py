@@ -65,6 +65,19 @@ def interview_return_metrics(db, now):
     }
 
 
+def signup_funnel(db, now):
+    """Sign-up to interview funnel over non-admin accounts, so the owner's own test runs don't inflate it."""
+    users = db.query(User).filter(User.role != "admin")
+    interviews = db.query(InterviewSession.user_id).join(User, User.id == InterviewSession.user_id).filter(User.role != "admin")
+    return {
+        "funnel_signups": users.count(),
+        "funnel_signups_7d": users.filter(User.created_at >= now - timedelta(days=7)).count(),
+        "funnel_verified": users.filter(User.email_verified == True).count(),  # noqa: E712
+        "funnel_started": interviews.distinct().count(),
+        "funnel_completed": interviews.filter(InterviewSession.status == "completed").distinct().count(),
+    }
+
+
 @router.get("/overview", response_model=AdminOverviewResponse)
 async def get_admin_overview(
     _: User = Depends(require_admin_user),
@@ -169,6 +182,7 @@ async def get_admin_overview(
         "essays_created_7d": essays_created_7d,
         "api_error_events_7d": api_error_events_7d,
         **interview_return_metrics(db, datetime.utcnow()),
+        **signup_funnel(db, datetime.utcnow()),
     }
 
 
