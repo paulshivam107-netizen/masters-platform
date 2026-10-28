@@ -363,3 +363,42 @@ export const MoonIcon = () => (
     />
   </svg>
 );
+export const FileTextIcon = () => (
+  <svg
+    focusable="false"
+    className="nav-icon-svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    aria-hidden="true"
+  >
+    <path
+      d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M14 3v5h5M9 13h6M9 17h4"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+export const BoltIcon = () => (
+  <svg
+    focusable="false"
+    className="nav-icon-svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    aria-hidden="true"
+  >
+    <path
+      d="M13 3 5 14h6l-1 7 8-11h-6z"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
