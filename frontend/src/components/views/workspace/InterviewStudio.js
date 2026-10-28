@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { readUserValue, writeUserValue } from "../../../app/workspaceStorage";
-import { ArrowIcon, CheckIcon } from "../../../app/icons";
+import {
+  ArrowIcon,
+  BoltIcon,
+  CheckIcon,
+  FileTextIcon,
+} from "../../../app/icons";
 import * as api from "../../../api/interviewsApi";
 import useInterviewAudio from "./useInterviewAudio";
 import InterviewQuestionBank from "./InterviewQuestionBank";
@@ -149,6 +154,10 @@ export default function InterviewStudio({
     question_limit: 5,
   });
   const [focusResume, setFocusResume] = useState(false);
+  const [needResume, setNeedResume] = useState(false);
+  const [path, setPath] = useState(
+    preference.path === "general" ? "general" : "resume",
+  );
   const active = useRef(true);
   const inFlight = useRef(false);
   const controllers = useRef(new Set());
@@ -169,8 +178,9 @@ export default function InterviewStudio({
     writeUserValue(user.id, "interview_preferences", {
       programme_name: setup.programme_name,
       application_id: setup.application_id,
+      path,
     });
-  }, [user.id, setup.programme_name, setup.application_id]);
+  }, [user.id, setup.programme_name, setup.application_id, path]);
 
   useEffect(() => {
     active.current = true;
@@ -391,10 +401,14 @@ export default function InterviewStudio({
   };
   const start = (event) => {
     event.preventDefault();
+    if (live && path === "resume" && !reviewedProfile && !chosenQuestion) {
+      setNeedResume(true);
+      return;
+    }
     startWith({
       setup,
       question: chosenQuestion,
-      profile: reviewedProfile,
+      profile: path === "general" ? null : reviewedProfile,
     });
   };
   // Same settings, one click.
@@ -599,14 +613,61 @@ export default function InterviewStudio({
             </p>
           )}
           {live && (
+            <div
+              className="studio-paths"
+              role="radiogroup"
+              aria-label="How do you want to start?"
+            >
+              {[
+                [
+                  "resume",
+                  "Start from your résumé",
+                  "Questions drawn from your own lines.",
+                  "Sharper",
+                  <FileTextIcon />,
+                ],
+                [
+                  "general",
+                  "Start with general questions",
+                  "Why MBA, work, motivation. No upload.",
+                  "Fastest",
+                  <BoltIcon />,
+                ],
+              ].map(([value, title, detail, tag, icon]) => (
+                <label
+                  key={value}
+                  className={`studio-path${path === value ? " is-selected" : ""}`}
+                >
+                  <input
+                    type="radio"
+                    name="studio-path"
+                    className="studio-path__input"
+                    value={value}
+                    checked={path === value}
+                    onChange={() => {
+                      setPath(value);
+                      setNeedResume(false);
+                    }}
+                  />
+                  <span className="studio-path__top">
+                    {icon}
+                    <span className="studio-path__tag">{tag}</span>
+                  </span>
+                  <strong>{title}</strong>
+                  <span>{detail}</span>
+                </label>
+              ))}
+            </div>
+          )}
+          {live && (
             <section
               className="studio-resume-step"
               ref={resumeSection}
+              hidden={path !== "resume"}
               aria-labelledby="studio-resume-heading"
             >
-              <h3 id="studio-resume-heading">
-                Your résumé{" "}
-                <span>Optional · for sharper, personal questions</span>
+              <h3 id="studio-resume-heading" className="sr-only">
+                Your résumé
               </h3>
               <ResumeQuestionBuilder
                 capabilities={capabilities}
@@ -640,41 +701,6 @@ export default function InterviewStudio({
             onSubmit={start}
           >
             <fieldset className="studio-form-fields" disabled={disabled}>
-              {applications.length > 0 && (
-                <div className="ws-field">
-                  <label htmlFor="studio-application">Tracked programme</label>
-                  <select
-                    id="studio-application"
-                    value={setup.application_id}
-                    onChange={(event) =>
-                      setSetup({ ...setup, application_id: event.target.value })
-                    }
-                  >
-                    <option value="">Type a programme instead</option>
-                    {applications.map((app) => (
-                      <option value={app.id} key={app.id}>
-                        {app.school_name} · {app.program_name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
-              {!setup.application_id && (
-                <div className="ws-field">
-                  <label htmlFor="studio-programme-name">
-                    Preparing for (optional)
-                  </label>
-                  <input
-                    id="studio-programme-name"
-                    value={setup.programme_name}
-                    maxLength={160}
-                    placeholder="IIMA PGPX, INSEAD MBA…"
-                    onChange={(event) =>
-                      setSetup({ ...setup, programme_name: event.target.value })
-                    }
-                  />
-                </div>
-              )}
               {chosenQuestion && (
                 <div className="studio-selected-question">
                   <span className="ws-eyebrow">
@@ -691,32 +717,108 @@ export default function InterviewStudio({
                   </button>
                 </div>
               )}
-              {live && (
-                <div
-                  className="studio-mode-toggle"
-                  role="group"
-                  aria-label="How would you like to answer?"
+              <div className="studio-actions">
+                <button
+                  ref={startButton}
+                  type="submit"
+                  className="ws-btn ws-btn--primary studio-start"
+                  disabled={disabled}
                 >
-                  {[
-                    ["chat", "Chat"],
-                    ["voice", "Voice"],
-                  ]
-                    .filter(([value]) => value === "chat" || capabilities.voice)
-                    .map(([value, label]) => (
-                      <button
-                        key={value}
-                        type="button"
-                        className={`ws-btn ws-btn--sm ${setup.mode === value ? "" : "ws-btn--ghost"}`}
-                        aria-pressed={setup.mode === value}
-                        onClick={() => setSetup({ ...setup, mode: value })}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                </div>
+                  {busy || (live ? "Start interview" : "Start practice")}{" "}
+                  <ArrowIcon />
+                </button>
+              </div>
+              {live && (
+                <p
+                  className={`studio-fine-print studio-start-hint${needResume && path === "resume" && !reviewedProfile ? " is-needed" : ""}`}
+                  role={
+                    needResume && path === "resume" && !reviewedProfile
+                      ? "alert"
+                      : undefined
+                  }
+                >
+                  {path === "general"
+                    ? "Starts straight away. Add a résumé any time for sharper questions."
+                    : reviewedProfile
+                      ? "Your résumé is ready."
+                      : "Add your résumé above, or switch to general questions."}{" "}
+                  Chat or voice, programme and length are under More options.
+                </p>
               )}
-              <details className="studio-options">
+              <details
+                className="studio-options"
+                open={Boolean(linkedProgramme) || undefined}
+              >
                 <summary>More options</summary>
+                {applications.length > 0 && (
+                  <div className="ws-field">
+                    <label htmlFor="studio-application">
+                      Tracked programme
+                    </label>
+                    <select
+                      id="studio-application"
+                      value={setup.application_id}
+                      onChange={(event) =>
+                        setSetup({
+                          ...setup,
+                          application_id: event.target.value,
+                        })
+                      }
+                    >
+                      <option value="">Type a programme instead</option>
+                      {applications.map((app) => (
+                        <option value={app.id} key={app.id}>
+                          {app.school_name} · {app.program_name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+                {!setup.application_id && (
+                  <div className="ws-field">
+                    <label htmlFor="studio-programme-name">
+                      Preparing for (optional)
+                    </label>
+                    <input
+                      id="studio-programme-name"
+                      value={setup.programme_name}
+                      maxLength={160}
+                      placeholder="IIMA PGPX, INSEAD MBA…"
+                      onChange={(event) =>
+                        setSetup({
+                          ...setup,
+                          programme_name: event.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                )}
+                {live && (
+                  <div
+                    className="studio-mode-toggle"
+                    role="group"
+                    aria-label="How would you like to answer?"
+                  >
+                    {[
+                      ["chat", "Chat"],
+                      ["voice", "Voice"],
+                    ]
+                      .filter(
+                        ([value]) => value === "chat" || capabilities.voice,
+                      )
+                      .map(([value, label]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          className={`ws-btn ws-btn--sm ${setup.mode === value ? "" : "ws-btn--ghost"}`}
+                          aria-pressed={setup.mode === value}
+                          onClick={() => setSetup({ ...setup, mode: value })}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                  </div>
+                )}
                 <div className="studio-fields">
                   <div className="ws-field">
                     <label htmlFor="studio-length">Session length</label>
@@ -781,17 +883,6 @@ export default function InterviewStudio({
                   </small>
                 </div>
               </details>
-              <div className="studio-actions">
-                <button
-                  ref={startButton}
-                  type="submit"
-                  className="ws-btn ws-btn--primary"
-                  disabled={disabled}
-                >
-                  {busy || (live ? "Start interview" : "Start practice")}{" "}
-                  <ArrowIcon />
-                </button>
-              </div>
             </fieldset>
           </form>
           {history.length > 0 && (

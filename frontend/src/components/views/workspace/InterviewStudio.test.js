@@ -159,9 +159,16 @@ const submitForm = () =>
       .dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
   );
 const tick = (fn) => act(async () => fn());
+const choose = (value) =>
+  tick(() =>
+    container
+      .querySelector(`input[name="studio-path"][value="${value}"]`)
+      .click(),
+  );
 
 test("Start interview is visible without a résumé and creates a general full interview", async () => {
   await render();
+  await choose("general");
   expect(container.textContent).not.toMatch(/taster|Why MBA interview|demo/i);
   expect(container.querySelector('[data-testid="resume-cta"]')).toBeNull();
   await tick(() => button("Start interview").click());
@@ -179,6 +186,7 @@ test("Start interview is visible without a résumé and creates a general full i
 
 test("Chat/Voice toggle sets the mode and voice is hidden when unavailable", async () => {
   await render();
+  await choose("general");
   await tick(() => button("Voice").click());
   await tick(() => button("Start interview").click());
   expect(api.createInterview.mock.calls[0][0].mode).toBe("voice");
@@ -258,6 +266,7 @@ test("the interview header names the candidate; the debrief offers Practise agai
     },
   });
   await render();
+  await choose("general");
   await tick(() => button("Start interview").click());
   expect(
     container.querySelector('[data-testid="interview-header"]').textContent,
@@ -363,6 +372,7 @@ const debrief = (readiness) => ({
 const openDebrief = async (readiness) => {
   api.createInterview.mockResolvedValue(debrief(readiness));
   await render();
+  await choose("general");
   await tick(() => button("Start interview").click());
 };
 
@@ -471,4 +481,37 @@ test("the question counter ignores off_topic user turns", async () => {
   await render();
   await tick(() => button("Resume your interview").click());
   expect(container.textContent).toContain("Question 1 of 5");
+});
+
+test("the résumé path asks for a résumé instead of starting, and the general path starts at once", async () => {
+  await render();
+  expect(
+    container.querySelector('input[name="studio-path"][value="resume"]')
+      .checked,
+  ).toBe(true);
+  await tick(() => button("Start interview").click());
+  expect(api.createInterview).not.toHaveBeenCalled();
+  expect(container.querySelector('[role="alert"]').textContent).toContain(
+    "Add your résumé above, or switch to general questions.",
+  );
+  await choose("general");
+  expect(
+    container.querySelector("#studio-resume-heading").closest("[hidden]"),
+  ).toBeTruthy();
+  await tick(() => button("Start interview").click());
+  expect(api.createInterview).toHaveBeenCalledTimes(1);
+  expect(api.createInterview.mock.calls[0][0].profile_set_id).toBeNull();
+});
+
+test("a reviewed résumé is ignored on the general path and the last path is remembered", async () => {
+  await render();
+  await tick(() => button("Use reviewed profile").click());
+  await choose("general");
+  await tick(() => button("Start interview").click());
+  expect(api.createInterview.mock.calls[0][0].profile_set_id).toBeNull();
+  expect(writeUserValue).toHaveBeenCalledWith(
+    99,
+    "interview_preferences",
+    expect.objectContaining({ path: "general" }),
+  );
 });
