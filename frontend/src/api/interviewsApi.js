@@ -25,6 +25,8 @@ export const listResumeQuestions = (offset = 0, signal) =>
     .then((r) => r.data);
 export const deleteResumeQuestions = (id, signal) =>
   apiClient.delete(`${root}/resume/question-sets/${id}`, options(signal));
+export const tryInterview = (payload, signal) =>
+  apiClient.post(`${root}/try`, payload, options(signal)).then((r) => r.data);
 export const getInterviewCapabilities = (signal) =>
   apiClient.get(`${root}/capabilities`, options(signal)).then((r) => r.data);
 export const listInterviews = (offset = 0, signal) =>

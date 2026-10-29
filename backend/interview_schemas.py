@@ -44,6 +44,13 @@ class InterviewAnswer(InterviewAction):
         return value
 
 
+class PublicTry(BaseModel):
+    """A signed-out visitor's one-question try: nothing is stored, only the follow-up is generated."""
+    model_config = ConfigDict(extra="forbid", str_strip_whitespace=True)
+    resume_line: str = Field(min_length=5, max_length=240)
+    answer: str = Field(min_length=1, max_length=1500)
+
+
 class InterviewSpeech(InterviewAction):
     turn_id: str = Field(pattern=r"^q([1-9]|1[0-6])$")
 

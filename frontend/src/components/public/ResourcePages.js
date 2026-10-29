@@ -9,6 +9,7 @@ import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
 import { schoolGroups } from "../../content/schools";
 import { contactEmail } from "../../content/site";
+import TryFollowUp from "./TryFollowUp";
 import FocusedPractice from "../views/workspace/FocusedPractice";
 import "../views/Workspace.css";
 import "../views/workspace/InterviewStudio.css";
@@ -728,12 +729,19 @@ export function PracticePage() {
         <section id="try">
           <h2>Try one question now</h2>
           <p>
-            No account needed. Pick a question, record your answer, listen back
-            and try again. Recordings stay in your browser; nothing is uploaded
-            and no AI is involved.
+            No account needed. Paste one line from your résumé, answer the
+            question it starts, and see the follow-up the AI interviewer asks.
+            Your line and answer go to OpenAI to write that follow-up and are
+            not saved.
+          </p>
+          <TryFollowUp />
+          <h3>Prefer to rehearse aloud?</h3>
+          <p>
+            Pick a question, record your answer and listen back. Recordings
+            stay in your browser and no AI is involved.
           </p>
           <div className="rp-try">
-            <FocusedPractice defaultOpen />
+            <FocusedPractice />
           </div>
         </section>
         <section id="example">

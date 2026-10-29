@@ -460,6 +460,10 @@ export default function LandingPage() {
                   the way a panel member might. It cannot predict an admit. It
                   gives you honest repetitions before the real conversation.
                 </p>
+                <p className="lp-why-byline">
+                  Built by Shivam Paul, an MBA applicant who struggled through
+                  interview prep too.
+                </p>
                 <p className="lp-why-privacy">
                   Your résumé goes to OpenAI only to write your questions, with
                   contact details removed. We keep the highlights, not the file,

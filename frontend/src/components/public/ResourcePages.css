@@ -863,3 +863,70 @@ html[data-reduced-motion="true"] .rp-faq-icon::after {
   --ws-ctrl: color-mix(in srgb, var(--ink) 62%, var(--canvas));
   margin-top: 16px;
 }
+
+/* Signed-out AI try: one résumé line, one answer, one follow-up */
+.rp-tryai {
+  display: grid;
+  gap: 12px;
+  margin: 16px 0 40px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-soft);
+}
+.rp-tryai form {
+  display: grid;
+  gap: 12px;
+}
+.rp-tryai label {
+  font-weight: 650;
+}
+.rp-tryai textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+}
+.rp-tryai .rp-btn {
+  justify-self: start;
+}
+.rp-tryai .rp-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.rp-prose .rp-tryai p {
+  margin: 0;
+}
+.rp-tryai-q,
+.rp-tryai-a {
+  display: grid;
+  gap: 4px;
+}
+.rp-tryai-q span,
+.rp-tryai-a span {
+  font-size: 13px;
+  font-weight: 650;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.rp-tryai mark {
+  padding: 0 2px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: inherit;
+}
+.rp-tryai-error {
+  color: var(--danger, #b42318);
+}
+.rp-tryai-next {
+  display: grid;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
