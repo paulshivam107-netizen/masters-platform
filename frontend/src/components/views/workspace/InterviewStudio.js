@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { readUserValue, writeUserValue } from "../../../app/workspaceStorage";
+import { clearTryHandoff, readTryHandoff } from "../../../app/tryHandoff";
 import {
   ArrowIcon,
   BoltIcon,
@@ -158,6 +159,8 @@ export default function InterviewStudio({
   const [path, setPath] = useState(
     preference.path === "general" ? "general" : "resume",
   );
+  // A try-one-question answer saved in this browser before sign-up (see app/tryHandoff.js).
+  const [carried, setCarried] = useState(readTryHandoff);
   const active = useRef(true);
   const inFlight = useRef(false);
   const controllers = useRef(new Set());
@@ -170,6 +173,7 @@ export default function InterviewStudio({
   const resumeSection = useRef(null);
   const lastStart = useRef(null);
   const startButton = useRef(null);
+  const pathsRef = useRef(null);
   const practiceDisclosure = useRef(null);
   useEffect(() => {
     if (session?.status === "active") transcriptEnd.current?.focus();
@@ -365,13 +369,26 @@ export default function InterviewStudio({
     section.scrollIntoView?.({ block: "start", behavior: "smooth" });
     section.querySelector("input")?.focus({ preventScroll: true });
   }, [focusResume, session, loading]);
+  const dropCarried = () => {
+    clearTryHandoff();
+    setCarried(null);
+  };
+  useEffect(() => {
+    // A used taster can never take the saved try, so stop keeping it.
+    if (capabilities?.taster_used) {
+      clearTryHandoff();
+      setCarried(null);
+    }
+  }, [capabilities?.taster_used]);
   const startWith = (settings) => {
     const provider = capabilities.chat ? "openai" : "demo";
-    lastStart.current = settings;
+    // "Practise again" must not send the saved try a second time.
+    lastStart.current = { ...settings, handoff: null };
     const payload = {
       ...settings.setup,
       route: "auto",
-      kind: "full",
+      kind: settings.handoff ? "taster" : "full",
+      ...(settings.handoff && { handoff: settings.handoff }),
       provider,
       mode: provider === "demo" ? "chat" : settings.setup.mode,
       application_id: settings.setup.application_id
@@ -389,15 +406,36 @@ export default function InterviewStudio({
     if (createRequest.current?.signature !== signature)
       createRequest.current = { signature, id: requestId() };
     run("Starting your interview…", async (signal) => {
-      const next = await api.createInterview(
-        { ...payload, request_id: createRequest.current.id },
-        signal,
-      );
+      let next;
+      try {
+        next = await api.createInterview(
+          { ...payload, request_id: createRequest.current.id },
+          signal,
+        );
+      } catch (err) {
+        // Taster already used or the try expired: it can never work, so do not offer it again.
+        if (settings.handoff && [409, 422].includes(err.response?.status))
+          dropCarried();
+        throw err;
+      }
+      if (settings.handoff) dropCarried();
       if (!active.current) return;
       openSession(next);
       updateSession(next);
       createRequest.current = null;
     });
+  };
+  // Picks up a saved try. Falls back to the normal first screen if anything about it is off.
+  const continueTry = () =>
+    startWith({
+      setup,
+      question: null,
+      profile: null,
+      handoff: carried.handoff,
+    });
+  const startFresh = () => {
+    dropCarried();
+    pathsRef.current?.querySelector("input:checked")?.focus();
   };
   const start = (event) => {
     event.preventDefault();
@@ -612,8 +650,46 @@ export default function InterviewStudio({
               a question below.
             </p>
           )}
+          {live && carried && !capabilities.taster_used && (
+            <section
+              className="studio-carried"
+              aria-labelledby="studio-carried-title"
+              data-testid="try-handoff"
+            >
+              <h3 id="studio-carried-title">Pick up where you left off</h3>
+              <p className="studio-carried__label">Your answer</p>
+              <blockquote className="studio-carried__answer">
+                {excerpt(carried.answer)}
+              </blockquote>
+              <p className="studio-carried__label">Follow-up question</p>
+              <p className="studio-carried__question">{carried.followUp}</p>
+              <div className="studio-carried__actions">
+                <button
+                  type="button"
+                  className="ws-btn ws-btn--primary"
+                  disabled={disabled}
+                  onClick={continueTry}
+                >
+                  {busy || "Continue with this follow-up"} <ArrowIcon />
+                </button>
+                <button
+                  type="button"
+                  className="ws-btn ws-btn--ghost ws-btn--sm"
+                  disabled={disabled}
+                  onClick={startFresh}
+                >
+                  Start fresh instead
+                </button>
+              </div>
+              <p className="studio-fine-print">
+                This starts a 3-question Why MBA interview from your answer.
+                Your answer is sent to us only when you continue.
+              </p>
+            </section>
+          )}
           {live && (
             <div
+              ref={pathsRef}
               className="studio-paths"
               role="radiogroup"
               aria-label="How do you want to start?"

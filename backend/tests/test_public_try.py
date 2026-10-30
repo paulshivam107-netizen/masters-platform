@@ -17,6 +17,7 @@ from models import AdminEvent, AiCostEntry, AiRuntimeConfig, AiSpendCounter, Int
 from routers import public_try_routes as routes
 from services import ai_costs, rate_limit
 from services import interview_provider as provider
+from services import try_handoff
 
 ANSWER = "I led a team of six engineers at a logistics startup and I want an MBA to move from operations into strategy."
 QUOTE = "led a team of six engineers"
@@ -154,6 +155,22 @@ class PublicTryTest(unittest.IsolatedAsyncioTestCase):
         event, = self.rows(AdminEvent)
         self.assertIsNone(event.user_id)
         self.assertIn("school:chicago-booth", event.payload_json)
+
+    async def test_response_carries_a_signed_handoff_with_the_try(self):
+        body = (await self.post()).json()
+        self.assertEqual(set(body), {"follow_up", "quote", "fallback", "handoff"})
+        claims = try_handoff.verify(body["handoff"])
+        self.assertEqual((claims["question_id"], claims["answer"], claims["follow_up"], claims["quote"], claims["fallback"], claims["topic"]),
+                         ("motivation", ANSWER, body["follow_up"], QUOTE, False, "experience"))
+        self.model.side_effect = [provider.ProviderFailure("x", billing="charged", usage=USAGE)] * 2
+        fixed = (await self.post()).json()  # a fixed question gets one too
+        self.assertTrue(fixed["fallback"])
+        claims = try_handoff.verify(fixed["handoff"])
+        self.assertEqual((claims["follow_up"], claims["quote"], claims["fallback"]), (fixed["follow_up"], None, True))
+
+    async def test_rejections_carry_no_handoff(self):
+        for changes in ({"answer": "I like business a lot."}, {"website": "http://spam.example"}):
+            self.assertNotIn("handoff", (await self.post(**changes)).text)
 
     async def test_nothing_the_visitor_wrote_is_stored(self):
         await self.post()

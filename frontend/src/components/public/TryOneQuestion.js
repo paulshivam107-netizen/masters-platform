@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowIcon } from "../../app/icons";
 import { useAuth } from "../../contexts/AuthContext";
 import { getTryStatusApi, submitTryFollowUpApi } from "../../api/publicTryApi";
+import { readTryHandoff, saveTryHandoff } from "../../app/tryHandoff";
 
 const TURNSTILE_SRC =
   "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -169,6 +170,8 @@ function TryForm({ status, source, next }) {
         followUp: data.follow_up,
         quote: data.fallback ? null : data.quote,
         fallback: Boolean(data.fallback),
+        // Kept on this device so the first interview can continue it; false when storage is blocked.
+        saved: saveTryHandoff(data.handoff),
       });
     } catch (err) {
       const detail = err.response?.data?.detail;
@@ -212,7 +215,7 @@ function TryForm({ status, source, next }) {
           </p>
           <p className="rp-tq-note" id={`${id}-note`}>
             Your answer is sent to an AI service to write one follow-up. We
-            don&rsquo;t save it.
+            don&rsquo;t store it on our servers.
           </p>
           <input
             className="rp-tq-hp"
@@ -273,6 +276,12 @@ function TryForm({ status, source, next }) {
                 Answer it in a full mock interview, with questions drawn from
                 your own résumé.
               </p>
+              {result.saved && (
+                <p className="rp-tq-caption">
+                  Your answer is saved for 24 hours on this device, so your
+                  first interview can start from this follow-up.
+                </p>
+              )}
               <Link
                 className="rp-btn"
                 to={`/auth?mode=signup&next=${encodeURIComponent(next)}`}
@@ -294,6 +303,10 @@ export default function TryOneQuestion({
   next = "/app/interviews?from=try",
 }) {
   const status = useTryStatus();
+  // Reading drops an expired saved try, so "kept for 24 hours" stays true for a visitor who comes back.
+  useEffect(() => {
+    readTryHandoff();
+  }, []);
   return status ? (
     <TryForm status={status} source={source} next={next} />
   ) : null;

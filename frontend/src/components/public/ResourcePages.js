@@ -491,7 +491,7 @@ export function HelpPage() {
     </ResourceShell>
   );
 }
-const PRIVACY_UPDATED = "2026-10-30";
+const PRIVACY_UPDATED = "2026-10-31";
 const PRIVACY_TOC = [
   ["what-we-store", "What we store"],
   ["what-we-dont", "What we don't store"],
@@ -579,9 +579,11 @@ export function PrivacyPage() {
             Visitors who are not signed in can also try one question on the
             interview practice and school pages. If you do, your typed answer is
             sent to OpenAI to write one follow-up question, and we do not save
-            it. To block bots we use Cloudflare Turnstile, which checks your
-            browser when you use that box. We also limit how much each anonymous
-            visitor can use it.
+            it. Your answer and the follow-up are kept in your browser for 24
+            hours so we can continue it after you sign up, and are sent to our
+            servers only when you choose to continue. To block bots we use
+            Cloudflare Turnstile, which checks your browser when you use that
+            box. We also limit how much each anonymous visitor can use it.
           </p>
           <p>
             AI output can be wrong. It is practice material, not an admissions
@@ -622,9 +624,10 @@ export function PrivacyPage() {
           <h2>Cookies and browser storage</h2>
           <p>
             MockMBA sets one cookie that keeps you signed in. Your browser also
-            stores your theme and motion settings, unsent drafts, and the
-            interview preparation notes marked "saved in this browser". Those
-            notes stay on your device; clearing your browser data removes them.
+            stores your theme and motion settings, unsent drafts, a signed-out
+            try-one-question answer for 24 hours, and the interview preparation
+            notes marked "saved in this browser". Those notes stay on your
+            device; clearing your browser data removes them.
           </p>
         </section>
         <section id="your-choices">

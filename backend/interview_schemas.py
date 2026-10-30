@@ -24,6 +24,9 @@ class InterviewCreate(BaseModel):
     consent: bool = False
     question_id: Optional[str] = Field(default=None, max_length=80, pattern=r"^[a-z0-9-]+$")
     question_set_id: Optional[UUID] = None
+    # Signed token from a signed-out "try one question" (services/try_handoff.py): starts the taster with that try already in it.
+    # Room for a 1200-character non-Latin answer plus its follow-up; Latin text stays under 3000.
+    handoff: Optional[str] = Field(default=None, max_length=8000)
 
 
 class InterviewAction(BaseModel):

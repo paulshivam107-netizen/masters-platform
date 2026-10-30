@@ -71,6 +71,7 @@ const fill = async (text = ANSWER) => {
 
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true;
+  localStorage.clear();
   serial = 0;
   Object.defineProperty(global, "crypto", {
     configurable: true,
@@ -93,6 +94,7 @@ beforeEach(() => {
   root = createRoot(container);
 });
 afterEach(() => {
+  jest.restoreAllMocks();
   act(() => root.unmount());
   container.remove();
   delete window.turnstile;
@@ -132,7 +134,7 @@ test("shows the server's question, the AI notice and a labelled textarea", async
   await mount();
   expect(container.textContent).toContain(QUESTION.text);
   expect(container.textContent).toMatch(
-    /Your answer is sent to an AI service to write one follow-up\. We don.t save it\./,
+    /Your answer is sent to an AI service to write one follow-up\. We don.t store it on our servers\./,
   );
   expect(
     container.querySelector(`label[for="${textarea().id}"]`),
@@ -303,4 +305,108 @@ test("the Turnstile script is only added once the widget is showing", async () =
   );
   expect(script).not.toBeNull();
   expect(script.src).toContain("render=explicit");
+});
+
+const STASH = "mockmba:try_handoff";
+const reply = (extra = {}) => ({
+  follow_up: "How did you measure the 12% saving?",
+  quote: "cut costs (by 12%)",
+  fallback: false,
+  handoff: "e30.sig",
+  ...extra,
+});
+
+test("a successful try is kept on this device as {handoff, savedAt} and the sign-up says so", async () => {
+  submitTryFollowUpApi.mockResolvedValue(reply());
+  await mount();
+  await fill();
+  await submit();
+  expect(Object.keys(JSON.parse(localStorage.getItem(STASH))).sort()).toEqual([
+    "handoff",
+    "savedAt",
+  ]);
+  expect(JSON.parse(localStorage.getItem(STASH)).handoff).toBe("e30.sig");
+  expect(localStorage.length).toBe(1);
+  expect(container.textContent).toContain(
+    "Your answer is saved for 24 hours on this device",
+  );
+  expect(container.textContent).not.toMatch(/—/);
+});
+
+test("a fixed follow-up is kept too", async () => {
+  submitTryFollowUpApi.mockResolvedValue(reply({ fallback: true }));
+  await mount();
+  await fill();
+  await submit();
+  expect(JSON.parse(localStorage.getItem(STASH)).handoff).toBe("e30.sig");
+});
+
+test("a failed try keeps nothing, and a newer try replaces an older one", async () => {
+  // A readable older try: the widget keeps it unless it is replaced by a new one.
+  const older = `${Buffer.from(
+    JSON.stringify({
+      answer: "Older answer",
+      follow_up: "Older follow-up",
+      exp: Math.floor(Date.now() / 1000) + 3600,
+    }),
+  ).toString("base64url")}.sig`;
+  localStorage.setItem(
+    STASH,
+    JSON.stringify({ handoff: older, savedAt: Date.now() }),
+  );
+  submitTryFollowUpApi.mockRejectedValue({
+    response: { status: 422, data: { detail: "No." } },
+  });
+  await mount();
+  await fill();
+  await submit();
+  expect(JSON.parse(localStorage.getItem(STASH)).handoff).toBe(older);
+  submitTryFollowUpApi.mockResolvedValue(reply({ handoff: "new.sig" }));
+  await solveCheck("tok-2");
+  await submit();
+  expect(JSON.parse(localStorage.getItem(STASH)).handoff).toBe("new.sig");
+});
+
+test("a reply without a token still shows the follow-up and promises nothing", async () => {
+  submitTryFollowUpApi.mockResolvedValue(reply({ handoff: undefined }));
+  await mount();
+  await fill();
+  await submit();
+  expect(container.textContent).toContain(
+    "How did you measure the 12% saving?",
+  );
+  expect(localStorage.getItem(STASH)).toBeNull();
+  expect(container.textContent).not.toContain("saved for 24 hours");
+});
+
+test("blocked browser storage does not break the try and the page does not promise a saved answer", async () => {
+  jest.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+    throw new Error("blocked");
+  });
+  jest.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+    throw new Error("blocked");
+  });
+  submitTryFollowUpApi.mockResolvedValue(reply());
+  await mount();
+  await fill();
+  await submit();
+  expect(container.textContent).toContain(
+    "How did you measure the 12% saving?",
+  );
+  expect(container.textContent).not.toContain("saved for 24 hours");
+  expect(container.querySelector("a").getAttribute("href")).toMatch(
+    /^\/auth\?mode=signup/,
+  );
+});
+
+test("an expired saved try is dropped when a visitor comes back to the page", async () => {
+  localStorage.setItem(
+    STASH,
+    JSON.stringify({
+      handoff: "e30.sig",
+      savedAt: Date.now() - 25 * 60 * 60 * 1000,
+    }),
+  );
+  await mount();
+  expect(localStorage.getItem(STASH)).toBeNull();
 });
