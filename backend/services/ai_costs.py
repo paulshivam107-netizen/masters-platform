@@ -74,6 +74,9 @@ def caps() -> dict:
     return {
         "global_daily_cap_paise": global_cap,
         "user_daily_cap_paise": env_int("AI_USER_DAILY_CAP_PAISE", 500),
+        # Signed-out "try one question" visitors share one pool inside the global cap.
+        "anon_daily_cap_paise": env_int("AI_ANON_DAILY_CAP_PAISE", 1_000),
+        "anon_max_in_flight": env_int("AI_ANON_MAX_IN_FLIGHT", 3, 1, 100),
         "global_max_in_flight": env_int("AI_GLOBAL_MAX_IN_FLIGHT", 20, 1, 10_000),
         "user_max_in_flight": env_int("AI_USER_MAX_IN_FLIGHT", 2, 1, 100),
         # Alert only: reported to the admin view, never enforced.
@@ -114,9 +117,8 @@ class Denied(HTTPException):
 
 
 def _counter_ids(user_id, day: date):
-    ids = []
-    if user_id is not None:
-        ids.append(f"user:{user_id}:{day.isoformat()}")
+    # No user means a signed-out visitor: they spend from the shared anon pool, then the global cap.
+    ids = [f"anon:{day.isoformat()}" if user_id is None else f"user:{user_id}:{day.isoformat()}"]
     ids.append(f"global:{day.isoformat()}")
     return ids
 
@@ -135,6 +137,12 @@ def _ensure_counter(db, counter_id: str, day: date):
 def _deny(db, counter_id, amount, cap, max_in_flight, is_user):
     row = db.query(AiSpendCounter.committed_paise, AiSpendCounter.in_flight).filter_by(id=counter_id).first()
     db.rollback()
+    if counter_id.startswith("anon:"):
+        if row and row.in_flight >= max_in_flight:
+            raise Denied(429, "Several people are trying this right now. Please retry in a few seconds.",
+                         "anon_concurrency")
+        raise Denied(429, "Today's free tries are used up. Sign up to keep going, or try again tomorrow.",
+                     "anon_daily_cap")
     if is_user and row and row.in_flight >= max_in_flight:
         raise Denied(429, "Another AI step for your account is still running. Your input is kept here; "
                           "wait for it to finish, then retry.", "user_concurrency")
@@ -165,9 +173,10 @@ def reserve(db, *, user_id: Optional[int], operation: str, model: str, input_uni
     amount = price.cost(input_units, output_units)
     day = datetime.utcnow().date()
     for counter_id in _counter_ids(user_id, day):
-        is_user = counter_id.startswith("user:")
-        cap = limits["user_daily_cap_paise" if is_user else "global_daily_cap_paise"]
-        max_in_flight = limits["user_max_in_flight" if is_user else "global_max_in_flight"]
+        scope = counter_id.split(":", 1)[0]  # user | anon | global
+        is_user = scope == "user"
+        cap = limits[f"{scope}_daily_cap_paise"]
+        max_in_flight = limits[f"{scope}_max_in_flight"]
         _ensure_counter(db, counter_id, day)
         changed = db.query(AiSpendCounter).filter(
             AiSpendCounter.id == counter_id,
@@ -301,7 +310,15 @@ def reconcile(db, day: date) -> dict:
     per_user = db.query(AiCostEntry.user_id, func.sum(exposure_expression()),
                         func.sum(case((AiCostEntry.status == "reserved", 1), else_=0))) \
         .filter(AiCostEntry.day == day, AiCostEntry.user_id.isnot(None)).group_by(AiCostEntry.user_id).all()
+    anon_exposure, anon_reserved = db.query(
+        func.coalesce(func.sum(exposure_expression()), 0), func.coalesce(func.sum(case((AiCostEntry.status == "reserved", 1), else_=0)), 0)
+    ).filter(AiCostEntry.day == day, AiCostEntry.user_id.is_(None)).one()
+    anon_counter = db.get(AiSpendCounter, f"anon:{day.isoformat()}")
     mismatches = []
+    if (anon_counter.committed_paise if anon_counter else 0) != int(anon_exposure) or \
+            (anon_counter.in_flight if anon_counter else 0) != int(anon_reserved):
+        mismatches.append({"counter": f"anon:{day.isoformat()}", "counter_paise": anon_counter.committed_paise if anon_counter else 0,
+                           "ledger_paise": int(anon_exposure)})
     if (counter.committed_paise if counter else 0) != ledger_global or (counter.in_flight if counter else 0) != in_flight:
         mismatches.append({"counter": f"global:{day.isoformat()}", "counter_paise": counter.committed_paise if counter else 0,
                            "ledger_paise": ledger_global, "counter_in_flight": counter.in_flight if counter else 0,
