@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { AuthProvider, useAuth } from "./AuthContext";
 import { getAuthToken, setAuthToken } from "../api/client";
 import { loginApi, logoutApi, refreshTokenApi } from "../api";
+import { saveTryHandoff } from "../app/tryHandoff";
 
 jest.mock("../api", () => {
   const client = jest.requireActual("../api/client");
@@ -139,4 +140,14 @@ test("signing out in one tab signs out the others", async () => {
   expect(logoutApi).toHaveBeenCalledWith(false);
   expect(getAuthToken()).toBeNull();
   expect(firstTab.user).not.toBeUndefined();
+});
+
+test("signing out clears a saved try so the next person on this device does not see it", async () => {
+  refreshTokenApi.mockResolvedValue(session(4));
+  const auth = await mount();
+  saveTryHandoff("signed-token");
+  expect(localStorage.getItem("mockmba:try_handoff")).not.toBeNull();
+  logoutApi.mockResolvedValue({ success: true });
+  await act(async () => auth.logout());
+  expect(localStorage.getItem("mockmba:try_handoff")).toBeNull();
 });
