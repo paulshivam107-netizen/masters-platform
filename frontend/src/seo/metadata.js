@@ -40,10 +40,20 @@ publicPages["/schools"] = {
     "Interview preparation pages for individual MBA schools: programmes, what each school says about its interview and where graduates go, with sources. Independent, not affiliated with any school.",
   kind: "website",
 };
+// Searchers ask what a school's interview is like, so lead with the school's own first interview fact.
+const schoolDescription = ({ shortName, interview }) => {
+  const lead = interview?.points?.[0];
+  const text = lead && `${shortName} MBA interview: ${lead}`;
+  if (text && text.length <= 200)
+    return `${text} Practise the follow-ups.`.length <= 200
+      ? `${text} Practise the follow-ups.`
+      : text;
+  return `${shortName} MBA interview: what the school says about the format, with source links, and a way to practise follow-up questions. Independent guide.`;
+};
 for (const school of schools)
   publicPages[`/schools/${school.slug}`] = {
-    title: `${school.shortName} interview preparation: format, programmes and practice`,
-    description: `${school.shortName} programmes, what the school says about its interview and where graduates go, with source links. Independent guide, not affiliated with ${school.shortName}.`,
+    title: `${school.shortName} MBA interview: what to expect`,
+    description: schoolDescription(school),
     updated: school.checked,
     kind: "website",
   };
