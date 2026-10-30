@@ -713,3 +713,53 @@
 .resume-upload { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
 @keyframes resume-spin { to { transform: rotate(360deg); } }
 @media (prefers-reduced-motion: reduce) { .resume-spinner { animation-duration: 3s; } }
+.studio-share,
+.studio-goal {
+  display: grid;
+  gap: 10px;
+  justify-items: start;
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+.studio-share blockquote {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.5;
+}
+.studio-goal p,
+.studio-share p {
+  margin: 0;
+}
+.studio-goal label {
+  font-weight: 650;
+}
+.studio-goal input {
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.studio-goal-bar {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  width: min(100%, 320px);
+}
+.studio-goal-bar span {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--line);
+}
+.studio-goal-bar span.is-done {
+  background: var(--accent);
+}
+.studio-goal-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}

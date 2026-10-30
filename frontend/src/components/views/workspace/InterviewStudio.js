@@ -12,6 +12,8 @@ import useInterviewAudio from "./useInterviewAudio";
 import InterviewQuestionBank from "./InterviewQuestionBank";
 import ResumeQuestionBuilder from "./ResumeQuestionBuilder";
 import FocusedPractice from "./FocusedPractice";
+import ShareFollowUp from "./ShareFollowUp";
+import MockGoal from "./MockGoal";
 import { clearInterviewIntent } from "./interviewIntent";
 import DictationButton, { appendTranscript } from "./DictationButton";
 import "./InterviewStudio.css";
@@ -117,6 +119,7 @@ export default function InterviewStudio({
   const [capabilities, setCapabilities] = useState(null);
   const [history, setHistory] = useState([]);
   const [hasMore, setHasMore] = useState(false);
+  const [completedCount, setCompletedCount] = useState(0);
   const [historyOffset, setHistoryOffset] = useState(0);
   const [session, setSession] = useState(null);
   const [resumable, setResumable] = useState(null);
@@ -254,6 +257,7 @@ export default function InterviewStudio({
         if (signal.aborted) return;
         setHistory(previous.items);
         setHasMore(previous.has_more);
+        setCompletedCount(previous.completed_count || 0);
         setHistoryOffset(previous.items.length);
       })
       .catch(fail);
@@ -522,6 +526,11 @@ export default function InterviewStudio({
     audio.requesting ||
     audio.processing,
   );
+  // History pages hold 20 rows; the server count covers the rest, the list covers this visit.
+  const mocksDone = Math.max(
+    completedCount,
+    history.filter((item) => item.status === "completed").length,
+  );
   const live = Boolean(capabilities?.chat);
   const sessionHadResume = Boolean(
     lastStart.current?.profile ||
@@ -606,6 +615,7 @@ export default function InterviewStudio({
               ? "A live interviewer asks about you and follows up on your answers. Debrief at the end."
               : "Practise one question at a time and return to your answers whenever you need."}
           </p>
+          <MockGoal userId={user.id} completed={mocksDone} />
           {!capabilities.chat && (
             <p className="studio-message" data-testid="demo-notice">
               AI interviews are temporarily unavailable. You can still rehearse
@@ -1217,6 +1227,9 @@ export default function InterviewStudio({
                 </span>
                 <p>{session.feedback.next_exercise}</p>
               </div>
+              {session.provider !== "demo" && (
+                <ShareFollowUp transcript={session.transcript} />
+              )}
               <p className="studio-fine-print">
                 Practice guidance based on these answers. It does not predict
                 admission or assess accent, personality or spoken delivery.

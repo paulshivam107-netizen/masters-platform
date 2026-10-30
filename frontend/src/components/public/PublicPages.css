@@ -294,6 +294,10 @@
   font-size: 14px;
   font-weight: 600;
 }
+.lp-why-byline {
+  margin: 0;
+  font-weight: 600;
+}
 .lp-why-privacy {
   margin: 0;
   max-width: 52ch;

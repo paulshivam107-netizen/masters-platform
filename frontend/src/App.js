@@ -732,7 +732,13 @@ function ProtectedAppRoute() {
 function AppRoutes() {
   const { pathname, hash } = useLocation();
   React.useEffect(() => {
-    if (!pathname.startsWith("/app") && !hash) window.scrollTo(0, 0);
+    if (pathname.startsWith("/app")) return;
+    // In-app links don't scroll to a #section themselves, so do it once the page has rendered.
+    if (hash)
+      document
+        .getElementById(decodeURIComponent(hash.slice(1)))
+        ?.scrollIntoView();
+    else window.scrollTo(0, 0);
   }, [pathname, hash]);
   return (
     <>
