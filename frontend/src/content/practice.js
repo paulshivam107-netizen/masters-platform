@@ -77,6 +77,7 @@ const practice = {
       "Your résumé text is sent to the AI provider only after you review it.",
       "The original file and the reviewed résumé text are not saved in our database.",
       "What is saved is the practice set: the questions and the short résumé excerpts they are based on, so you can see them again.",
+      "If you use the try-one-question box above, your typed answer goes to our AI provider to write one follow-up. We do not save it.",
     ],
     note: "This summarises the current behaviour of the pilot. It is not a full privacy policy.",
   },

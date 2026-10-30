@@ -10,6 +10,7 @@ import {
   NotFoundPage,
 } from "./ResourcePages";
 import { useAuth } from "../../contexts/AuthContext";
+import TryOneQuestion from "./TryOneQuestion";
 import "./SchoolPages.css";
 
 const MONTHS = [
@@ -366,6 +367,10 @@ export function SchoolPage() {
           <ResourceCta next={practiceNext(school)}>
             Practise for {school.shortName}
           </ResourceCta>
+          <TryOneQuestion
+            source={`school:${school.slug}`}
+            next={`${practiceNext(school)}&from=try`}
+          />
         </div>
       </section>
     </ResourceShell>

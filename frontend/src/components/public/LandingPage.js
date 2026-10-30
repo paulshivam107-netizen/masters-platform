@@ -58,7 +58,8 @@ function useCompact() {
   return compact;
 }
 
-// Signed-out visitors can rehearse one question in the browser first (no AI, no account).
+// Signed-out visitors can try one question first, no account: a recorder with no AI, and
+// (when the server offers it) one AI follow-up. See TryOneQuestion.
 function TryLink() {
   const { user } = useAuth();
   return user ? (
