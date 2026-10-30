@@ -158,8 +158,6 @@ def reserve_quota(db, user_id, family="ai"):
     )
     if family == "resume_upload":
         caps = [(f"resume_upload:global:{day}", 200), (f"resume_upload:user:{user_id}:{day}", 20)]
-    if family == "public_try":  # signed-out tries share one daily pool
-        caps = [(f"public_try:global:{day}", limit("PUBLIC_TRY_GLOBAL_DAILY", 100))]
     for key, cap in caps:
         if db.get(InterviewQuota, key) is None:
             try:

@@ -55,24 +55,6 @@ class InterviewApiTest(unittest.IsolatedAsyncioTestCase):
         self.engine.dispose()
         self.tmp.cleanup()
 
-    async def test_public_try_needs_no_account_and_is_capped_per_ip(self):
-        body = {"resume_line": "Led a four-person analytics team at Acme", "answer": "I owned the churn dashboard and cut reporting time by half."}
-        follow_up = {"question": "How did you measure the time saved?", "kind": "follow_up", "topic": "experience",
-                     "anchor_turn_id": "a1", "anchor_quote": "cut reporting time by half", "conflict": ""}
-        self.assertEqual((await self.client.post("/interviews/try", json=body)).status_code, 503)  # AI not connected
-        with patch.object(provider, "api_key", return_value="unit-test-key"), \
-                patch.object(provider, "next_question", return_value=(follow_up, {"input_tokens": 900, "output_tokens": 40})) as called:
-            bad = await self.client.post("/interviews/try", json={**body, "answer": "asdf jkl qwer zxcv"})
-            self.assertEqual(bad.status_code, 422)
-            for _ in range(2):
-                response = await self.client.post("/interviews/try", json=body)
-                self.assertEqual(response.status_code, 200, response.text)
-            self.assertEqual(response.json()["anchor_quote"], "cut reporting time by half")
-            self.assertIn("Acme", called.call_args.args[1][0]["text"])
-            self.assertEqual((await self.client.post("/interviews/try", json=body)).status_code, 429)
-        with self.Session() as db:
-            self.assertEqual(db.query(InterviewSession).count(), 0)  # nothing stored
-
     def resume_set(self, user_id=1, route="cat"):
         """A completed, reviewed resume set: a full live interview needs one."""
         with self.Session() as db:

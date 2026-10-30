@@ -9,8 +9,8 @@ import SiteFooter from "./SiteFooter";
 import { LandingPhoto } from "./LandingPanels";
 import { schoolGroups } from "../../content/schools";
 import { contactEmail } from "../../content/site";
-import TryFollowUp from "./TryFollowUp";
 import FocusedPractice from "../views/workspace/FocusedPractice";
+import TryOneQuestion, { useTryStatus } from "./TryOneQuestion";
 import "../views/Workspace.css";
 import "../views/workspace/InterviewStudio.css";
 import "./PublicPages.css";
@@ -491,7 +491,7 @@ export function HelpPage() {
     </ResourceShell>
   );
 }
-const PRIVACY_UPDATED = "2026-10-26";
+const PRIVACY_UPDATED = "2026-10-30";
 const PRIVACY_TOC = [
   ["what-we-store", "What we store"],
   ["what-we-dont", "What we don't store"],
@@ -576,6 +576,14 @@ export function PrivacyPage() {
             these requests with OpenAI's storage option turned off.
           </p>
           <p>
+            Visitors who are not signed in can also try one question on the
+            interview practice and school pages. If you do, your typed answer is
+            sent to OpenAI to write one follow-up question, and we do not save
+            it. To block bots we use Cloudflare Turnstile, which checks your
+            browser when you use that box. We also limit how much each anonymous
+            visitor can use it.
+          </p>
+          <p>
             AI output can be wrong. It is practice material, not an admissions
             assessment, and it does not predict any outcome.
           </p>
@@ -593,14 +601,16 @@ export function PrivacyPage() {
             </li>
             <li>
               <strong>Cloudflare:</strong> the website, the mockmba.com domain,
-              forwarding of hello@mockmba.com, and cookieless visit counts.
+              forwarding of hello@mockmba.com, cookieless visit counts, and the
+              Turnstile check that blocks bots on the try-one-question box.
             </li>
             <li>
               <strong>Resend:</strong> account and reminder emails.
             </li>
             <li>
-              <strong>OpenAI:</strong> AI interviews, résumé questions and
-              transcription.
+              <strong>OpenAI:</strong> AI interviews, résumé questions,
+              transcription and the one-question follow-up for visitors who are
+              not signed in.
             </li>
             <li>
               <strong>Google:</strong> only if you choose to sign in with
@@ -694,6 +704,8 @@ export function NotFoundPage() {
 
 export function PracticePage() {
   const { how, example, routes, limits, privacy } = practice;
+  // Only when the server offers the AI follow-up; otherwise the recorder stays the main block.
+  const withAi = Boolean(useTryStatus());
   return (
     <ResourceShell>
       <ArticleLayout
@@ -728,21 +740,37 @@ export function PracticePage() {
         </section>
         <section id="try">
           <h2>Try one question now</h2>
-          <p>
-            No account needed. Paste one line from your résumé, answer the
-            question it starts, and see the follow-up the AI interviewer asks.
-            Your line and answer go to OpenAI to write that follow-up and are
-            not saved.
-          </p>
-          <TryFollowUp />
-          <h3>Prefer to rehearse aloud?</h3>
-          <p>
-            Pick a question, record your answer and listen back. Recordings
-            stay in your browser and no AI is involved.
-          </p>
-          <div className="rp-try">
-            <FocusedPractice />
-          </div>
+          {withAi ? (
+            <>
+              <p>
+                No account needed. Answer one question in writing and get one
+                follow-up from AI that picks up on your words.
+              </p>
+              <TryOneQuestion source="practice" />
+              <div className="rp-tq-aside">
+                <h3>Or rehearse aloud, no AI</h3>
+                <p>
+                  Pick a question, record your answer, listen back and try
+                  again. Recordings stay in your browser; nothing is uploaded
+                  and no AI is involved.
+                </p>
+                <div className="rp-try">
+                  <FocusedPractice />
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <p>
+                No account needed. Pick a question, record your answer, listen
+                back and try again. Recordings stay in your browser; nothing is
+                uploaded and no AI is involved.
+              </p>
+              <div className="rp-try">
+                <FocusedPractice defaultOpen />
+              </div>
+            </>
+          )}
         </section>
         <section id="example">
           <h2>A short example</h2>

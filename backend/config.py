@@ -66,6 +66,10 @@ class Settings(BaseSettings):
     # Number of reverse proxies in front of the API that append to X-Forwarded-For (Railway: 1).
     # 0 = use the socket peer. The client IP is the N-th entry from the right, never the leftmost.
     TRUSTED_PROXY_HOPS: int = 0
+    # Signed-out "try one question" (public_try_routes). Ships off; needs Cloudflare Turnstile keys in production.
+    ANON_TRY_ENABLED: bool = False
+    TURNSTILE_SITE_KEY: str = ""
+    TURNSTILE_SECRET_KEY: str = ""
 
     CORS_ORIGINS: str = "http://localhost:3000,http://127.0.0.1:3000"
     CORS_ORIGIN_REGEX: Optional[str] = None

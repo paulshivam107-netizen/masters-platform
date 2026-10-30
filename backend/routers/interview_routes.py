@@ -12,16 +12,15 @@ from starlette.concurrency import run_in_threadpool
 
 from auth import get_current_user
 from database import get_db
-from interview_schemas import InterviewAction, InterviewAnswer, InterviewCreate, InterviewSpeech, PublicTry
+from interview_schemas import InterviewAction, InterviewAnswer, InterviewCreate, InterviewSpeech
 from models import AiRuntimeConfig, ApplicationTracker, InterviewOperation, InterviewSession, User
-from services import ai_costs
 from services import interview_provider as provider
 from services.interview_questions import question_bank, route_matches, starting_question, follow_up_questions
 from services.resume_questions import owned_set
 from services.interview_plan import make_plan
-from services.interviews import (FALLBACK_AFTER_ATTEMPTS, MAX_OUTPUT_TOKENS, TEXT_OVERHEAD_CHARS, answer_count, claim,
-                                 closing_turn, complete, fallback_question, fingerprint, is_stop_request, limit,
-                                 non_answer_reason, owned, require_live, reserve_cost, reserve_quota, run_step, serialize)
+from services.interviews import (FALLBACK_AFTER_ATTEMPTS, answer_count, claim, closing_turn, complete, fallback_question,
+                                 fingerprint, is_stop_request, non_answer_reason, owned, require_live, reserve_quota, run_step,
+                                 serialize)
 from services.rate_limit import enforce_rate_limit
 
 router = APIRouter(prefix="/interviews", tags=["interviews"])
@@ -49,49 +48,6 @@ def interview_user(request: Request, response: Response, user: User = Depends(ge
     enforce_rate_limit(request, action="interviews", limit=90, window_seconds=60, user_id=user.id,
                        db=db, memory=request.method == "GET")
     return user
-
-
-def try_opening(line):
-    return f"You wrote: “{line}”. Walk me through your part in it."
-
-
-@router.post("/try")
-def public_try(payload: PublicTry, request: Request, response: Response, db: Session = Depends(get_db)):
-    """Signed-out taster: a fixed opening built from one résumé line, then one live follow-up.
-
-    Nothing is stored. Per-IP and global daily caps (env-tunable) sit on top of the AI money caps.
-    """
-    response.headers["Cache-Control"] = "no-store"
-    reason = non_answer_reason(payload.answer)
-    if reason:  # before any counter: nothing is charged
-        raise HTTPException(422, {"code": "not_an_answer", "message": reason})
-    require_live(db)
-    enforce_rate_limit(request, action="public_try", limit=limit("PUBLIC_TRY_PER_IP_DAILY", 2),
-                       window_seconds=86400, db=db)
-    reserve_quota(db, None, "public_try")
-    context = {"route": "auto", "kind": "taster", "school": "General MBA practice", "programme": "MBA",
-               "practice_focus": "resume", "question_limit": 2, "interview_plan": make_plan("auto", "resume"),
-               "resume_profile": [{"id": "f1", "category": "experience", "evidence_quote": payload.resume_line}]}
-    transcript = [{"id": "q1", "role": "assistant", "text": try_opening(payload.resume_line)},
-                  {"id": "a1", "role": "user", "text": payload.answer}]
-    chars = len(json.dumps(context)) + len(json.dumps(transcript)) + TEXT_OVERHEAD_CHARS
-    entry = reserve_cost(db, None, "public_try", provider.text_model(),
-                         ai_costs.text_tokens_upper_bound(chars), MAX_OUTPUT_TOKENS["answer"], None)
-    db.commit()
-    try:
-        question, usage = provider.next_question(context, transcript)
-    except provider.ProviderFailure as exc:
-        ai_costs.finish(db, entry.id, exc.billing, exc.usage, exc.code)
-        db.commit()
-        # Provider messages talk about a saved interview; a visitor has none.
-        raise HTTPException(exc.status, "The interviewer couldn't write a follow-up just now. Please try again in a minute.") from None
-    except Exception:
-        ai_costs.finish(db, entry.id, "unknown", None, "public_try_error")
-        db.commit()
-        raise HTTPException(503, "The follow-up could not be generated. Please try again.") from None
-    ai_costs.finish(db, entry.id, "charged", usage)
-    db.commit()
-    return {"question": question["question"], "kind": question["kind"], "anchor_quote": question["anchor_quote"]}
 
 
 @router.get("/questions")
