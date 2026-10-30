@@ -6,7 +6,7 @@ const publicPages = {
   "/": {
     title: "Practise MBA interviews with résumé-based questions",
     description:
-      "Mock interviews for MBA, EMBA and MiM applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free during the pilot.",
+      "Mock interviews for MBA, EMBA and MiM applicants: questions drawn from your résumé, follow-ups that quote your answers and a debrief to act on. Free to use right now.",
     kind: "website",
   },
   "/guides": {

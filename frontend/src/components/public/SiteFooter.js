@@ -38,7 +38,7 @@ export default function SiteFooter({ home = false }) {
         </nav>
         <div className="site-footer-bottom">
           <p>
-            © 2026 MockMBA. Free during the pilot.
+            © 2026 MockMBA. Free to use right now.
             <br />
             MockMBA is independent and not affiliated with any business school.
           </p>
