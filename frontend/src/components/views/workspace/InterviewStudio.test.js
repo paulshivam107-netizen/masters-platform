@@ -70,6 +70,7 @@ const button = (text) =>
   );
 beforeEach(() => {
   global.IS_REACT_ACT_ENVIRONMENT = true;
+  localStorage.clear();
   Object.defineProperty(global, "crypto", {
     configurable: true,
     value: { randomUUID: () => "test-request-id" },
@@ -514,4 +515,235 @@ test("a reviewed résumé is ignored on the general path and the last path is re
     "interview_preferences",
     expect.objectContaining({ path: "general" }),
   );
+});
+
+// A try saved before sign-up (see app/tryHandoff.js). The browser only reads the text back.
+const STASH = "mockmba:try_handoff";
+const ANSWER = "I led a team of six engineers and want to move into strategy.";
+const FOLLOW_UP =
+  "You led six engineers. What exactly did you decide yourself?";
+const tokenFor = (claims = {}) =>
+  `${Buffer.from(
+    JSON.stringify({
+      answer: ANSWER,
+      follow_up: FOLLOW_UP,
+      v: 1,
+      exp: Math.floor(Date.now() / 1000) + 86400,
+      ...claims,
+    }),
+  ).toString("base64url")}.sig`;
+const stash = (claims, savedAt = Date.now()) =>
+  localStorage.setItem(
+    STASH,
+    JSON.stringify({ handoff: tokenFor(claims), savedAt }),
+  );
+const card = () => container.querySelector('[data-testid="try-handoff"]');
+const seeded = {
+  id: "seeded",
+  provider: "openai",
+  mode: "chat",
+  status: "active",
+  version: 0,
+  answer_count: 1,
+  question_limit: 3,
+  context: { school: "General MBA practice", programme: "MBA", kind: "taster" },
+  transcript: [
+    { id: "q1", role: "assistant", text: "Walk me through yourself." },
+    { id: "a1", role: "user", text: ANSWER },
+    { id: "q2", role: "assistant", text: FOLLOW_UP, kind: "follow_up" },
+  ],
+};
+const failure = (status, detail) =>
+  Object.assign(new Error("failed"), {
+    response: { status, data: { detail } },
+  });
+
+test("a saved try shows above the two ways to start, with the answer and the follow-up as text", async () => {
+  stash({ answer: `${ANSWER} <img src=x onerror=alert(1)>` });
+  await render();
+  expect(card().textContent).toContain("Pick up where you left off");
+  expect(card().textContent).toContain(FOLLOW_UP);
+  expect(card().textContent).toContain("<img src=x onerror=alert(1)>");
+  expect(card().querySelector("img")).toBeNull();
+  expect(button("Continue with this follow-up")).toBeDefined();
+  expect(button("Start fresh instead")).toBeDefined();
+  const paths = container.querySelector(".studio-paths");
+  expect(
+    card().compareDocumentPosition(paths) & Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(container.textContent).not.toMatch(/—/);
+});
+
+test("a long answer is shortened in the card", async () => {
+  stash({ answer: "word ".repeat(200) });
+  await render();
+  const shown = card().querySelector("blockquote").textContent;
+  expect(shown.length).toBeLessThanOrEqual(240);
+  expect(shown.endsWith("…")).toBe(true);
+});
+
+test("no card without a saved try", async () => {
+  await render();
+  expect(card()).toBeNull();
+  expect(button("Start interview")).toBeDefined();
+});
+
+test.each([
+  ["older than 24 hours", () => stash({}, Date.now() - 25 * 60 * 60 * 1000)],
+  [
+    "with an expired token",
+    () => stash({ exp: Math.floor(Date.now() / 1000) - 60 }),
+  ],
+  ["malformed", () => localStorage.setItem(STASH, "{not json")],
+  [
+    "missing the follow-up",
+    () =>
+      localStorage.setItem(
+        STASH,
+        JSON.stringify({ handoff: "x.y", savedAt: Date.now() }),
+      ),
+  ],
+])("a saved try %s is not offered and is removed", async (_name, plant) => {
+  plant();
+  await render();
+  expect(card()).toBeNull();
+  expect(localStorage.getItem(STASH)).toBeNull();
+  expect(button("Start interview")).toBeDefined();
+});
+
+test("a saved try is not offered, and is removed, once the taster is used", async () => {
+  stash();
+  api.getInterviewCapabilities.mockResolvedValue({
+    chat: true,
+    voice: true,
+    taster_used: true,
+  });
+  await render();
+  expect(card()).toBeNull();
+  expect(localStorage.getItem(STASH)).toBeNull();
+});
+
+test("a saved try is kept but not shown while live AI is off", async () => {
+  stash();
+  api.getInterviewCapabilities.mockResolvedValue({ chat: false, voice: false });
+  await render();
+  expect(card()).toBeNull();
+  expect(localStorage.getItem(STASH)).not.toBeNull();
+});
+
+test("blocked browser storage leaves the normal first screen", async () => {
+  stash();
+  const blocked = jest
+    .spyOn(Storage.prototype, "getItem")
+    .mockImplementation(() => {
+      throw new Error("blocked");
+    });
+  readUserValue.mockImplementation((_u, _k, f) => f);
+  await render();
+  blocked.mockRestore();
+  expect(card()).toBeNull();
+  expect(button("Start interview")).toBeDefined();
+});
+
+test("Start fresh instead removes the saved try and the normal start still works", async () => {
+  stash();
+  await render();
+  await tick(() => button("Start fresh instead").click());
+  expect(card()).toBeNull();
+  expect(localStorage.getItem(STASH)).toBeNull();
+  expect(api.createInterview).not.toHaveBeenCalled();
+  expect(document.activeElement.name).toBe("studio-path");
+  await choose("general");
+  await tick(() => button("Start interview").click());
+  const sent = api.createInterview.mock.calls[0][0];
+  expect(sent).toEqual(expect.objectContaining({ kind: "full" }));
+  expect(sent).not.toHaveProperty("handoff");
+});
+
+test("Continue creates the Why MBA interview from the saved try, then clears it and opens the session", async () => {
+  stash();
+  const handoff = JSON.parse(localStorage.getItem(STASH)).handoff;
+  api.createInterview.mockResolvedValue(seeded);
+  await render();
+  await tick(() => button("Continue with this follow-up").click());
+  expect(api.createInterview).toHaveBeenCalledTimes(1);
+  expect(api.createInterview.mock.calls[0][0]).toEqual(
+    expect.objectContaining({
+      kind: "taster",
+      provider: "openai",
+      route: "auto",
+      handoff,
+      request_id: "test-request-id",
+      profile_set_id: null,
+      question_set_id: null,
+    }),
+  );
+  expect(localStorage.getItem(STASH)).toBeNull();
+  expect(card()).toBeNull();
+  expect(container.textContent).toContain(FOLLOW_UP);
+  expect(container.textContent).toContain(ANSWER);
+  expect(container.querySelector("textarea")).not.toBeNull();
+});
+
+test("Practise again after a continued try does not send the saved try again", async () => {
+  stash();
+  api.createInterview.mockResolvedValue({
+    ...debrief(null),
+    context: {
+      school: "General MBA practice",
+      programme: "MBA",
+      kind: "taster",
+    },
+  });
+  await render();
+  await tick(() => button("Continue with this follow-up").click());
+  api.createInterview.mockClear();
+  await tick(() => button("Practise again").click());
+  const sent = api.createInterview.mock.calls[0][0];
+  expect(sent.kind).toBe("full");
+  expect(sent).not.toHaveProperty("handoff");
+});
+
+test.each([
+  [
+    409,
+    "You've used your Why MBA taster. Add your résumé for a full interview.",
+  ],
+  [422, "This try expired. Start a new interview."],
+])(
+  "a %i reply clears the saved try and shows the server's message",
+  async (status, detail) => {
+    stash();
+    api.createInterview.mockRejectedValue(failure(status, detail));
+    api.interviewError.mockResolvedValue(detail);
+    await render();
+    await tick(() => button("Continue with this follow-up").click());
+    expect(container.querySelector('[role="alert"]').textContent).toContain(
+      detail,
+    );
+    expect(card()).toBeNull();
+    expect(localStorage.getItem(STASH)).toBeNull();
+    expect(button("Start interview")).toBeDefined();
+  },
+);
+
+test("a temporary failure keeps the saved try and a retry reuses the same request", async () => {
+  stash();
+  api.createInterview
+    .mockRejectedValueOnce(
+      failure(503, "AI practice is temporarily paused by the site owner."),
+    )
+    .mockResolvedValueOnce(seeded);
+  api.interviewError.mockResolvedValue(
+    "AI practice is temporarily paused by the site owner.",
+  );
+  await render();
+  await tick(() => button("Continue with this follow-up").click());
+  expect(card()).not.toBeNull();
+  expect(localStorage.getItem(STASH)).not.toBeNull();
+  await tick(() => button("Continue with this follow-up").click());
+  const [first, second] = api.createInterview.mock.calls.map(([body]) => body);
+  expect(second.request_id).toBe(first.request_id);
+  expect(second.handoff).toBe(first.handoff);
+  expect(localStorage.getItem(STASH)).toBeNull();
 });

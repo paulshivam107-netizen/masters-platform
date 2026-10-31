@@ -15,6 +15,7 @@ from database import get_db
 from interview_schemas import InterviewAction, InterviewAnswer, InterviewCreate, InterviewSpeech
 from models import AiRuntimeConfig, ApplicationTracker, InterviewOperation, InterviewSession, User
 from services import interview_provider as provider
+from services import try_handoff
 from services.interview_questions import question_bank, route_matches, starting_question, follow_up_questions
 from services.resume_questions import owned_set
 from services.interview_plan import make_plan
@@ -27,6 +28,7 @@ router = APIRouter(prefix="/interviews", tags=["interviews"])
 
 
 TASTER_USED = "You've used your Why MBA taster. Add your résumé for a full interview."
+HANDOFF_EXPIRED = "This try expired. Start a new interview."
 
 
 def taster_used(db, user_id):
@@ -83,17 +85,25 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         if previous.create_fingerprint != digest:
             raise HTTPException(409, "This request ID was already used for another interview.")
         return serialize(previous)
+    if payload.handoff and not (payload.kind == "taster" and payload.provider == "openai"):
+        raise HTTPException(422, "Only the live Why MBA interview can continue a saved try.")
     if payload.provider == "openai":
         require_live(db)
     if payload.provider == "demo" and payload.mode == "voice":
         raise HTTPException(422, "The demo supports typed answers. Voice needs a live AI connection.")
     taster = payload.kind == "taster"
+    seeded = None
     if taster:
         if payload.provider != "openai":
             raise HTTPException(422, "The Why MBA taster needs live AI.")
         if taster_used(db, user.id):
             raise HTTPException(409, TASTER_USED)
         payload.question_limit, payload.practice_focus = 3, "motivation"
+        if payload.handoff:  # q1, a1 and q2 from the try; nothing is sent to the model
+            try:
+                seeded = try_handoff.seed_turns(payload.handoff, str(payload.request_id))
+            except try_handoff.HandoffInvalid:
+                raise HTTPException(422, HANDOFF_EXPIRED) from None
     general = payload.provider == "openai" and not (payload.profile_set_id or payload.question_set_id)
     if general and not taster:  # no résumé: same motivation-led plan and opening as the taster, but repeatable
         payload.practice_focus = "motivation"
@@ -153,7 +163,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
     if payload.profile_fact_ids and not payload.profile_set_id:
         raise HTTPException(422, "Choose the saved resume profile for these facts.")
     if taster or (general and not payload.question_id):
-        opening = "Walk me through yourself, and why an MBA is the next step you want to take."
+        opening = try_handoff.QUESTION["text"]
     elif not payload.question_id:
         openings = {
             "behavioural": "Tell me about a time something you tried did not work out. What happened?",
@@ -168,7 +178,7 @@ def create_session(payload: InterviewCreate, user: User = Depends(interview_user
         id=str(uuid4()), user_id=user.id, create_request_id=str(payload.request_id), create_fingerprint=digest,
         kind=payload.kind, context_json=json.dumps(context), provider=payload.provider, mode=payload.mode,
         question_limit=payload.question_limit, prompt_version=provider.PROMPT_VERSION,
-        transcript_json=json.dumps([{"id": "q1", "role": "assistant", "text": opening}]),
+        transcript_json=json.dumps(seeded or [{"id": "q1", "role": "assistant", "text": opening}]),
     )
     db.add(session)
     try:
