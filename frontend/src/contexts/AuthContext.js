@@ -16,6 +16,7 @@ import {
   updateProfileApi,
   installSessionRecovery,
 } from "../api";
+import { clearTryHandoff } from "../app/tryHandoff";
 
 /*
  * Session model (see backend/services/sessions.py):
@@ -193,6 +194,7 @@ export const AuthProvider = ({ children }) => {
       );
     } finally {
       clearSession();
+      clearTryHandoff(); // a saved try belongs to the person who made it, not the next one on this device
       announce("logout");
     }
   };

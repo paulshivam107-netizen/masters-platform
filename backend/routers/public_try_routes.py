@@ -3,10 +3,10 @@
 Stateless: nothing about the visitor, answer or follow-up is stored. The only records are cost-ledger
 rows (no user), rate-limit buckets (hashed IP, purged within days) and an anonymous admin event.
 Every check that costs nothing runs before the first reservation; spend comes from the shared
-``anon`` pool inside the global cap (see ``services/ai_costs.py``).
+``anon`` pool inside the global cap (see ``services/ai_costs.py``). The response carries a signed token
+(``services/try_handoff.py``) the browser may keep for 24 hours to continue the try after sign-up.
 """
 import json
-import re
 from types import SimpleNamespace
 from typing import Literal
 from uuid import UUID
@@ -24,15 +24,13 @@ from services import interview_provider as provider
 from services.interview_plan import make_plan
 from services.interviews import estimate, fallback_question, is_stop_request, non_answer_reason
 from services.rate_limit import enforce_rate_limit
+from services.try_handoff import MAX_CHARS, MIN_CHARS, QUESTION, sign, usable_follow_up
 
 router = APIRouter(prefix="/public/try", tags=["public-try"])
 
-QUESTION = {"id": "motivation", "text": "Walk me through yourself, and why an MBA is the next step you want to take."}
-MIN_CHARS, MAX_CHARS = 40, 1200
 BURST_SECONDS, DAILY_TRIES = 20, 3
 UNAVAILABLE = "This try is not available right now. Sign up to practise a full interview."
 NOT_ANSWERED = "That doesn't seem to answer the question. Write a few sentences about your own background and reasons."
-LINK_OR_EMAIL = re.compile(r"https?://|www\.|\S+@\S+\.\S+", re.I)
 TURNSTILE_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify"
 
 
@@ -150,11 +148,14 @@ def follow_up(payload: TryRequest, request: Request, response: Response, db: Ses
     question = result
     if question is not None and question.get("kind") in ("off_topic", "end_requested"):
         raise HTTPException(422, NOT_ANSWERED)
-    if question is None or len(question["question"]) > 300 or LINK_OR_EMAIL.search(question["question"]):
+    if question is None or not usable_follow_up(question["question"]):
         question = fallback_question(context, transcript)
     quote = question.get("anchor_quote") or None
     quote = quote if quote and quote in answer and not question.get("fallback") else None
     db.add(AdminEvent(user_id=None, event_name="anon_try_answered", payload_json=json.dumps(
         {"source": payload.source, "grounded": bool(quote), "fallback": bool(question.get("fallback"))})))
     db.commit()
-    return {"follow_up": question["question"], "quote": quote, "fallback": bool(question.get("fallback"))}
+    fallback = bool(question.get("fallback"))
+    handoff = sign({"question_id": QUESTION["id"], "answer": answer, "follow_up": question["question"], "quote": quote,
+                    "fallback": fallback, "topic": question["topic"]})
+    return {"follow_up": question["question"], "quote": quote, "fallback": fallback, "handoff": handoff}
