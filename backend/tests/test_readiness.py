@@ -12,7 +12,7 @@ from sqlalchemy.orm import sessionmaker
 
 from auth import create_access_token
 from database import Base, get_db
-from models import InterviewSession, User
+from models import AdminEvent, InterviewSession, User
 from routers.admin_routes import interview_return_metrics, signup_funnel
 from routers.interview_routes import router
 from services import interview_provider as provider
@@ -150,7 +150,13 @@ class ReadinessApiTest(unittest.IsolatedAsyncioTestCase):
         self.add(2, 1, status="active")                 # started, never finished
         self.add(4, 1)                                  # admin test run is excluded
         with self.Session() as db:
+            db.add(AdminEvent(event_name="anon_try_answered", user_id=None, created_at=datetime.utcnow()))
+            db.add(AdminEvent(event_name="anon_try_answered", user_id=None, created_at=datetime.utcnow() - timedelta(days=30)))
+            db.add(AdminEvent(event_name="view_home", user_id=None))  # other events are not tries
+            db.commit()
+        with self.Session() as db:
             self.assertEqual(signup_funnel(db, datetime.utcnow()), {
+                "funnel_tried": 2, "funnel_tried_7d": 1,
                 "funnel_signups": 3, "funnel_signups_7d": 2, "funnel_verified": 1,
                 "funnel_started": 2, "funnel_completed": 1})
 

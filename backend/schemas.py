@@ -217,6 +217,8 @@ class AdminOverviewResponse(BaseModel):
     users_3plus_interviews: int
     return_7d_eligible_users: int
     return_7d_rate: float
+    funnel_tried: int
+    funnel_tried_7d: int
     funnel_signups: int
     funnel_signups_7d: int
     funnel_verified: int

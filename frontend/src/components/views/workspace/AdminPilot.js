@@ -970,6 +970,10 @@ export default function AdminPilot({ section, refresh, overview, onSelect }) {
         <p>Applicant accounts only; admin test runs are left out.</p>
         <div className="pilot-metrics">
           <Metric
+            label="Tried without signing up (this week)"
+            value={`${overview?.funnel_tried ?? "—"} (${overview?.funnel_tried_7d ?? "—"})`}
+          />
+          <Metric
             label="Signed up (this week)"
             value={`${overview?.funnel_signups ?? "—"} (${overview?.funnel_signups_7d ?? "—"})`}
           />

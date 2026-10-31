@@ -59,6 +59,8 @@ test("overview keeps heavy controls out of the initial view and sections navigat
           programCatalog={[]}
           adminOverview={{
             total_users: 5,
+            funnel_tried: 4,
+            funnel_tried_7d: 3,
             funnel_signups: 3,
             funnel_signups_7d: 2,
             funnel_started: 1,
@@ -71,6 +73,7 @@ test("overview keeps heavy controls out of the initial view and sections navigat
   expect(
     container.querySelector('nav[aria-label="Admin sections"]'),
   ).toBeTruthy();
+  expect(container.textContent).toContain("Tried without signing up (this week)4 (3)");
   expect(container.textContent).toContain("Signed up (this week)3 (2)");
   expect(container.textContent).toContain("Started an interview1");
   const systemHeading = [...container.querySelectorAll("h3")].find(
