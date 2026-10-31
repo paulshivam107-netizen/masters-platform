@@ -391,7 +391,7 @@ export function GuidePage() {
         heading="Put one step into practice"
         next={guide.next}
         cta={guide.cta}
-        note="Free during the pilot. Check programme-specific instructions with your school."
+        note="Free to use right now. Check programme-specific instructions with your school."
       />
     </ResourceShell>
   );

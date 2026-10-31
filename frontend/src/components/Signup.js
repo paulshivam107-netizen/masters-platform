@@ -76,7 +76,7 @@ function Signup({ onSwitchToLogin }) {
         </p>
         <h1 data-testid="auth-signup-heading">Start your next chapter.</h1>
         <p className="auth-subtitle">
-          Free during the pilot. Add your résumé and run your first mock
+          Free to use right now. Add your résumé and run your first mock
           interview in a few minutes.
         </p>
 

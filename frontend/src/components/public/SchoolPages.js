@@ -361,7 +361,7 @@ export function SchoolPage() {
         <div className="rp-frame rp-closing-inner">
           <h2>Practise for {school.shortName}</h2>
           <p>
-            Free during the pilot. Sign up, add your résumé and start a mock
+            Free to use right now. Sign up, add your résumé and start a mock
             interview.
           </p>
           <ResourceCta next={practiceNext(school)}>
