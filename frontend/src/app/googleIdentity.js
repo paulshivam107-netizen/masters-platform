@@ -27,7 +27,23 @@ export async function resolveGoogleClientId() {
   return inflightClientId;
 }
 
+let googleScript = null;
+
+// Public pages no longer pay for Google's script; it loads the first time a sign-in button asks for it.
+function loadGoogleIdentity() {
+  if (googleScript || window.google?.accounts?.id) return;
+  googleScript = document.createElement('script');
+  googleScript.src = 'https://accounts.google.com/gsi/client';
+  googleScript.async = true;
+  googleScript.onerror = () => {
+    googleScript.remove();
+    googleScript = null; // a later attempt may try again
+  };
+  document.head.appendChild(googleScript);
+}
+
 export async function waitForGoogleIdentity(timeoutMs = GOOGLE_LOAD_TIMEOUT_MS) {
+  loadGoogleIdentity();
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
     if (window.google?.accounts?.id) return window.google.accounts.id;
