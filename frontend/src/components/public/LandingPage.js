@@ -376,7 +376,7 @@ function Closing() {
           <h2 id="closing-heading">Your turn.</h2>
           <p className="lp-closing-lead">
             Create a free account, add your résumé and start your first mock
-            interview. <span>Free during the pilot.</span>
+            interview. <span>Free to use right now.</span>
           </p>
           <hr />
           <ul className="lp-closing-features">
@@ -396,7 +396,7 @@ function Closing() {
               <BrandLogoIcon />
             </div>
             <div className="lp-signup-info">
-              <p className="lp-signup-label">Pilot access</p>
+              <p className="lp-signup-label">Free access</p>
               <p className="lp-signup-muted">Email or Google sign-in</p>
               <p className="lp-signup-title">Mock interview</p>
               <StartButton
@@ -437,7 +437,7 @@ export default function LandingPage() {
               <TryLink />
             </div>
             <p className="lp-hero-note">
-              Free during the pilot · Five questions · Résumé optional
+              Free to use right now · Five questions · Résumé optional
             </p>
           </div>
           <LiveInterview />
