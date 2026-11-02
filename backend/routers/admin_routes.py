@@ -69,7 +69,10 @@ def signup_funnel(db, now):
     """Sign-up to interview funnel over non-admin accounts, so the owner's own test runs don't inflate it."""
     users = db.query(User).filter(User.role != "admin")
     interviews = db.query(InterviewSession.user_id).join(User, User.id == InterviewSession.user_id).filter(User.role != "admin")
+    tries = db.query(AdminEvent).filter(AdminEvent.event_name == "anon_try_answered")  # signed-out try, no user attached
     return {
+        "funnel_tried": tries.count(),
+        "funnel_tried_7d": tries.filter(AdminEvent.created_at >= now - timedelta(days=7)).count(),
         "funnel_signups": users.count(),
         "funnel_signups_7d": users.filter(User.created_at >= now - timedelta(days=7)).count(),
         "funnel_verified": users.filter(User.email_verified == True).count(),  # noqa: E712
