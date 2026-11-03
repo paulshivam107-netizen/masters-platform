@@ -9,7 +9,7 @@ test("counts calendar days to the interview", () => {
   expect(daysUntil("2026-10-01", now)).toBe(-28);
 });
 
-test("shares the last follow-up, never an answer", () => {
+test("shares the last interviewer question, never a user turn", () => {
   const transcript = [
     { role: "assistant", text: "Opening?" },
     { role: "user", text: "My private answer" },
