@@ -1,5 +1,7 @@
 import { guides } from "../content/guides";
-import { schools } from "../content/schools";
+import { schools, india } from "../content/schools";
+import { indiaHub } from "../content/indiaHub";
+import { monthYear } from "../content/dates";
 import { practice } from "../content/practice";
 import * as defaults from "../content/site";
 const publicPages = {
@@ -40,25 +42,54 @@ publicPages["/schools"] = {
     "Interview preparation pages for individual MBA schools: programmes, what each school says about its interview and where graduates go, with sources. Independent, not affiliated with any school.",
   kind: "website",
 };
-// Searchers ask what a school's interview is like, so lead with the school's own first interview fact.
-const schoolDescription = ({ shortName, interview }) => {
-  const lead = interview?.points?.[0];
-  const text = lead && `${shortName} MBA interview: ${lead}`;
-  if (text && text.length <= 200)
-    return `${text} Practise the follow-ups.`.length <= 200
-      ? `${text} Practise the follow-ups.`
-      : text;
-  return `${shortName} MBA interview: what the school says about the format, with source links, and a way to practise follow-up questions. Independent guide.`;
+// Searchers ask what a school's interview is like. Lead with the programme and the school's own
+// first interview facts (the school-level block describes the flagship programme), then the month
+// they were checked.
+const schoolDescription = ({ shortName, programmes, interview, checked }) => {
+  const lead = `${shortName} ${programmes[0].name} interview:`;
+  const [first, second, third] = interview?.points || [];
+  const when = `Checked ${monthYear(checked)}.`;
+  return (
+    [
+      first && second && `${lead} ${first} ${second} ${when}`,
+      // The longest sourced fact that still fits; a later point beats a generic line.
+      ...[first, second, third].flatMap((point) =>
+        point ? [`${lead} ${point} ${when}`, `${lead} ${point}`] : [],
+      ),
+    ].find((text) => text && text.length <= 200) ||
+    `${lead} the format as ${shortName} describes it, with source links. ${when} Practise the follow-ups.`
+  );
 };
 for (const school of schools)
   publicPages[`/schools/${school.slug}`] = {
-    title: `${school.shortName} MBA interview: what to expect`,
+    // Indian searchers ask by programme ("IIMB EPGP interview"), so name it in the title.
+    title:
+      school.region === "India"
+        ? `${school.shortName} ${school.programmes[0].name} interview: format and what to expect`
+        : `${school.shortName} MBA interview: what to expect`,
     description: schoolDescription(school),
     updated: school.checked,
     kind: "website",
+    crumb: ["Schools", "/schools"],
+    about: school.name,
   };
+publicPages[indiaHub.path] = {
+  title: indiaHub.title,
+  description: indiaHub.description,
+  updated: indiaHub.updated,
+  kind: "website",
+  crumb: ["Schools", "/schools"],
+  list: india.map((school) => [
+    `/schools/${school.slug}`,
+    `${school.shortName} interview preparation`,
+  ]),
+};
 for (const guide of guides)
-  publicPages[`/guides/${guide.slug}`] = { ...guide, kind: "article" };
+  publicPages[`/guides/${guide.slug}`] = {
+    ...guide,
+    kind: "article",
+    crumb: ["Guides", "/guides"],
+  };
 
 function publicOrigin(value) {
   try {
@@ -105,7 +136,9 @@ function metadata(pathname, config = defaults) {
   const brand = config.siteName || "MockMBA";
   const pageTitle = page?.title || fallbackTitle;
   // Append the brand once; a title that already names it stays as written.
-  const title = pageTitle.includes(brand) ? pageTitle : `${pageTitle} | ${brand}`;
+  const title = pageTitle.includes(brand)
+    ? pageTitle
+    : `${pageTitle} | ${brand}`;
   const description =
     page?.description ||
     "Manage your MBA applications, essay drafts and interview preparation.";
@@ -129,8 +162,12 @@ function metadata(pathname, config = defaults) {
       headline: page.title,
       description,
       url: canonical,
-      ...(page.kind === "article"
-        ? { dateModified: page.updated, publisher }
+      ...(page.updated ? { dateModified: page.updated } : {}),
+      ...(page.kind === "article" ? { publisher } : {}),
+      ...(page.about
+        ? {
+            about: { "@type": "EducationalOrganization", name: page.about },
+          }
         : {}),
       isPartOf: { "@id": `${origin}/#website` },
     });
@@ -143,15 +180,15 @@ function metadata(pathname, config = defaults) {
         url: origin,
         description,
       });
-    if (page.kind === "article")
+    if (page.crumb)
       graph.push({
         "@type": "BreadcrumbList",
         itemListElement: [
           {
             "@type": "ListItem",
             position: 1,
-            name: "Guides",
-            item: `${origin}/guides`,
+            name: page.crumb[0],
+            item: `${origin}${page.crumb[1]}`,
           },
           {
             "@type": "ListItem",
@@ -160,6 +197,16 @@ function metadata(pathname, config = defaults) {
             item: canonical,
           },
         ],
+      });
+    if (page.list)
+      graph.push({
+        "@type": "ItemList",
+        itemListElement: page.list.map(([path, name], i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          name,
+          url: origin + path,
+        })),
       });
   }
   return {

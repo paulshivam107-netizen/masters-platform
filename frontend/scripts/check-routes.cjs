@@ -25,6 +25,7 @@ const checks = [
   ["/schools/isb", 200, null, "index"],
   ["/schools/iima", 200, null, "index"],
   ["/schools/insead", 200, null, "index"],
+  ["/india-mba-mock-interview", 200, null, "index"],
   ["/schools/not-a-real-school", 404, null, "noindex"],
   ["/mba-interview-practice", 200, null, "index"],
   ["/guides/mba-interview-from-resume", 200, null, "index"],
@@ -42,6 +43,7 @@ const checks = [
   ["/guides/not-a-real-guide", 404, null, "noindex"],
   ["/robots.txt", 200],
   ["/sitemap.xml", 200],
+  ["/llms.txt", 200],
 ];
 
 function robotsOf(res, html) {

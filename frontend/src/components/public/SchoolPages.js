@@ -11,32 +11,13 @@ import {
 } from "./ResourcePages";
 import { useAuth } from "../../contexts/AuthContext";
 import TryOneQuestion from "./TryOneQuestion";
+import { monthYear } from "../../content/dates";
+import { indiaHub, indiaProgrammeRows } from "../../content/indiaHub";
 import "./SchoolPages.css";
-
-const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-// Deterministic, so prerendered and client HTML match.
-export function monthYear(iso) {
-  const [year, month] = iso.split("-").map(Number);
-  return `${MONTHS[month - 1]} ${year}`;
-}
 export const practiceNext = (school, programme = school.programmes[0]) =>
   `/app/interviews?programme=${encodeURIComponent(
     `${school.shortName} ${programme.name}`,
   )}`;
-
 
 function SourceLink({ url, label = "Source" }) {
   return (
@@ -68,9 +49,149 @@ export function SchoolsPage() {
         <div className="rp-frame">
           <SchoolList />
           <p className="sp-note">
+            Preparing for an IIM or ISB interview? See{" "}
+            <Link to={indiaHub.path}>the Indian MBA mock interview page</Link>{" "}
+            for each programme&rsquo;s interview format in one place.
+          </p>
+          <p className="sp-note">
             More schools are on the way. Facts are only added when a school
             states them on its own website or in its official employment report.
           </p>
+        </div>
+      </section>
+    </ResourceShell>
+  );
+}
+
+export function IndiaMockInterviewPage() {
+  const groups = indiaProgrammeRows();
+  return (
+    <ResourceShell current="guides">
+      <ArticleLayout
+        header={
+          <nav className="rp-breadcrumb" aria-label="Breadcrumb">
+            <Link to="/schools">Schools</Link>
+            <span aria-hidden="true"> / </span>
+            <span>Indian MBA mock interview</span>
+          </nav>
+        }
+        eyebrow={
+          <>
+            India · Facts checked{" "}
+            <time dateTime={indiaHub.updated}>
+              {monthYear(indiaHub.updated)}
+            </time>
+          </>
+        }
+        title="Mock interview for IIM, ISB and other Indian MBA programmes"
+        summary="MockMBA is a free-to-use mock interviewer for MBA and executive MBA applicants. It asks questions drawn from your résumé and follows up on what you say. Below is what each Indian school says about its own interview, by programme, with the month we checked and a link to the source. Independent, not affiliated with any school."
+        toc={[
+          ...groups.map((group) => [group.track, group.label]),
+          ["practice", "How the practice works"],
+          ["faq", "Questions"],
+        ]}
+        tocLabel="On this page"
+      >
+        {groups.map((group) => (
+          <section
+            key={group.track}
+            id={group.track}
+            aria-labelledby={`${group.track}-h`}
+          >
+            <h2 id={`${group.track}-h`}>
+              {group.label}: interview format by programme
+            </h2>
+            <div className="sp-cards">
+              {group.rows.map(({ school, programme, facts }) => (
+                <article
+                  className="sp-card"
+                  key={`${school.slug}-${programme.name}`}
+                >
+                  <p className="sp-tag">
+                    Facts checked {monthYear(school.checked)}
+                  </p>
+                  <h3>
+                    {school.shortName} {programme.name}
+                  </h3>
+                  <ul>
+                    {facts.points.slice(0, 2).map((point) => (
+                      <li key={point}>{point}</li>
+                    ))}
+                  </ul>
+                  <p className="sp-sources-inline">
+                    Sources: <FactSources school={school} facts={facts} />
+                    {" · "}
+                    <Link to={`/schools/${school.slug}`}>
+                      Full {school.shortName} page
+                    </Link>
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+        ))}
+        <section id="practice" aria-labelledby="practice-h">
+          <h2 id="practice-h">How the practice works</h2>
+          <p>
+            You upload your résumé or paste the text, review it, and get three
+            opening questions. Each has a follow-up and a deeper follow-up, and
+            each shows the résumé line it is based on, so you can see why it was
+            asked.
+          </p>
+          <p>
+            <Link to="/mba-interview-practice">
+              See how résumé-based follow-ups work
+            </Link>
+            , or read{" "}
+            <Link to="/guides/mba-interview-from-resume">
+              how to prepare for follow-up questions on your résumé
+            </Link>
+            .
+          </p>
+        </section>
+        <section id="faq" aria-labelledby="faq-h">
+          <h2 id="faq-h">Questions</h2>
+          <h3>Is the mock interview free?</h3>
+          <p>
+            Free to use right now. You sign up, add your résumé and start a mock
+            interview.
+          </p>
+          <h3>Does MockMBA use the real IIM or ISB interview questions?</h3>
+          <p>
+            No. MockMBA does not claim to reproduce any school&rsquo;s
+            interview. It asks questions drawn from your own résumé and follows
+            up on what you say. For each school&rsquo;s format, use the facts
+            above and the school&rsquo;s own pages.
+          </p>
+          <h3>Is MockMBA affiliated with any IIM, ISB or other school?</h3>
+          <p>
+            No. MockMBA is independent. Every school fact on this page comes
+            from the school&rsquo;s own website, with the source link and the
+            month we checked.
+          </p>
+          <h3>How current are the facts?</h3>
+          <p>
+            Each card shows the month we last checked the school&rsquo;s pages.
+            Schools can change their process between admission cycles, so
+            confirm with the school&rsquo;s own instructions for the current
+            cycle.
+          </p>
+        </section>
+        <p className="sp-disclaimer">
+          Independent preparation guide, not affiliated with any school. Check
+          each school&rsquo;s own pages for current requirements.
+        </p>
+      </ArticleLayout>
+      <section className="rp-closing">
+        <div className="rp-frame rp-closing-inner">
+          <h2>Practise for your IIM or ISB interview</h2>
+          <p>
+            Free to use right now. Sign up, add your résumé and start a mock
+            interview.
+          </p>
+          <ResourceCta next="/app/interviews">
+            Start a mock interview
+          </ResourceCta>
         </div>
       </section>
     </ResourceShell>
@@ -124,6 +245,22 @@ function Programmes({ school }) {
   );
 }
 
+function FactSources({ school, facts }) {
+  return (
+    <>
+      {facts.sources.map((url, i) => (
+        <React.Fragment key={url}>
+          {i > 0 && ", "}
+          <SourceLink
+            url={url}
+            label={school.sources.find((x) => x.url === url)?.label}
+          />
+        </React.Fragment>
+      ))}
+    </>
+  );
+}
+
 function InterviewFacts({ school, facts, heading }) {
   return (
     <>
@@ -135,16 +272,7 @@ function InterviewFacts({ school, facts, heading }) {
       </ul>
       {facts.note && <p>{facts.note}</p>}
       <p className="sp-sources-inline">
-        Sources:{" "}
-        {facts.sources.map((url, i) => (
-          <React.Fragment key={url}>
-            {i > 0 && ", "}
-            <SourceLink
-              url={url}
-              label={school.sources.find((x) => x.url === url)?.label}
-            />
-          </React.Fragment>
-        ))}
+        Sources: <FactSources school={school} facts={facts} />
       </p>
     </>
   );
@@ -177,13 +305,15 @@ function Interview({ school }) {
       ))}
       {!interview && !programmeInterviews.length && (
         <p>
-          We haven&rsquo;t found an official description of{" "}
-          {school.shortName}&rsquo;s interview format to cite yet. Most panels
-          for this kind of programme probe the topics below.
+          We haven&rsquo;t found an official description of {school.shortName}
+          &rsquo;s interview format to cite yet. Most panels for this kind of
+          programme probe the topics below.
         </p>
       )}
       <aside className="sp-guidance" aria-label="Our general guidance">
-        <p className="sp-tag">Our general guidance, not from {school.shortName}</p>
+        <p className="sp-tag">
+          Our general guidance, not from {school.shortName}
+        </p>
         <p>
           Interviews for programmes like these tend to probe the same few
           things, whatever the exact format:
@@ -194,12 +324,12 @@ function Interview({ school }) {
             you will do with it.
           </li>
           <li>
-            <strong>Experience:</strong> the choices and results on your
-            résumé, in your own words and with specifics.
+            <strong>Experience:</strong> the choices and results on your résumé,
+            in your own words and with specifics.
           </li>
           <li>
-            <strong>Fit:</strong> what you will add to a class, and how you
-            work with other people.
+            <strong>Fit:</strong> what you will add to a class, and how you work
+            with other people.
           </li>
           <li>
             <strong>Direction:</strong> whether your goals follow from your
@@ -278,10 +408,17 @@ function Prepare({ school }) {
             Build a story bank you can adapt in the room
           </Link>
         </li>
+        {school.region === "India" && (
+          <li>
+            <Link to={indiaHub.path}>
+              Interview format for every Indian programme, in one place
+            </Link>
+          </li>
+        )}
       </ul>
       <p>
-        Then practise out loud. You get questions drawn from your own résumé
-        and follow-ups that quote your answers.
+        Then practise out loud. You get questions drawn from your own résumé and
+        follow-ups that quote your answers.
       </p>
     </section>
   );
@@ -310,6 +447,18 @@ function Sources({ school }) {
   );
 }
 
+// Answer first: lead with what the school says about its flagship programme's interview.
+const schoolSummary = ({ shortName, programmes, interview, checked }) => {
+  const points = interview?.points || [];
+  const facts =
+    points[1] && points[0].length + points[1].length <= 260
+      ? `${points[0]} ${points[1]}`
+      : points[0];
+  return facts
+    ? `${shortName} ${programmes[0].name} interview, as ${shortName} describes it: ${facts} Facts checked ${monthYear(checked)}. Independent guide, not affiliated with ${shortName}.`
+    : `Programmes, what ${shortName} says about its interview, and where graduates go. Independent preparation guide, not affiliated with ${shortName}.`;
+};
+
 export function SchoolPage() {
   const { slug } = useParams();
   const school = schoolBySlug(slug);
@@ -331,7 +480,7 @@ export function SchoolPage() {
           </>
         }
         title={`${school.shortName} interview preparation`}
-        summary={`Programmes, what ${school.shortName} says about its interview, and where graduates go. Independent preparation guide, not affiliated with ${school.shortName}.`}
+        summary={schoolSummary(school)}
         toc={[
           ["programmes", "Programmes"],
           ["interview", "The interview"],

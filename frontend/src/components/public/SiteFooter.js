@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ThemeSwitch, sectionHref } from "./SiteHeader";
 import { contactEmail } from "../../content/site";
+import { indiaHub } from "../../content/indiaHub";
 import "./SiteChrome.css";
 
 export default function SiteFooter({ home = false }) {
@@ -14,6 +15,7 @@ export default function SiteFooter({ home = false }) {
             <a href={sectionHref(home, "how_it_works")}>How it works</a>
             <a href={sectionHref(home, "routes")}>Routes</a>
             <Link to="/mba-interview-practice">MBA interview practice</Link>
+            <Link to={indiaHub.path}>IIM and ISB mock interview</Link>
           </div>
           <div>
             <h3>Product</h3>

@@ -111,6 +111,35 @@ fs.writeFileSync(
   path.join(build, "sitemap.xml"),
   `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`,
 );
+// A plain-text map for AI assistants (llmstxt.org). Google does not need it; same pages as the sitemap.
+const llmsLine = ([route, page]) =>
+  `- [${page.title}](${origin + route}): ${page.description}`;
+const llmsSection = (heading, keep) => {
+  const lines = Object.entries(publicPages)
+    .filter(([route]) => keep(route))
+    .map(llmsLine);
+  return lines.length ? `## ${heading}\n\n${lines.join("\n")}\n` : "";
+};
+const keyPages = [
+  "/",
+  "/mba-interview-practice",
+  "/india-mba-mock-interview",
+  "/schools",
+  "/guides",
+];
+fs.writeFileSync(
+  path.join(build, "llms.txt"),
+  config.allowIndexing && origin
+    ? [
+        `# ${config.siteName || "MockMBA"}\n\n> ${publicPages["/"].description} Independent, not affiliated with any business school.\n`,
+        llmsSection("Key pages", (route) => keyPages.includes(route)),
+        llmsSection("School interview guides", (route) =>
+          route.startsWith("/schools/"),
+        ),
+        llmsSection("Guides", (route) => route.startsWith("/guides/")),
+      ].join("\n")
+    : "",
+);
 console.log(
   `Rendered ${Object.keys(publicPages).length} public pages, catalogue and 404. Search indexing: ${config.allowIndexing && origin ? "enabled" : "disabled (preview)"}.`,
 );

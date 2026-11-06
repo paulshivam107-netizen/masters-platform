@@ -13,7 +13,11 @@ import {
   PrivacyPage,
   NotFoundPage,
 } from "../components/public/ResourcePages";
-import { SchoolsPage, SchoolPage } from "../components/public/SchoolPages";
+import {
+  SchoolsPage,
+  SchoolPage,
+  IndiaMockInterviewPage,
+} from "../components/public/SchoolPages";
 
 export default function StaticSite({ path }) {
   return (
@@ -26,6 +30,10 @@ export default function StaticSite({ path }) {
             <Route path="/guides/:slug" element={<GuidePage />} />
             <Route path="/schools" element={<SchoolsPage />} />
             <Route path="/schools/:slug" element={<SchoolPage />} />
+            <Route
+              path="/india-mba-mock-interview"
+              element={<IndiaMockInterviewPage />}
+            />
             <Route path="/mba-interview-practice" element={<PracticePage />} />
             <Route path="/help" element={<HelpPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
