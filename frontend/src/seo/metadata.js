@@ -171,7 +171,7 @@ function metadata(pathname, config = defaults) {
       ? "index, follow, max-image-preview:large"
       : "noindex, follow",
     type: page?.kind === "article" ? "article" : "website",
-    image: origin ? `${origin}/social-preview.png` : "",
+    image: origin ? `${origin}/social-preview-v2.png` : "",
     jsonLd: graph.length
       ? { "@context": "https://schema.org", "@graph": graph }
       : null,
