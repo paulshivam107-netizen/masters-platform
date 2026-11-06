@@ -91,6 +91,11 @@ test("priority interview pages have unique metadata and the right structured dat
     }
   }
 });
+test("link cards use the current MockMBA image, and only on a public origin", () => {
+  // X caches card images by URL: a changed image needs a new filename.
+  expect(metadata("/", live).image).toBe(live.siteUrl + "/social-preview-v2.png");
+  expect(metadata("/", { ...live, siteUrl: "" }).image).toBe("");
+});
 test("page titles name the brand exactly once", () => {
   const routes = [...Object.keys(publicPages), "/app/today", "/auth", "/missing"];
   for (const route of routes) {

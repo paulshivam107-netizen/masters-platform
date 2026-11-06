@@ -67,7 +67,7 @@ Public build variables:
 | `REACT_APP_SITE_NAME`      | Name used in metadata                                                       | Masters                      |
 | `REACT_APP_API_URL`        | Existing frontend API destination                                           | Existing application default |
 
-These are public build values, not secrets. Do not put API keys in `REACT_APP_*` values. If the final brand changes, update visible copy, wordmark and `social-preview.png` as well as metadata; the public name is still provisional.
+These are public build values, not secrets. Do not put API keys in `REACT_APP_*` values. If the final brand changes, update visible copy, wordmark and `social-preview-v2.png` as well as metadata; the public name is still provisional.
 
 For every preview or staging deployment, leave indexing disabled and restrict access where appropriate. An indexable build requires a valid public HTTPS origin. The default build emits `noindex`, disallows automated crawling and generates an empty sitemap. Enabling indexing without a valid origin fails the build instead of publishing localhost canonicals.
 
