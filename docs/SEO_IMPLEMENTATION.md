@@ -23,12 +23,14 @@ These checks use disposable local data and a mock backend. Real email delivery, 
 | `/guides`                                 | Linked index of the two published guides                                                                             |
 | `/guides/mba-application-checklist-india` | Practical CAT/GMAT-route planning guide and CSV template                                                             |
 | `/guides/mba-interview-story-bank`        | Story preparation method, example and downloadable worksheet                                                         |
+| `/schools/*`                              | One sourced, dated page per school; title, description and lead name the flagship programme (`content/schools/`)    |
+| `/india-mba-mock-interview`               | Hub for "iim/isb mock interview" searches: each Indian programme's sourced interview facts, built from the school data |
 | `/help`                                   | Getting started, storage limits, current features and feedback route                                                 |
 | `/programs`                               | Rendered catalogue shell with `noindex`; the current data is not ready to become authoritative programme SEO content |
 | `/auth`, `/app/*`                         | Authenticated application shell with `noindex`; no user content is pre-rendered                                      |
 | Unknown routes                            | A useful not-found screen; the reference server returns HTTP 404                                                     |
 
-The build generates titles, descriptions, canonical URLs, Open Graph tags, Twitter card type, JSON-LD, `robots.txt`, `sitemap.xml`, a branded 1200 × 630 share image and an SVG favicon. JSON-LD uses WebSite, WebPage/Article, SoftwareApplication and article breadcrumbs where appropriate. It contains no invented reviews, star ratings, school endorsements or admission claims. Visible FAQs are included for people; no special FAQ rich-result eligibility is claimed.
+The build generates titles, descriptions, canonical URLs, Open Graph tags, Twitter card type, JSON-LD, `robots.txt`, `sitemap.xml`, `llms.txt` (a plain-text page map for AI assistants; Google does not need it), a branded 1200 × 630 share image and an SVG favicon. JSON-LD uses WebSite, WebPage/Article, SoftwareApplication, breadcrumbs on guides, school pages and the India hub, `dateModified` from each school's `checked` date, and an ItemList of schools on the hub. It contains no invented reviews, star ratings, school endorsements or admission claims. Visible FAQs are included for people; no special FAQ rich-result eligibility is claimed.
 
 Client navigation updates the metadata and removes public canonicals/structured data when moving into private routes. Public canonicals omit query strings. Guide modification dates come from explicit editorial dates, not every build time. Only the five intentional public pages enter the sitemap.
 

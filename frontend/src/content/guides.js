@@ -77,6 +77,10 @@ const guides = [
     related: [
       ["/guides/mba-interview-story-bank", "Build an MBA interview story bank"],
       ["/mba-interview-practice", "How résumé-based interview practice works"],
+      [
+        "/india-mba-mock-interview",
+        "IIM and ISB interview formats, by programme",
+      ],
     ],
     cta: "Start your application plan",
     next: "/app/tracker",

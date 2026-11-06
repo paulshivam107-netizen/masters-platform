@@ -5,6 +5,8 @@ import {
   safeJson,
   publicPages,
 } from "./metadata";
+import { schools, india } from "../content/schools";
+import { indiaHub } from "../content/indiaHub";
 const live = {
   siteName: "MockMBA",
   siteUrl: "https://admissions-demo.org",
@@ -93,11 +95,18 @@ test("priority interview pages have unique metadata and the right structured dat
 });
 test("link cards use the current MockMBA image, and only on a public origin", () => {
   // X caches card images by URL: a changed image needs a new filename.
-  expect(metadata("/", live).image).toBe(live.siteUrl + "/social-preview-v2.png");
+  expect(metadata("/", live).image).toBe(
+    live.siteUrl + "/social-preview-v2.png",
+  );
   expect(metadata("/", { ...live, siteUrl: "" }).image).toBe("");
 });
 test("page titles name the brand exactly once", () => {
-  const routes = [...Object.keys(publicPages), "/app/today", "/auth", "/missing"];
+  const routes = [
+    ...Object.keys(publicPages),
+    "/app/today",
+    "/auth",
+    "/missing",
+  ];
   for (const route of routes) {
     const { title } = metadata(route, live);
     expect(title.split(live.siteName).length - 1).toBe(1);
@@ -105,4 +114,28 @@ test("page titles name the brand exactly once", () => {
   expect(metadata("/privacy", live).title).toBe(
     "Privacy: how your data is handled | MockMBA",
   );
+});
+test("school pages name the programme, carry a checked date and breadcrumbs", () => {
+  for (const school of schools) {
+    const m = metadata(`/schools/${school.slug}`, live);
+    expect(m.description).toContain(
+      `${school.shortName} ${school.programmes[0].name} interview:`,
+    );
+    expect(m.description.length).toBeLessThanOrEqual(200);
+    const nodes = m.jsonLd["@graph"];
+    expect(nodes.map((n) => n["@type"])).toContain("BreadcrumbList");
+    expect(nodes.find((n) => n["@type"] === "WebPage").dateModified).toBe(
+      school.checked,
+    );
+  }
+  expect(metadata("/schools/isb", live).title).toBe(
+    "ISB PGP interview: format and what to expect | MockMBA",
+  );
+});
+test("the Indian mock interview hub is indexed and lists every Indian school", () => {
+  const m = metadata(indiaHub.path, live);
+  expect(m.indexable).toBe(true);
+  expect(m.canonical).toBe(live.siteUrl + indiaHub.path);
+  const list = m.jsonLd["@graph"].find((n) => n["@type"] === "ItemList");
+  expect(list.itemListElement).toHaveLength(india.length);
 });

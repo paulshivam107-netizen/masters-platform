@@ -46,7 +46,11 @@ import {
   PrivacyPage,
   NotFoundPage,
 } from "./components/public/ResourcePages";
-import { SchoolsPage, SchoolPage } from "./components/public/SchoolPages";
+import {
+  SchoolsPage,
+  SchoolPage,
+  IndiaMockInterviewPage,
+} from "./components/public/SchoolPages";
 import Seo from "./seo/Seo";
 import {
   UNIVERSITY_OPTIONS,
@@ -623,11 +627,14 @@ function AppContent() {
             user={user}
           />
 
-          <div
-            className={`ws-body ${showAdminPage ? "ws-body--wide" : ""}`}
-          >
+          <div className={`ws-body ${showAdminPage ? "ws-body--wide" : ""}`}>
             {/* 2. Main Center Workspace */}
-            <main className="ws-main ws-page" id="main-workspace" tabIndex="-1" key={activeNav}>
+            <main
+              className="ws-main ws-page"
+              id="main-workspace"
+              tabIndex="-1"
+              key={activeNav}
+            >
               <PageHeader
                 eyebrow={pageEyebrow}
                 title={pageHeading}
@@ -744,6 +751,10 @@ function AppRoutes() {
         <Route path="/guides/:slug" element={<GuidePage />} />
         <Route path="/schools" element={<SchoolsPage />} />
         <Route path="/schools/:slug" element={<SchoolPage />} />
+        <Route
+          path="/india-mba-mock-interview"
+          element={<IndiaMockInterviewPage />}
+        />
         <Route path="/mba-interview-practice" element={<PracticePage />} />
         <Route path="/help" element={<HelpPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
