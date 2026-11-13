@@ -44,7 +44,7 @@ _CONTACT = re.compile(r"""
     [\w.+-]+@[\w-]+(?:\.[\w-]+)+                                  # email
   | (?:https?://|www\.)\S+                                        # web url
   | \b(?:[\w-]+\.)*(?:linkedin|github|gitlab|behance)\.com/\S+     # profile url without scheme
-  | (?P<phone>(?<![\w/.,$%-])(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d[\d\s().-]{6,}\d(?![\w/%]))  # phone
+  | (?P<phone>(?<![\w/.,$%-])(?:\+\d{1,3}[\s.-]?)?(?:\(\d{2,4}\)[\s.-]?)?\d[\d \t().-]{6,}\d(?![\w/%]))  # phone: never across lines
 """, re.X | re.I)
 
 
@@ -57,6 +57,9 @@ def _is_phone_like(match):
         return False
     # Years, ranges and figures such as "2017-2021" or "5,000,000" are not phones.
     if re.fullmatch(r"(?:19|20)\d{2}\s*[-\u2013]\s*(?:19|20)\d{2}", text.strip()) or "," in text:
+        return False
+    # Marksheet rows ("2019 2023 8.84") are years and scores: a decimal score, or two years, mean not a phone.
+    if re.search(r"\d\.\d{1,2}(?!\d)", text) or len(re.findall(r"(?<!\d)(?:19|20)\d{2}(?!\d)", text)) >= 2:
         return False
     return text.lstrip().startswith(("+", "(", "0")) or len(digits) == 10 or bool(re.search(r"[\s.-]", text))
 
@@ -115,20 +118,18 @@ def _build_graph(result, resume_text, context):
     result = ResumeQuestionDraft.model_validate(result)
     profile, dropped_facts, dropped_questions = [], 0, 0
     for fact in result.profile:
-        span = find_quote(fact.evidence_quote, resume_text, max_length=240)
+        span = find_quote(fact.evidence_quote, resume_text, max_length=240, lenient=True)
         if span is None:
             dropped_facts += 1
             continue
         profile.append({"id": f"fact-{len(profile) + 1}", **{**fact.model_dump(), "evidence_quote": span}})
-    if not profile:
-        raise provider.ProviderFailure("The profile could not be matched to your resume. Please retry.")
     roots, nodes, edges = [], [], []
     seen = set()
     for branch in result.branches:
         index = len(roots) + 1
         kept = []
         for question in (branch.opening, branch.follow_up, branch.deeper_follow_up):
-            span = find_quote(question.evidence_quote, resume_text, max_length=240)
+            span = find_quote(question.evidence_quote, resume_text, max_length=240, lenient=True)
             if span is None or question.question.casefold() in seen:
                 break
             seen.add(question.question.casefold())
@@ -145,7 +146,11 @@ def _build_graph(result, resume_text, context):
                 edges.append({"parent": previous, "child": node_id, "basis": "ai_connection", "sources": ["resume"]})
             previous = node_id
     if not roots:
-        raise provider.ProviderFailure("The drafted questions could not be grounded in your resume. Your reviewed text is still here; please retry.")
+        # The failure code lands in the cost ledger, so a report can be told apart without keeping resume text:
+        # "f0/12 q0/9" means no fact and no question matched (a layout problem), "f5/12 q0/9" only the questions failed.
+        raise provider.ProviderFailure(
+            "We couldn't match the suggestions to your resume text. Paste it as plain text, or remove tables and columns, then generate again.",
+            code=f"resume_ungrounded f{len(profile)}/{len(result.profile)} q{len(nodes)}/{len(result.branches) * 3}")
     return {"version": "resume-v2", "profile": profile, "roots": roots, "nodes": nodes, "edges": edges,
             "sources": [{"id": "resume", "label": "Your reviewed resume"}],
             "dropped": {"facts": dropped_facts, "questions": dropped_questions}}

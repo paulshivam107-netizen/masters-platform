@@ -17,6 +17,8 @@ _QUOTE_MAP = {
 _EDGE_QUOTES = "'\""
 _TRAILING = ".,;:!?"
 _ELISION = re.compile(r"\s*\.{3,}\s*")
+# Lenient mode keeps these as part of a word or figure ("B.Tech", "20%", "C++", "₹5"); any other symbol is a space.
+_LENIENT_KEEP = ".'%$₹€£+&#"
 
 
 def _norm_char(char: str) -> str:
@@ -24,13 +26,13 @@ def _norm_char(char: str) -> str:
     return "".join(_QUOTE_MAP.get(c, c) for c in out)
 
 
-def _normalise(text: str) -> tuple[str, list[int]]:
+def _normalise(text: str, lenient: bool = False) -> tuple[str, list[int]]:
     """Return the normalised text and, per normalised char, its original index."""
     chars: list[str] = []
     index: list[int] = []
     for position, original in enumerate(text):
         for char in _norm_char(original):
-            if char.isspace():
+            if char.isspace() or (lenient and not (char.isalnum() or char in _LENIENT_KEEP)):
                 if chars and chars[-1] == " ":
                     continue
                 char = " "
@@ -39,22 +41,26 @@ def _normalise(text: str) -> tuple[str, list[int]]:
     return "".join(chars), index
 
 
-def find_quote(quote: str, source: str, max_length: int | None = None) -> str | None:
+def find_quote(quote: str, source: str, max_length: int | None = None, lenient: bool = False) -> str | None:
     """Return the exact span of `source` matching `quote` under normalisation, else None.
 
     An ellipsis inside the quote is an elision: every piece must match, in order, and the
     returned span is the whole original passage from the first piece to the last, so the
     stored evidence is still the applicant's own unbroken words.
+
+    lenient also ignores separators that résumé text carries (table pipes, bullet glyphs, commas, slashes,
+    brackets). Words are still never changed, reordered or added. Use it only for résumé text, never for
+    an applicant's spoken answers, where punctuation can change the meaning.
     """
     if not isinstance(quote, str) or not isinstance(source, str) or not quote.strip():
         return None
-    needle, _ = _normalise(quote)
+    needle, _ = _normalise(quote, lenient)
     # NFKC turns "…" into "..."; leading/trailing ellipses only mark truncation.
     needle = needle.strip(" " + _EDGE_QUOTES + ".").rstrip(" " + _EDGE_QUOTES + _TRAILING).lstrip(" " + _EDGE_QUOTES)
     pieces = [piece.strip(" ") for piece in _ELISION.split(needle)]
     if not pieces or any(len(piece) < _MIN_LENGTH for piece in pieces):
         return None
-    haystack, index = _normalise(source)
+    haystack, index = _normalise(source, lenient)
     start = position = haystack.find(pieces[0])
     if start < 0:
         return None
