@@ -1009,21 +1009,17 @@
   background: var(--hero-bg);
   color: var(--hero-ink);
 }
-/* Animated WebGL background; without WebGL the card keeps its flat hero colour. */
-.wi-welcome__bg {
-  position: absolute;
-  inset: 0;
+/* Light mode: a flat sage field instead of the ink card, so the persimmon button stays the focus
+   (button edge 3.05:1, ink 14.05:1, muted 4.93:1 on #dfe3d3). Dark mode keeps the hero tokens. */
+:root:not([data-theme="dark"]) .wi-welcome__copy {
+  --hero-bg: #dfe3d3;
+  --hero-ink: var(--ink);
+  --hero-muted: var(--muted);
+  --hero-kicker: var(--muted);
 }
-/* Holds the text clear of the silk's bright folds; the silk shows in full on the right. */
-.wi-welcome__scrim {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    var(--hero-bg) 0%,
-    color-mix(in srgb, var(--hero-bg) 88%, transparent) 42%,
-    transparent 68%
-  );
+/* The accent stays on the action, so the name is ink in light mode. */
+:root:not([data-theme="dark"]) .wi-welcome__copy h2 span {
+  color: inherit;
 }
 .wi-welcome__text {
   position: relative;
@@ -1179,9 +1175,6 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
-  .wi-welcome__scrim {
-    background: color-mix(in srgb, var(--hero-bg) 84%, transparent);
-  }
   .wi-steps ol {
     grid-template-columns: 1fr;
   }

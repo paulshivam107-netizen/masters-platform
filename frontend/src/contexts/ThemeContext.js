@@ -46,7 +46,7 @@ export function ThemeProvider({ children }) {
     document.documentElement.style.colorScheme = isDarkMode ? "dark" : "light";
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute("content", isDarkMode ? "#111216" : "#f4f6f3");
+      ?.setAttribute("content", isDarkMode ? "#12100d" : "#f3eee3");
     try {
       localStorage.setItem("ui_theme", theme);
       localStorage.setItem("ui_reduced_motion", String(reducedMotion));

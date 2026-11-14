@@ -1,0 +1,107 @@
+/*
+  Type, shape and motion for the site's look: cream paper, warm ink, one persimmon accent that
+  only the action wears, serif headlines, and a highlighter that marks what you said.
+  Colour lives in the tokens in index.css; this file holds what tokens cannot carry.
+
+  Selectors start with :root[data-theme] on purpose. The inline script in public/index.html sets
+  data-theme before first paint, and the extra attribute keeps these rules above the single-class
+  component rules that set the old heading weights and radii.
+  index.css switches every animation and transition off under prefers-reduced-motion and
+  data-reduced-motion.
+*/
+
+/* Type: Fraunces carries its weight in the shapes, so headings sit at 540 instead of 700-800. */
+:root[data-theme] :is(h1, h2, h3, h4),
+:root[data-theme] :is(.ap-panel-title, .ap-subhead, .lp-card-display) {
+  font-weight: 540;
+  letter-spacing: -0.022em;
+  font-variation-settings:
+    "SOFT" 0,
+    "WONK" 0;
+  font-optical-sizing: auto;
+}
+:root[data-theme] .lp-hero-copy h1 {
+  font-size: clamp(42px, 5.4vw, 80px);
+  line-height: 1.02;
+}
+@media (min-width: 1000px) {
+  :root[data-theme] .lp-hero-copy h1 {
+    font-size: clamp(42px, 3.9vw, 62px);
+  }
+}
+:root[data-theme] .lp-hero-lead {
+  color: var(--ink);
+  font-size: 18px;
+}
+/* The wordmark stays in the sans so the brand does not change with the headline face. */
+:root[data-theme] .brand-wordmark {
+  font-family: "Manrope", var(--font-body);
+}
+
+/* Shape: squarer, like cut paper. */
+:root[data-theme] :is(.lp-btn, .site-btn, .auth-button, .ws-btn--solid) {
+  border-radius: 8px;
+}
+:root[data-theme] .lp-btn--pill {
+  border-radius: 999px;
+}
+:root[data-theme] :is(.lp-live-card, .lp-debrief-card, .lp-step-card) {
+  border-radius: 10px;
+}
+:root[data-theme] :is(.lp-route-card, .lp-why-photo) {
+  border-radius: 12px;
+}
+
+/* The accent belongs to the action: the two solid buttons in the signed-in app take it too.
+   Landing buttons (.lp-btn) already use --accent. */
+:root[data-theme] :is(.auth-button, .ws-btn--solid) {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+:root[data-theme] :is(.auth-button, .ws-btn--solid):hover {
+  background: var(--accent-hover);
+}
+
+/* The highlighter: an uneven marker stroke instead of a flat box. */
+:root[data-theme] .lp-live-you mark {
+  margin: 0 -0.12em;
+  padding: 0.04em 0.12em;
+  border-radius: 0.5em 0.2em 0.6em 0.25em / 0.3em 0.5em 0.25em 0.6em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Motion: a sheet that settles, a button that takes the press. */
+:root[data-theme] .lp-live-card {
+  rotate: -1.1deg;
+  transition:
+    opacity 0.6s ease,
+    rotate 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+:root[data-theme] :is(.lp-btn, .site-btn, .auth-button) {
+  transition:
+    background 0.16s ease,
+    transform 0.14s cubic-bezier(0.23, 1, 0.32, 1);
+}
+:root[data-theme] :is(.lp-btn, .site-btn, .auth-button):active {
+  transform: scale(0.97);
+}
+:root[data-theme] .lp-btn svg {
+  transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme] .lp-live:hover .lp-live-card {
+    rotate: 0deg;
+  }
+  :root[data-theme] .lp-btn:hover svg {
+    transform: translateX(3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme] .lp-live-card {
+    rotate: 0deg;
+  }
+}
+html[data-reduced-motion="true"][data-theme] .lp-live-card {
+  rotate: 0deg;
+}
