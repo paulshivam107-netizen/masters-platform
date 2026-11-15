@@ -524,13 +524,13 @@
   padding: 8px;
   border-radius: 8px;
   border: 1px solid #00000022;
-  background: #f4f6f3;
+  background: #f3eee3;
 }
 .wac-theme__preview i {
   flex: none;
   width: 14px;
   border-radius: 4px;
-  background: #1d3028;
+  background: #17140f;
 }
 .wac-theme__preview > span {
   display: grid;
@@ -542,25 +542,25 @@
   display: block;
   height: 8px;
   border-radius: 3px;
-  background: #cfd9d0;
+  background: #d6d2c7;
 }
 .wac-theme__preview--dark {
-  background: #14201b;
+  background: #12100d;
 }
 .wac-theme__preview--dark i {
-  background: #d7ecac;
+  background: #f3eee3;
 }
 .wac-theme__preview--dark b {
-  background: #2c3d35;
+  background: #2f2d29;
 }
 .wac-theme__preview--system {
-  background: linear-gradient(105deg, #f4f6f3 50%, #14201b 50%);
+  background: linear-gradient(105deg, #f3eee3 50%, #12100d 50%);
 }
 .wac-theme__preview--system i {
-  background: #6a8f6a;
+  background: #8a857b;
 }
 .wac-theme__preview--system b {
-  background: #8aa08f;
+  background: #9a958b;
 }
 .wac-theme__label {
   display: flex;

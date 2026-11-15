@@ -868,7 +868,7 @@ html[data-reduced-motion="true"] .rp-faq-icon::after {
    the practice page and on the dark closing band on school pages, so it is always a card on
    --surface with its own text colours. */
 .rp-tq {
-  --rp-tq-mark: #d7ecac;
+  --rp-tq-mark: color-mix(in srgb, var(--accent) 34%, var(--surface));
   position: relative;
   width: 100%;
   max-width: 720px;
@@ -879,9 +879,6 @@ html[data-reduced-motion="true"] .rp-faq-icon::after {
   background: var(--surface);
   color: var(--ink);
   text-align: left;
-}
-:root[data-theme="dark"] .rp-tq {
-  --rp-tq-mark: #3d5a2a;
 }
 .rp .rp-tq p,
 .rp .rp-tq blockquote {
