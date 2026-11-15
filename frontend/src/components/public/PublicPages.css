@@ -428,19 +428,15 @@
   color: var(--muted);
   font-size: 13px;
 }
-/* Section fields: sections alternate between the page ground and the tint; the deep brand
-   green is kept for the closing band and footer only (deep next to tint looked muddy). */
+/* Section fields: sections alternate between the page ground and the band; the deep ink is kept
+   for the closing band and footer only (deep next to band looked muddy). The accent stays on
+   the action, so these fields take the neutral band and ink, and the accent only tints the
+   highlighter. */
 .lp {
-  --lp-tint: color-mix(in srgb, var(--accent) 38%, var(--canvas));
-  --lp-accent-ink: #2f6b50;
-  --lp-live-mark: #d7ecac;
-  --lp-live-you: color-mix(in srgb, var(--accent) 35%, var(--surface));
-}
-[data-theme="dark"] .lp {
-  --lp-tint: var(--surface-soft);
-  --lp-accent-ink: var(--accent);
-  --lp-live-mark: #3d5a2a;
-  --lp-live-you: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  --lp-tint: var(--band);
+  --lp-accent-ink: var(--ink);
+  --lp-live-mark: color-mix(in srgb, var(--accent) 34%, var(--surface));
+  --lp-live-you: color-mix(in srgb, var(--accent) 14%, var(--surface));
 }
 @keyframes lp-live-sweep {
   from { background-size: 0% 100%; }
@@ -829,16 +825,19 @@
   padding-block: var(--lp-y);
   /* Page ground: it sits between the tinted debrief and how-it-works. */
 }
+/* The photo is landscape and shown whole; it no longer stretches to the text column's height,
+   which cropped it to one zoomed-in face. */
 .lp-why-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
   gap: clamp(32px, 5vw, 64px);
 }
 .lp-why-text {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 120px;
+  gap: 56px;
 }
 .lp-why-text h2 {
   font-size: clamp(36px, 4.6vw, 64px);
@@ -856,7 +855,7 @@
 .lp-why-photo {
   --lp-notch: 40px;
   position: relative;
-  min-height: 620px;
+  aspect-ratio: 16 / 10;
   background: var(--hero-bg);
   clip-path: polygon(
     0 0,
@@ -1933,13 +1932,13 @@ html[data-reduced-motion="true"] .lp .is-pending {
     max-width: 80%;
   }
   .lp-why-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
   .lp-why-text {
     gap: 48px;
   }
   .lp-why-photo {
-    min-height: 560px;
+    order: -1;
   }
   .lp-how-body {
     grid-template-columns: minmax(0, 3fr) minmax(0, 1fr);
@@ -2191,9 +2190,6 @@ html[data-reduced-motion="true"] .lp .is-pending {
   .lp-dots,
   .lp-carousel-controls {
     display: none;
-  }
-  .lp-why-grid {
-    min-height: 620px;
   }
 }
 
