@@ -84,6 +84,60 @@ test("overview keeps heavy controls out of the initial view and sections navigat
   expect(systemHeading.closest("[hidden]")).toBeNull();
   expect(button("System").getAttribute("aria-current")).toBe("page");
 });
+test("users table shows how far each account got", async () => {
+  const base = {
+    role: "user",
+    email_verified: true,
+    applications_count: 0,
+    essays_count: 0,
+    resume_ok: 0,
+    resume_failed: 0,
+    interviews_started: 0,
+    interviews_completed: 0,
+    answers_given: 0,
+    active_days: 0,
+    last_seen_at: null,
+    furthest_step_at: null,
+  };
+  const users = [
+    {
+      ...base,
+      id: 2,
+      email: "midway@example.test",
+      furthest_step: "interview_answered",
+      furthest_step_at: "2026-11-09T10:00:00",
+      last_seen_at: "2026-11-12T20:00:00",
+      active_days: 3,
+      resume_ok: 1,
+      resume_failed: 2,
+      interviews_started: 1,
+      answers_given: 4,
+    },
+    { ...base, id: 3, email: "new@example.test", furthest_step: "signed_up" },
+  ];
+  await act(async () =>
+    root.render(
+      <MemoryRouter>
+        <AdminView
+          adminUsers={users}
+          adminEvents={[]}
+          adminBreakdown={[]}
+          programCatalog={[]}
+          adminOverview={{}}
+          onRefresh={async () => {}}
+        />
+      </MemoryRouter>,
+    ),
+  );
+  const steps = [
+    ...container.querySelectorAll('[data-testid="admin-user-step"]'),
+  ].map((cell) => cell.textContent);
+  expect(steps[0]).toContain("Answered a question");
+  expect(steps[0]).toContain("résumé 1 ok, 2 failed");
+  expect(steps[0]).toContain("1 interview started, 0 finished · 4 answers");
+  expect(steps[1]).toBe("Signed up");
+  expect(container.textContent).toContain("3 days");
+});
 test("feedback save carries revision and retains the note on a conflict", async () => {
   const row = {
     id: 7,

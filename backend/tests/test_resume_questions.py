@@ -48,6 +48,16 @@ class ResumeParserTest(unittest.TestCase):
         for data, kind in [(TEXT.encode(), "txt"), (pdf(), "pdf"), (docx(), "docx")]:
             with self.subTest(kind=kind): self.assertEqual(extract_document(data, kind), TEXT)
 
+    def test_docx_runs_split_inside_a_word_join_without_a_space(self):
+        w = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        body = (f'<w:document xmlns:w="{w}"><w:body>'
+                '<w:p><w:r><w:t>Manage</w:t></w:r><w:r><w:t>ment of a five-person product team across two regions.</w:t></w:r></w:p>'
+                '<w:p><w:r><w:t>Analyst, Acme</w:t></w:r><w:r><w:tab/></w:r><w:r><w:t>2019 to 2022, delivering monthly planning reports.</w:t></w:r></w:p>'
+                '</w:body></w:document>')
+        self.assertEqual(extract_document(docx(body), "docx").splitlines(),
+                         ["Management of a five-person product team across two regions.",
+                          "Analyst, Acme 2019 to 2022, delivering monthly planning reports."])
+
     def test_bad_scanned_encrypted_long_and_entity_documents_rejected(self):
         cases = [(b"not a pdf", "pdf"), (pdf(text=""), "pdf"), (pdf(encrypted=True), "pdf"),
                  (pdf(pages=11), "pdf"), (b"x" * 20001, "txt"), (b"\x00" * 90, "txt"),

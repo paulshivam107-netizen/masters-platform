@@ -3,6 +3,23 @@ import { useSearchParams } from 'react-router-dom';
 import AdminPilot from './AdminPilot';
 import CatalogReview from './CatalogReview';
 
+const PROGRESS_STEPS = {
+  signed_up: 'Signed up',
+  verified: 'Verified email',
+  resume_questions: 'Résumé questions built',
+  interview_started: 'Started an interview',
+  interview_answered: 'Answered a question',
+  interview_completed: 'Finished an interview'
+};
+// The API sends naive UTC timestamps; add the Z so the browser does not read them as local time.
+const utcDate = (value) => (value ? new Date(/(Z|[+-]\d\d:\d\d)$/i.test(value) ? value : `${value}Z`).toLocaleDateString() : '');
+const plural = (count, word) => `${count} ${word}${count === 1 ? '' : 's'}`;
+const progressDetail = (row) => [
+  row.resume_ok || row.resume_failed ? `résumé ${row.resume_ok} ok, ${row.resume_failed} failed` : '',
+  row.interviews_started ? `${plural(row.interviews_started, 'interview')} started, ${row.interviews_completed} finished` : '',
+  row.answers_given ? plural(row.answers_given, 'answer') : ''
+].filter(Boolean).join(' · ');
+
 function AdminView({
   adminLoading,
   adminError,
@@ -401,6 +418,8 @@ function AdminView({
                   <th>Email</th>
                   <th>Role</th>
                   <th>Verified</th>
+                  <th>Furthest step</th>
+                  <th>Last seen</th>
                   <th>Apps</th>
                   <th>Essays</th>
                   <th>Role Action</th>
@@ -409,7 +428,7 @@ function AdminView({
               <tbody>
                 {visibleUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={6}>No users found.</td>
+                    <td colSpan={8}>No users found.</td>
                   </tr>
                 ) : (
                   visibleUsers.map((row) => (
@@ -417,6 +436,12 @@ function AdminView({
                       <td>{row.email}</td>
                       <td><span className={`admin-role-badge admin-role-${row.role}`}>{row.role}</span></td>
                       <td>{row.email_verified ? 'Yes' : 'No'}</td>
+                      <td data-testid="admin-user-step">
+                        {PROGRESS_STEPS[row.furthest_step] || row.furthest_step}
+                        {row.furthest_step_at ? ` (${utcDate(row.furthest_step_at)})` : ''}
+                        {progressDetail(row) && <div className="pilot-muted">{progressDetail(row)}</div>}
+                      </td>
+                      <td>{row.last_seen_at ? `${utcDate(row.last_seen_at)} · ${plural(row.active_days, 'day')}` : '-'}</td>
                       <td>{row.applications_count}</td>
                       <td>{row.essays_count}</td>
                       <td>

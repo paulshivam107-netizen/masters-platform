@@ -236,6 +236,16 @@ class AdminUserRow(BaseModel):
     created_at: datetime
     essays_count: int
     applications_count: int
+    # How far the account has got (services/user_progress.py); defaults keep older callers valid.
+    furthest_step: str = "signed_up"
+    furthest_step_at: Optional[datetime] = None
+    last_seen_at: Optional[datetime] = None
+    active_days: int = 0
+    resume_ok: int = 0
+    resume_failed: int = 0
+    interviews_started: int = 0
+    interviews_completed: int = 0
+    answers_given: int = 0
 
 
 class AdminEventRow(BaseModel):
