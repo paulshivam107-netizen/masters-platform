@@ -303,6 +303,19 @@ function Interview({ school }) {
           heading={`${p.name}: what ${school.shortName} says`}
         />
       ))}
+      {school.faq?.length > 0 && (
+        <>
+          <h3>Quick answers</h3>
+          <dl>
+            {school.faq.map(({ q, a }) => (
+              <React.Fragment key={q}>
+                <dt>{q}</dt>
+                <dd>{a}</dd>
+              </React.Fragment>
+            ))}
+          </dl>
+        </>
+      )}
       {!interview && !programmeInterviews.length && (
         <p>
           We haven&rsquo;t found an official description of {school.shortName}
