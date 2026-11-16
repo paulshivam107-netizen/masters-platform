@@ -25,7 +25,8 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     role = Column(String, default="user", nullable=False, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
-    
+    signup_nudge_sent_at = Column(DateTime, nullable=True)  # set once, when the 24h nudge email is claimed
+
     essays = relationship("Essay", back_populates="user")
     applications = relationship("ApplicationTracker", back_populates="user")
     refresh_tokens = relationship("RefreshToken", back_populates="user")

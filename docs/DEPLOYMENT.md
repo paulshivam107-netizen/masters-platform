@@ -73,6 +73,14 @@ Variables (Railway → Variables; secrets never go in the frontend):
 | `MOCK_MODE`, `OPENAI_API_KEY` / `GEMINI_API_KEY` | keep `MOCK_MODE=true` until R05/R07 (spend caps, live evaluation) are done |
 | `GOOGLE_CLIENT_ID` | optional |
 
+**Sign-up nudge email (ships OFF).** One plain email, sent once per user about 24 hours after sign-up, to
+verified non-admin users with no interview yet (accounts 24 hours to 7 days old). It does nothing unless
+`SIGNUP_NUDGE_ENABLED=true` on the service that runs it, and it needs the SMTP variables above. There is
+no in-process scheduler, so trigger it with a second Railway service from the same repo and image
+(root `backend`, cron schedule e.g. `0 * * * *`, start command `python send_signup_nudges.py`) with the
+same variables. Each run is idempotent: `users.signup_nudge_sent_at` is claimed before sending and cleared
+if the send fails, so repeats and overlapping runs never double-send.
+
 Sessions use an `HttpOnly`, `Secure`, `SameSite=Lax` refresh cookie set by `api.<domain>` (scoped to
 `/auth`) and a 15-minute in-memory access token (`ACCESS_TOKEN_EXPIRE_MINUTES`, default 15). The
 frontend and API **must be on the same registrable domain** (`www.<domain>` + `api.<domain>`) so the
