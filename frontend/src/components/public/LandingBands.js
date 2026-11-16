@@ -113,10 +113,15 @@ function interleave(list) {
   return out;
 }
 
+// Chips per row shown at first when motion is reduced (the still list); the rest open on request.
+const CHIPS_SHOWN_PER_ROW = 9;
+
 export function SchoolBand() {
+  const [open, setOpen] = useState(false);
   const mixed = interleave(schools);
   const half = Math.ceil(mixed.length / 2);
   const rows = [mixed.slice(0, half), mixed.slice(half)];
+  const more = schools.length - 2 * CHIPS_SHOWN_PER_ROW;
   return (
     <section className="lp-schools-band" aria-labelledby="schools-band-heading">
       <div className="lp-frame lp-schools-band-head">
@@ -126,7 +131,10 @@ export function SchoolBand() {
           US. <Link to="/schools">See all schools</Link>
         </p>
       </div>
-      <div className="lp-marquee">
+      <div
+        className={`lp-marquee${open ? " is-open" : ""}`}
+        id="lp-school-chips"
+      >
         {rows.map((row, r) => (
           <div
             className={`lp-marquee-row${r ? " lp-marquee-row--rev" : ""}`}
@@ -139,8 +147,13 @@ export function SchoolBand() {
                 key={copy}
                 aria-hidden={copy ? "true" : undefined}
               >
-                {row.map((school) => (
-                  <li key={school.slug}>
+                {row.map((school, i) => (
+                  <li
+                    key={school.slug}
+                    className={
+                      i >= CHIPS_SHOWN_PER_ROW ? "lp-chip-extra" : undefined
+                    }
+                  >
                     <Link
                       to={`/schools/${school.slug}`}
                       tabIndex={copy ? -1 : undefined}
@@ -153,6 +166,17 @@ export function SchoolBand() {
             ))}
           </div>
         ))}
+      </div>
+      {/* Only shown when motion is reduced (CSS); the drifting rows already carry every school. */}
+      <div className="lp-frame lp-marquee-more">
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls="lp-school-chips"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? "Show fewer schools" : `Show ${more} more schools`}
+        </button>
       </div>
     </section>
   );
