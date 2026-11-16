@@ -19,7 +19,7 @@ MAX_AGE = timedelta(days=7)  # so switching the flag on never emails old account
 SUBJECT = "Have you tried a MockMBA question yet?"
 BODY = (
     "Hi {name},\n\n"
-    "You signed up for MockMBA yesterday and have not tried a question yet. "
+    "You signed up for MockMBA recently and have not tried a question yet. "
     "The first one takes about two minutes and needs no résumé. MockMBA is free to use right now.\n\n"
     "{link}\n\n"
     "This is the only reminder you will get from us about this.\n\n— Shivam, MockMBA"
