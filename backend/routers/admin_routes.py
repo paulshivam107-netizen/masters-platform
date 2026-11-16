@@ -22,6 +22,7 @@ from schemas import (
     AdminRoleUpdateResponse,
     AdminUserRow,
 )
+from services.user_progress import user_progress
 from services.ai_runtime import (
     ALLOWED_AI_PROVIDERS,
     get_or_create_ai_runtime_config,
@@ -214,6 +215,7 @@ async def get_admin_users(
         .all()
     )
 
+    progress = user_progress(db, rows)
     return [
         {
             "id": row.id,
@@ -224,6 +226,7 @@ async def get_admin_users(
             "created_at": row.created_at,
             "essays_count": int(row.essays_count or 0),
             "applications_count": int(row.applications_count or 0),
+            **progress[row.id],
         }
         for row in rows
     ]
