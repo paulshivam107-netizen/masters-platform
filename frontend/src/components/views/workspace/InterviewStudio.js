@@ -101,6 +101,7 @@ function Readiness({ session, history }) {
 const sessionLabel = (session) =>
   `${session.context.kind === "taster" ? "Why MBA interview" : session.context.school} · ${session.provider === "demo" ? "Practice question" : "AI practice"}`;
 const GENERIC_SCHOOL = "General MBA practice";
+const THINKING = "Thinking… preparing your next question";
 // ?programme=… prefills the programme field only. Untrusted text: trimmed and capped, never auto-starts.
 export const programmeFromLocation = () => {
   try {
@@ -164,6 +165,10 @@ export default function InterviewStudio({
   );
   // A try-one-question answer saved in this browser before sign-up (see app/tryHandoff.js).
   const [carried, setCarried] = useState(readTryHandoff);
+  // null until history loads; true when the account has no sessions yet.
+  const [firstVisit, setFirstVisit] = useState(null);
+  const [firstRunDone, setFirstRunDone] = useState(false);
+  const firstAnswerBox = useRef(null);
   const active = useRef(true);
   const inFlight = useRef(false);
   const controllers = useRef(new Set());
@@ -263,8 +268,12 @@ export default function InterviewStudio({
         setHasMore(previous.has_more);
         setCompletedCount(previous.completed_count || 0);
         setHistoryOffset(previous.items.length);
+        setFirstVisit(previous.items.length === 0);
       })
-      .catch(fail);
+      .catch((err) => {
+        if (!signal.aborted) setFirstVisit(false);
+        fail(err);
+      });
     const lastId = readUserValue(user.id, "interview_active_id", "");
     if (lastId)
       api
@@ -384,7 +393,8 @@ export default function InterviewStudio({
       setCarried(null);
     }
   }, [capabilities?.taster_used]);
-  const startWith = (settings) => {
+  // firstAnswer: create the session and send this as answer 1 in the same step.
+  const startWith = (settings, firstAnswer) => {
     const provider = capabilities.chat ? "openai" : "demo";
     // "Practise again" must not send the saved try a second time.
     lastStart.current = { ...settings, handoff: null };
@@ -409,7 +419,7 @@ export default function InterviewStudio({
     const signature = JSON.stringify(payload);
     if (createRequest.current?.signature !== signature)
       createRequest.current = { signature, id: requestId() };
-    run("Starting your interview…", async (signal) => {
+    run(firstAnswer ? THINKING : "Starting your interview…", async (signal) => {
       let next;
       try {
         next = await api.createInterview(
@@ -427,6 +437,18 @@ export default function InterviewStudio({
       openSession(next);
       updateSession(next);
       createRequest.current = null;
+      if (!firstAnswer) return;
+      // The session's own answer box keeps the text, so a failed send retries from there.
+      setAnswer(firstAnswer);
+      await sendAnswer(
+        next,
+        {
+          text: firstAnswer,
+          expected_version: next.version,
+          request_id: requestId(),
+        },
+        signal,
+      );
     });
   };
   // Picks up a saved try. Falls back to the normal first screen if anything about it is off.
@@ -443,6 +465,7 @@ export default function InterviewStudio({
   };
   const start = (event) => {
     event.preventDefault();
+    if (firstRun) return; // Enter in More options: the answer form sends, not this one
     if (live && path === "resume" && !reviewedProfile && !chosenQuestion) {
       setNeedResume(true);
       return;
@@ -463,6 +486,38 @@ export default function InterviewStudio({
     leaveSession();
     startWith({ ...settings, question: null });
   };
+  const answerFirst = (event) => {
+    event.preventDefault();
+    if (answer.trim())
+      startWith({ setup, question: null, profile: null }, answer);
+  };
+  const switchToResume = () => {
+    setFirstRunDone(true);
+    setPath("resume");
+    wantResume();
+  };
+  const sendAnswer = async (target, payload, signal) => {
+    draft.current = payload;
+    writeUserValue(user.id, draftKey(target.id), payload);
+    let next;
+    try {
+      next = await api.answerInterview(target.id, payload, signal);
+    } catch (err) {
+      const detail = err.response?.data?.detail;
+      if (err.response?.status === 422 && detail?.code === "not_an_answer") {
+        if (active.current) setGuard(detail.message);
+        return;
+      }
+      throw err;
+    }
+    if (!active.current) return;
+    updateSession(next);
+    setAnswer("");
+    draft.current = null;
+    writeUserValue(user.id, draftKey(target.id), null);
+    speechCache.current.clear();
+    transcriptEnd.current?.focus();
+  };
   const submitAnswer = (event) => {
     event.preventDefault();
     if (!answer.trim()) return;
@@ -472,29 +527,8 @@ export default function InterviewStudio({
       expected_version: session.version,
       request_id: requestId(),
     };
-    draft.current = payload;
-    writeUserValue(user.id, draftKey(session.id), payload);
     setGuard("");
-    run("Thinking… preparing your next question", async (signal) => {
-      let next;
-      try {
-        next = await api.answerInterview(session.id, payload, signal);
-      } catch (err) {
-        const detail = err.response?.data?.detail;
-        if (err.response?.status === 422 && detail?.code === "not_an_answer") {
-          if (active.current) setGuard(detail.message);
-          return;
-        }
-        throw err;
-      }
-      if (!active.current) return;
-      updateSession(next);
-      setAnswer("");
-      draft.current = null;
-      writeUserValue(user.id, draftKey(session.id), null);
-      speechCache.current.clear();
-      transcriptEnd.current?.focus();
-    });
+    run(THINKING, (signal) => sendAnswer(session, payload, signal));
   };
   const finish = () => {
     audio.stopPlayback();
@@ -570,6 +604,23 @@ export default function InterviewStudio({
     history.filter((item) => item.status === "completed").length,
   );
   const live = Boolean(capabilities?.chat);
+  const carriedShown = Boolean(live && carried && !capabilities.taster_used);
+  // No sessions yet: open on question 1 itself. Nothing is created or sent until the first answer.
+  const firstRun = Boolean(
+    live &&
+    capabilities.first_question &&
+    firstVisit &&
+    history.length === 0 &&
+    !carriedShown &&
+    !firstRunDone,
+  );
+  // Wait for history so a returning user never sees the first-visit screen flash.
+  const waitingForHistory = Boolean(
+    live && capabilities.first_question && firstVisit === null,
+  );
+  useEffect(() => {
+    if (firstRun) firstAnswerBox.current?.focus();
+  }, [firstRun]);
   const sessionHadResume = Boolean(
     lastStart.current?.profile ||
     session?.context?.profile_set_id ||
@@ -624,7 +675,7 @@ export default function InterviewStudio({
           {notice}
         </p>
       )}
-      {loading ? (
+      {loading || waitingForHistory ? (
         <p role="status" className="wi-loading">
           Opening your interview workspace…
         </p>
@@ -653,14 +704,66 @@ export default function InterviewStudio({
               ? "A live interviewer asks about you and follows up on your answers. Debrief at the end."
               : "Practise one question at a time and return to your answers whenever you need."}
           </p>
-          <MockGoal userId={user.id} completed={mocksDone} />
+          {firstRun && (
+            <form
+              className="studio-conversation"
+              onSubmit={answerFirst}
+              data-testid="first-question"
+            >
+              <div className="studio-question">
+                <span className="ws-eyebrow">
+                  <span aria-hidden="true" />
+                  Opening question · Question 1 of {setup.question_limit}
+                </span>
+                <h3 id="studio-first-question">
+                  {capabilities.first_question}
+                </h3>
+              </div>
+              <div className="ws-field">
+                <label htmlFor="studio-first-answer">Your answer</label>
+                <textarea
+                  id="studio-first-answer"
+                  ref={firstAnswerBox}
+                  aria-describedby="studio-first-question"
+                  maxLength={3000}
+                  rows={7}
+                  value={answer}
+                  disabled={disabled}
+                  onChange={(event) => setAnswer(event.target.value)}
+                  placeholder="Take your time. Use a specific example and explain your own contribution."
+                />
+                <small className="studio-char-count">
+                  {answer.length}/3,000 characters · Sent to OpenAI when you
+                  press Send
+                </small>
+              </div>
+              <div className="studio-actions">
+                <button
+                  className="ws-btn ws-btn--primary"
+                  type="submit"
+                  disabled={disabled || !answer.trim()}
+                >
+                  {busy || "Send answer"} <ArrowIcon />
+                </button>
+                <button
+                  type="button"
+                  className="ws-btn ws-btn--ghost ws-btn--sm"
+                  disabled={disabled}
+                  onClick={switchToResume}
+                >
+                  Use my résumé instead
+                </button>
+              </div>
+            </form>
+          )}
+          {!firstRun && <MockGoal userId={user.id} completed={mocksDone} />}
           {!capabilities.chat && (
             <p className="studio-message" data-testid="demo-notice">
               AI interviews are temporarily unavailable. You can still rehearse
               a question below.
             </p>
           )}
-          {live && carried && !capabilities.taster_used && (
+          {carriedShown && (
             <section
               className="studio-carried"
               aria-labelledby="studio-carried-title"
@@ -697,7 +800,7 @@ export default function InterviewStudio({
               </p>
             </section>
           )}
-          {live && (
+          {live && !firstRun && (
             <div
               ref={pathsRef}
               className="studio-paths"
@@ -745,7 +848,7 @@ export default function InterviewStudio({
               ))}
             </div>
           )}
-          {live && (
+          {live && !firstRun && (
             <section
               className="studio-resume-step"
               ref={resumeSection}
@@ -803,18 +906,20 @@ export default function InterviewStudio({
                   </button>
                 </div>
               )}
-              <div className="studio-actions">
-                <button
-                  ref={startButton}
-                  type="submit"
-                  className="ws-btn ws-btn--primary studio-start"
-                  disabled={disabled}
-                >
-                  {busy || (live ? "Start interview" : "Start practice")}{" "}
-                  <ArrowIcon />
-                </button>
-              </div>
-              {live && (
+              {!firstRun && (
+                <div className="studio-actions">
+                  <button
+                    ref={startButton}
+                    type="submit"
+                    className="ws-btn ws-btn--primary studio-start"
+                    disabled={disabled}
+                  >
+                    {busy || (live ? "Start interview" : "Start practice")}{" "}
+                    <ArrowIcon />
+                  </button>
+                </div>
+              )}
+              {live && !firstRun && (
                 <p
                   className={`studio-fine-print studio-start-hint${needResume && path === "resume" && !reviewedProfile ? " is-needed" : ""}`}
                   role={
@@ -971,6 +1076,7 @@ export default function InterviewStudio({
               </details>
             </fieldset>
           </form>
+          {firstRun && <MockGoal userId={user.id} completed={mocksDone} />}
           {history.length > 0 && (
             <div className="studio-history">
               <h3>Your recent sessions</h3>
@@ -1045,6 +1151,7 @@ export default function InterviewStudio({
               disabled={disabled}
               onChoose={(node) => {
                 setChosenQuestion(node);
+                setFirstRunDone(true);
                 if (bankDisclosure.current) bankDisclosure.current.open = false;
                 startButton.current?.focus();
                 setNotice(
@@ -1243,6 +1350,23 @@ export default function InterviewStudio({
                   )}
                 </div>
               </form>
+              {live && answers === 1 && !sessionHadResume && (
+                <p className="studio-fine-print">
+                  Questions get sharper with your résumé.{" "}
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
+                    disabled={disabled}
+                    onClick={() => {
+                      leaveSession();
+                      setPath("resume");
+                      wantResume();
+                    }}
+                  >
+                    Use my résumé instead
+                  </button>
+                </p>
+              )}
             </div>
           )}
           {session.status === "ready_for_feedback" && (
