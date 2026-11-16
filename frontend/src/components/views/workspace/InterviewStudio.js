@@ -14,6 +14,7 @@ import InterviewQuestionBank from "./InterviewQuestionBank";
 import ResumeQuestionBuilder from "./ResumeQuestionBuilder";
 import FocusedPractice from "./FocusedPractice";
 import ShareFollowUp from "./ShareFollowUp";
+import PaidInterest from "./PaidInterest";
 import MockGoal from "./MockGoal";
 import { clearInterviewIntent } from "./interviewIntent";
 import DictationButton, { appendTranscript } from "./DictationButton";
@@ -1306,6 +1307,7 @@ export default function InterviewStudio({
               {session.provider !== "demo" && (
                 <ShareFollowUp transcript={session.transcript} />
               )}
+              {session.provider !== "demo" && <PaidInterest userId={user.id} />}
               <p className="studio-fine-print">
                 Practice guidance based on these answers. It does not predict
                 admission or assess accent, personality or spoken delivery.

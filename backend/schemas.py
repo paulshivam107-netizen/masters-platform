@@ -224,6 +224,7 @@ class AdminOverviewResponse(BaseModel):
     funnel_verified: int
     funnel_started: int
     funnel_completed: int
+    funnel_would_pay: int
 
 
 class AdminUserRow(BaseModel):

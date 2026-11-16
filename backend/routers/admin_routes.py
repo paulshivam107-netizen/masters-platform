@@ -78,6 +78,8 @@ def signup_funnel(db, now):
         "funnel_verified": users.filter(User.email_verified == True).count(),  # noqa: E712
         "funnel_started": interviews.distinct().count(),
         "funnel_completed": interviews.filter(InterviewSession.status == "completed").distinct().count(),
+        "funnel_would_pay": db.query(AdminEvent.user_id).join(User, User.id == AdminEvent.user_id)
+        .filter(AdminEvent.event_name == "paid_interest_clicked", User.role != "admin").distinct().count(),
     }
 
 
