@@ -17,7 +17,7 @@ const uvaDarden = {
   ],
   interview: {
     points: [
-      "Up to 45 minutes; on-Grounds, virtually via Zoom or, in some cases, off-Grounds.",
+      "Up to 45 minutes, on-Grounds, virtual (Zoom) or sometimes off-Grounds.",
       "Run by Admissions Committee members or Second Year students.",
       "Interviews are given equal weight for any interviewer type.",
       "Interviews are required prior to acceptance and play a critical role in Darden's assessment of candidates.",
