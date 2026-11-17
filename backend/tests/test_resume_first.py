@@ -106,6 +106,9 @@ class ResumeFirstTest(unittest.IsolatedAsyncioTestCase):
             response = await self.post()
             self.assertEqual(response.status_code, 201, response.text)
             self.assertEqual(response.json()["context"]["practice_focus"], "motivation")
+        # The workspace shows this question before the session exists, so it must match q1.
+        caps = await self.client.get("/interviews/capabilities", headers=self.headers)
+        self.assertEqual(caps.json()["first_question"], response.json()["transcript"][0]["text"])
 
     async def test_full_live_interview_with_reviewed_profile_or_question_set(self):
         set_id = self.make_set()

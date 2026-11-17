@@ -2,6 +2,8 @@ import React, { act } from "react";
 import { createRoot } from "react-dom/client";
 import MockGoal from "./MockGoal";
 import ShareFollowUp from "./ShareFollowUp";
+import PaidInterest from "./PaidInterest";
+import * as telemetry from "../../../app/telemetry";
 
 const DATE_KEY = "masters:user:7:interview_date";
 let root, container;
@@ -28,13 +30,25 @@ test("asks for the interview date, then shows days left and mock progress", asyn
   expect(form).not.toBeNull();
   container.querySelector("input[name=date]").value = "2099-01-10";
   await act(async () =>
-    form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true })),
+    form.dispatchEvent(
+      new Event("submit", { bubbles: true, cancelable: true }),
+    ),
   );
   expect(JSON.parse(localStorage.getItem(DATE_KEY))).toBe("2099-01-10");
   expect(container.textContent).toMatch(/days to your interview/);
   expect(container.textContent).toContain("2 of 3 mocks done");
   const bar = container.querySelector("[role=progressbar]");
   expect(bar.getAttribute("aria-valuenow")).toBe("2");
+});
+
+test("paid interest click records the event, then shows thanks", async () => {
+  const spy = jest.spyOn(telemetry, "trackEvent").mockImplementation(() => {});
+  await render(<PaidInterest userId={7} />);
+  await act(async () => container.querySelector("button").click());
+  expect(spy).toHaveBeenCalledWith("paid_interest_clicked");
+  expect(container.querySelector("button")).toBeNull();
+  expect(container.textContent).toContain("Thanks");
+  spy.mockRestore();
 });
 
 test("caps progress at the goal", async () => {

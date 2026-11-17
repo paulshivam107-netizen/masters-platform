@@ -10,7 +10,8 @@ from services.resume_questions import strip_contact_details
 from tests import test_interviews as interview_tests
 
 KEEP = ["Jun 2021 – Aug 2022", "2017-2021", "CGPA 8.84/10.00", "grew revenue 20%", "raised $2M", "served 5,000 users",
-        "scored 98.5 percentile", "Class of 2019, 12th: 91.4%"]
+        "scored 98.5 percentile", "Class of 2019, 12th: 91.4%", "B.Tech 2018 - 2022\n95.2 % marks", "2019 2023 8.84 CGPA",
+        "2015 2017 67.5 %"]
 BODY = "Built API monitoring. Studied computer science."
 
 
@@ -32,6 +33,12 @@ class StripContactTest(unittest.TestCase):
         for item in KEEP:
             with self.subTest(item=item):
                 self.assertEqual(clean(f"Note: {item}."), (f"Note: {item}.", 0))
+
+    def test_a_phone_never_swallows_the_next_line(self):
+        text, count = clean("Call +91 97760 76385\n2019 2023 8.84 CGPA")
+        self.assertEqual(count, 1)
+        self.assertIn("\n2019 2023 8.84 CGPA", text)
+        self.assertNotIn("97760", text)
 
     def test_counts_multiple_and_leaves_plain_text(self):
         text, count = clean("a@b.com | +91 97760 76385 | github.com/x\n" + BODY)

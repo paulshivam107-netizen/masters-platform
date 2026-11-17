@@ -989,6 +989,10 @@ export default function AdminPilot({ section, refresh, overview, onSelect }) {
             label="Completed an interview"
             value={overview?.funnel_completed ?? "—"}
           />
+          <Metric
+            label="Said they'd pay"
+            value={overview?.funnel_would_pay ?? "—"}
+          />
         </div>
       </section>
       <InterviewOperations
