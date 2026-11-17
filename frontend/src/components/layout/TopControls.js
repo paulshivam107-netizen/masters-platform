@@ -17,6 +17,7 @@ export default function TopControls({
   onGlobalSearchSubmit,
   onCreateEssay,
   onCreateApplication,
+  showCreate = true,
   notificationCount,
   onOpenNotifications,
   profileMenuRef,
@@ -60,11 +61,7 @@ export default function TopControls({
       <div className="ws-topbar__brand">
         <Brand compact to="/app/today" onClick={onGoHome} />
       </div>
-      <form
-        className="ws-search"
-        onSubmit={onGlobalSearchSubmit}
-        role="search"
-      >
+      <form className="ws-search" onSubmit={onGlobalSearchSubmit} role="search">
         <SearchIcon />
         <input
           data-testid="global-search-input"
@@ -93,42 +90,44 @@ export default function TopControls({
           <BellIcon />
           {notificationCount > 0 && <span className="ws-bell__dot" />}
         </button>
-        <div className="ws-menu" ref={createRef}>
-          <button
-            type="button"
-            className="ws-btn ws-btn--primary ws-new"
-            data-testid="header-create-button"
-            aria-label="Create new essay or application"
-            aria-expanded={isCreateMenuOpen}
-            onClick={() => setIsCreateMenuOpen((open) => !open)}
-          >
-            <PlusIcon />
-            <span>New</span>
-          </button>
-          {isCreateMenuOpen && (
-            <div className="ws-popover ws-popover--create">
-              <p className="ws-popover__label">Make a little progress</p>
-              <button
-                data-testid="create-application-option"
-                onClick={() => {
-                  setIsCreateMenuOpen(false);
-                  onCreateApplication();
-                }}
-              >
-                <ApplicationsIcon /> Add application
-              </button>
-              <button
-                data-testid="create-essay-option"
-                onClick={() => {
-                  setIsCreateMenuOpen(false);
-                  onCreateEssay();
-                }}
-              >
-                <EssaysIcon /> Write an essay
-              </button>
-            </div>
-          )}
-        </div>
+        {showCreate && (
+          <div className="ws-menu" ref={createRef}>
+            <button
+              type="button"
+              className="ws-btn ws-btn--primary ws-new"
+              data-testid="header-create-button"
+              aria-label="Create new essay or application"
+              aria-expanded={isCreateMenuOpen}
+              onClick={() => setIsCreateMenuOpen((open) => !open)}
+            >
+              <PlusIcon />
+              <span>New</span>
+            </button>
+            {isCreateMenuOpen && (
+              <div className="ws-popover ws-popover--create">
+                <p className="ws-popover__label">Make a little progress</p>
+                <button
+                  data-testid="create-application-option"
+                  onClick={() => {
+                    setIsCreateMenuOpen(false);
+                    onCreateApplication();
+                  }}
+                >
+                  <ApplicationsIcon /> Add application
+                </button>
+                <button
+                  data-testid="create-essay-option"
+                  onClick={() => {
+                    setIsCreateMenuOpen(false);
+                    onCreateEssay();
+                  }}
+                >
+                  <EssaysIcon /> Write an essay
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         <div className="ws-menu" ref={profileMenuRef}>
           <button
             type="button"
@@ -139,11 +138,7 @@ export default function TopControls({
             onClick={onToggleProfileMenu}
           >
             {user?.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                alt=""
-                className="ws-avatar-img"
-              />
+              <img src={user.avatar_url} alt="" className="ws-avatar-img" />
             ) : (
               <span className="ws-avatar">{initials}</span>
             )}

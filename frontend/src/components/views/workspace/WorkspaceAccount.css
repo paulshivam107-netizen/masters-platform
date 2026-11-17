@@ -377,8 +377,8 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--surface-hover);
+  color: var(--ink);
   font: 750 22px var(--font-heading);
 }
 .wac-summary__who {
@@ -477,8 +477,8 @@
   left: 23px;
 }
 :root[data-theme="dark"] .wac-toggle__input:checked + .wac-toggle__track {
-  background: var(--accent);
-  border-color: var(--accent);
+  background: color-mix(in srgb, var(--ink) 72%, var(--canvas));
+  border-color: transparent;
 }
 :root[data-theme="dark"] .wac-toggle__input:checked + .wac-toggle__track::after {
   background: var(--on-accent);
@@ -512,10 +512,6 @@
 .wac-theme.is-selected {
   border-color: var(--primary);
   box-shadow: 0 0 0 1px var(--primary);
-}
-:root[data-theme="dark"] .wac-theme.is-selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 1px var(--accent);
 }
 .wac-theme__preview {
   display: flex;

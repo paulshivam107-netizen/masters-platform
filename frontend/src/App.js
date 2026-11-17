@@ -616,6 +616,8 @@ function AppContent() {
               });
               actions.handleOpenApplicationForm();
             }}
+            // Applications has its own Add application button, so the top bar drops the duplicate.
+            showCreate={activeNav !== "tracker"}
             notificationCount={notificationCount}
             onOpenNotifications={() => actions.handleNavChange("notifications")}
             profileMenuRef={profileMenuRef}
