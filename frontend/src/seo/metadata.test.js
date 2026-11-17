@@ -139,3 +139,19 @@ test("the Indian mock interview hub is indexed and lists every Indian school", (
   const list = m.jsonLd["@graph"].find((n) => n["@type"] === "ItemList");
   expect(list.itemListElement).toHaveLength(india.length);
 });
+
+test("a school with quick answers emits FAQPage markup that matches the page", () => {
+  const booth = schools.find((s) => s.slug === "chicago-booth");
+  const faq = metadata("/schools/chicago-booth", live).jsonLd["@graph"].find(
+    (n) => n["@type"] === "FAQPage",
+  );
+  expect(faq.mainEntity.map((q) => q.name)).toEqual(booth.faq.map((f) => f.q));
+  expect(faq.mainEntity[0].acceptedAnswer.text).toBe(booth.faq[0].a);
+  // A school without quick answers gets no FAQPage node.
+  const none = schools.find((s) => !s.faq?.length);
+  expect(
+    metadata(`/schools/${none.slug}`, live).jsonLd["@graph"].some(
+      (n) => n["@type"] === "FAQPage",
+    ),
+  ).toBe(false);
+});

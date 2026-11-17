@@ -65,6 +65,8 @@ def capabilities(user: User = Depends(interview_user), db: Session = Depends(get
             "provider": "openai", "voice_style": "turn_based",
             "max_answer_chars": 3000, "max_recording_seconds": provider.MAX_RECORDING_SECONDS,
             "max_audio_bytes": provider.MAX_AUDIO_BYTES,
+            # q1 of a general interview (create_session uses the same text), shown before any session exists
+            "first_question": try_handoff.QUESTION["text"],
             "message": "AI interviews are connected." if available else "AI practice is not connected yet. You can explore a clearly labelled demo."}
 
 

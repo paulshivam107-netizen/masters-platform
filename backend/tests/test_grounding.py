@@ -62,6 +62,29 @@ class FindQuoteTest(unittest.TestCase):
         self.assertIsNone(find_quote("led the tem", "led the team"))
 
 
+TABLE = ("Qualification | Institute | Year | CGPA\nB.Tech | IIT Delhi | 2019 | 8.5\n"
+         " Led a team of 5 analysts\n Grew revenue 20% in FY21\nSkills: Excel, SQL, Python")
+
+
+class LenientQuoteTest(unittest.TestCase):
+    """Résumé text carries table pipes, bullet glyphs and list commas that a model tidies away."""
+
+    def test_layout_symbols_are_ignored_and_the_verbatim_span_returned(self):
+        cases = [("B.Tech IIT Delhi 2019 8.5", "B.Tech | IIT Delhi | 2019 | 8.5"),
+                 ("Led a team of 5 analysts Grew revenue 20% in FY21", "Led a team of 5 analysts\n Grew revenue 20% in FY21"),
+                 ("Excel SQL Python", "Excel, SQL, Python")]
+        for quote, expected in cases:
+            with self.subTest(quote=quote):
+                self.assertEqual(find_quote(quote, TABLE, lenient=True), expected)
+                self.assertIsNone(find_quote(quote, TABLE))  # the default stays strict for spoken answers
+
+    def test_words_are_never_changed_reordered_or_added(self):
+        for quote in ["B.Tech IIT Delhi 2018 8.5", "IIT Delhi B.Tech 2019", "Led a team of 5 senior analysts",
+                      "Grew revenue 25% in FY21", "Grew revenue 20 in FY21", "|||| ,,, ---"]:
+            with self.subTest(quote=quote):
+                self.assertIsNone(find_quote(quote, TABLE, lenient=True))
+
+
 ANSWER = ("I'm applying now because the decisions I find most interesting, such as what to build and for which "
           "merchants, are made one level above me, and I want the business training to make them well.")
 
@@ -202,13 +225,30 @@ class PartialGraphTest(unittest.TestCase):
         graph = self.build([_fact()], [branch])
         self.assertEqual(len(graph["nodes"]), 1 + 6)
 
-    def test_all_facts_bad_raises(self):
-        with self.assertRaisesRegex(provider.ProviderFailure, "profile could not be matched"):
-            self.build([_fact("Not in resume"), _fact("Also absent")], [_branch(1)])
+    def test_all_facts_bad_keeps_the_grounded_questions(self):
+        graph = self.build([_fact("Not in resume"), _fact("Also absent")], [_branch(1)])
+        self.assertEqual(graph["profile"], [])
+        self.assertEqual(graph["dropped"]["facts"], 2)
+        self.assertEqual(len(graph["roots"]), 3)
 
-    def test_all_openings_bad_raises(self):
-        with self.assertRaisesRegex(provider.ProviderFailure, "could not be grounded"):
+    def test_all_openings_bad_raises_with_counts_for_the_ledger(self):
+        with self.assertRaisesRegex(provider.ProviderFailure, "couldn't match") as caught:
             self.build([_fact()], [_branch(n, bad=("opening",)) for n in (1, 2, 3)])
+        self.assertEqual(caught.exception.code, "resume_ungrounded f1/1 q0/9")
+
+    def test_nothing_grounded_raises(self):
+        with self.assertRaisesRegex(provider.ProviderFailure, "couldn't match") as caught:
+            self.build([_fact("Not in resume"), _fact("Also absent")], [_branch(n, bad=("opening",)) for n in (1, 2, 3)])
+        self.assertEqual(caught.exception.code, "resume_ungrounded f0/2 q0/9")
+
+    def test_table_style_resume_grounds_tidied_quotes(self):
+        text = "Education\nB.Tech | IIT Delhi | 2019 | 8.5\nExperience\n Led a team of 5 analysts at Acme\n Cut churn by 12% in FY21"
+        branches = [{key: {"question": f"Question {n}{key} about this item?", "evidence_quote": "Led a team of 5 analysts at Acme"}
+                     for key in ("opening", "follow_up", "deeper_follow_up")} for n in range(3)]
+        draft = {"profile": [{"category": "education", "evidence_quote": "B.Tech IIT Delhi 2019 8.5"}], "branches": branches}
+        graph = resume_questions._build_graph(draft, text, ROUTE)
+        self.assertEqual(graph["profile"][0]["evidence_quote"], "B.Tech | IIT Delhi | 2019 | 8.5")
+        self.assertEqual(graph["dropped"], {"facts": 0, "questions": 0})
 
     def test_clean_draft_reports_zero_dropped(self):
         graph = self.build([_fact()], [_branch(1)])

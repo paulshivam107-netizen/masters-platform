@@ -152,13 +152,15 @@ class ReadinessApiTest(unittest.IsolatedAsyncioTestCase):
         with self.Session() as db:
             db.add(AdminEvent(event_name="anon_try_answered", user_id=None, created_at=datetime.utcnow()))
             db.add(AdminEvent(event_name="anon_try_answered", user_id=None, created_at=datetime.utcnow() - timedelta(days=30)))
+            for uid in (1, 1, 4):  # one user clicking twice counts once; the admin is excluded
+                db.add(AdminEvent(event_name="paid_interest_clicked", user_id=uid))
             db.add(AdminEvent(event_name="view_home", user_id=None))  # other events are not tries
             db.commit()
         with self.Session() as db:
             self.assertEqual(signup_funnel(db, datetime.utcnow()), {
                 "funnel_tried": 2, "funnel_tried_7d": 1,
                 "funnel_signups": 3, "funnel_signups_7d": 2, "funnel_verified": 1,
-                "funnel_started": 2, "funnel_completed": 1})
+                "funnel_started": 2, "funnel_completed": 1, "funnel_would_pay": 1})
 
 
 class RescoreSummaryTest(unittest.TestCase):
