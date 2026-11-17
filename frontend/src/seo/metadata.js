@@ -72,6 +72,7 @@ for (const school of schools)
     kind: "website",
     crumb: ["Schools", "/schools"],
     about: school.name,
+    faq: school.faq,
   };
 publicPages[indiaHub.path] = {
   title: indiaHub.title,
@@ -197,6 +198,15 @@ function metadata(pathname, config = defaults) {
             item: canonical,
           },
         ],
+      });
+    if (page.faq?.length)
+      graph.push({
+        "@type": "FAQPage",
+        mainEntity: page.faq.map(({ q, a }) => ({
+          "@type": "Question",
+          name: q,
+          acceptedAnswer: { "@type": "Answer", text: a },
+        })),
       });
     if (page.list)
       graph.push({
