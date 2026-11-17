@@ -22,7 +22,7 @@ A deletion is refused with `409 operation_in_progress` while an interview or ré
 
 | Data | Export | On deletion | Why |
 | --- | --- | --- | --- |
-| `users` (profile, reminder preferences) | yes, minus password hash | **deleted** | Account row. The email can register again as a new, empty account. |
+| `users` (profile, reminder preferences, `signup_nudge_sent_at` marker) | yes, minus password hash | **deleted** | Account row. The email can register again as a new, empty account. |
 | `applications` | yes | **deleted** | Applicant content. |
 | `essays` (drafts, versions via `parent_essay_id`, AI review text) | yes | **deleted** | Applicant content. Links between essays/applications are cleared first. |
 | `interview_sessions` (context snapshot, transcript, feedback) | yes | **deleted** | Applicant content. Not reachable afterwards by anyone (API returns 404 to other users; the owner's tokens stop working). |

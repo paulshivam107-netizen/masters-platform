@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     TRUSTED_PROXY_HOPS: int = 0
     # Signed-out "try one question" (public_try_routes). Ships off; needs Cloudflare Turnstile keys in production.
     ANON_TRY_ENABLED: bool = False
+    # One email ~24h after sign-up to verified users who have not started an interview. Ships off.
+    SIGNUP_NUDGE_ENABLED: bool = False
     TURNSTILE_SITE_KEY: str = ""
     TURNSTILE_SECRET_KEY: str = ""
 
