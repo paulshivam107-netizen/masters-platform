@@ -50,7 +50,11 @@ def extract(data, kind):
                 raise ValueError("This document has too much content. Paste the relevant sections instead.")
             document = fromstring(archive.read(entry), forbid_dtd=True, forbid_entities=True, forbid_external=True)
             ns = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
-            text = "\n".join(" ".join(t.text or "" for t in p.iter(ns + "t")) for p in document.iter(ns + "p"))
+            # Word often splits one word across runs, so runs join with nothing; a tab or line break is a space.
+            gaps = {ns + "tab", ns + "br", ns + "cr"}
+            text = "\n".join(
+                "".join((el.text or "") if el.tag == ns + "t" else " " for el in p.iter() if el.tag == ns + "t" or el.tag in gaps)
+                for p in document.iter(ns + "p"))
     else:
         raise ValueError("Use a PDF, DOCX or UTF-8 text file.")
     text = re.sub(r"[\x00-\x08\x0b\x0c\x0e-\x1f]", "", text).strip()

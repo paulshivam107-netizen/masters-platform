@@ -22,6 +22,7 @@ from schemas import (
     AdminRoleUpdateResponse,
     AdminUserRow,
 )
+from services.user_progress import user_progress
 from services.ai_runtime import (
     ALLOWED_AI_PROVIDERS,
     get_or_create_ai_runtime_config,
@@ -78,6 +79,8 @@ def signup_funnel(db, now):
         "funnel_verified": users.filter(User.email_verified == True).count(),  # noqa: E712
         "funnel_started": interviews.distinct().count(),
         "funnel_completed": interviews.filter(InterviewSession.status == "completed").distinct().count(),
+        "funnel_would_pay": db.query(AdminEvent.user_id).join(User, User.id == AdminEvent.user_id)
+        .filter(AdminEvent.event_name == "paid_interest_clicked", User.role != "admin").distinct().count(),
     }
 
 
@@ -214,6 +217,7 @@ async def get_admin_users(
         .all()
     )
 
+    progress = user_progress(db, rows)
     return [
         {
             "id": row.id,
@@ -224,6 +228,7 @@ async def get_admin_users(
             "created_at": row.created_at,
             "essays_count": int(row.essays_count or 0),
             "applications_count": int(row.applications_count or 0),
+            **progress[row.id],
         }
         for row in rows
     ]
