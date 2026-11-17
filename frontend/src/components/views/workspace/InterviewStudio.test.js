@@ -747,3 +747,151 @@ test("a temporary failure keeps the saved try and a retry reuses the same reques
   expect(second.handoff).toBe(first.handoff);
   expect(localStorage.getItem(STASH)).toBeNull();
 });
+
+// First visit: an account with no sessions opens on question 1 itself.
+const Q1 =
+  "Walk me through yourself, and why an MBA is the next step you want to take.";
+const firstQuestion = () =>
+  container.querySelector('[data-testid="first-question"]');
+const liveWithQ1 = () =>
+  api.getInterviewCapabilities.mockResolvedValue({
+    chat: true,
+    voice: true,
+    first_question: Q1,
+  });
+const typeFirst = (text) =>
+  act(async () => {
+    const box = container.querySelector("#studio-first-answer");
+    Object.getOwnPropertyDescriptor(
+      HTMLTextAreaElement.prototype,
+      "value",
+    ).set.call(box, text);
+    box.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+test("a first visit shows question 1 with the answer box focused and sends nothing until Send", async () => {
+  liveWithQ1();
+  api.createInterview.mockResolvedValue(
+    activeSession([{ id: "q1", role: "assistant", text: Q1 }]),
+  );
+  api.answerInterview.mockResolvedValue(
+    activeSession(
+      [
+        { id: "q1", role: "assistant", text: Q1 },
+        { id: "a1", role: "user", text: "I run a plant." },
+        { id: "q2", role: "assistant", text: "What did you decide?" },
+      ],
+      1,
+    ),
+  );
+  await render();
+  expect(firstQuestion().textContent).toContain(Q1);
+  expect(document.activeElement.id).toBe("studio-first-answer");
+  expect(
+    container.querySelector("label[for=studio-first-answer]"),
+  ).not.toBeNull();
+  expect(button("Start interview")).toBeUndefined();
+  expect(container.querySelector(".studio-paths")).toBeNull();
+  expect(button("Use my résumé instead")).toBeDefined();
+  // The interview date and options sit below the question.
+  const date = container.querySelector("#interview-date");
+  expect(
+    firstQuestion().compareDocumentPosition(date) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(container.querySelectorAll(".ws-btn--primary")).toHaveLength(1);
+  expect(api.createInterview).not.toHaveBeenCalled();
+  await typeFirst("I run a plant.");
+  await tick(() => button("Send answer").click());
+  expect(api.createInterview.mock.calls[0][0]).toEqual(
+    expect.objectContaining({
+      kind: "full",
+      provider: "openai",
+      profile_set_id: null,
+      question_set_id: null,
+      question_id: null,
+    }),
+  );
+  expect(api.answerInterview).toHaveBeenCalledWith(
+    "s-act",
+    expect.objectContaining({ text: "I run a plant.", expected_version: 2 }),
+    expect.any(AbortSignal),
+  );
+  expect(container.textContent).toContain("What did you decide?");
+  expect(button("Use my résumé instead")).toBeDefined();
+});
+
+test("a first answer that fails to send stays in the session's answer box", async () => {
+  liveWithQ1();
+  api.createInterview.mockResolvedValue(
+    activeSession([{ id: "q1", role: "assistant", text: Q1 }]),
+  );
+  api.answerInterview.mockRejectedValue(new Error("down"));
+  api.interviewError.mockResolvedValue("Try again.");
+  await render();
+  await typeFirst("My answer");
+  await tick(() => button("Send answer").click());
+  expect(container.querySelector("#studio-answer").value).toBe("My answer");
+  expect(container.textContent).toContain("Try again.");
+});
+
+test("Use my résumé instead opens the résumé path", async () => {
+  liveWithQ1();
+  await render();
+  await tick(() => button("Use my résumé instead").click());
+  expect(firstQuestion()).toBeNull();
+  expect(
+    container.querySelector('input[name="studio-path"][value="resume"]')
+      .checked,
+  ).toBe(true);
+  expect(button("Start interview")).toBeDefined();
+});
+
+test("a returning user sees the usual setup", async () => {
+  liveWithQ1();
+  api.listInterviews.mockResolvedValue({
+    items: [debrief(null)],
+    has_more: false,
+  });
+  await render();
+  expect(firstQuestion()).toBeNull();
+  expect(button("Start interview")).toBeDefined();
+  expect(container.querySelector(".studio-paths")).not.toBeNull();
+});
+
+test("a first visit waits for history instead of flashing the setup", async () => {
+  liveWithQ1();
+  api.listInterviews.mockReturnValue(new Promise(() => {}));
+  await render();
+  expect(container.textContent).toContain("Opening your interview");
+  expect(button("Start interview")).toBeUndefined();
+});
+
+test("a saved try keeps its card on a first visit; Start fresh then shows question 1", async () => {
+  liveWithQ1();
+  stash();
+  await render();
+  expect(card()).not.toBeNull();
+  expect(firstQuestion()).toBeNull();
+  await tick(() => button("Start fresh instead").click());
+  expect(firstQuestion()).not.toBeNull();
+  expect(document.activeElement.id).toBe("studio-first-answer");
+});
+
+test("?programme= on a first visit is preselected and sent with the first answer", async () => {
+  liveWithQ1();
+  api.answerInterview.mockResolvedValue(
+    activeSession([{ id: "q2", role: "assistant", text: "Next?" }], 1),
+  );
+  window.history.pushState({}, "", "/app/interviews?programme=IIMA%20PGPX");
+  await render();
+  expect(firstQuestion()).not.toBeNull();
+  expect(container.querySelector(".studio-options").open).toBe(true);
+  expect(container.querySelector("#studio-programme-name").value).toBe(
+    "IIMA PGPX",
+  );
+  await typeFirst("Ten years in operations.");
+  await tick(() => button("Send answer").click());
+  expect(api.createInterview.mock.calls[0][0].programme_name).toBe("IIMA PGPX");
+  window.history.pushState({}, "", "/");
+});
