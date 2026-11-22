@@ -29,6 +29,7 @@ const checks = [
   ["/schools/not-a-real-school", 404, null, "noindex"],
   ["/mba-interview-practice", 200, null, "index"],
   ["/guides/mba-interview-from-resume", 200, null, "index"],
+  ["/guides/isb-pgp-interview", 200, null, "index"],
   ["/guides/mba-interview-for-freshers", 200, null, "index"],
   ["/guides/mba-interview-work-experience", 200, null, "index"],
   [guide + "/", [301, 308], guide],

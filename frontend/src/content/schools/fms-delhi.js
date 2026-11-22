@@ -40,12 +40,31 @@ const fmsDelhi = {
       "CAT 2025 is required; applicants without it are not considered. Shortlisting weights CAT sections VARC 40%, DILR 30%, QA 30%; women get 5 extra marks for shortlisting.",
       "Final selection weights: weighted CAT score 50%, Class X 10%, Class XII 10%, discussion on statement of purpose 10%, extempore 5%, personal interview 15%.",
       "The statement-of-purpose discussion, extempore and personal interview are each conducted individually for every candidate.",
-      "Women who appear for the interview get 5 additional marks. Originals of certificates and mark sheets are checked at the interview."
+      "Women who appear for the interview get 5 additional marks. Originals of certificates and mark sheets are checked at the interview.",
+      "The final list is declared after the process is complete for all candidates. These facts are from FMS's information bulletin for the MBA 2026-28 batch; the bulletin does not state the length, format or language of the three spoken components."
     ],
     "sources": [
       "https://www.fms.edu/static/programmes/MBA_2026.pdf"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the FMS Delhi MBA interview process?",
+      "a": "Candidates shortlisted on CAT go through three individual components: a discussion on their statement of purpose (10%), an extempore (5%) and a personal interview (15%), per FMS's bulletin for the 2026-28 batch."
+    },
+    {
+      "q": "Does FMS Delhi have a group discussion?",
+      "a": "In the MBA 2026-28 bulletin, FMS lists no group discussion. The statement-of-purpose discussion, extempore and personal interview are each conducted individually."
+    },
+    {
+      "q": "How is the FMS Delhi MBA final selection weighted?",
+      "a": "Weighted CAT score 50%, Class X 10%, Class XII 10%, discussion on statement of purpose 10%, extempore 5% and personal interview 15%. Women who appear for the interview get 5 additional marks."
+    },
+    {
+      "q": "What documents does FMS Delhi ask for at the interview?",
+      "a": "FMS says candidates must produce original certificates and mark sheets at the time of the interview."
+    }
+  ],
   "careers": {
     "report": "FMS Delhi final placement report, batch 2024-26 (MBA Full-Time)",
     "year": "Class of 2026",
@@ -71,6 +90,6 @@ const fmsDelhi = {
       "url": "https://www.fms.edu/static/corporate-relations/placementReports/Final_Placement_Report_2024-2026.pdf"
     }
   ],
-  "checked": "2026-10-18"
+  "checked": "2026-11-22"
 };
 export default fmsDelhi;

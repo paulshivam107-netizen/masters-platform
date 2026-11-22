@@ -29,6 +29,7 @@ const CATEGORIES = {
   "mba-application-checklist-india": "Indian MBA routes",
   "mba-interview-story-bank": "Interview preparation",
   "mba-interview-from-resume": "Interview preparation",
+  "isb-pgp-interview": "School interview",
   "mba-interview-for-freshers": "Early-career route",
   "mba-interview-work-experience": "Experienced route",
 };

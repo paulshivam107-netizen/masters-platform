@@ -421,6 +421,13 @@ function Prepare({ school }) {
             Build a story bank you can adapt in the room
           </Link>
         </li>
+        {school.slug === "isb" && (
+          <li>
+            <Link to="/guides/isb-pgp-interview">
+              ISB PGP interview: what to expect and how to prepare
+            </Link>
+          </li>
+        )}
         {school.region === "India" && (
           <li>
             <Link to={indiaHub.path}>
