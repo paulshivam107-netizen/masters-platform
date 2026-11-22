@@ -41,13 +41,33 @@ const iima = {
       "In the 2027-29 domestic admission policy, the final composite score weights the personal interview at 50%, the analytical writing test at 10% and the earlier composite score at 40%.",
       "IIMA says it does not disclose candidates' AWT and PI performance details, and exercises its own discretion in disclosing the weights of the attributes assessed in the interview.",
       "IIMA says it forms interview panels with objective assessment criteria and allocates candidates to panels at random.",
-      "The policy does not state the interview's length or question format."
+      "The policy does not state the interview's length or question format.",
+      "For the PGP 2027-29 batch the AWT and PI are held in Ahmedabad, Bengaluru, Hyderabad, Kolkata, Mumbai and New Delhi; candidates pick two cities in the CAT application form.",
+      "IIMA tentatively intimates shortlisted candidates by email in the second week of January 2027 and sends no regret letters to the rest. Offers are tentatively visible in the second week of April 2027, with acceptance due by the first week of May 2027."
     ],
     "sources": [
       "https://www.iima.ac.in/sites/default/files/2026-09/AdmissionProcedure_PGP_1109_2026.pdf",
       "https://www.iima.ac.in/academics/mba/admissions"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the IIMA PGP interview process?",
+      "a": "Domestic applicants are shortlisted through CAT for an Analytical Writing Test (AWT) and a Personal Interview (PI). The final composite score weights the PI 50%, the AWT 10% and the earlier composite 40% in the 2027-29 policy."
+    },
+    {
+      "q": "Does IIMA have a group discussion for the PGP?",
+      "a": "IIMA's PGP 2027-29 admission policy names the AWT and the PI as the shortlist stages and does not mention a group discussion."
+    },
+    {
+      "q": "Where and when are the IIMA PGP interviews?",
+      "a": "In Ahmedabad, Bengaluru, Hyderabad, Kolkata, Mumbai and New Delhi. IIMA tentatively intimates shortlisted candidates by email in the second week of January 2027."
+    },
+    {
+      "q": "How long is the IIMA PGP personal interview?",
+      "a": "IIMA's policy does not state the interview's length or question format. It says panels use objective assessment criteria and candidates are allocated to panels at random."
+    }
+  ],
   "careers": {
     "report": "the IIMA PGP final placement report (audited)",
     "year": "Class of 2025",
@@ -85,6 +105,6 @@ const iima = {
       "url": "https://www.iima.ac.in/academics/MBA-PGPX/admission"
     }
   ],
-  "checked": "2026-10-18"
+  "checked": "2026-11-22"
 };
 export default iima;

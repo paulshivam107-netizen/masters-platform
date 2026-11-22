@@ -40,12 +40,32 @@ const iimc = {
       "Stage I: minimum CAT 2026 sectional and overall percentile cut-offs (open category: 80 / 80 / 75 sectional, 85 overall).",
       "Stage II: shortlist for a Personal Interview (PI) and Writing Ability Test (WAT) on a composite out of 85: CAT 56, Class XII 15, Class X 10, gender diversity 4.",
       "Stage III final composite out of 100: PI 48, CAT 30, WAT 8, work experience 8, academic diversity 6.",
-      "The number shortlisted for PI and WAT depends on the planned batch size and is at the Institute's sole discretion."
+      "The number shortlisted for PI and WAT depends on the planned batch size and is at the Institute's sole discretion.",
+      "Work experience is counted in completed months as of 31 January 2027, after the bachelor's degree only. Employer letters and payslips are asked for, and reservation certificates must be furnished during the PI.",
+      "For the MBA 2027-29 the policy page does not describe the PI or WAT format or length, their language, centres, or dates."
     ],
     "sources": [
       "https://www.iimcal.ac.in/programs/pgp/admission/admission-policy/admission-procedure-for-domestic-candidates"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the IIM Calcutta MBA interview process?",
+      "a": "After the CAT 2026 cut-offs, candidates are shortlisted on a composite out of 85 for a Personal Interview (PI) and Writing Ability Test (WAT). The final composite out of 100 gives the PI 48, CAT 30, WAT 8, work experience 8 and academic diversity 6."
+    },
+    {
+      "q": "Does IIM Calcutta have a group discussion for the MBA?",
+      "a": "IIMC's MBA 2027-29 admission policy names a PI and a WAT as the selection stages and does not mention a group discussion."
+    },
+    {
+      "q": "How much does the IIM Calcutta MBA PI count for?",
+      "a": "48 of the 100 points in the final composite, the largest single component. CAT carries 30."
+    },
+    {
+      "q": "What does IIM Calcutta ask you to bring to the MBA PI?",
+      "a": "The policy says reservation certificates must be furnished during the PI. It also asks for employer letters and payslips as work experience proof; it publishes no PI format, length or dates."
+    }
+  ],
   "careers": {
     "report": "IIM Calcutta MBA Placement Report 2023 (58th batch, 2021-23); the latest report linked on the official MBA page",
     "year": "Class of 2023",
@@ -75,6 +95,6 @@ const iimc = {
       "url": "https://www.iimcal.ac.in/programs/pgpex/admissions/admissions-policy"
     }
   ],
-  "checked": "2026-10-18"
+  "checked": "2026-11-22"
 };
 export default iimc;

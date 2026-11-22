@@ -48,6 +48,24 @@ const iimb = {
       "https://www.iimb.ac.in/sites/default/files/inline-files/PGP-admissions-process_2027.pdf"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the IIM Bangalore PGP interview process?",
+      "a": "After a CAT-based shortlist, candidates take a Personal Interview (PI) and a Written Ability Test (WAT) on the same day and place. The final weights are PI 40, CAT 25, WAT 10, work experience 10, Class X 5, Class XII 5 and bachelor's 5."
+    },
+    {
+      "q": "How long is the IIM Bangalore PGP WAT?",
+      "a": "IIMB's PGP admission procedure describes the WAT as about 30 minutes, a written note judged on content and style."
+    },
+    {
+      "q": "Does IIM Bangalore have a group discussion for the PGP?",
+      "a": "IIMB's PGP 2027-29 admission procedure names the PI and the WAT as the second stage and does not mention a group discussion."
+    },
+    {
+      "q": "What is the IIM Bangalore EPGP interview process?",
+      "a": "For the EPGP, IIMB says the process includes an interview and a written test, held in Bangalore, New Delhi, Mumbai and Kolkata, or online for applicants outside India. It publishes no weights."
+    }
+  ],
   "careers": {
     "report": "IIMB Placement Report 2026 (PGP + PGPBA 2024-26), final placements",
     "year": "Class of 2026",

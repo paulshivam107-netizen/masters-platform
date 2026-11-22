@@ -41,13 +41,32 @@ const spjimr = {
       "Shortlists are profile-based or profile-cum-score-based. A shortlisted applicant is invited to only one interview.",
       "SPJIMR says assessment rests on the profile, the qualifying scores and the interview process. Interview format and length are not described.",
       "Interviews are usually held in January and February; the 2027 intake lists in-person rounds in Mumbai, Kolkata, Bengaluru and Delhi.",
-      "International applicants are interviewed on an online platform chosen by the institute."
+      "International applicants are interviewed on an online platform chosen by the institute.",
+      "For the PGDM 2027-29 batch the application opened on 15 September 2026 and closes on 27 November 2026. SPJIMR does not state interview dates, and its admissions page does not mention a group discussion."
     ],
     "sources": [
       "https://www.spjimr.org/course/post-graduate-diploma-in-management-pgdm/admissions/",
       "https://www.spjimr.org/course/post-graduate-diploma-in-management-pgdm/faq/"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the SPJIMR PGDM interview process?",
+      "a": "SPJIMR shortlists on profile (academics, work experience, entrance scores, versatility and achievements), with a CAT or GMAT cut-off mandatory. A shortlisted applicant is invited to one interview."
+    },
+    {
+      "q": "Does SPJIMR have a group discussion for the PGDM?",
+      "a": "SPJIMR's PGDM admissions page does not mention a group discussion and does not describe the interview format or length."
+    },
+    {
+      "q": "When are the SPJIMR PGDM interviews held?",
+      "a": "SPJIMR says interviews are usually held in January and February. The 2027 intake lists in-person rounds in Mumbai, Kolkata, Bengaluru and Delhi."
+    },
+    {
+      "q": "What is the SPJIMR PGPM interview process?",
+      "a": "For the PGPM, SPJIMR runs two rounds of personal and/or group interviews on a rolling basis, and shares further details with shortlisted applicants only."
+    }
+  ],
   "careers": {
     "report": "SPJIMR PGDM & PGDM (BM) placement report 2026 (final placements, batch 2024-26)",
     "year": "Class of 2026",
@@ -80,6 +99,6 @@ const spjimr = {
       "url": "https://www.spjimr.org/wp-content/uploads/2026/05/pgdm-pgdmbm-report-2026.pdf"
     }
   ],
-  "checked": "2026-10-18"
+  "checked": "2026-11-22"
 };
 export default spjimr;
