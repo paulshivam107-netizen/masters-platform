@@ -515,8 +515,8 @@ const guides = [
           "Check every number on your résumé, including where it came from and what else could explain it.",
           "Be ready to separate your own decisions from your team’s results.",
           "Have a plain-sentence answer for why an MBA, why now, and what you want to do afterwards.",
-          "Practise writing a clear 300-word answer to a question in 20 minutes, since two on-spot essays are part of the process.",
-          "Say your answers aloud. Speaking shows what writing hides.",
+          "Practise writing a short, clear answer against a timer, since two on-spot essays are part of the process. ISB does not publish their length or time limit on this page.",
+          "Say your answers aloud and record yourself once.",
         ],
       },
       {
@@ -555,7 +555,7 @@ const guides = [
       ],
       ["/guides/mba-interview-story-bank", "Build an MBA interview story bank"],
     ],
-    cta: "Practise an ISB-style interview",
+    cta: "Practise for your ISB interview",
     next: "/app/interviews",
   },
 ];
