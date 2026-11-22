@@ -465,6 +465,99 @@ const guides = [
     cta: "Practise an experienced-applicant interview",
     next: "/app/interviews",
   },
+  {
+    slug: "isb-pgp-interview",
+    title: "ISB PGP interview: what to expect and how to prepare",
+    description:
+      "What ISB says about the PGP interview, the tentative 2026-27 windows, and how to prepare for a résumé-based panel interview, with practice questions.",
+    updated: "2026-11-22",
+    readingTime: "5 min",
+    summary:
+      "ISB says PGP interviews last about 30 minutes, are held with a panel of faculty, alumni and senior staff, and include two on-spot essays. It does not publish questions. Prepare by knowing your own résumé well.",
+    sections: [
+      {
+        id: "what-isb-says",
+        title: "What ISB says about the PGP interview",
+        paragraphs: [
+          "These facts are for the one-year PGP in Management, taken from ISB’s own admissions pages (checked 22 November 2026). Other ISB programmes, such as PGP PRO and PGP YL, have their own pages and dates.",
+        ],
+        list: [
+          "After your application is verified, you may be invited to an interview. It lasts approximately 30 minutes.",
+          "A panel of ISB faculty, alumni and senior staff conducts it.",
+          "You can choose a virtual interview on Zoom or an in-person one at available tier-1 city locations. The admissions team makes the final assignment, and ISB says both formats are evaluated equally.",
+          "You get 3 to 7 days’ notice, and you complete two on-spot essays during the interview process.",
+          "ISB’s FAQ page says there is no group discussion.",
+        ],
+      },
+      {
+        id: "dates",
+        title: "Round 2 and Round 3 interview windows",
+        paragraphs: [
+          "ISB’s deadlines page labels all interview dates as tentative. For the PGP class of 2028, Round 2 closes on 6 December 2026, with interviews from week 4 of December 2026 to week 1 of February 2027 and decisions in mid-February 2027. Round 3 closes on 17 January 2027, with interviews from week 1 to week 4 of February 2027 and decisions in mid-March 2027. Check the official page for changes.",
+        ],
+      },
+      {
+        id: "not-published",
+        title: "What ISB does not publish",
+        paragraphs: [
+          "ISB does not publish interview questions or topics. It says every aspect of your application is considered comprehensively. It does not state the interview language, and it does not say whether the panel reads your application beforehand. Treat anything you read elsewhere about these points as unverified.",
+        ],
+      },
+      {
+        id: "prepare",
+        title: "How to prepare (our advice, not ISB’s)",
+        paragraphs: [
+          "Because ISB’s interview is part of a review of your whole application, a sensible assumption is that your résumé and essays are fair material. This is our advice, not an ISB statement.",
+        ],
+        ordered: true,
+        list: [
+          "Pick the five or six résumé lines you would be happiest to discuss, and write what happened, why you chose that approach and what you would change.",
+          "Check every number on your résumé, including where it came from and what else could explain it.",
+          "Be ready to separate your own decisions from your team’s results.",
+          "Have a plain-sentence answer for why an MBA, why now, and what you want to do afterwards.",
+          "Practise writing a clear 300-word answer to a question in 20 minutes, since two on-spot essays are part of the process.",
+          "Say your answers aloud. Speaking shows what writing hides.",
+        ],
+      },
+      {
+        id: "practice-questions",
+        title: "Practice questions (ours, not ISB’s)",
+        paragraphs: [
+          "These are MockMBA practice questions for a résumé-based panel interview. They are not ISB questions, and ISB has not said it asks them.",
+        ],
+        list: [
+          "Walk me through the project on your résumé that you are proudest of. What was your own part?",
+          "What was the hardest decision you made in your last role, and what did you give up?",
+          "Tell me about a time a result was worse than you expected. What did you learn?",
+          "Why do you want an MBA now and not two years ago?",
+          "What do you want to do after the programme, and what do you lack today?",
+          "Pick one number on your résumé. How was it measured?",
+          "Describe a disagreement with a senior colleague and how it ended.",
+          "What would your classmates say you bring to a study group?",
+        ],
+      },
+      {
+        id: "practise",
+        title: "Practise on MockMBA",
+        paragraphs: [
+          "MockMBA is free to use right now. Add your résumé, and it drafts questions from it and follows up on your answers, so you can rehearse the kind of conversation described above. It is independent and not affiliated with ISB, and it cannot predict an admission result.",
+        ],
+      },
+    ],
+    related: [
+      [
+        "/guides/mba-interview-from-resume",
+        "One résumé line, three levels of follow-up",
+      ],
+      [
+        "/guides/mba-interview-work-experience",
+        "Interview preparation for experienced applicants",
+      ],
+      ["/guides/mba-interview-story-bank", "Build an MBA interview story bank"],
+    ],
+    cta: "Practise an ISB-style interview",
+    next: "/app/interviews",
+  },
 ];
 
 const faqs = [
