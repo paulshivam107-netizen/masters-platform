@@ -23,13 +23,32 @@ const sibmPune = {
       "For the 2025 intake the process ran over 10 days in two windows (5-9 and 12-16 February 2025).",
       "The group exercise assessed teamwork, communication, consensus-building, conceptual clarity and awareness of current trends.",
       "The personal interaction was one-on-one with a panelist, focused on communication skills and cultural fit.",
-      "An Immersive Assessment of emotional intelligence, personality, focus and conflict management also fed into the GE-PI rounds."
+      "An Immersive Assessment of emotional intelligence, personality, focus and conflict management also fed into the GE-PI rounds.",
+      "SIBM's admission process page gives no weightage, round durations, interview format (online or in person), documents list or 2027 dates; its only dates are for the 2025 intake. It directs queries to the Aspirant Relations Team at admissionsteam@sibmpune.edu.in."
     ],
     "sources": [
       "https://sibm.edu/mba/",
       "https://sibm.edu/admission_process"
     ]
   },
+  "faq": [
+    {
+      "q": "What is the SIBM Pune MBA interview process?",
+      "a": "SIBM Pune requires a SNAP score. Candidates shortlisted on SNAP are called for Group Exercise, Personal Interview and Written Ability Test (GE-PIWAT), held in Pune only."
+    },
+    {
+      "q": "Does SIBM Pune have a group discussion?",
+      "a": "SIBM calls it a Group Exercise. It assessed teamwork, communication, consensus-building, conceptual clarity and awareness of current trends in the 2025 intake."
+    },
+    {
+      "q": "What is asked in the SIBM Pune personal interview?",
+      "a": "SIBM publishes no question list. It describes the personal interaction as one-on-one with a panelist, focused on communication skills and cultural fit."
+    },
+    {
+      "q": "When are the SIBM Pune GE-PI rounds?",
+      "a": "For the 2025 intake they ran over 10 days, 5-9 and 12-16 February 2025. SIBM's admission process page lists no dates for the 2027 intake."
+    }
+  ],
   "careers": {
     "report": "SIBM Pune Campus Recruitment Programme 2025 placement report (MBA batch 2024-26)",
     "year": "Class of 2026 (CRP 2025, batch 2024-26)",
@@ -55,6 +74,6 @@ const sibmPune = {
       "url": "https://sibm.edu/assets/pdf/placement-report/CRPReport2025.pdf"
     }
   ],
-  "checked": "2026-10-18"
+  "checked": "2026-11-22"
 };
 export default sibmPune;
