@@ -641,7 +641,12 @@ export default function InterviewStudio({
     >
       <header className="studio-heading">
         <div>
-          <h2 id="interview-studio-title">Mock interview</h2>
+          <h2
+            id="interview-studio-title"
+            className={firstRun ? "sr-only" : undefined}
+          >
+            Mock interview
+          </h2>
         </div>
         {session && (
           <button
@@ -700,14 +705,16 @@ export default function InterviewStudio({
               </button>
             </p>
           )}
-          <p className="studio-intro">
-            {live
-              ? "A live interviewer asks about you and follows up on your answers. Debrief at the end."
-              : "Practise one question at a time and return to your answers whenever you need."}
-          </p>
+          {!firstRun && (
+            <p className="studio-intro">
+              {live
+                ? "A live interviewer asks about you and follows up on your answers. Debrief at the end."
+                : "Practise one question at a time and return to your answers whenever you need."}
+            </p>
+          )}
           {firstRun && (
             <form
-              className="studio-conversation"
+              className="studio-conversation studio-conversation--first"
               onSubmit={answerFirst}
               data-testid="first-question"
             >
@@ -727,7 +734,7 @@ export default function InterviewStudio({
                   ref={firstAnswerBox}
                   aria-describedby="studio-first-question"
                   maxLength={3000}
-                  rows={7}
+                  rows={4}
                   value={answer}
                   disabled={disabled}
                   onChange={(event) => setAnswer(event.target.value)}
