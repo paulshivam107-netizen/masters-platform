@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { requestEmailVerificationApi } from "../api";
 import GoogleSignInButton from "./GoogleSignInButton";
 import { trackEvent } from "../app/telemetry";
 import "./Auth.css";
@@ -30,8 +29,7 @@ function Signup({ onSwitchToLogin }) {
 
     try {
       await signup(email, name, password);
-      // Best effort: the workspace banner offers a resend, nothing waits on it.
-      requestEmailVerificationApi(email).catch(() => {});
+      // The server already emailed a link on signup; asking again would void it (one live token).
       trackEvent("auth_signup_success", { method: "password" });
     } catch (err) {
       setError(authError(err, "Signup failed. Please try again."));
