@@ -162,7 +162,7 @@ export function VerifyEmailPage() {
           <div className="success-message" role="status">
             Your email is verified.
           </div>
-          <Link className="auth-button auth-link-button" to="/app">
+          <Link className="auth-button auth-link-button" to="/app/interviews">
             Continue to your workspace
           </Link>
         </>
