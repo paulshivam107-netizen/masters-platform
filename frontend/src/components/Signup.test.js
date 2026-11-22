@@ -63,7 +63,11 @@ test("signup does not request a second verification email (it would void the fir
       new Event("submit", { bubbles: true, cancelable: true }),
     );
   });
-  expect(mockSignup).toHaveBeenCalledWith("u@example.com", "Test User", "Testpass12345");
+  expect(mockSignup).toHaveBeenCalledWith(
+    "u@example.com",
+    "Test User",
+    "Testpass12345",
+  );
   expect(mockRequestVerification).not.toHaveBeenCalled();
   act(() => root.unmount());
   c.remove();
