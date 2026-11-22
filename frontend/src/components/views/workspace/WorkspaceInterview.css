@@ -423,6 +423,24 @@
   font-size: 13px;
 }
 
+/* First question: Send has to be on screen when a new user arrives, so this is tighter. */
+.wi-studio .studio-conversation--first {
+  margin-top: 12px;
+  gap: 12px;
+}
+.wi-studio .studio-conversation--first .studio-question {
+  padding: 16px 18px;
+}
+.wi-studio .studio-conversation--first .studio-question .ws-eyebrow {
+  margin-bottom: 8px;
+}
+.wi-studio .studio-conversation--first .studio-question h3 {
+  font-size: clamp(19px, 1.9vw, 22px);
+}
+.wi-studio .studio-conversation--first textarea {
+  min-height: 112px;
+}
+
 /* microphone states: idle, requesting, recording, unsupported */
 .wi-mic {
   gap: 10px 14px;
