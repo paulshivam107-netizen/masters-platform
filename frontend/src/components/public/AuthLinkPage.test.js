@@ -75,6 +75,10 @@ test("verify page consumes the token exactly once and confirms", async () => {
   expect(verifyEmailApi).toHaveBeenCalledTimes(1);
   expect(verifyEmailApi).toHaveBeenCalledWith("one-time");
   expect(container.textContent).toContain("Your email is verified.");
+  // Straight to the interview, not the Today page.
+  expect(
+    container.querySelector(".auth-link-button").getAttribute("href"),
+  ).toBe("/app/interviews");
   expect(window.location.hash).toBe("");
 });
 
