@@ -847,6 +847,16 @@ test("Use my résumé instead opens the résumé path", async () => {
   expect(button("Start interview")).toBeDefined();
 });
 
+test("Use my résumé instead goes away once the first answer has text", async () => {
+  liveWithQ1();
+  await render();
+  await typeFirst("I run a plant.");
+  expect(firstQuestion()).not.toBeNull();
+  expect(button("Use my résumé instead")).toBeUndefined();
+  await typeFirst("");
+  expect(button("Use my résumé instead")).toBeDefined();
+});
+
 test("a returning user sees the usual setup", async () => {
   liveWithQ1();
   api.listInterviews.mockResolvedValue({

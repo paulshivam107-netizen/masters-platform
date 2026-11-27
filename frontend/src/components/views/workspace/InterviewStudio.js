@@ -753,14 +753,17 @@ export default function InterviewStudio({
                 >
                   {busy || "Send answer"} <ArrowIcon />
                 </button>
-                <button
-                  type="button"
-                  className="ws-btn ws-btn--ghost ws-btn--sm"
-                  disabled={disabled}
-                  onClick={switchToResume}
-                >
-                  Use my résumé instead
-                </button>
+                {/* Hidden once typing starts: switching would throw the typed answer away. */}
+                {!answer.trim() && (
+                  <button
+                    type="button"
+                    className="ws-btn ws-btn--ghost ws-btn--sm"
+                    disabled={disabled}
+                    onClick={switchToResume}
+                  >
+                    Use my résumé instead
+                  </button>
+                )}
               </div>
             </form>
           )}
