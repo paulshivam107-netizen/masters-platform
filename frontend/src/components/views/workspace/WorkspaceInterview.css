@@ -150,19 +150,28 @@
 }
 
 /* ---------- Setup steps ---------- */
-.wi-studio .studio-journey,
-.wi-studio .studio-setup,
-.wi-studio .studio-resume-step {
+.wi-studio .studio-journey {
   margin: 14px 0 0;
   padding: clamp(16px, 2.2vw, 24px);
   border: 1px solid var(--line);
   border-radius: 16px;
   background: var(--canvas);
 }
-:root[data-theme="dark"] .wi-studio .studio-journey,
-:root[data-theme="dark"] .wi-studio .studio-setup,
-:root[data-theme="dark"] .wi-studio .studio-resume-step {
+:root[data-theme="dark"] .wi-studio .studio-journey {
   background: color-mix(in srgb, var(--canvas) 55%, var(--surface));
+}
+/* The setup page is one sheet with dividers, not boxes inside boxes. The two route cards and the
+   upload drop zone stay boxed because they are choices you click. */
+.wi-studio .studio-goal {
+  margin: 0;
+  padding: 26px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.wi-studio .studio-resume-step {
+  margin: 0;
+  padding: 24px 0 2px;
 }
 .wi-studio .studio-journey h3,
 .wi-studio .studio-setup > h3,
@@ -205,6 +214,9 @@
 .wi-studio .studio-setup {
   display: grid;
   gap: 18px;
+  margin: 24px 0 0;
+  padding: 0 0 24px;
+  border-bottom: 1px solid var(--line);
 }
 .wi-studio .studio-mode legend {
   margin-bottom: 8px;
@@ -265,10 +277,14 @@
 
 /* disclosures: question bank, focused practice */
 .wi-studio .studio-bank-disclosure {
-  margin-top: 14px;
-  padding: 4px clamp(16px, 2.2vw, 24px);
-  border: 1px solid var(--line);
-  border-radius: 16px;
+  margin-top: 0;
+  padding: 2px 0;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.wi-studio .studio-bank-disclosure:last-of-type {
+  border-bottom: 0;
 }
 .wi-studio .studio-bank-disclosure:not(.studio-resume-step) > summary {
   min-height: 56px;
@@ -1035,10 +1051,6 @@
   --hero-muted: var(--muted);
   --hero-kicker: var(--muted);
 }
-/* The accent stays on the action, so the name is ink in light mode. */
-:root:not([data-theme="dark"]) .wi-welcome__copy h2 span {
-  color: inherit;
-}
 .wi-welcome__text {
   position: relative;
   max-width: 640px;
@@ -1054,9 +1066,6 @@
   margin: 0 0 12px;
   font: 700 clamp(28px, 3.2vw, 40px) / 1.1 var(--font-heading);
   letter-spacing: -0.03em;
-}
-.wi-welcome__copy h2 span {
-  color: var(--accent);
 }
 .wi-welcome__copy p {
   max-width: 52ch;
@@ -1250,15 +1259,18 @@
   color: var(--ink);
   font: 700 13px var(--font-heading);
 }
-.wi-studio .studio-bank-disclosure > summary {
+.wi-studio .studio-bank-disclosure > summary,
+.wi-studio .studio-options > summary {
   list-style: none;
   position: relative;
   padding-right: 28px;
 }
-.wi-studio .studio-bank-disclosure > summary::-webkit-details-marker {
+.wi-studio .studio-bank-disclosure > summary::-webkit-details-marker,
+.wi-studio .studio-options > summary::-webkit-details-marker {
   display: none;
 }
-.wi-studio .studio-bank-disclosure > summary::after {
+.wi-studio .studio-bank-disclosure > summary::after,
+.wi-studio .studio-options > summary::after {
   content: "";
   position: absolute;
   right: 6px;
@@ -1270,7 +1282,8 @@
   border-bottom: 2px solid var(--muted);
   transform: rotate(45deg);
 }
-.wi-studio .studio-bank-disclosure[open] > summary::after {
+.wi-studio .studio-bank-disclosure[open] > summary::after,
+.wi-studio .studio-options[open] > summary::after {
   margin-top: -2px;
   transform: rotate(-135deg);
 }
@@ -1312,9 +1325,10 @@
   line-height: 1.55;
 }
 .wi-studio .studio-options {
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 4px 16px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  padding: 2px 0;
 }
 .wi-studio .studio-options > summary {
   min-height: 44px;
@@ -1415,7 +1429,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  margin: 14px 0 0;
+  margin: 22px 0 0;
 }
 .wi-studio .studio-path {
   position: relative;

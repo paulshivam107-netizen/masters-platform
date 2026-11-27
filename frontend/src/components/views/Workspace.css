@@ -263,8 +263,8 @@
   height: 36px;
   flex: none;
   border-radius: 50%;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--surface-hover);
+  color: var(--ink);
   font: 700 13px var(--font-heading);
   letter-spacing: 0.02em;
 }
@@ -918,9 +918,13 @@
   background: var(--danger-bg);
   color: var(--danger);
 }
+/* Status on the palette: sage, not blue. */
 .ws-chip--info {
-  background: var(--info-bg);
-  color: var(--info-ink);
+  background: #dfe3d3;
+  color: var(--ink);
+}
+:root[data-theme="dark"] .ws-chip--info {
+  background: #2a3023;
 }
 .ws-chip--accent {
   background: var(--accent);
@@ -1311,10 +1315,10 @@ details.ws-card[open] > :not(summary) {
   gap: 12px;
   margin-bottom: 12px;
   padding: 6px 12px;
-  border: 1px solid color-mix(in srgb, var(--warning) 40%, transparent);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: var(--warning-bg);
-  color: var(--warning);
+  background: color-mix(in srgb, var(--ink) 6%, var(--canvas));
+  color: var(--ink);
   font-size: 14px;
 }
 .verify-banner span {
@@ -1328,5 +1332,7 @@ details.ws-card[open] > :not(summary) {
   color: inherit;
   font: inherit;
   font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
 }
